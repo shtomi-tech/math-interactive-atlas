@@ -7,6 +7,7 @@
     "unitLabel": "二次関数",
     "title": "y = ax² を動かす",
     "shortDescription": "aを変えて、放物線の向きと開き方を観察します。",
+    "instructions": "aを動かして、放物線の向きと開き方の変化を観察します。",
     "formula": "y=ax^2",
     "interactionType": "slider",
     "interaction": {
@@ -41,6 +42,7 @@
     "unitLabel": "二次関数",
     "title": "頂点を動かす",
     "shortDescription": "a・p・qを変えて、頂点と放物線の関係を観察します。",
+    "instructions": "a・p・qを動かして、頂点と対称軸の位置を見比べます。",
     "formula": "y=a(x-p)^2+q",
     "interactionType": "slider",
     "interaction": {
@@ -77,6 +79,7 @@
     "unitLabel": "二次関数",
     "title": "判別式と交点数",
     "shortDescription": "a・b・cを変えて、Dの符号とx軸との交点数を観察します。",
+    "instructions": "a・b・cを動かして、Dの符号とx軸との交点数を比べます。",
     "formula": "D=b^2-4ac",
     "interactionType": "slider",
     "interaction": {
@@ -93,6 +96,42 @@
       "D > 0 では、x軸との交点が2個ある。",
       "D = 0 では、放物線がx軸に接する。",
       "D < 0 では、実数の交点がない。"
+    ],
+    "related": [
+      "quadratic-basic",
+      "quadratic-vertex"
+    ],
+    "source": {
+      "usage": "original",
+      "library": "JSXGraph 1.8.0",
+      "license": "MIT OR LGPL-3.0-or-later",
+      "repository": "https://github.com/jsxgraph/jsxgraph"
+    }
+  },
+  {
+    "id": "quadratic-range",
+    "subject": "math1",
+    "subjectLabel": "数学I",
+    "unit": "quadratic",
+    "unitLabel": "二次関数",
+    "title": "最大・最小と定義域",
+    "shortDescription": "定義域の端点を動かして、最大値・最小値がどこで決まるかを観察します。",
+    "instructions": "左右の端点 l・r を動かして、最大値と最小値がどこで決まるか観察します。",
+    "formula": "y=(x-1)^2+1\\quad (l\\le x\\le r)",
+    "interactionType": "drag",
+    "interaction": {
+      "engine": "rangeGraph",
+      "mode": "quadratic-range",
+      "initial": { "l": -2, "r": 3 },
+      "parameters": {
+        "l": { "label": "l", "min": -3, "max": 3.75, "step": 0.25 },
+        "r": { "label": "r", "min": -2.75, "max": 4, "step": 0.25 }
+      }
+    },
+    "discoveryPoints": [
+      "頂点が定義域に入る場合と入らない場合で、最小値を取る場所はどう変わるだろう？",
+      "左右の端点を動かすと、最大値を取る点はいつ入れ替わるだろう？",
+      "同じ関数でも定義域を変えると、値域はどう変化するだろう？"
     ],
     "related": [
       "quadratic-basic",

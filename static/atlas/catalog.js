@@ -1,5 +1,12 @@
 const INTERACTION_LABELS = {
-  slider: "SLIDER"
+  slider: "SLIDER",
+  drag: "DRAG",
+  geometry: "GEOMETRY",
+  select: "SELECT",
+  cards: "CARDS",
+  data: "DATA",
+  simulation: "SIMULATION",
+  build: "BUILD"
 };
 
 export function renderCatalog(root, contents, { subject = "math1", unit = null, onSelect }) {

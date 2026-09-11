@@ -51,11 +51,13 @@ Good Design = Invisible UI + Visible Mathematics + Meaningful Interaction
 
 ## インタラクション
 
-`static/atlas/interactions/function-graph.js` の `mountFunctionGraph(container, config)` を共通エンジンとする。エンジンは軸、グリッド、関数グラフ、点、補助線、動的ラベル、パラメータ更新、Reset、Destroyを提供する。
+`static/atlas/interactions/index.js` のInteraction Engine Registryを入口とする。ViewerはRegistryだけを呼び、`interaction.engine` に応じて `functionGraph` または `rangeGraph` をmountする。すべてのEngineは `reset()`、`destroy()`、`getState()` を返し、パラメータ型Engineは `setParameter()` も返す。
 
-コンテンツ固有の違いは `content-data.json` の `interaction.mode`、初期値、パラメータ定義へ寄せる。Viewerへ教材固有の描画分岐を追加しない。
+`static/atlas/interactions/function-graph.js` は軸、グリッド、関数グラフ、点、補助線、動的ラベル、パラメータ更新、Reset、Destroyを提供する。`range-graph.js` はこれを使って関数全体、定義域内の強調曲線、左右端の44pxドラッグハンドル、最大・最小候補を表示する。
 
-グラフは主対象を青、副対象を赤、補助線をグレー、注目値をアンバーで描く。`a = 0` などの定義域外状態は、NaN・Infinity・誤った交点数を表示せず、短い説明で状態を示す。
+コンテンツ固有の違いは `content-data.json` の `interaction.engine`、`interaction.mode`、初期値、パラメータ定義へ寄せる。Viewerへ教材固有の描画分岐を追加しない。
+
+グラフは主対象を青、副対象を赤、補助線をグレー、注目値をアンバーで描く。`a = 0` などの定義域外状態は、NaN・Infinity・誤った交点数を表示せず、短い説明で状態を示す。最大・最小では、定義域全体を薄い線、定義域内だけを主色で示し、端点と頂点の候補から値を計算する。
 
 ## 数式と出典
 
@@ -76,6 +78,7 @@ Good Design = Invisible UI + Visible Mathematics + Meaningful Interaction
 
 - `/atlas.html` — カタログ
 - `/atlas.html?content=quadratic-basic` — 教材Viewer
+- `/atlas.html?content=quadratic-range` — 最大・最小と定義域の教材Viewer
 - `/atlas.html?subject=math1&unit=quadratic` — 単元指定カタログ
 
-不正な `content` はエラー画面を作らず、履歴を置き換えて図鑑トップへ戻す。Viewer切り替え時は前のFunctionGraphを必ずDestroyする。
+不正な `content` はエラー画面を作らず、履歴を置き換えて図鑑トップへ戻す。Viewer切り替え時は前のInteraction Engineを必ずDestroyする。

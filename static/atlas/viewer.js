@@ -1,4 +1,4 @@
-import { mountFunctionGraph } from "./interactions/function-graph.js";
+import { mountInteraction } from "./interactions/index.js";
 
 function renderFormula(target, expression) {
   target.className = "atlas-formula-fallback";
@@ -17,7 +17,7 @@ function renderFormula(target, expression) {
 function numberText(value) {
   const number = Number(value);
   if (!Number.isFinite(number)) return "0";
-  return Number.isInteger(number) ? String(number) : number.toFixed(1).replace(/\.0$/, "");
+  return Number.isInteger(number) ? String(number) : number.toFixed(2).replace(/0+$/, "").replace(/\.$/, "");
 }
 
 function createControl(name, definition, initial, onInput) {
@@ -130,6 +130,9 @@ export function createViewer(root, { onBack, onRelated }) {
     frame.className = "atlas-interactive-frame";
     const canvas = document.createElement("div");
     canvas.className = "atlas-canvas";
+    const instructions = document.createElement("p");
+    instructions.className = "atlas-instructions";
+    instructions.textContent = content.instructions || "操作欄を使って、値の変化とグラフの関係を観察します。";
     const controlsHost = document.createElement("div");
     controlsHost.className = "atlas-controls";
     const footer = document.createElement("div");
@@ -154,7 +157,7 @@ export function createViewer(root, { onBack, onRelated }) {
       controlsHost.append(control.label);
     });
     footer.append(observation, reset);
-    frame.append(canvas, controlsHost, footer);
+    frame.append(canvas, instructions, controlsHost, footer);
     interactive.append(interactiveHeading, frame);
 
     const discovery = document.createElement("section");
@@ -197,10 +200,7 @@ export function createViewer(root, { onBack, onRelated }) {
     viewer.append(header, formula, interactive, discovery, related, source);
     root.append(viewer);
 
-    engine = mountFunctionGraph(canvas, {
-      mode: content.interaction.mode,
-      initial: content.interaction.initial,
-      parameters: content.interaction.parameters,
+    engine = mountInteraction(canvas, content.interaction, {
       onStateChange: (state, summary) => {
         observation.textContent = summary;
         syncControls(state);

@@ -260,6 +260,8 @@ h3 { font-size: 1.25rem; line-height: 1.45; }
   background: var(--atlas-subtle);
 }
 
+.atlas-instructions { margin: 12px 0 0; color: var(--atlas-muted); font-size: .8125rem; }
+
 .atlas-canvas {
   position: relative;
   min-height: 360px;
@@ -278,6 +280,26 @@ h3 { font-size: 1.25rem; line-height: 1.45; }
 }
 
 .atlas-canvas .jxgbox { border: 0; }
+
+.atlas-range-handle {
+  position: absolute;
+  z-index: 3;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 2px solid var(--atlas-math-primary);
+  border-radius: 50%;
+  background: var(--atlas-canvas);
+  color: var(--atlas-math-primary);
+  font-family: var(--atlas-mono);
+  font-weight: 700;
+  line-height: 1;
+  touch-action: none;
+  transform: translate(-50%, -50%);
+}
+
+.atlas-range-handle:hover { border-color: var(--atlas-accent-hover); background: var(--atlas-selected); }
+.atlas-range-handle:focus-visible { outline: 2px solid var(--atlas-focus); outline-offset: 2px; }
 
 .atlas-canvas-note {
   position: absolute;
