@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="数学I・Aの関係を、動かして観察するインタラクティブ図鑑。">
+  <title>数学I・A インタラクティブ図鑑</title>
+  <link rel="stylesheet" href="./static/zukan/styles.css?v=20260911">
+  <script type="module" src="./static/zukan/app.js?v=20260911"></script>
+</head>
+<body>
+  <a class="skip-link" href="#viewer">本文へ移動</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="./zukan.html" aria-label="数学図鑑のトップへ">
+        <span class="brand-mark" aria-hidden="true">∑</span>
+        <span>
+          <span class="eyebrow">MATHEMATICS / INTERACTIVE ATLAS</span>
+          <strong>数学I・A インタラクティブ図鑑</strong>
+        </span>
+      </a>
+      <div class="header-tools">
+        <span id="saveStatus" class="save-status" role="status" aria-live="polite">この端末に保存</span>
+        <button id="favoriteButton" class="icon-button" type="button" aria-pressed="false" aria-label="この教材をお気に入りにする">☆</button>
+      </div>
+    </div>
+    <div class="header-subline">
+      <p>触る。観察する。関係を見つける。</p>
+      <span id="progressSummary">0 / 10 教材を見た</span>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <section class="intro-panel" aria-labelledby="pageTitle">
+      <div>
+        <p class="eyebrow">CATALOG / START HERE</p>
+        <h1 id="pageTitle">数学の「つながり」を、動かして見る。</h1>
+        <p class="intro-copy">公式を覚える前に、値を変えて関係を観察します。正解を当てる場所ではありません。しばらく動かすと、数字のほうから話しかけてきます。</p>
+      </div>
+      <div class="intro-note">
+        <span class="note-icon" aria-hidden="true">↻</span>
+        <span>各教材の状態と発見ポイントは、この端末にだけ保存されます。</span>
+      </div>
+    </section>
+
+    <div class="subject-tabs" role="tablist" aria-label="数学の科目">
+      <button class="subject-tab is-active" type="button" role="tab" aria-selected="true" data-subject="math1">数学I <span>6教材</span></button>
+      <button class="subject-tab" type="button" role="tab" aria-selected="false" data-subject="mathA">数学A <span>4教材</span></button>
+    </div>
+
+    <div class="atlas-layout">
+      <aside class="catalog-panel" aria-labelledby="catalogTitle">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">CONTENTS</p>
+            <h2 id="catalogTitle">教材を選ぶ</h2>
+          </div>
+          <span id="catalogCount" class="count-badge">6</span>
+        </div>
+        <div id="catalog" class="catalog" aria-label="教材一覧"></div>
+      </aside>
+
+      <section id="viewer" class="viewer" aria-labelledby="viewerTitle" tabindex="-1">
+        <div class="viewer-heading">
+          <div>
+            <div class="breadcrumb" id="breadcrumb">数学I　/　二次関数</div>
+            <h2 id="viewerTitle">頂点を動かす</h2>
+            <p id="viewerDescription" class="viewer-description"></p>
+          </div>
+          <span id="difficultyBadge" class="difficulty-badge">基礎</span>
+        </div>
+
+        <div id="formulaBox" class="formula-box" aria-label="公式">
+          <span class="eyebrow">FORMULA</span>
+          <span id="viewerFormula" class="formula"></span>
+        </div>
+
+        <section class="interactive-panel" aria-labelledby="interactiveTitle">
+          <div class="interactive-heading">
+            <div>
+              <p class="eyebrow">INTERACTIVE</p>
+              <h3 id="interactiveTitle">動かしてみる</h3>
+            </div>
+            <span class="interaction-kind" id="interactionKind"></span>
+          </div>
+          <div id="interactionHost" class="interaction-host"></div>
+        </section>
+
+        <div class="viewer-lower-grid">
+          <section class="discovery-panel" aria-labelledby="discoveryTitle">
+            <div class="panel-heading compact">
+              <div>
+                <p class="eyebrow">DISCOVERY</p>
+                <h3 id="discoveryTitle">発見ポイント</h3>
+              </div>
+              <span class="bulb" aria-hidden="true">💡</span>
+            </div>
+            <ul id="discoveryList" class="discovery-list"></ul>
+          </section>
+
+          <section class="related-panel" aria-labelledby="relatedTitle">
+            <div class="panel-heading compact">
+              <div>
+                <p class="eyebrow">NEXT</p>
+                <h3 id="relatedTitle">関連教材</h3>
+              </div>
+            </div>
+            <div id="relatedList" class="related-list"></div>
+          </section>
+        </div>
+
+        <footer class="source-panel" aria-labelledby="sourceTitle">
+          <div>
+            <p class="eyebrow">SOURCE / LICENSE</p>
+            <h3 id="sourceTitle">出典とライセンス</h3>
+          </div>
+          <div id="sourceDetails" class="source-details"></div>
+        </footer>
+      </section>
+    </div>
+  </main>
+
+  <noscript>
+    <p class="noscript">この図鑑にはJavaScriptが必要です。ブラウザの設定を確認してください。</p>
+  </noscript>
+</body>
+</html>
