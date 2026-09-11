@@ -1,0 +1,108 @@
+[
+  {
+    "id": "quadratic-basic",
+    "subject": "math1",
+    "subjectLabel": "数学I",
+    "unit": "quadratic",
+    "unitLabel": "二次関数",
+    "title": "y = ax² を動かす",
+    "shortDescription": "aを変えて、放物線の向きと開き方を観察します。",
+    "formula": "y=ax^2",
+    "interactionType": "slider",
+    "interaction": {
+      "engine": "functionGraph",
+      "mode": "quadratic-basic",
+      "initial": { "a": 1 },
+      "parameters": {
+        "a": { "label": "a", "min": -3, "max": 3, "step": 0.5 }
+      }
+    },
+    "discoveryPoints": [
+      "aを大きくすると、放物線の開き方はどう変わるだろう？",
+      "aを負にすると、グラフの向きはどう変わるだろう？",
+      "a = 0 では、二次関数ではなくなる。"
+    ],
+    "related": [
+      "quadratic-vertex",
+      "quadratic-discriminant"
+    ],
+    "source": {
+      "usage": "original",
+      "library": "JSXGraph 1.8.0",
+      "license": "MIT OR LGPL-3.0-or-later",
+      "repository": "https://github.com/jsxgraph/jsxgraph"
+    }
+  },
+  {
+    "id": "quadratic-vertex",
+    "subject": "math1",
+    "subjectLabel": "数学I",
+    "unit": "quadratic",
+    "unitLabel": "二次関数",
+    "title": "頂点を動かす",
+    "shortDescription": "a・p・qを変えて、頂点と放物線の関係を観察します。",
+    "formula": "y=a(x-p)^2+q",
+    "interactionType": "slider",
+    "interaction": {
+      "engine": "functionGraph",
+      "mode": "quadratic-vertex",
+      "initial": { "a": 1, "p": 0, "q": 0 },
+      "parameters": {
+        "a": { "label": "a", "min": -2, "max": 2, "step": 0.5 },
+        "p": { "label": "p", "min": -3, "max": 3, "step": 1 },
+        "q": { "label": "q", "min": -3, "max": 3, "step": 1 }
+      }
+    },
+    "discoveryPoints": [
+      "pを変えると、頂点は左右へ動く。",
+      "qを変えると、頂点は上下へ動く。",
+      "aを変えても、頂点の座標は変わらない。"
+    ],
+    "related": [
+      "quadratic-basic",
+      "quadratic-discriminant"
+    ],
+    "source": {
+      "usage": "original",
+      "library": "JSXGraph 1.8.0",
+      "license": "MIT OR LGPL-3.0-or-later",
+      "repository": "https://github.com/jsxgraph/jsxgraph"
+    }
+  },
+  {
+    "id": "quadratic-discriminant",
+    "subject": "math1",
+    "subjectLabel": "数学I",
+    "unit": "quadratic",
+    "unitLabel": "二次関数",
+    "title": "判別式と交点数",
+    "shortDescription": "a・b・cを変えて、Dの符号とx軸との交点数を観察します。",
+    "formula": "D=b^2-4ac",
+    "interactionType": "slider",
+    "interaction": {
+      "engine": "functionGraph",
+      "mode": "quadratic-discriminant",
+      "initial": { "a": 1, "b": 0, "c": -1 },
+      "parameters": {
+        "a": { "label": "a", "min": -2, "max": 2, "step": 0.5 },
+        "b": { "label": "b", "min": -4, "max": 4, "step": 1 },
+        "c": { "label": "c", "min": -4, "max": 4, "step": 1 }
+      }
+    },
+    "discoveryPoints": [
+      "D > 0 では、x軸との交点が2個ある。",
+      "D = 0 では、放物線がx軸に接する。",
+      "D < 0 では、実数の交点がない。"
+    ],
+    "related": [
+      "quadratic-basic",
+      "quadratic-vertex"
+    ],
+    "source": {
+      "usage": "original",
+      "library": "JSXGraph 1.8.0",
+      "license": "MIT OR LGPL-3.0-or-later",
+      "repository": "https://github.com/jsxgraph/jsxgraph"
+    }
+  }
+]

@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="高校数学の概念を、グラフを動かして観察するインタラクティブ図鑑。">
+  <title>数学インタラクティブ図鑑</title>
+  <link rel="stylesheet" href="./static/atlas.css?v=20260912">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsxgraph@1.8.0/distrib/jsxgraph.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsxgraph@1.8.0/distrib/jsxgraphcore.js"></script>
+  <script type="module" src="./static/atlas/main.js?v=20260912"></script>
+</head>
+<body>
+  <a class="atlas-skip-link" href="#atlasMain">本文へ移動</a>
+  <header class="atlas-header">
+    <div class="atlas-header-inner">
+      <a class="atlas-brand" href="./atlas.html" aria-label="数学インタラクティブ図鑑のトップへ">
+        <span class="atlas-brand-mark" aria-hidden="true">∑</span>
+        <span>
+          <span class="atlas-eyebrow">INTERACTIVE MATHEMATICS ATLAS</span>
+          <strong>数学インタラクティブ図鑑</strong>
+        </span>
+      </a>
+      <a class="atlas-return-link" href="https://shtomi-tech.github.io/math-practice/">← 数学演習に戻る</a>
+    </div>
+  </header>
+
+  <main id="atlasMain" class="atlas-shell">
+    <p id="atlasStatus" class="atlas-status" role="status" aria-live="polite"></p>
+
+    <section id="atlasCatalogView" aria-labelledby="catalogTitle">
+      <div class="atlas-page-heading">
+        <div>
+          <p class="atlas-eyebrow">CATALOG / START HERE</p>
+          <h1 id="catalogTitle">数学の「つながり」を、動かして見る。</h1>
+          <p class="atlas-lead">公式を覚える前に、値を変えて関係を観察します。触る、観察する、気づく。その順番で進みます。</p>
+        </div>
+        <p class="atlas-local-note">図鑑は演習・試験とは独立して動作します。</p>
+      </div>
+
+      <div class="atlas-breadcrumb" aria-label="現在地">数学図鑑　＞　教材一覧</div>
+      <div id="catalogGrid" class="atlas-catalog-grid" aria-label="教材一覧"></div>
+
+      <section class="atlas-preparing" aria-labelledby="preparingTitle">
+        <p class="atlas-eyebrow">NEXT SUBJECT</p>
+        <h2 id="preparingTitle">数学A</h2>
+        <p>準備中</p>
+      </section>
+    </section>
+
+    <section id="atlasViewerView" hidden aria-labelledby="viewerTitle" tabindex="-1">
+      <div id="atlasViewerRoot"></div>
+    </section>
+  </main>
+
+  <noscript>
+    <p class="atlas-noscript">この図鑑にはJavaScriptが必要です。ブラウザの設定を確認してください。</p>
+  </noscript>
+</body>
+</html>
