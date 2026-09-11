@@ -130,7 +130,7 @@ function renderCatalog() {
       title.textContent = content.title;
       const mark = document.createElement("span");
       mark.className = saved.visited ? "visited-mark is-visited" : "visited-mark";
-      mark.textContent = saved.visited ? "見た" : "未読";
+      mark.textContent = saved.visited ? "閲覧済み" : "未閲覧";
       itemTop.append(title, mark);
       const meta = document.createElement("span");
       meta.className = "catalog-item-meta";
@@ -147,7 +147,7 @@ function renderCatalog() {
 function renderViewer() {
   const content = getContent(state.activeId);
   const saved = progressFor(content.id);
-  dom.breadcrumb.textContent = `${content.subject === "math1" ? "数学I" : "数学A"}　/　${content.unit}　/　${content.topic}`;
+  dom.breadcrumb.textContent = `${content.subject === "math1" ? "数学I" : "数学A"}　＞　${content.unit}　＞　${content.topic}`;
   dom.viewerTitle.textContent = content.title;
   dom.viewerDescription.textContent = content.shortDescription;
   dom.difficultyBadge.textContent = content.difficulty === "basic" ? "基礎" : "標準";
@@ -235,7 +235,7 @@ function createInteractionFrame(host, instructions, reset) {
   const resetButton = document.createElement("button");
   resetButton.type = "button";
   resetButton.className = "reset-button";
-  resetButton.textContent = "↻ リセット";
+  resetButton.textContent = "初期状態に戻す";
   resetButton.addEventListener("click", reset);
   footer.append(instruction, status, resetButton);
   frame.append(stage, controls, footer);
