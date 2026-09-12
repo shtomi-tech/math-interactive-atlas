@@ -1,5 +1,5 @@
-import { mountInteraction } from "./interactions/index.js?v=20260912-5c";
-import { neighborsForContent } from "./curriculum.js?v=20260912-5c";
+import { mountInteraction } from "./interactions/index.js?v=20260912-6g";
+import { neighborsForContent } from "./curriculum.js?v=20260912-6g";
 
 function renderFormula(target, expression) {
   target.className = "atlas-formula-fallback";
@@ -72,7 +72,7 @@ function appendSource(section, source) {
   }
 }
 
-export function createViewer(root, { onBack, onRelated, onNavigate = onRelated }) {
+export function createViewer(root, { onBack, onRelated, onNavigate = onRelated, onToggleFavorite = () => {} }) {
   let engine = null;
   let controls = new Map();
 
@@ -83,7 +83,7 @@ export function createViewer(root, { onBack, onRelated, onNavigate = onRelated }
     root.replaceChildren();
   }
 
-  function render(content, contents) {
+  function render(content, contents, { fromProblem = null, fromCatalog = null, practiceProblems = [], isFavorite = false } = {}) {
     destroy();
 
     const viewer = document.createElement("article");
@@ -103,12 +103,30 @@ export function createViewer(root, { onBack, onRelated, onNavigate = onRelated }
     description.className = "atlas-viewer-description";
     description.textContent = content.shortDescription;
     heading.append(breadcrumb, title, description);
+    const actions = document.createElement("div");
+    actions.className = "atlas-viewer-actions";
+    if (fromProblem) {
+      const problemBack = document.createElement("a");
+      problemBack.className = "atlas-problem-return";
+      problemBack.href = `./practice.html?problem=${encodeURIComponent(fromProblem)}`;
+      problemBack.textContent = "← 問題に戻る";
+      actions.append(problemBack);
+    }
+    const favorite = document.createElement("button");
+    favorite.type = "button";
+    favorite.className = "atlas-favorite-button";
+    let favoriteState = Boolean(isFavorite);
+    const syncFavorite = () => { favorite.textContent = favoriteState ? "★ お気に入り" : "☆ お気に入り"; favorite.setAttribute("aria-pressed", String(favoriteState)); favorite.setAttribute("aria-label", favoriteState ? "お気に入りから外す" : "お気に入りに追加"); };
+    syncFavorite();
+    favorite.addEventListener("click", () => { const next = onToggleFavorite(content.id); favoriteState = typeof next === "boolean" ? next : !favoriteState; syncFavorite(); });
+    actions.append(favorite);
     const backButton = document.createElement("button");
     backButton.type = "button";
     backButton.className = "atlas-back-button";
     backButton.textContent = "← 図鑑一覧へ戻る";
-    backButton.addEventListener("click", onBack);
-    header.append(heading, backButton);
+    backButton.addEventListener("click", () => onBack({ fromCatalog, fromProblem }));
+    actions.append(backButton);
+    header.append(heading, actions);
 
     const formula = document.createElement("section");
     formula.className = "atlas-formula";
@@ -190,10 +208,22 @@ export function createViewer(root, { onBack, onRelated, onNavigate = onRelated }
       const itemTitle = document.createElement("strong");
       itemTitle.textContent = item.title;
       button.append(unit, itemTitle);
-      button.addEventListener("click", () => onRelated(item.id));
+      button.addEventListener("click", () => onRelated(item.id, { fromCatalog, fromProblem }));
       relatedList.append(button);
     });
     related.append(relatedTitle, relatedList);
+
+    const linkedProblems = (Array.isArray(practiceProblems) ? practiceProblems : []).filter((problem) => problem.atlasContentId === content.id);
+    let practiceSection = null;
+    if (linkedProblems.length > 0) {
+      practiceSection = document.createElement("section");
+      practiceSection.className = "atlas-practice-links";
+      const practiceTitle = document.createElement("h2");
+      practiceTitle.textContent = "この概念を問題で使う";
+      const practiceList = document.createElement("ul");
+      linkedProblems.forEach((problem) => { const item = document.createElement("li"); const link = document.createElement("a"); link.href = `./practice.html?problem=${encodeURIComponent(problem.id)}`; link.textContent = problem.title; item.append(link); practiceList.append(item); });
+      practiceSection.append(practiceTitle, practiceList);
+    }
 
     const navigation = document.createElement("nav");
     navigation.className = "atlas-learning-navigation";
@@ -203,7 +233,7 @@ export function createViewer(root, { onBack, onRelated, onNavigate = onRelated }
       button.type = "button"; button.className = `atlas-learning-navigation-${direction}`; button.disabled = !target;
       button.setAttribute("aria-label", target ? `${label}：${target.title}` : label);
       button.textContent = label;
-      if (target) { const title = document.createElement("strong"); title.textContent = target.title; button.append(document.createElement("br"), title); button.addEventListener("click", () => onNavigate(target.id)); }
+      if (target) { const title = document.createElement("strong"); title.textContent = target.title; button.append(document.createElement("br"), title); button.addEventListener("click", () => onNavigate(target.id, { fromCatalog, fromProblem })); }
       navigation.append(button);
     });
 
@@ -211,7 +241,9 @@ export function createViewer(root, { onBack, onRelated, onNavigate = onRelated }
     source.className = "atlas-source";
     appendSource(source, content.source);
 
-    viewer.append(header, formula, interactive, discovery, related, navigation, source);
+    viewer.append(header, formula, interactive, discovery, related);
+    if (practiceSection) viewer.append(practiceSection);
+    viewer.append(navigation, source);
     root.append(viewer);
 
     engine = mountInteraction(canvas, content.interaction, {

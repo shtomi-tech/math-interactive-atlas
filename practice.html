@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="数学インタラクティブ図鑑とつながる基礎問題演習。">
+  <title>数学問題演習</title>
+  <link rel="stylesheet" href="./static/tokens.css?v=20260912-6i">
+  <link rel="stylesheet" href="./static/practice.css?v=20260912-6i">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
+  <script type="module" src="./static/practice/main.js?v=20260912-6i"></script>
+</head>
+<body>
+  <a class="practice-skip-link" href="#practiceMain">本文へ移動</a>
+  <header class="practice-header">
+    <div class="practice-header-inner">
+      <a class="practice-brand" href="./practice.html" aria-label="数学問題演習のトップへ"><span class="practice-brand-mark" aria-hidden="true">∴</span><span><span class="practice-eyebrow">MATHEMATICS PRACTICE</span><strong>数学問題演習</strong></span></a>
+      <a class="practice-atlas-link" href="./atlas.html">← 図鑑へ戻る</a>
+    </div>
+  </header>
+  <main id="practiceMain" class="practice-shell">
+    <p id="practiceStatus" class="practice-status" role="status" aria-live="polite"></p>
+    <section id="practiceCatalogView" aria-labelledby="practiceCatalogTitle">
+      <div class="practice-page-heading"><div><p class="practice-eyebrow">PRACTICE / USE IT</p><h1 id="practiceCatalogTitle">見た関係を、問題で使ってみる。</h1><p class="practice-lead">図鑑で観察した概念を短い問題で確かめます。間違えたら、いつでも図鑑へ戻れます。</p></div><p class="practice-note">学習状態はこの端末にだけ保存されます。</p></div>
+      <div id="practiceCatalogRoot"></div>
+    </section>
+    <section id="practiceRunnerView" hidden aria-labelledby="practiceRunnerTitle" tabindex="-1"><div id="practiceRunnerRoot"></div></section>
+  </main>
+</body>
+</html>

@@ -1,31 +1,3 @@
-:root {
-  --atlas-bg: #f8f9fb;
-  --atlas-canvas: #ffffff;
-  --atlas-subtle: #f3f4f6;
-  --atlas-formula-bg: #f8fafc;
-  --atlas-text: #1f2937;
-  --atlas-muted: #6b7280;
-  --atlas-faint: #9ca3af;
-  --atlas-border: #e5e7eb;
-  --atlas-border-strong: #d1d5db;
-  --atlas-accent: #4f46e5;
-  --atlas-accent-hover: #4338ca;
-  --atlas-selected: #eef2ff;
-  --atlas-focus: #6366f1;
-  --atlas-success: #15803d;
-  --atlas-error: #b91c1c;
-  --atlas-math-primary: #2563eb;
-  --atlas-math-secondary: #e11d48;
-  --atlas-math-helper: #64748b;
-  --atlas-math-construction: #94a3b8;
-  --atlas-math-highlight: #f59e0b;
-  --atlas-region-unselected: #f8fafc;
-  --atlas-font: "Noto Sans JP", Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --atlas-mono: "Cascadia Mono", Consolas, "Noto Sans JP", monospace;
-  --atlas-max: 1120px;
-  --atlas-gutter: 24px;
-}
-
 * { box-sizing: border-box; }
 
 html { scroll-behavior: smooth; }
@@ -226,9 +198,16 @@ h3 { font-size: 1.25rem; line-height: 1.45; }
   border-color: var(--atlas-accent);
   background: var(--atlas-selected);
 }
-.atlas-catalog-filters { display:grid; grid-template-columns:minmax(220px,2fr) repeat(3,minmax(130px,1fr)) auto; gap:10px; align-items:center; margin:20px 0 12px; }
+.atlas-catalog-card-open { display: block; min-height: 0; padding: 0; border: 0; background: transparent; text-align: left; }
+.atlas-catalog-card-open:hover { border-color: transparent; background: transparent; }
+.atlas-catalog-card-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 14px; }
+.atlas-card-favorite { display: grid; place-items: center; width: 44px; min-height: 44px; padding: 0; border-color: transparent; background: transparent; color: var(--atlas-math-highlight); font-size: 1.35rem; }
+.atlas-card-favorite:hover { border-color: var(--atlas-accent); background: var(--atlas-selected); }
+.atlas-visited-badge { padding: 2px 8px; border-radius: 999px; background: var(--atlas-subtle); color: var(--atlas-muted); font-size: .75rem; }
+.atlas-catalog-filters { display:grid; grid-template-columns:minmax(200px,2fr) repeat(4,minmax(110px,1fr)) auto; gap:10px; align-items:center; margin:20px 0 12px; }
 .atlas-catalog-filters input, .atlas-catalog-filters select { width:100%; min-height:44px; padding:8px 10px; border:1px solid var(--atlas-border-strong); border-radius:8px; background:var(--atlas-canvas); color:var(--atlas-text); }
 .atlas-catalog-filters button { min-height:44px; padding:8px 12px; }
+.atlas-catalog-progress-summary { margin: 0; color: var(--atlas-muted); font-size: .875rem; }
 .atlas-catalog-result-count { margin:0; color:var(--atlas-muted); font-size:.875rem; }
 .atlas-catalog-results { min-width:0; }
 
@@ -758,6 +737,12 @@ h3 { font-size: 1.25rem; line-height: 1.45; }
 .atlas-learning-navigation { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:28px; }
 .atlas-learning-navigation button { min-height:68px; padding:10px 12px; text-align:left; }
 .atlas-learning-navigation-next { text-align:right !important; }
+.atlas-viewer-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
+.atlas-problem-return { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 12px; border: 1px solid var(--atlas-border-strong); border-radius: 8px; text-decoration: none; }
+.atlas-favorite-button { min-height: 44px; padding: 8px 12px; }
+.atlas-practice-links { margin-top: 24px; padding: 20px; border: 1px solid var(--atlas-border); border-radius: 12px; background: var(--atlas-canvas); }
+.atlas-practice-links h2 { margin: 0; }
+.atlas-practice-links ul { display: grid; gap: 8px; margin: 14px 0 0; padding-left: 1.25rem; }
 .atlas-related-button small { color: var(--atlas-muted); }
 .atlas-related-button strong { margin-top: 2px; }
 
@@ -777,6 +762,7 @@ h3 { font-size: 1.25rem; line-height: 1.45; }
   .atlas-back-button { margin-top: 16px; }
   .atlas-catalog-filters { grid-template-columns:1fr 1fr; }
   .atlas-catalog-filters input { grid-column:1 / -1; }
+  .atlas-viewer-actions { justify-content: flex-start; margin-top: 16px; }
   .atlas-interactive-frame { padding: 12px; }
   .atlas-canvas,
   .jxgbox { min-height: 280px; height: 280px; }

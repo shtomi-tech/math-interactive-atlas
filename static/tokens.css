@@ -1,0 +1,27 @@
+:root {
+  --atlas-bg: #f8f9fb;
+  --atlas-canvas: #ffffff;
+  --atlas-subtle: #f3f4f6;
+  --atlas-formula-bg: #f8fafc;
+  --atlas-text: #1f2937;
+  --atlas-muted: #6b7280;
+  --atlas-faint: #9ca3af;
+  --atlas-border: #e5e7eb;
+  --atlas-border-strong: #d1d5db;
+  --atlas-accent: #4f46e5;
+  --atlas-accent-hover: #4338ca;
+  --atlas-selected: #eef2ff;
+  --atlas-focus: #6366f1;
+  --atlas-success: #15803d;
+  --atlas-error: #b91c1c;
+  --atlas-math-primary: #2563eb;
+  --atlas-math-secondary: #e11d48;
+  --atlas-math-helper: #64748b;
+  --atlas-math-construction: #94a3b8;
+  --atlas-math-highlight: #f59e0b;
+  --atlas-region-unselected: #f8fafc;
+  --atlas-font: "Noto Sans JP", Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --atlas-mono: "Cascadia Mono", Consolas, "Noto Sans JP", monospace;
+  --atlas-max: 1120px;
+  --atlas-gutter: 24px;
+}

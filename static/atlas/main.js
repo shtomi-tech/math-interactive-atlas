@@ -1,6 +1,7 @@
-import { renderCatalog } from "./catalog.js?v=20260912-5c";
-import { createViewer } from "./viewer.js?v=20260912-5c";
-import { goToCatalog, goToContent, replaceCatalogFilters, watchRoute } from "./router.js?v=20260912-5c";
+import { renderCatalog } from "./catalog.js?v=20260912-6g";
+import { createViewer } from "./viewer.js?v=20260912-6g";
+import { goToCatalog, goToContent, replaceCatalogFilters, watchRoute } from "./router.js?v=20260912-6g";
+import { loadLearningState, recordVisit, saveLearningState, toggleFavorite } from "./storage.js?v=20260912-6g";
 
 const dom = {
   status: document.querySelector("#atlasStatus"),
@@ -14,6 +15,10 @@ function showStatus(message = "") {
   dom.status.textContent = message;
 }
 
+const storage = (() => { try { return window.localStorage; } catch { return null; } })();
+let learningState = loadLearningState(storage);
+let activeCatalogRoute = null;
+
 async function loadContents() {
   const response = await fetch("./static/atlas/content-data.json", { cache: "no-store" });
   if (!response.ok) throw new Error(`content data request failed: ${response.status}`);
@@ -22,14 +27,44 @@ async function loadContents() {
   return contents;
 }
 
+async function loadPracticeProblems() {
+  try {
+    const response = await fetch("./static/practice/problem-data.json", { cache: "no-store" });
+    if (!response.ok) return [];
+    const problems = await response.json();
+    return Array.isArray(problems) ? problems : [];
+  } catch {
+    return [];
+  }
+}
+
 async function start() {
   try {
     const contents = await loadContents();
+    const practiceProblems = await loadPracticeProblems();
+    const persist = (nextState) => { learningState = nextState; saveLearningState(storage, learningState); return learningState; };
+    const catalogContext = () => ({ subject: activeCatalogRoute?.subject || "", unit: activeCatalogRoute?.unit || "", type: activeCatalogRoute?.type || "", progress: activeCatalogRoute?.progress || "", query: activeCatalogRoute?.query || "" });
     const viewer = createViewer(dom.viewerRoot, {
-      onBack: () => goToCatalog(),
-      onRelated: (id) => goToContent(id),
-      onNavigate: (id) => goToContent(id)
+      onBack: (context) => context?.fromCatalog ? goToCatalog({ ...context.fromCatalog, replace: true }) : goToCatalog(),
+      onRelated: (id, context = {}) => goToContent(id, { fromCatalog: context.fromCatalog, fromProblem: context.fromProblem }),
+      onNavigate: (id, context = {}) => goToContent(id, { fromCatalog: context.fromCatalog, fromProblem: context.fromProblem }),
+      onToggleFavorite: (id) => { persist(toggleFavorite(learningState, id)); return learningState.favorites.includes(id); }
     });
+
+    const renderCatalogView = (route) => {
+      activeCatalogRoute = { ...route };
+      renderCatalog(dom.catalogGrid, contents, {
+        subject: route.subject,
+        unit: route.unit,
+        type: route.type,
+        progress: route.progress,
+        query: route.query,
+        state: learningState,
+        onFilterChange: (filters) => { activeCatalogRoute = { ...activeCatalogRoute, ...filters }; replaceCatalogFilters(filters); },
+        onToggleFavorite: (id) => { persist(toggleFavorite(learningState, id)); renderCatalogView(activeCatalogRoute); },
+        onSelect: (id) => goToContent(id, { fromCatalog: catalogContext() })
+      });
+    };
 
     watchRoute(contents, (route) => {
       if (route.invalidContent) {
@@ -46,7 +81,8 @@ async function start() {
         showStatus();
         dom.catalogView.hidden = true;
         dom.viewerView.hidden = false;
-        viewer.render(content, contents);
+        persist(recordVisit(learningState, content.id));
+        viewer.render(content, contents, { fromProblem: route.fromProblem, fromCatalog: route.fromCatalog, practiceProblems, isFavorite: learningState.favorites.includes(content.id) });
         dom.viewerView.focus({ preventScroll: true });
         return;
       }
@@ -55,14 +91,7 @@ async function start() {
       dom.viewerView.hidden = true;
       dom.catalogView.hidden = false;
       showStatus();
-      renderCatalog(dom.catalogGrid, contents, {
-        subject: route.subject,
-        unit: route.unit,
-        type: route.type,
-        query: route.query,
-        onFilterChange: (filters) => replaceCatalogFilters(filters),
-        onSelect: (id) => goToContent(id)
-      });
+      renderCatalogView(route);
     });
   } catch (error) {
     console.error(error);

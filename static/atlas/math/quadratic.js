@@ -1,11 +1,43 @@
 const EPSILON = 1e-9;
 
+function formatNumber(value) {
+  const number = Number(value);
+  if (Object.is(number, -0)) return "0";
+  return Number.isInteger(number) ? String(number) : number.toFixed(3).replace(/0+$/, "").replace(/\.$/, "");
+}
+
 function coefficient(value, fallback = 0) {
   return Number.isFinite(Number(value)) ? Number(value) : fallback;
 }
 
 export function quadraticValue({ a = 0, b = 0, c = 0 }, x) {
   return coefficient(a) * Number(x) ** 2 + coefficient(b) * Number(x) + coefficient(c);
+}
+
+export function quadraticExpression({ a = 0, b = 0, c = 0 }) {
+  const A = coefficient(a); const B = coefficient(b); const C = coefficient(c);
+  const terms = [];
+  if (Math.abs(A) > EPSILON) terms.push(`${A === 1 ? "" : A === -1 ? "−" : formatNumber(A)}x²`);
+  if (Math.abs(B) > EPSILON) {
+    const sign = B < 0 ? "−" : terms.length ? "+" : "";
+    const magnitude = Math.abs(B);
+    terms.push(`${sign} ${magnitude === 1 ? "" : formatNumber(magnitude)}x`.trim());
+  }
+  if (Math.abs(C) > EPSILON || terms.length === 0) {
+    const sign = C < 0 ? "−" : terms.length ? "+" : "";
+    terms.push(`${sign} ${formatNumber(Math.abs(C))}`.trim());
+  }
+  return terms.join(" ").replace(/^\+\s*/, "");
+}
+
+export function formatIntervalSet(intervals) {
+  if (!Array.isArray(intervals) || intervals.length === 0) return "∅";
+  const endpoint = (value) => value === -Infinity ? "−∞" : value === Infinity ? "∞" : formatNumber(value);
+  return intervals.map((interval) => {
+    const left = interval.fromClosed ? "[" : "(";
+    const right = interval.toClosed ? "]" : ")";
+    return `${left}${endpoint(interval.from)}, ${endpoint(interval.to)}${right}`;
+  }).join(" ∪ ");
 }
 
 export function quadraticDiscriminant({ a = 0, b = 0, c = 0 }) {
@@ -54,7 +86,7 @@ export function quadraticInequalityIntervals({ a, b, c, operator }) {
   const wantsPositive = operator === ">" || operator === "≥"; const closed = operator === "≥" || operator === "≤";
   if (roots.length === 0) { const value = quadraticValue({ a: A, b: B, c: C }, 0); return ((value > 0) === wantsPositive || (value === 0 && closed)) ? [{ from: -Infinity, to: Infinity, fromClosed: false, toClosed: false }] : []; }
   if (roots.length === 1) return wantsPositive === (A > 0) ? [{ from: -Infinity, to: roots[0], fromClosed: false, toClosed: closed }, { from: roots[0], to: Infinity, fromClosed: closed, toClosed: false }] : (closed ? [{ from: roots[0], to: roots[0], fromClosed: true, toClosed: true }] : []);
-  const [left, right] = roots; return wantsPositive === (A > 0) ? [{ from: -Infinity, to: left, fromClosed: false, toClosed: false }, { from: right, to: Infinity, fromClosed: false, toClosed: false }] : [{ from: left, to: right, fromClosed: closed, toClosed: closed }];
+  const [left, right] = roots; return wantsPositive === (A > 0) ? [{ from: -Infinity, to: left, fromClosed: false, toClosed: closed }, { from: right, to: Infinity, fromClosed: closed, toClosed: false }] : [{ from: left, to: right, fromClosed: closed, toClosed: closed }];
 }
 
 export function quadraticLineIntersections({ quadratic, line }) {

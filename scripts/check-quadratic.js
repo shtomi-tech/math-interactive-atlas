@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { quadraticDiscriminant, quadraticInequalityIntervals, quadraticRoots, quadraticThroughPoints, quadraticVertex } from "../static/atlas/math/quadratic.js";
+import { formatIntervalSet, quadraticDiscriminant, quadraticExpression, quadraticInequalityIntervals, quadraticRoots, quadraticThroughPoints, quadraticVertex } from "../static/atlas/math/quadratic.js";
 assert.equal(quadraticDiscriminant({ a: 1, b: 0, c: -4 }), 16);
 assert.deepEqual(quadraticRoots({ a: 1, b: 0, c: -4 }), [-2, 2]);
 assert.deepEqual(quadraticVertex({ a: 1, b: -4, c: 3 }), { x: 2, y: -1 });
@@ -8,4 +8,8 @@ assert.equal(quadraticThroughPoints([{ x: 0, y: 1 }, { x: 0, y: 2 }, { x: 1, y: 
 assert.deepEqual(quadraticInequalityIntervals({ a: 1, b: 0, c: -4, operator: ">" }).map(({ from, to }) => [from, to]), [[-Infinity, -2], [2, Infinity]]);
 assert.deepEqual(quadraticInequalityIntervals({ a: 1, b: 0, c: 1, operator: "<" }), []);
 assert.deepEqual(quadraticInequalityIntervals({ a: -1, b: 0, c: 4, operator: ">" }).map(({ from, to }) => [from, to]), [[-2, 2]]);
+assert.equal(quadraticExpression({ a: 1, b: 0, c: -4 }), "x² − 4");
+assert.equal(formatIntervalSet(quadraticInequalityIntervals({ a: 1, b: 0, c: -4, operator: ">" })), "(−∞, -2) ∪ (2, ∞)");
+assert.equal(formatIntervalSet(quadraticInequalityIntervals({ a: 1, b: 0, c: -4, operator: "≥" })), "(−∞, -2] ∪ [2, ∞)");
+assert.equal(formatIntervalSet([]), "∅");
 console.log("Quadratic math: PASS (discriminant, roots, vertex, points, intervals)");

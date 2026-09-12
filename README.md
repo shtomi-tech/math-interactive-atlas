@@ -5,9 +5,12 @@
 ## 数学インタラクティブ図鑑
 
 - URL: [`atlas.html`](./atlas.html)
+- Practice: [`practice.html`](./practice.html)
 - 目的: 「触る → 観察 → 気づく」の流れで、数学の関係を視覚的に理解する
 - 実装済み: 数学I・数学Aの7単元、40教材。二次関数・集合・場合の数・確率・データ分析・図形と計量・図形の性質・数と式・数学と人間の活動を扱う
 - 教材データ: [`static/atlas/content-data.json`](./static/atlas/content-data.json) を正本とするデータ駆動構成
+- Practice問題: [`static/practice/problem-data.json`](./static/practice/problem-data.json) に7単元21問を収録。図鑑とは独立した問題形式・採点処理を持つ
+- 学習ループ: 図鑑で観察し、Practiceで使い、間違えた問題から図鑑へ戻る。お気に入り・閲覧・問題結果はブラウザのlocalStorageにだけ保存する
 - Interaction Engine: `static/atlas/interactions/index.js` のRegistry経由で10エンジンを切り替える。AlgebraLab / NumberLineLab / AlgorithmLabを追加し、既存Engineの新modeもRegistryで再利用する
 - 設計書: [`docs/atlas/DESIGN.md`](./docs/atlas/DESIGN.md)
 
@@ -21,6 +24,23 @@
 - 数学A・図形の性質: 三角形の五心を追いかける、角の二等分線と辺の比、円周角を動かす、方べきの定理を動かす
 - 数学A・数学と人間の活動: ユークリッド互除法を動かす
 - カタログは検索、科目・単元・Interaction Typeの絞り込み、同一科目内の前後移動に対応する
+- カタログは閲覧済み・未閲覧・お気に入りでも絞り込める。URLには `q`、`subject`、`unit`、`type`、`progress` を同期する
+
+## データ構成
+
+```text
+Atlas: static/atlas/content-data.json
+Practice: static/practice/problem-data.json
+Shared: static/atlas/curriculum.js / static/atlas/storage.js / static/tokens.css
+```
+
+## Practice
+
+- [`practice.html`](./practice.html): 21問の問題一覧。科目・単元・難易度・間違えた問題で絞り込める
+- [`practice.html?problem=quad-discriminant-01`](./practice.html?problem=quad-discriminant-01): 問題を開く
+- [`practice.html?mode=mistakes`](./practice.html?mode=mistakes): 要復習の問題だけを表示する
+- 正解判定後は自動で次へ進まず、次の問題ボタンを明示的に押す。誤答時は該当する図鑑教材へ戻れる
+- 学習状態は `math-interactive-atlas-state-v1` としてこのブラウザ内に保存し、ログインやバックエンドは使用しない
 
 ## Checks
 
@@ -39,11 +59,19 @@ node scripts/check-number-line.js
 node scripts/check-sample-space.js
 node scripts/check-number-theory.js
 node scripts/check-geometry.js
+node scripts/check-quadratic.js
+node scripts/check-trigonometry.js
+node scripts/check-curriculum.js
+node scripts/check-related-content.js
+node scripts/check-practice-data.js
+node scripts/check-practice-answer.js
+node scripts/check-practice-links.js
+node scripts/check-learning-state.js
 ```
 
 GitHub Actionsでも、同じ契約・数学ロジック検査と対象JavaScriptの構文検査を実行します。
 
-GitHub ActionsのAtlas checksはpush / pull requestで実行します。Pages公開は手動実行の [`.github/workflows/pages.yml`](./.github/workflows/pages.yml) から行い、`atlas.html`、`static/atlas.css`、`static/atlas/` を公開します。GitHub Pages deployment requires repository-side Pages configuration. PagesがRepository設定またはGitHubプランで有効化できない場合は、`Pages configuration required` として扱います。
+GitHub ActionsのAtlas checksはpush / pull requestで実行します。Pages公開は手動実行の [`.github/workflows/pages.yml`](./.github/workflows/pages.yml) から行い、AtlasとPracticeのHTML・CSS・JS・データを公開します。GitHub Pages deployment requires repository-side Pages configuration. PagesがRepository設定またはGitHubプランで有効化できない場合は、`Pages configuration required` として扱います。
 
 `zukan.html` / `static/zukan/` は旧プロトタイプです。新規実装の正本は `atlas.html` / `static/atlas/` です。Legacy prototype. Do not add new features here.
 

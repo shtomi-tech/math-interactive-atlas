@@ -27,15 +27,21 @@ jobs:
         run: |
           test -f atlas.html
           test -f index.html
+          test -f practice.html
+          test -f static/tokens.css
           test -f static/atlas.css
           test -f static/atlas/main.js
           test -f static/atlas/content-data.json
+          test -f static/practice.css
+          test -f static/practice/main.js
+          test -f static/practice/problem-data.json
       - name: Prepare static files
         run: |
           mkdir -p _site/static
-          cp atlas.html index.html _site/
-          cp static/atlas.css _site/static/atlas.css
+          cp atlas.html index.html practice.html _site/
+          cp static/tokens.css static/atlas.css static/practice.css _site/static/
           cp -R static/atlas _site/static/atlas
+          cp -R static/practice _site/static/practice
           touch _site/.nojekyll
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

@@ -1,7 +1,7 @@
 # 高校数学インタラクティブ図鑑 Design Contract
 
 Version: 1.0
-Scope: `atlas.html` と `static/atlas/` の図鑑UI
+Scope: `atlas.html`、`practice.html`、`static/atlas/`、`static/practice/` の学習UI
 
 ## 原則
 
@@ -56,6 +56,18 @@ Good Design = Invisible UI + Visible Mathematics + Meaningful Interaction
 ### Learning Navigation
 
 Viewerのパンくずには同一科目内の位置を表示し、教材末尾には前後の教材への導線を置く。順序は `curriculum.js` の正本に従い、単元をまたいでも同一科目内に限定する。関連教材は別の入口として残し、一本道にはしない。
+
+### Learning Loop
+
+学習の導線は `SEE → MOVE → NOTICE → USE → REVIEW` とする。
+
+- `SEE`: Atlasのカタログから教材を選び、動かして観察する
+- `MOVE`: Viewerの「この概念を問題で使う」からPracticeへ移る
+- `NOTICE`: 図鑑では正誤や点数を出さず、発見ポイントと変化を確認する
+- `USE`: Practiceで単一選択または数値問題に答える。自動で次へ進まず、明示的なボタンで移動する
+- `REVIEW`: 誤答時は該当教材へのリンクを表示し、Atlasには「問題に戻る」導線を表示する
+
+お気に入り・閲覧・Practiceの結果は `static/atlas/storage.js` の同一状態へ保存する。保存先はこのブラウザのlocalStorageだけで、ログイン、バックエンド、個人情報、XPやゲーム的報酬は導入しない。PracticeのUIは共有トークンを使い、クラス名は `practice-*` 名前空間に限定する。
 
 ## インタラクション
 

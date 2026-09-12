@@ -1,4 +1,4 @@
-import { mountFunctionGraph } from "./function-graph.js?v=20260912-5c";
+import { mountFunctionGraph } from "./function-graph.js?v=20260912-6g";
 import { mountGeometryBoard } from "./geometry-board.js?v=20260912-5c";
 import { mountRangeGraph } from "./range-graph.js?v=20260912-3a";
 import { mountRegionSelector } from "./region-selector.js?v=20260912-3a";

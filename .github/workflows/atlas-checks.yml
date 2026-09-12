@@ -37,6 +37,10 @@ jobs:
           node scripts/check-curriculum.js
           node scripts/check-related-content.js
           node scripts/check-hypothesis-test.js
+          node scripts/check-practice-data.js
+          node scripts/check-practice-answer.js
+          node scripts/check-practice-links.js
+          node scripts/check-learning-state.js
       - name: Check JavaScript syntax
         shell: bash
         run: |
@@ -72,3 +76,10 @@ jobs:
           node --check static/atlas/math/quadratic.js
           node --check static/atlas/math/trigonometry.js
           node --check static/atlas/math/hypothesis-test.js
+          node --check static/atlas/storage.js
+          node --check static/practice/main.js
+          node --check static/practice/router.js
+          node --check static/practice/catalog.js
+          node --check static/practice/runner.js
+          node --check static/practice/answer.js
+          node --check static/practice/validation.js
