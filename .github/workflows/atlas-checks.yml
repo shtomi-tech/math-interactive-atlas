@@ -25,6 +25,9 @@ jobs:
           node scripts/check-event-regions.js
           node scripts/check-conditional-probability.js
           node scripts/check-combinatorics.js
+          node scripts/check-statistics.js
+          node scripts/check-probability.js
+          node scripts/check-hypothesis-test.js
       - name: Check JavaScript syntax
         shell: bash
         run: |
@@ -38,8 +41,13 @@ jobs:
           node --check static/atlas/interactions/geometry-board.js
           node --check static/atlas/interactions/region-selector.js
           node --check static/atlas/interactions/combinatorics-viewer.js
+          node --check static/atlas/interactions/data-lab.js
+          node --check static/atlas/interactions/simulation-lab.js
           node --check static/atlas/math/set-regions.js
           node --check static/atlas/math/set-relations.js
           node --check static/atlas/math/event-regions.js
           node --check static/atlas/math/conditional-probability.js
           node --check static/atlas/math/combinatorics.js
+          node --check static/atlas/math/statistics.js
+          node --check static/atlas/math/probability.js
+          node --check static/atlas/math/hypothesis-test.js

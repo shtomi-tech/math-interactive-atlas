@@ -1,6 +1,6 @@
-import { renderCatalog } from "./catalog.js?v=20260912-3a";
-import { createViewer } from "./viewer.js?v=20260912-3a";
-import { goToCatalog, goToContent, watchRoute } from "./router.js?v=20260912-3a";
+import { renderCatalog } from "./catalog.js?v=20260912-3b";
+import { createViewer } from "./viewer.js?v=20260912-3b";
+import { goToCatalog, goToContent, watchRoute } from "./router.js?v=20260912-3b";
 
 const dom = {
   status: document.querySelector("#atlasStatus"),

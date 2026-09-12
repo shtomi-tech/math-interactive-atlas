@@ -628,6 +628,84 @@ h3 { font-size: 1.25rem; line-height: 1.45; }
 .atlas-combination-group strong { font-family: var(--atlas-mono); }
 .atlas-combination-group small { color: var(--atlas-muted); font-size: .75rem; }
 
+.atlas-canvas.atlas-data-canvas,
+.atlas-canvas.atlas-simulation-canvas {
+  min-height: 0;
+  height: auto;
+  overflow: visible;
+}
+.atlas-data-lab,
+.atlas-simulation-lab { display: grid; gap: 16px; width: 100%; }
+.atlas-data-diagram,
+.atlas-simulation-diagram { min-width: 0; }
+.atlas-data-svg,
+.atlas-simulation-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--atlas-border);
+  border-radius: 12px;
+  background: var(--atlas-canvas);
+}
+.atlas-data-axis,
+.atlas-simulation-axis { stroke: var(--atlas-math-helper); stroke-width: 1.5; }
+.atlas-data-tick { stroke: var(--atlas-math-construction); stroke-width: 1.5; }
+.atlas-data-grid-line { stroke: var(--atlas-border); stroke-width: 1; stroke-dasharray: 4 5; }
+.atlas-data-axis-label,
+.atlas-simulation-axis-label {
+  fill: var(--atlas-muted);
+  font-family: var(--atlas-mono);
+  font-size: 12px;
+  text-anchor: middle;
+}
+.atlas-data-point { fill: var(--atlas-math-highlight); stroke: var(--atlas-math-primary); stroke-width: 2; }
+.atlas-data-point-draggable { cursor: ew-resize; }
+.atlas-data-point-label { fill: var(--atlas-text); font-family: var(--atlas-mono); font-size: 12px; text-anchor: middle; }
+.atlas-data-distance { stroke: var(--atlas-math-construction); stroke-width: 3; stroke-linecap: round; }
+.atlas-data-marker { stroke-width: 3; }
+.atlas-data-marker-mean { stroke: var(--atlas-math-primary); fill: var(--atlas-math-primary); }
+.atlas-data-marker-median { stroke: var(--atlas-math-secondary); fill: var(--atlas-math-secondary); }
+.atlas-data-marker-label { font-size: 13px; font-weight: 700; text-anchor: middle; }
+.atlas-data-controls,
+.atlas-simulation-controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
+.atlas-data-range-control,
+.atlas-data-select-control,
+.atlas-simulation-range-control { display: grid; gap: 5px; min-width: 0; }
+.atlas-data-control-heading,
+.atlas-simulation-control-heading { display: flex; justify-content: space-between; gap: 10px; color: var(--atlas-muted); font-size: .8125rem; font-weight: 650; }
+.atlas-data-control-heading output,
+.atlas-simulation-control-heading output { color: var(--atlas-accent); font-family: var(--atlas-mono); }
+.atlas-data-range-control input,
+.atlas-simulation-range-control input { width: 100%; accent-color: var(--atlas-accent); }
+.atlas-data-select-control > span { color: var(--atlas-muted); font-size: .8125rem; font-weight: 650; }
+.atlas-data-select-control select { width: 100%; min-height: 44px; padding: 6px 8px; border: 1px solid var(--atlas-border-strong); border-radius: 8px; background: var(--atlas-canvas); color: var(--atlas-text); }
+.atlas-data-result,
+.atlas-simulation-result { padding: 12px 16px; border-left: 3px solid var(--atlas-math-highlight); border-radius: 8px; background: #fffbeb; }
+.atlas-data-result-label,
+.atlas-simulation-result-label { color: var(--atlas-muted); font-size: .8125rem; font-weight: 650; }
+.atlas-data-formula,
+.atlas-simulation-formula { display: grid; min-height: 44px; place-items: center; color: var(--atlas-text); }
+.atlas-data-formula .katex,
+.atlas-simulation-formula .katex { font-size: 1.1rem; }
+.atlas-data-summary,
+.atlas-simulation-theory,
+.atlas-simulation-observation { margin-top: 6px; color: var(--atlas-text); font-weight: 650; text-align: center; }
+.atlas-boxplot-raw-point.is-selected { fill: var(--atlas-math-secondary); stroke-width: 3; }
+.atlas-boxplot-whisker,
+.atlas-boxplot-cap { stroke: var(--atlas-math-helper); stroke-width: 3; }
+.atlas-boxplot-box { fill: rgba(37, 99, 235, .16); stroke: var(--atlas-math-primary); stroke-width: 2; }
+.atlas-boxplot-median { stroke: var(--atlas-math-highlight); stroke-width: 4; }
+.atlas-boxplot-label { fill: var(--atlas-text); font-size: 12px; text-anchor: middle; }
+.atlas-data-scatter-label { fill: var(--atlas-math-primary); font-family: var(--atlas-mono); font-size: 16px; font-weight: 700; }
+.atlas-simulation-bar { fill: rgba(37, 99, 235, .3); stroke: var(--atlas-math-primary); stroke-width: 1; }
+.atlas-simulation-bar.is-tail { fill: rgba(245, 158, 11, .78); stroke: #b45309; }
+.atlas-simulation-threshold { stroke: var(--atlas-math-secondary); stroke-width: 2; stroke-dasharray: 5 4; }
+.atlas-simulation-threshold-label { fill: var(--atlas-math-secondary); font-size: 12px; font-weight: 700; }
+.atlas-simulation-five-percent { stroke: var(--atlas-math-highlight); stroke-width: 2; stroke-dasharray: 3 4; }
+.atlas-simulation-five-percent-label { fill: #92400e; font-family: var(--atlas-mono); font-size: 12px; text-anchor: end; }
+.atlas-simulation-axis-title { fill: var(--atlas-muted); font-size: 13px; text-anchor: middle; }
+.atlas-simulation-button { min-height: 48px; padding: 8px 12px; }
+
 .atlas-canvas-fallback { display: grid; min-height: 360px; place-items: center; padding: 24px; color: var(--atlas-muted); text-align: center; }
 
 .atlas-controls {

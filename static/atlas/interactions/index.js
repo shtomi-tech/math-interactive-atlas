@@ -3,13 +3,17 @@ import { mountGeometryBoard } from "./geometry-board.js?v=20260912-3a";
 import { mountRangeGraph } from "./range-graph.js?v=20260912-3a";
 import { mountRegionSelector } from "./region-selector.js?v=20260912-3a";
 import { mountCombinatoricsViewer } from "./combinatorics-viewer.js?v=20260912-3a";
+import { mountDataLab } from "./data-lab.js?v=20260912-3b";
+import { mountSimulationLab } from "./simulation-lab.js?v=20260912-3b";
 
 const ENGINES = Object.freeze({
   functionGraph: mountFunctionGraph,
   rangeGraph: mountRangeGraph,
   geometryBoard: mountGeometryBoard,
   regionSelector: mountRegionSelector,
-  combinatoricsViewer: mountCombinatoricsViewer
+  combinatoricsViewer: mountCombinatoricsViewer,
+  dataLab: mountDataLab,
+  simulationLab: mountSimulationLab
 });
 
 function unavailableEngine(container, error) {

@@ -145,6 +145,12 @@
       "mode": "tree-count",
       "initial": {
         "visibleDepth": 2
+      },
+      "data": {
+        "stages": [
+          ["A", "B", "C"],
+          ["1", "2"]
+        ]
       }
     },
     "discoveryPoints": [
@@ -225,6 +231,184 @@
     "source": {
       "usage": "original",
       "library": "Vanilla JavaScript",
+      "license": "Original implementation"
+    }
+  },
+  {
+    "id": "mean-median-outlier",
+    "subject": "math1",
+    "subjectLabel": "数学I",
+    "unit": "statistics",
+    "unitLabel": "データの分析",
+    "title": "平均と中央値を壊してみる",
+    "shortDescription": "1つの値を動かして、平均と中央値が外れ値から受ける影響を観察します。",
+    "instructions": "外れ値をドラッグまたはスライダーで動かし、平均と中央値の動きを比べます。",
+    "formula": "\\bar{x}=\\frac{\\sum x_i}{n}",
+    "interactionType": "drag",
+    "interaction": {
+      "engine": "dataLab",
+      "mode": "mean-median",
+      "initial": {
+        "outlier": 6
+      },
+      "data": {
+        "values": [1, 2, 3, 4, 5, 6]
+      }
+    },
+    "discoveryPoints": [
+      "1つの値だけを大きくすると、平均と中央値のどちらが大きく動くだろう？",
+      "極端な値があるデータでは、平均はどんな影響を受けるだろう？",
+      "中央値があまり動かないのはなぜだろう？"
+    ],
+    "related": [
+      "variance-distance"
+    ],
+    "source": {
+      "usage": "original",
+      "library": "SVG / Vanilla JavaScript",
+      "license": "Original implementation"
+    }
+  },
+  {
+    "id": "variance-distance",
+    "subject": "math1",
+    "subjectLabel": "数学I",
+    "unit": "statistics",
+    "unitLabel": "データの分析",
+    "title": "分散を距離として見る",
+    "shortDescription": "平均からの距離とその二乗を数直線上で観察し、分散の意味をつかみます。",
+    "instructions": "中心と広がりを動かして、平均・距離・分散がどう変わるか比べます。",
+    "formula": "V=\\frac{1}{n}\\sum(x_i-\\bar{x})^2",
+    "interactionType": "slider",
+    "interaction": {
+      "engine": "dataLab",
+      "mode": "variance-distance",
+      "initial": {
+        "center": 5,
+        "spread": 1
+      },
+      "data": {
+        "deviations": [-2, -1, 0, 0, 1, 2]
+      }
+    },
+    "discoveryPoints": [
+      "centerだけを変えると、全体と分散はどう動くだろう？",
+      "spreadを大きくすると、平均からの距離はどう変わるだろう？",
+      "分散が距離の二乗の平均になっているのはなぜだろう？"
+    ],
+    "related": [
+      "mean-median-outlier",
+      "boxplot-drag"
+    ],
+    "source": {
+      "usage": "original",
+      "library": "SVG / Vanilla JavaScript",
+      "license": "Original implementation"
+    }
+  },
+  {
+    "id": "boxplot-drag",
+    "subject": "math1",
+    "subjectLabel": "数学I",
+    "unit": "statistics",
+    "unitLabel": "データの分析",
+    "title": "箱ひげ図を動かす",
+    "shortDescription": "データ点を動かして、五数要約と箱ひげ図の変化を観察します。",
+    "instructions": "データ点をドラッグするか、選択した点のスライダーを動かして箱ひげ図を更新します。",
+    "formula": "\\min\\quad Q_1\\quad Q_2\\quad Q_3\\quad \\max",
+    "interactionType": "drag",
+    "interaction": {
+      "engine": "dataLab",
+      "mode": "boxplot",
+      "initial": {},
+      "data": {
+        "values": [1, 2, 3, 4, 5, 6, 7, 8, 9]
+      }
+    },
+    "discoveryPoints": [
+      "データ点を動かすと、最小値・中央値・最大値のどれが変わるだろう？",
+      "点の順序が入れ替わっても、並べ直した五数要約はどうなるだろう？",
+      "箱の長さはデータのどんな広がりを表しているだろう？"
+    ],
+    "related": [
+      "variance-distance",
+      "correlation-builder"
+    ],
+    "source": {
+      "usage": "original",
+      "library": "SVG / Vanilla JavaScript",
+      "license": "Original implementation"
+    }
+  },
+  {
+    "id": "correlation-builder",
+    "subject": "math1",
+    "subjectLabel": "数学I",
+    "unit": "statistics",
+    "unitLabel": "データの分析",
+    "title": "相関係数を作る",
+    "shortDescription": "傾向とばらつきを変えて、散布図と相関係数の関係を観察します。",
+    "instructions": "傾向とばらつきを組み合わせ、点の向き・まとまり方と相関係数を比べます。",
+    "formula": "r=\\frac{\\sum(x-\\bar{x})(y-\\bar{y})}{\\sqrt{\\sum(x-\\bar{x})^2\\sum(y-\\bar{y})^2}}",
+    "interactionType": "slider",
+    "interaction": {
+      "engine": "dataLab",
+      "mode": "correlation",
+      "initial": {
+        "trend": 1,
+        "noise": 1
+      },
+      "data": {
+        "x": [1, 2, 3, 4, 5, 6, 7, 8],
+        "noisePattern": [-1.2, 0.6, -0.4, 1, -0.8, 0.3, 1.1, -0.5]
+      }
+    },
+    "discoveryPoints": [
+      "trendが正と負のとき、散布図の向きとrの符号はどう変わるだろう？",
+      "noiseを大きくすると、点のまとまり方とrの絶対値はどうなるだろう？",
+      "相関係数と直線の傾きは、なぜ同じものではないのだろう？"
+    ],
+    "related": [
+      "boxplot-drag",
+      "hypothesis-test-coin"
+    ],
+    "source": {
+      "usage": "original",
+      "library": "SVG / Vanilla JavaScript",
+      "license": "Original implementation"
+    }
+  },
+  {
+    "id": "hypothesis-test-coin",
+    "subject": "math1",
+    "subjectLabel": "数学I",
+    "unit": "statistics",
+    "unitLabel": "データの分析",
+    "title": "仮説検定をシミュレーション",
+    "shortDescription": "公平なコインを仮定し、観測された表の回数以上が起こる確率を理論値と実験で比べます。",
+    "instructions": "観測値を動かし、二項分布の上側確率とシミュレーション結果を分けて観察します。",
+    "formula": "P(X\\ge k)=\\sum_{i=k}^{n}\\binom{n}{i}p^i(1-p)^{n-i}",
+    "interactionType": "simulation",
+    "interaction": {
+      "engine": "simulationLab",
+      "mode": "hypothesis-coin",
+      "initial": {
+        "n": 20,
+        "observedHeads": 15,
+        "nullProbability": 0.5
+      }
+    },
+    "discoveryPoints": [
+      "観測された表の回数を大きくすると、その値以上が起こる確率はどう変わるだろう？",
+      "シミュレーション回数を増やすと、実験割合は理論値へどう近づくだろう？",
+      "「めったに起こらない」と判断する基準を変えると、結論はどう変わるだろう？"
+    ],
+    "related": [
+      "correlation-builder"
+    ],
+    "source": {
+      "usage": "original",
+      "library": "SVG / Vanilla JavaScript",
       "license": "Original implementation"
     }
   },

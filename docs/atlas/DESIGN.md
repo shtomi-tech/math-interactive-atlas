@@ -51,7 +51,7 @@ Good Design = Invisible UI + Visible Mathematics + Meaningful Interaction
 
 ## インタラクション
 
-`static/atlas/interactions/index.js` のInteraction Engine Registryを入口とする。ViewerはRegistryだけを呼び、`interaction.engine` に応じて `functionGraph`、`rangeGraph`、`geometryBoard`、`regionSelector`、または `combinatoricsViewer` をmountする。すべてのEngineは `reset()`、`destroy()`、`getState()` を返し、パラメータ型Engineは `setParameter()` も返す。
+`static/atlas/interactions/index.js` のInteraction Engine Registryを入口とする。ViewerはRegistryだけを呼び、`interaction.engine` に応じて `functionGraph`、`rangeGraph`、`geometryBoard`、`regionSelector`、`combinatoricsViewer`、`dataLab`、または `simulationLab` をmountする。すべてのEngineは `reset()`、`destroy()`、`getState()` を返し、パラメータ型Engineは `setParameter()` も返す。
 
 `static/atlas/interactions/function-graph.js` は軸、グリッド、関数グラフ、点、補助線、動的ラベル、パラメータ更新、Reset、Destroyを提供する。`range-graph.js` はこれを使って関数全体、定義域内の強調曲線、左右端の44pxドラッグハンドル、最大・最小候補を表示する。
 
@@ -62,6 +62,14 @@ Good Design = Invisible UI + Visible Mathematics + Meaningful Interaction
 ### Combinatorics Visualization
 
 `combinatorics-viewer.js` は `tree-count`、`permutations`、`combinations` のSceneを共通Engine契約で提供する。数を先に固定表示するのではなく、樹形図や並べた結果、組へのグループ化からパターンを観察し、その後に階乗・順列・組合せの公式へ接続する。順列一覧はPhase 3Aの上限を5!までとし、組合せSceneの大きな順列一覧は表示上限を設けてモバイルの可読性を保つ。純粋な階乗・個数・列挙処理は `static/atlas/math/combinatorics.js` に置き、View層へ持ち込まない。
+
+### Data Visualization
+
+`data-lab.js` は `mean-median`、`variance-distance`、`boxplot`、`correlation` のSceneを共通Engine契約で提供する。数値を表へ並べるだけでなく、数値 → 位置 → 関係の順に、数直線・箱ひげ図・散布図へ変換して表示する。統計計算はDOMに依存しない `static/atlas/math/statistics.js` に置く。分散は高校数学Iの母分散 `1/n Σ(xi−x̄)²`、四分位数は奇数個の中央値を上下半分から除く方式、箱ひげ図は最小値・Q1・中央値・Q3・最大値の五数要約を使い、Tukey式の外れ値判定は行わない。
+
+### Simulation
+
+`simulation-lab.js` は理論値と1回ごとのシミュレーション結果を別の表示領域で扱う。`hypothesis-coin` では公平なコイン `p = 0.5`、20回試行、観測値以上の上側確率を使い、純粋な二項分布計算は `static/atlas/math/probability.js`、仮説検定の表示用事実は `static/atlas/math/hypothesis-test.js` に分離する。乱数結果を正確なp値や公式の証明として扱わない。
 
 GeometryBoardの共通CoreはBoard生成、座標変換、44pxタッチ領域、Resize、Reset、Destroyを担当し、教材固有の図形はSceneとしてdispatchする。`triangle-area-sine` では `h = a sin C` と `S = 1/2 × b × h = 1/2 ab sin C` を同じ状態から計算する。
 
@@ -82,6 +90,7 @@ Discovery Pointは結論ではなく観察の問いにする。利用者が値�
 - ページ全体に横スクロールを出さない
 - Sliderにはラベルと現在値を表示する
 - Resetはbuttonとして提供する
+- DataLabのドラッグ教材には、同じstateへ到達できるスライダーまたは選択中データのキーボード操作を用意する
 - カードと関連教材はbuttonとしてキーボード操作できるようにする
 - `:focus-visible` は `2px solid #6366f1` と offset 2pxを維持する
 - `prefers-reduced-motion: reduce` では遷移を抑制する
@@ -100,6 +109,11 @@ Discovery Pointは結論ではなく観察の問いにする。利用者が値�
 - `/atlas.html?content=counting-tree` — 数え上げの樹形図教材Viewer
 - `/atlas.html?content=permutations-all` — 順列を全部並べる教材Viewer
 - `/atlas.html?content=combinations-order` — 組合せは順序を無視する教材Viewer
+- `/atlas.html?content=mean-median-outlier` — 平均と中央値を壊してみる教材Viewer
+- `/atlas.html?content=variance-distance` — 分散を距離として見る教材Viewer
+- `/atlas.html?content=boxplot-drag` — 箱ひげ図を動かす教材Viewer
+- `/atlas.html?content=correlation-builder` — 相関係数を作る教材Viewer
+- `/atlas.html?content=hypothesis-test-coin` — 仮説検定をシミュレーションする教材Viewer
 - `/atlas.html?subject=math1` — 数学Iだけのカタログ
 - `/atlas.html?subject=mathA` — 数学Aだけのカタログ
 - `/atlas.html?subject=math1&unit=quadratic` — 単元指定カタログ

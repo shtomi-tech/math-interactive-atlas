@@ -9,12 +9,6 @@ import {
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 const DISPLAY_LIMIT = 240;
-let viewerSequence = 0;
-
-const TREE_STAGES = Object.freeze([
-  Object.freeze(["A", "B", "C"]),
-  Object.freeze(["1", "2"])
-]);
 
 const COMBINATORICS_VIEWS = Object.freeze({
   ORDERED: "ordered",
@@ -100,55 +94,50 @@ function cleanupScene(container, cleanup) {
   container.classList.remove("atlas-combinatorics-canvas");
 }
 
-function createTreeSvg(container, instanceId) {
+function createTreeSvg(container, stages) {
+  const stageData = stages.map((stage) => stage.map((choice) => String(choice)));
+  const width = 680;
+  const height = Math.max(300, Math.min(520, 100 + Math.max(2, stageData.reduce((total, stage) => total * stage.length, 1)) * 34));
+  const stageX = (stageIndex) => 90 + ((width - 170) / Math.max(1, stageData.length)) * (stageIndex + 1);
+  const yFor = (index, count) => 40 + ((height - 80) / Math.max(1, count - 1)) * index;
   const svg = svgElement("svg", {
     class: "atlas-combinatorics-svg atlas-tree-svg",
-    viewBox: "0 0 500 340",
+    viewBox: `0 0 ${width} ${height}`,
     role: "img",
-    "aria-label": "A・B・Cから1・2を選ぶ樹形図"
+    "aria-label": `${stageData.map((stage) => stage.join("・")).join("から選ぶ樹形図")}`
   });
-  svg.append(svgElement("rect", { class: "atlas-combinatorics-panel", x: 12, y: 12, width: 476, height: 316, rx: 14 }));
-  const start = { x: 52, y: 170 };
-  const firstNodes = [
-    { label: "A", x: 190, y: 70 },
-    { label: "B", x: 190, y: 170 },
-    { label: "C", x: 190, y: 270 }
-  ];
-  const secondNodes = [
-    { label: "1", x: 370, y: 42, parent: 0 },
-    { label: "2", x: 370, y: 88, parent: 0 },
-    { label: "1", x: 370, y: 142, parent: 1 },
-    { label: "2", x: 370, y: 188, parent: 1 },
-    { label: "1", x: 370, y: 242, parent: 2 },
-    { label: "2", x: 370, y: 288, parent: 2 }
-  ];
-  const firstElements = [];
-  const secondElements = [];
+  svg.append(svgElement("rect", { class: "atlas-combinatorics-panel", x: 12, y: 12, width: width - 24, height: height - 24, rx: 14 }));
+  const start = { x: 48, y: height / 2 };
+  const stageElements = [];
   const startGroup = svgElement("g", { class: "atlas-tree-node atlas-tree-start" });
   startGroup.append(svgElement("circle", { cx: start.x, cy: start.y, r: 22 }), svgElement("text", { x: start.x, y: start.y + 6 }));
   startGroup.children[1].textContent = "Start";
   svg.append(startGroup);
 
-  firstNodes.forEach((node) => {
-    const line = svgElement("line", { class: "atlas-tree-branch atlas-tree-first-branch", x1: start.x + 22, y1: start.y, x2: node.x - 22, y2: node.y });
-    const group = svgElement("g", { class: "atlas-tree-node atlas-tree-first-node" });
-    group.append(svgElement("circle", { cx: node.x, cy: node.y, r: 22 }), svgElement("text", { x: node.x, y: node.y + 6 }));
-    group.children[1].textContent = node.label;
-    svg.append(line, group);
-    firstElements.push({ line, group });
-  });
-
-  secondNodes.forEach((node) => {
-    const parent = firstNodes[node.parent];
-    const line = svgElement("line", { class: "atlas-tree-branch atlas-tree-second-branch", x1: parent.x + 22, y1: parent.y, x2: node.x - 22, y2: node.y });
-    const group = svgElement("g", { class: "atlas-tree-node atlas-tree-second-node" });
-    group.append(svgElement("circle", { cx: node.x, cy: node.y, r: 18 }), svgElement("text", { x: node.x, y: node.y + 5 }));
-    group.children[1].textContent = node.label;
-    svg.append(line, group);
-    secondElements.push({ line, group });
+  let parents = [{ x: start.x, y: start.y, path: [] }];
+  stageData.forEach((stage, stageIndex) => {
+    const lines = [];
+    const groups = [];
+    const children = [];
+    const childCount = parents.length * stage.length;
+    parents.forEach((parent) => stage.forEach((choice) => {
+      const index = children.length;
+      const node = { label: choice, x: stageX(stageIndex), y: yFor(index, childCount), path: [...parent.path, choice] };
+      const nodeSize = stageIndex === 0 ? 22 : 18;
+      const line = svgElement("line", { class: `atlas-tree-branch atlas-tree-stage-${stageIndex + 1}-branch`, x1: parent.x + nodeSize, y1: parent.y, x2: node.x - nodeSize, y2: node.y });
+      const group = svgElement("g", { class: `atlas-tree-node atlas-tree-stage-node atlas-tree-stage-${stageIndex + 1}-node${stageIndex === 0 ? " atlas-tree-first-node" : ""}${stageIndex === 1 ? " atlas-tree-second-node" : ""}`, "data-stage": stageIndex + 1 });
+      group.append(svgElement("circle", { cx: node.x, cy: node.y, r: nodeSize }), svgElement("text", { x: node.x, y: node.y + 6 }));
+      group.children[1].textContent = node.label;
+      svg.append(line, group);
+      lines.push(line);
+      groups.push(group);
+      children.push(node);
+    }));
+    stageElements.push({ lines, groups });
+    parents = children;
   });
   container.append(svg);
-  return { svg, firstElements, secondElements };
+  return { svg, stageElements };
 }
 
 function mountTreeCount(container, config = {}) {
@@ -160,7 +149,11 @@ function mountTreeCount(container, config = {}) {
     resultLabel: "選び方の数",
     rootClass: "atlas-tree-count-viewer"
   });
-  const tree = createTreeSvg(diagram, `atlas-tree-${viewerSequence += 1}`);
+  const stages = Array.isArray(config.data?.stages) && config.data.stages.length > 0
+    ? config.data.stages.filter((stage) => Array.isArray(stage) && stage.length > 0)
+    : [["A", "B", "C"], ["1", "2"]];
+  if (stages.length === 0) throw new TypeError("tree-count requires non-empty data.stages");
+  const tree = createTreeSvg(diagram, stages);
   const controlsRow = document.createElement("div");
   controlsRow.className = "atlas-combinatorics-control-row";
   const stepButtons = new Map();
@@ -190,18 +183,17 @@ function mountTreeCount(container, config = {}) {
   const paths = document.createElement("div");
   paths.className = "atlas-tree-paths";
   result.append(formula, summary, paths);
-  const allPaths = treePaths(TREE_STAGES);
+  const allPaths = treePaths(stages);
+  const stageCounts = stages.map((stage) => stage.length);
+  const productText = stageCounts.join(" × ");
 
   function setDepth(depth) {
     if (destroyed || ![1, 2, 3].includes(depth)) return;
     visibleDepth = depth;
-    tree.firstElements.forEach(({ line, group }) => {
-      line.style.display = "";
-      group.style.display = "";
-    });
-    tree.secondElements.forEach(({ line, group }) => {
-      line.style.display = visibleDepth >= 2 ? "" : "none";
-      group.style.display = visibleDepth >= 2 ? "" : "none";
+    tree.stageElements.forEach(({ lines, groups }, index) => {
+      const visible = visibleDepth === 3 || index < visibleDepth;
+      lines.forEach((line) => { line.style.display = visible ? "" : "none"; });
+      groups.forEach((group) => { group.style.display = visible ? "" : "none"; });
     });
     stepButtons.forEach((button, value) => {
       button.setAttribute("aria-pressed", String(value === visibleDepth));
@@ -209,10 +201,10 @@ function mountTreeCount(container, config = {}) {
     });
     if (visibleDepth === 1) {
       renderFormula(formula, "3", "3");
-      summary.textContent = "1段階目：3通りの選び方";
+      summary.textContent = `1段階目：${stageCounts[0]}通りの選び方`;
     } else {
-      renderFormula(formula, "3\\times 2=6", "3 × 2 = 6");
-      summary.textContent = visibleDepth === 3 ? "3 × 2 = 6通り（すべての経路）" : "3 × 2 = 6通り";
+      renderFormula(formula, `${productText.replaceAll(" × ", "\\times ")}=${allPaths.length}`, `${productText} = ${allPaths.length}`);
+      summary.textContent = visibleDepth === 3 ? `${productText} = ${allPaths.length}通り（すべての経路）` : `${productText} = ${allPaths.length}通り`;
     }
     paths.replaceChildren();
     if (visibleDepth === 3) {

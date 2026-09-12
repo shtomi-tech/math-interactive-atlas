@@ -36,6 +36,13 @@ const CONTENT_ORDER = Object.freeze({
     "counting-tree",
     "permutations-all",
     "combinations-order"
+  ]),
+  statistics: Object.freeze([
+    "mean-median-outlier",
+    "variance-distance",
+    "boxplot-drag",
+    "correlation-builder",
+    "hypothesis-test-coin"
   ])
 });
 

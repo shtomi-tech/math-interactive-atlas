@@ -6,9 +6,9 @@
 
 - URL: [`atlas.html`](./atlas.html)
 - 目的: 「触る → 観察 → 気づく」の流れで、数学の関係を視覚的に理解する
-- 実装済み: 集合を塗って式を作る、必要条件・十分条件、余事象・和事象を塗る、条件付き確率で世界を絞る、数え上げの樹形図、順列を全部並べる、組合せは順序を無視する、`y = ax²`、頂点形式、判別式と交点数、最大・最小と定義域、単位円でsin・cosを見る、三角形の面積とsinの13コンテンツ
+- 実装済み: 集合を塗って式を作る、必要条件・十分条件、余事象・和事象を塗る、条件付き確率で世界を絞る、数え上げの樹形図、順列を全部並べる、組合せは順序を無視する、平均と中央値を壊してみる、分散を距離として見る、箱ひげ図を動かす、相関係数を作る、仮説検定をシミュレーション、`y = ax²`、頂点形式、判別式と交点数、最大・最小と定義域、単位円でsin・cosを見る、三角形の面積とsinの18コンテンツ
 - 教材データ: [`static/atlas/content-data.json`](./static/atlas/content-data.json) を正本とするデータ駆動構成
-- Interaction Engine: `static/atlas/interactions/index.js` のRegistry経由でRegionSelector / FunctionGraph / RangeGraph / GeometryBoard / CombinatoricsViewerを切り替える。RegionSelectorは集合・条件付き確率のScene、CombinatoricsViewerは樹形図・順列・組合せのSceneで再利用する
+- Interaction Engine: `static/atlas/interactions/index.js` のRegistry経由でRegionSelector / FunctionGraph / RangeGraph / GeometryBoard / CombinatoricsViewer / DataLab / SimulationLabを切り替える。RegionSelectorは集合・条件付き確率のScene、CombinatoricsViewerは樹形図・順列・組合せのScene、DataLabは統計4 Sceneで再利用する
 - 設計書: [`docs/atlas/DESIGN.md`](./docs/atlas/DESIGN.md)
 
 ## Checks
@@ -20,11 +20,14 @@ node scripts/check-set-relations.js
 node scripts/check-event-regions.js
 node scripts/check-conditional-probability.js
 node scripts/check-combinatorics.js
+node scripts/check-statistics.js
+node scripts/check-probability.js
+node scripts/check-hypothesis-test.js
 ```
 
 GitHub Actionsでも、同じ契約・数学ロジック検査と対象JavaScriptの構文検査を実行します。
 
-`master`へのpush時は [`.github/workflows/pages.yml`](./.github/workflows/pages.yml) が `atlas.html`、`static/atlas.css`、`static/atlas/` をGitHub Pagesへ公開します。PagesがRepository設定またはGitHubプランで有効化できない場合は、`Pages configuration required` として扱います。
+GitHub ActionsのAtlas checksはpush / pull requestで実行します。Pages公開は手動実行の [`.github/workflows/pages.yml`](./.github/workflows/pages.yml) から行い、`atlas.html`、`static/atlas.css`、`static/atlas/` を公開します。GitHub Pages deployment requires repository-side Pages configuration. PagesがRepository設定またはGitHubプランで有効化できない場合は、`Pages configuration required` として扱います。
 
 `zukan.html` / `static/zukan/` は旧プロトタイプです。新規実装の正本は `atlas.html` / `static/atlas/` です。
 
@@ -44,6 +47,11 @@ GitHub Actionsでも、同じ契約・数学ロジック検査と対象JavaScrip
 /atlas.html?content=counting-tree
 /atlas.html?content=permutations-all
 /atlas.html?content=combinations-order
+/atlas.html?content=mean-median-outlier
+/atlas.html?content=variance-distance
+/atlas.html?content=boxplot-drag
+/atlas.html?content=correlation-builder
+/atlas.html?content=hypothesis-test-coin
 /atlas.html?subject=math1
 /atlas.html?subject=mathA
 /atlas.html?subject=math1&unit=quadratic
