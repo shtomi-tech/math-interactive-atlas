@@ -464,6 +464,41 @@ h3 { font-size: 1.25rem; line-height: 1.45; }
   font-size: .8125rem;
 }
 
+.atlas-relation-option:not(.is-active) { display: none; }
+.atlas-relation-option { cursor: pointer; }
+.atlas-relation-shape {
+  stroke-width: 4;
+  transition: fill 120ms ease, opacity 120ms ease;
+}
+.atlas-relation-shape-p { fill: rgba(245, 158, 11, .28); stroke: var(--atlas-math-highlight); }
+.atlas-relation-shape-q { fill: rgba(37, 99, 235, .2); stroke: var(--atlas-math-primary); }
+.atlas-relation-shape-equal { fill: rgba(79, 70, 229, .18); stroke: var(--atlas-accent); }
+.atlas-relation-labels text {
+  fill: var(--atlas-text);
+  font-family: var(--atlas-font);
+  font-size: 20px;
+  font-weight: 750;
+  text-anchor: middle;
+}
+.atlas-relation-result-fields { display: grid; gap: 6px; margin-top: 8px; }
+.atlas-relation-result-fields p { margin: 0; }
+.atlas-relation-field-label {
+  display: inline-block;
+  min-width: 4.5em;
+  color: var(--atlas-muted);
+  font-size: .8125rem;
+  font-weight: 650;
+}
+.atlas-relation-formula { display: inline-block; min-height: 32px; vertical-align: middle; }
+.atlas-relation-formula .katex { font-size: 1.1rem; }
+.atlas-relation-condition-fields {
+  display: grid;
+  gap: 3px;
+  padding-top: 4px;
+  border-top: 1px solid rgba(245, 158, 11, .3);
+}
+.atlas-relation-condition-fields p { color: var(--atlas-text); font-size: .9rem; }
+
 .atlas-canvas-fallback { display: grid; min-height: 360px; place-items: center; padding: 24px; color: var(--atlas-muted); text-align: center; }
 
 .atlas-controls {

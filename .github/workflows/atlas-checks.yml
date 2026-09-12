@@ -1,0 +1,38 @@
+name: Atlas checks
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run atlas contract checks
+        run: |
+          node scripts/check-atlas-contract.js
+          node scripts/check-set-regions.js
+          node scripts/check-set-relations.js
+      - name: Check JavaScript syntax
+        shell: bash
+        run: |
+          node --check static/atlas/main.js
+          node --check static/atlas/catalog.js
+          node --check static/atlas/viewer.js
+          node --check static/atlas/router.js
+          node --check static/atlas/interactions/index.js
+          node --check static/atlas/interactions/function-graph.js
+          node --check static/atlas/interactions/range-graph.js
+          node --check static/atlas/interactions/geometry-board.js
+          node --check static/atlas/interactions/region-selector.js
+          node --check static/atlas/math/set-regions.js
+          node --check static/atlas/math/set-relations.js

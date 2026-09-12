@@ -57,7 +57,7 @@ Good Design = Invisible UI + Visible Mathematics + Meaningful Interaction
 
 `geometry-board.js` は動的図形の共通入口である。図形はドラッグで動かせるようにし、動点と固定点を視覚的に区別する。円の教材では `keepAspectRatio: true` を使い、座標・角度・長さはCanvas外でも確認できるようにする。`unit-circle` modeは点P、OP、射影線、角度、sin・cosの座標関係を表示し、`triangle-area-sine` modeは固定辺 `a = 3`、`b = 4` と動く角Cから高さ・sin C・面積を表示する。
 
-`region-selector.js` はSVGとVanilla JavaScriptで全体集合U、集合A・B、4つの原子的領域を表示する。領域クリックと4つのtoggle buttonは同じ `selectedMask` を更新し、塗り分け・`aria-pressed`・集合式を同時に同期する。集合論のbit maskと式変換は `static/atlas/math/set-regions.js` に分離する。
+`region-selector.js` はSVGとVanilla JavaScriptのRegionSelector RegistryでSceneを切り替える。`set-regions` は全体集合U、集合A・B、4つの原子的領域を表示し、領域クリックと4つのtoggle buttonが同じ `selectedMask` を更新する。集合論のbit mask、プレーンテキスト、KaTeX式は `static/atlas/math/set-regions.js` に分離する。`necessary-sufficient` はP・Qの包含関係を4状態で表示し、ボタン、SVG、包含関係、命題、必要条件・十分条件を同じ `relation` stateから更新する。関係の真偽と説明文はDOMに依存しない `static/atlas/math/set-relations.js` に置く。
 
 GeometryBoardの共通CoreはBoard生成、座標変換、44pxタッチ領域、Resize、Reset、Destroyを担当し、教材固有の図形はSceneとしてdispatchする。`triangle-area-sine` では `h = a sin C` と `S = 1/2 × b × h = 1/2 ab sin C` を同じ状態から計算する。
 
@@ -90,6 +90,7 @@ Discovery Pointは結論ではなく観察の問いにする。利用者が値�
 - `/atlas.html?content=unit-circle` — 単位円でsin・cosを見る教材Viewer
 - `/atlas.html?content=triangle-area-sine` — 三角形の面積とsinの教材Viewer
 - `/atlas.html?content=set-regions` — 集合を塗って式を作る教材Viewer
+- `/atlas.html?content=necessary-sufficient` — 必要条件・十分条件を集合で見る教材Viewer
 - `/atlas.html?subject=math1&unit=quadratic` — 単元指定カタログ
 
 不正な `content` はエラー画面を作らず、履歴を置き換えて図鑑トップへ戻す。Viewer切り替え時は前のInteraction Engineを必ずDestroyする。

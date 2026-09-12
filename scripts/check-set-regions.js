@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { expressionForMask, REGION_BITS, toggleRegion } from "../static/atlas/math/set-regions.js";
+import { expressionForMask, latexForMask, REGION_BITS, toggleRegion } from "../static/atlas/math/set-regions.js";
 
 const expected = new Map([
   [0, "∅"],
@@ -20,7 +20,11 @@ const expected = new Map([
   [15, "U"]
 ]);
 
-expected.forEach((expression, mask) => assert.equal(expressionForMask(mask), expression, `mask ${mask}`));
+expected.forEach((expression, mask) => {
+  assert.equal(expressionForMask(mask), expression, `mask ${mask}`);
+  assert.equal(typeof latexForMask(mask), "string", `latex mask ${mask} type`);
+  assert.ok(latexForMask(mask).trim(), `latex mask ${mask} is empty`);
+});
 assert.equal(toggleRegion(0, REGION_BITS.INTERSECTION), 4);
 assert.equal(toggleRegion(4, REGION_BITS.INTERSECTION), 0);
 assert.equal(toggleRegion(15, REGION_BITS.OUTSIDE), 14);

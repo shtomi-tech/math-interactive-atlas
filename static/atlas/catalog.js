@@ -12,7 +12,8 @@ const INTERACTION_LABELS = {
 const UNIT_ORDER = Object.freeze(["algebra", "trigonometry", "quadratic", "statistics"]);
 const CONTENT_ORDER = Object.freeze({
   algebra: Object.freeze([
-    "set-regions"
+    "set-regions",
+    "necessary-sufficient"
   ]),
   quadratic: Object.freeze([
     "quadratic-basic",

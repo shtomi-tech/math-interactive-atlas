@@ -22,7 +22,41 @@
       "AまたはBに入る部分をすべて選ぶと、どんな式になるだろう？",
       "Aの外側をすべて選ぶと、Aを使ってどう表せるだろう？"
     ],
-    "related": [],
+    "related": [
+      "necessary-sufficient"
+    ],
+    "source": {
+      "usage": "original",
+      "library": "SVG / Vanilla JavaScript",
+      "license": "Original implementation"
+    }
+  },
+  {
+    "id": "necessary-sufficient",
+    "subject": "math1",
+    "subjectLabel": "数学I",
+    "unit": "algebra",
+    "unitLabel": "数と式",
+    "title": "必要条件・十分条件を集合で見る",
+    "shortDescription": "集合PとQの包含関係を変えて、p⇒qと必要条件・十分条件の関係を観察します。",
+    "instructions": "PとQの関係を切り替えて、包含関係と命題の向きを見比べます。",
+    "formula": "P\\subseteq Q\\quad \\Longleftrightarrow\\quad p\\Rightarrow q",
+    "interactionType": "select",
+    "interaction": {
+      "engine": "regionSelector",
+      "mode": "necessary-sufficient",
+      "initial": {
+        "relation": "p-subset-q"
+      }
+    },
+    "discoveryPoints": [
+      "PがQの内側にすべて入っているとき、p⇒qとq⇒pのどちらが成り立つだろう？",
+      "pがqの十分条件なら、qはpにとって何条件になるだろう？",
+      "PとQが同じ集合になったとき、pとqの関係はどう変わるだろう？"
+    ],
+    "related": [
+      "set-regions"
+    ],
     "source": {
       "usage": "original",
       "library": "SVG / Vanilla JavaScript",
