@@ -1,6 +1,6 @@
-import { loadLearningState, saveLearningState } from "../atlas/storage.js?v=20260912-7k";
-import { summarizeLearning } from "./summary.js?v=20260912-7k";
-import { buildLearningRecord, parseLearningRecord, replaceLearningRecord } from "./record.js?v=20260912-7k";
+import { loadLearningState, saveLearningState } from "../atlas/storage.js?v=20260913-8a";
+import { summarizeLearning } from "./summary.js?v=20260913-8a";
+import { buildLearningRecord, parseLearningRecord, replaceLearningRecord } from "./record.js?v=20260913-8a";
 
 const dom = { status: document.querySelector("#progressStatus"), summary: document.querySelector("#progressSummary"), units: document.querySelector("#progressUnits"), contents: document.querySelector("#progressContents"), recent: document.querySelector("#recentActivity"), import: document.querySelector("#recordImport"), importPreview: document.querySelector("#recordImportPreview") };
 const storage = (() => { try { return window.localStorage; } catch { return null; } })();

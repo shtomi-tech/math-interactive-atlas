@@ -84,3 +84,11 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+      - name: Smoke test deployed Pages
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          test -n "$PAGE_URL"
+          for path in / /atlas.html /practice.html /sets.html /worksheet.html /progress.html; do
+            curl --fail --silent --show-error "$PAGE_URL$path" >/dev/null
+          done

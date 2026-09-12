@@ -9,7 +9,7 @@ if (!/^\d{8}-[a-z0-9]+$/.test(version)) {
   process.exit(1);
 }
 
-const targets = ["atlas.html", "practice.html", "sets.html", "worksheet.html", "progress.html"];
+const targets = ["atlas.html", "practice.html", "sets.html", "worksheet.html", "progress.html", "static/tokens.css", "static/atlas.css", "static/practice.css", "static/sets.css", "static/worksheet.css", "static/progress.css"];
 for (const folder of ["static/atlas", "static/practice", "static/sets", "static/worksheet", "static/progress"]) {
   const walk = (directory) => {
     for (const entry of fs.readdirSync(path.join(root, directory), { withFileTypes: true })) {

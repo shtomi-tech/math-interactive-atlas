@@ -58,77 +58,22 @@ jobs:
           node scripts/check-learning-record.js
           node scripts/check-asset-version.js
       - name: Check JavaScript syntax
-        shell: bash
-        run: |
-          node --check static/atlas/main.js
-          node --check static/atlas/catalog.js
-          node --check static/atlas/viewer.js
-          node --check static/atlas/router.js
-          node --check static/atlas/interactions/index.js
-          node --check static/atlas/interactions/function-graph.js
-          node --check static/atlas/interactions/sequence-lab.js
-          node --check static/atlas/interactions/range-graph.js
-          node --check static/atlas/interactions/geometry-board.js
-          node --check static/atlas/interactions/region-selector.js
-          node --check static/atlas/interactions/combinatorics-viewer.js
-          node --check static/atlas/interactions/data-lab.js
-          node --check static/atlas/interactions/simulation-lab.js
-          node --check static/atlas/math/set-regions.js
-          node --check static/atlas/math/set-relations.js
-          node --check static/atlas/math/event-regions.js
-          node --check static/atlas/math/conditional-probability.js
-          node --check static/atlas/math/combinatorics.js
-          node --check static/atlas/math/statistics.js
-          node --check static/atlas/math/probability.js
-          node --check static/atlas/math/geometry.js
-          node --check static/atlas/interactions/algebra-lab.js
-          node --check static/atlas/interactions/number-line-lab.js
-          node --check static/atlas/interactions/algorithm-lab.js
-          node --check static/atlas/math/algebra.js
-          node --check static/atlas/math/number-line.js
-          node --check static/atlas/math/sample-space.js
-          node --check static/atlas/math/number-theory.js
-          node --check static/atlas/interactions/function-graph.js
-          node --check static/atlas/curriculum.js
-          node --check static/atlas/math/quadratic.js
-          node --check static/atlas/math/trigonometry.js
-          node --check static/atlas/math/exponential-logarithm.js
-          node --check static/atlas/math/calculus.js
-          node --check static/atlas/math/sequences.js
-          node --check static/atlas/math/algebra2.js
-          node --check static/atlas/math/coordinate-geometry.js
-          node --check static/atlas/math/statistical-inference.js
-          node --check static/atlas/math/sampling.js
-          node --check static/atlas/math/modeling.js
-          node --check static/atlas/interactions/function-scenes/common.js
-          node --check static/atlas/interactions/function-scenes/index.js
-          node --check static/atlas/interactions/function-scenes/quadratic.js
-          node --check static/atlas/interactions/function-scenes/exponential.js
-          node --check static/atlas/interactions/function-scenes/trigonometric.js
-          node --check static/atlas/interactions/function-scenes/calculus.js
-          node --check static/atlas/interactions/function-scenes/social-models.js
-          node --check static/atlas/interactions/geometry-scenes/common.js
-          node --check static/atlas/interactions/geometry-scenes/index.js
-          node --check static/atlas/interactions/geometry-scenes/triangle.js
-          node --check static/atlas/interactions/geometry-scenes/circle.js
-          node --check static/atlas/interactions/geometry-scenes/trigonometry.js
-          node --check static/atlas/interactions/geometry-scenes/coordinate.js
-          node --check static/atlas/math/hypothesis-test.js
-          node --check static/atlas/storage.js
-          node --check static/practice/main.js
-          node --check static/practice/router.js
-          node --check static/practice/catalog.js
-          node --check static/practice/runner.js
-          node --check static/practice/answer.js
-          node --check static/practice/validation.js
-          node --check static/practice/filter.js
-          node --check static/practice/session.js
-          node --check static/sets/main.js
-          node --check static/sets/model.js
-          node --check static/sets/storage.js
-          node --check static/sets/io.js
-          node --check static/worksheet/main.js
-          node --check static/worksheet/model.js
-          node --check static/progress/main.js
-          node --check static/progress/summary.js
-          node --check static/progress/record.js
+        run: node scripts/check-js-syntax.js
+
+  browser-smoke:
+    needs: checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Run browser smoke and regression checks
+        run: npm test

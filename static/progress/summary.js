@@ -1,5 +1,5 @@
-import { SUBJECT_ORDER, SUBJECT_UNIT_ORDER, subjectLabel, unitLabel } from "../atlas/curriculum.js?v=20260912-7k";
-import { practiceStatus } from "../atlas/storage.js?v=20260912-7k";
+import { SUBJECT_ORDER, SUBJECT_UNIT_ORDER, subjectLabel, unitLabel } from "../atlas/curriculum.js?v=20260913-8a";
+import { practiceStatus } from "../atlas/storage.js?v=20260913-8a";
 
 const STATUS_VALUES = ["mastered", "practicing", "review", "unattempted"];
 const STATUS_LABELS = { mastered: "習得", practicing: "練習中", review: "要復習", unattempted: "未挑戦" };

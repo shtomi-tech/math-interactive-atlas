@@ -1,4 +1,4 @@
-import { filterProblems, orderProblems } from "./filter.js?v=20260912-7k";
+import { filterProblems, orderProblems } from "./filter.js?v=20260913-8a";
 
 export function buildSession(problems, filters = {}, learningState = {}) {
   return { filters: { ...filters }, problems: orderProblems(filterProblems(problems, filters, learningState)) };

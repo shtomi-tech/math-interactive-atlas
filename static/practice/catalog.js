@@ -1,5 +1,5 @@
-import { SUBJECT_ORDER, SUBJECT_UNIT_ORDER, subjectLabel, unitLabel } from "../atlas/curriculum.js?v=20260912-7k";
-import { STATUS_OPTIONS, filterProblems, orderProblems, statusForProblem, summarizeProblems } from "./filter.js?v=20260912-7k";
+import { SUBJECT_ORDER, SUBJECT_UNIT_ORDER, subjectLabel, unitLabel } from "../atlas/curriculum.js?v=20260913-8a";
+import { STATUS_OPTIONS, filterProblems, orderProblems, statusForProblem, summarizeProblems } from "./filter.js?v=20260913-8a";
 
 const STATUS_CLASSES = { unattempted: "is-unattempted", practicing: "is-practicing", review: "is-review", mastered: "is-mastered" };
 

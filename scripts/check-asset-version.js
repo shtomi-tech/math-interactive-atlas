@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const version = fs.readFileSync(path.join(root, "static/asset-version.txt"), "utf8").trim();
-const files = ["atlas.html", "practice.html", "sets.html", "worksheet.html", "progress.html"];
+const files = ["atlas.html", "practice.html", "sets.html", "worksheet.html", "progress.html", "static/tokens.css", "static/atlas.css", "static/practice.css", "static/sets.css", "static/worksheet.css", "static/progress.css"];
 for (const folder of ["static/atlas", "static/practice", "static/sets", "static/worksheet", "static/progress"]) {
   const walk = (directory) => {
     for (const entry of fs.readdirSync(path.join(root, directory), { withFileTypes: true })) {

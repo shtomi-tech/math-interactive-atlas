@@ -7,8 +7,8 @@ import {
   treePaths,
   circularPermutationCount,
   rotatePermutation
-} from "../math/combinatorics.js?v=20260912-7k";
-import { diceOutcomes, outcomesForEvent, probabilityForEvent } from "../math/sample-space.js?v=20260912-7k";
+} from "../math/combinatorics.js?v=20260913-8a";
+import { diceOutcomes, outcomesForEvent, probabilityForEvent } from "../math/sample-space.js?v=20260913-8a";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 const DISPLAY_LIMIT = 240;

@@ -1,4 +1,4 @@
-import { angleBisectorFoot, angleDegrees, centroid, circumcenter, distance, excenterA, incenter, lawOfCosinesSide, lineCircleIntersections, orthocenter, pointOnCircle } from "../../math/geometry.js?v=20260912-7k";
+import { angleBisectorFoot, angleDegrees, centroid, circumcenter, distance, excenterA, incenter, lawOfCosinesSide, lineCircleIntersections, orthocenter, pointOnCircle } from "../../math/geometry.js?v=20260913-8a";
 export { angleBisectorFoot, angleDegrees, centroid, circumcenter, distance, excenterA, incenter, lawOfCosinesSide, lineCircleIntersections, orthocenter, pointOnCircle };
 export const COLORS = Object.freeze({ primary: "#2563eb", secondary: "#0f766e", highlight: "#d97706", helper: "#64748b", construction: "#94a3b8" });
 export const finite = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
@@ -23,7 +23,7 @@ export function createContext(container, config, boundingbox) {
     text(x, y, value, options = {}) { return board?.create("text", [x, y, value], { fixed: true, highlight: false, fontSize: 14, strokeColor: COLORS.helper, ...options }); },
     button(label, active, onClick) { const button = document.createElement("button"); button.type = "button"; button.textContent = label; button.setAttribute("aria-pressed", String(active)); button.addEventListener("click", onClick); controls.append(button); cleanups.push(() => button.remove()); return button; },
     touchTarget({ label, position, onMove, onKey }) { const button = document.createElement("button"); button.type = "button"; button.className = "atlas-geometry-touch-target"; button.setAttribute("aria-label", label); const place = () => { if (!board) return; const coords = new globalThis.JXG.Coords(globalThis.JXG.COORDS_BY_USER, position(), board); button.style.left = `${coords.scrCoords[1]}px`; button.style.top = `${coords.scrCoords[2]}px`; }; const move = (event) => { if (!board) return; const rect = boardHost.getBoundingClientRect(); const coords = new globalThis.JXG.Coords(globalThis.JXG.COORDS_BY_SCREEN, [event.clientX - rect.left, event.clientY - rect.top], board); onMove(coords.usrCoords[1], coords.usrCoords[2]); }; button.addEventListener("pointerdown", (event) => { button.setPointerCapture(event.pointerId); move(event); }); button.addEventListener("pointermove", (event) => { if (button.hasPointerCapture(event.pointerId)) move(event); }); button.addEventListener("keydown", onKey); touchLayer.append(button); cleanups.push(() => button.remove()); return place; },
-    update(text, placers = []) { board?.update(); placers.forEach((place) => place()); summary.textContent = text; }
+    update(text, placers = [], state = {}) { board?.update(); placers.forEach((place) => place()); summary.textContent = text; config.onStateChange?.(state, text); }
   };
   const observer = globalThis.ResizeObserver ? new ResizeObserver(() => { board?.resizeContainer(boardHost.clientWidth, boardHost.clientHeight); board?.fullUpdate(); }) : null; observer?.observe(boardHost); cleanups.push(() => observer?.disconnect());
   context.destroy = () => { cleanups.forEach((cleanup) => cleanup()); if (board) globalThis.JXG?.JSXGraph?.freeBoard(board); container.replaceChildren(); };
@@ -32,8 +32,9 @@ export function createContext(container, config, boundingbox) {
 
 export function makeScene(context, config, spec) {
   const initial = { ...spec.initial, ...(config.initial || {}) }; const state = { ...initial }; const placers = []; let built = false;
-  const api = { state, setParameter(name, value) { if (!(name in state)) return; state[name] = spec.clamp?.(name, finite(value, state[name]), state) ?? finite(value, state[name]); spec.derive?.(state); if (!built) { spec.build(context, state, api, placers); built = true; } context.update(spec.summary(state), placers); }, reset() { Object.assign(state, initial); spec.derive?.(state); context.update(spec.summary(state), placers); }, placers };
-  spec.derive?.(state); spec.build(context, state, api, placers); built = true; context.update(spec.summary(state), placers); return api;
+  const update = () => { spec.derive?.(state); if (!built) { spec.build(context, state, api, placers); built = true; } spec.update?.(context, state, api, placers); context.update(spec.summary(state), placers, state); };
+  const api = { state, setParameter(name, value) { if (!(name in state)) return; const next = typeof value === "number" ? finite(value, state[name]) : value; state[name] = spec.clamp?.(name, next, state) ?? next; update(); }, reset() { Object.assign(state, initial); update(); }, placers };
+  update(); return api;
 }
 
 export function mountWithContext(container, config, sceneMap, bounds = [-6, 5, 6, -5]) { const mount = sceneMap[config.mode]; if (!mount) throw new Error(`Unsupported geometry mode: ${config.mode || "(empty)"}`); const context = createContext(container, config, config.boundingbox || bounds); const scene = mount(context, config); return { reset: scene.reset || (() => {}), destroy: context.destroy, getState: () => ({ ...scene.state }), setParameter: scene.setParameter || (() => {}) }; }

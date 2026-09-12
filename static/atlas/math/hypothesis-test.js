@@ -1,4 +1,4 @@
-import { binomialProbability, binomialUpperTail } from "./probability.js?v=20260912-7k";
+import { binomialProbability, binomialUpperTail } from "./probability.js?v=20260913-8a";
 
 export function coinTestFacts({ n, observedHeads, nullProbability = 0.5 }) {
   const trials = Number(n);

@@ -17,6 +17,7 @@
 - 学習レポート: 教材の閲覧数、問題の習熟状態、単元ごとの状況、最近の学習を表示し、学習記録をJSONでバックアップ・置換復元する
 - Interaction Engine: `static/atlas/interactions/index.js` のRegistry経由で11エンジンを切り替える。連続量はFunctionGraph / GeometryBoard / RangeGraph、離散量はSequenceLabで表示する
 - 設計書: [`docs/atlas/DESIGN.md`](./docs/atlas/DESIGN.md)
+- プロジェクトゴール: [`docs/PROJECT_GOAL.md`](./docs/PROJECT_GOAL.md)
 
 ## 教材構成
 
@@ -101,6 +102,16 @@ node scripts/check-asset-version.js
 ```
 
 GitHub Actionsでも、同じ契約・数学ロジック検査と対象JavaScriptの構文検査を実行します。
+
+### Phase 8A quality gate
+
+- コンテンツ89件、Practice267問、Interaction Engine11種を凍結し、既存IDを維持する
+- 正規母集団からの標本平均・信頼区間と、標準正規曲線による仮説検定を検証する
+- 座標教材はモード切替、点Pのドラッグ、キーボード操作、状態説明を持つ
+- `npm test` はAtlas / Practice / Classroom Pack / Progressのsmoke、回帰、レスポンシブ、アクセシビリティを確認する
+- 対象画面は1440 / 768 / 375 / 320pxで横スクロールを出さない。公開後はPagesのHTML入口をcurlで確認する
+
+ローカル検証は `npm run check`、`npm test` で実行します。PlaywrightのChromiumが未導入の場合は `npx playwright install chromium` を先に実行してください。
 
 GitHub ActionsのAtlas checksはpush / pull requestで実行します。Pages公開は手動実行の [`.github/workflows/pages.yml`](./.github/workflows/pages.yml) から行い、Atlas、Practice、問題セット、問題プリント、学習レポートのHTML・CSS・JS・データを公開します。GitHub Pages deployment requires repository-side Pages configuration. PagesがRepository設定またはGitHubプランで有効化できない場合は、`Pages configuration required` として扱います。
 

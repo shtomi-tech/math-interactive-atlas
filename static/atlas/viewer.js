@@ -1,6 +1,6 @@
-import { mountInteraction } from "./interactions/index.js?v=20260912-7k";
-import { neighborsForContent, subjectLabel, unitLabel } from "./curriculum.js?v=20260912-7k";
-import { practiceStatus } from "./storage.js?v=20260912-7k";
+import { mountInteraction } from "./interactions/index.js?v=20260913-8a";
+import { neighborsForContent, subjectLabel, unitLabel } from "./curriculum.js?v=20260913-8a";
+import { practiceStatus } from "./storage.js?v=20260913-8a";
 
 const STATUS_LABELS = { unattempted: "未挑戦", practicing: "練習中", review: "要復習", mastered: "習得" };
 
@@ -78,8 +78,11 @@ function appendSource(section, source) {
 export function createViewer(root, { onBack, onRelated, onNavigate = onRelated, onToggleFavorite = () => {} }) {
   let engine = null;
   let controls = new Map();
+  let observationObserver = null;
 
   function destroy() {
+    observationObserver?.disconnect();
+    observationObserver = null;
     engine?.destroy();
     engine = null;
     controls = new Map();
@@ -263,6 +266,16 @@ export function createViewer(root, { onBack, onRelated, onNavigate = onRelated, 
         syncControls(state);
       }
     });
+    if (content.interaction.engine === "simulationLab") {
+      const result = () => canvas.querySelector(".atlas-simulation-result");
+      const syncSimulationObservation = () => {
+        const current = result();
+        if (current?.textContent) observation.textContent = current.textContent;
+      };
+      observationObserver = new MutationObserver(syncSimulationObservation);
+      observationObserver.observe(canvas, { childList: true, characterData: true, subtree: true });
+      syncSimulationObservation();
+    }
     if (!observation.textContent) observation.textContent = content.instructions || "操作欄を使って、値の変化とグラフの関係を観察します。";
     reset.addEventListener("click", () => engine.reset());
   }
