@@ -101,7 +101,16 @@ jobs:
         run: npm ci
       - name: Install Chromium for browser smoke
         run: npx playwright install --with-deps chromium
-      - name: Browser smoke deployed Pages
+      - name: Read expected asset version
+        id: asset-version
+        run: echo "value=$(tr -d '\\r\\n' < static/asset-version.txt)" >> "$GITHUB_OUTPUT"
+      - name: Browser regression deployed Pages
         env:
           PLAYWRIGHT_BASE_URL: ${{ steps.deployment.outputs.page_url }}
-        run: npx playwright test tests/e2e/pages-smoke.spec.js
+          EXPECTED_ASSET_VERSION: ${{ steps.asset-version.outputs.value }}
+        run: >-
+          npx playwright test
+          tests/e2e/pages-smoke.spec.js
+          tests/e2e/all-atlas-content.spec.js
+          tests/e2e/learning-loop.spec.js
+          tests/e2e/responsive.spec.js

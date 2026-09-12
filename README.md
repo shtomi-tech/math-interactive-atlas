@@ -123,6 +123,15 @@ GitHub Actionsでも、同じ契約・数学ロジック検査と対象JavaScrip
 
 Phase 8Bのローカル検証は `npm test` と `npx playwright test tests/e2e/all-atlas-content.spec.js tests/e2e/learning-loop.spec.js` で実行します。公開Pagesのブラウザ検証は `PLAYWRIGHT_BASE_URL=<Pages URL> npx playwright test tests/e2e/pages-smoke.spec.js` です。
 
+### Phase 8C v1.0 release certification
+
+- 89教材を1教材1テストへ分割し、個別結果・traceを保持する。E2E URLはlocalhostとGitHub Pagesのリポジトリサブパスで共通利用する
+- Pages workflowは`EXPECTED_ASSET_VERSION`を使って公開asset versionを厳密に照合し、全89教材、4科目の学習ループ、320px / 375pxのresponsiveを公開URLで実行する
+- 数学I・A・II・Bの数量は89教材、267問、11 Interaction Engineから変更しない。新規教材・問題・Engine・数学C/III・Classroom Assignmentは追加しない
+- ローカル検証は `npm test`、`npm run check`、`node scripts/check-atlas-contract.js`、`node scripts/check-asset-version.js`、`git diff --check` とする。再利用可能な受入項目は [`docs/RELEASE_CHECKLIST.md`](./docs/RELEASE_CHECKLIST.md) にまとめる
+
+Phase 8Cの実装後はRelease candidateとし、GitHub Pages workflowの手動実行でActions・公開Pagesの最終成功を確認してからv1.0 Releasedと判定します。
+
 GitHub ActionsのAtlas checksはpush / pull requestで実行します。Pages公開は手動実行の [`.github/workflows/pages.yml`](./.github/workflows/pages.yml) から行い、Atlas、Practice、問題セット、問題プリント、学習レポートのHTML・CSS・JS・データを公開します。GitHub Pages deployment requires repository-side Pages configuration. PagesがRepository設定またはGitHubプランで有効化できない場合は、`Pages configuration required` として扱います。
 
 `zukan.html` / `static/zukan/` は旧プロトタイプです。新規実装の正本は `atlas.html` / `static/atlas/` です。Legacy prototype. Do not add new features here.

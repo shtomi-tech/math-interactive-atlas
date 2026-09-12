@@ -1,5 +1,9 @@
 import { expect } from "@playwright/test";
 
+export function appPath(path = "") {
+  return `./${String(path).replace(/^\/+/, "")}`;
+}
+
 export function collectBrowserErrors(page) {
   const errors = [];
   page.on("pageerror", (error) => errors.push(`pageerror: ${error.message}`));

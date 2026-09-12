@@ -1,6 +1,6 @@
 # 数学インタラクティブ図鑑 — Project Goal
 
-更新日: 2026-09-12
+更新日: 2026-09-13
 
 ## 1. 最終ゴール
 
@@ -171,9 +171,9 @@ UI
 - Accessibility
 - Regression
 
-## 13. 現在の最重要目標: Phase 8A
+## 13. 品質保証基準: Phase 8A
 
-Phase 7Bで範囲を広げたため、現在は「広げるフェーズ」から「固めるフェーズ」へ移る。
+Phase 7Bで範囲を広げた後、「広げるフェーズ」から「固めるフェーズ」へ移るための基準をPhase 8Aで定めた。
 
 Phase 8Aでは次の数量を固定する。
 
@@ -197,7 +197,7 @@ Phase 8Aでは次の数量を固定する。
 
 Phase 8Aは単なるバグ修正ではなく、数学I・A・II・B版 v1.0の品質保証Phaseと位置づける。
 
-## 14. Phase 8A完了後の判断
+## 14. Phase 8A完了後の拡張判断
 
 品質基盤が完成した後、次の拡張方向を判断する。
 
@@ -227,7 +227,28 @@ Phase 8Aで数学・操作・アクセシビリティの品質基盤を整えた
 
 Phase 8Bでも新規教材、新規Practice ID、新規Engine、数学C・数学III、Classroom Assignmentは追加しない。範囲の拡張ではなく、既存教材を実運用できる学習システムとして閉じることを優先する。
 
-## 16. 長期的な完成像
+## 16. Phase 8C: 数学I・A・II・B版 v1.0 Release Certification
+
+Phase 8Bで実装した学習ループを、GitHub Actionsと公開GitHub Pagesで最終受入できる状態へ固める。Phase 8Cは新機能追加Phaseではなく、次の数量を維持したまま公開品質を証明するリリースゲートである。
+
+```text
+Atlas: 89
+Practice: 267
+Interaction Engine: 11
+Subjects: 数学I / 数学A / 数学II / 数学B
+```
+
+P0では、全89教材を独立Playwrightテストへ分割し、1教材の失敗で他教材の結果を失わないようにする。E2EのURLはlocalhostとGitHub Pagesのリポジトリサブパスで共通利用し、Pages workflowから厳密な`EXPECTED_ASSET_VERSION`を渡す。公開Pagesでは主要画面、全89教材、Atlas → Practice → Progress、console/page error、fallback、Reset、responsiveを実ブラウザで検証する。
+
+P1では数学I・A・II・Bから既存問題を1ケースずつ使い、single-choiceとnumericの両回答形式を含む学習ループを回帰する。320px / 375pxではAtlas、Practice、Sets、Progressと代表教材の横スクロールなしを確認する。
+
+P2では [`docs/RELEASE_CHECKLIST.md`](RELEASE_CHECKLIST.md) を公開品質の再利用可能なチェックリストとして維持する。
+
+現時点の実装状態は、ローカルのPhase 8C回帰を通過したRelease candidateである。公開Pagesの実デプロイとGitHub Actionsの最終成功は、Pages workflowの手動実行後に確認する。完了後の表示は `数学I・A・II・B版 v1.0 / Status: Released / Quality Gate Passed` とする。
+
+Phase 8Cでも新規教材、新規Practice ID、新規Engine、数学C・数学III、Classroom Assignment、既存Progressデータを破壊するschema変更は追加しない。
+
+## 17. 長期的な完成像
 
 高校数学全体を、次の面が一つにつながる学習基盤にする。
 
@@ -258,4 +279,4 @@ Phase 8Bでも新規教材、新規Practice ID、新規Engine、数学C・数学
 - 現在の教材正本: [`static/atlas/content-data.json`](../static/atlas/content-data.json)
 - 現在の問題正本: [`static/practice/problem-data.json`](../static/practice/problem-data.json)
 - 設計正本: [`docs/atlas/DESIGN.md`](./atlas/DESIGN.md)
-- 次Phaseの詳細指示: Web ChatGPTで確認した「Phase 8B：公開版と学習ループの完成」
+- 次Phaseの詳細指示: Web ChatGPTで確認した「Phase 8C：v1.0 Release Certification」

@@ -174,6 +174,10 @@ Atlas / Practice
 
 AtlasからPracticeへ渡すURLには対応する `atlasContentId` を保持する。不正解時は対応Atlasへ戻り、Atlasから同じ問題へ復帰できるようにする。Progressの教材行にはAtlasとPracticeの両方への明示的な導線を置き、localStorageの既存学習記録と安定IDを変更しない。公開Pagesの検証はHTTPステータスだけで完了とせず、JavaScript初期化、主要DOM、asset version、`console.error` と `pageerror` の不在まで確認する。
 
+### Release Certification
+
+Phase 8Cは数学I・A・II・B版 v1.0の公開品質ゲートであり、機能拡張ではない。教材89、Practice267問、Interaction Engine11種を固定し、E2Eは教材ごとの独立テストとしてlocalhostとGitHub Pagesのリポジトリサブパスで共通利用する。Pages workflowはsourceの`static/asset-version.txt`を`EXPECTED_ASSET_VERSION`として公開版と厳密比較し、pages-smoke、89教材回帰、4科目学習ループ、responsiveを実行する。公開成功を確認するまではRelease candidateとし、成功後にだけ `Status: Released / Quality Gate Passed` と表示する。新規教材・新規Practice ID・新規Engine・数学C/III・Classroom Assignmentはこのゲートへ持ち込まない。
+
 ### Modeling
 
 数学と社会生活の教材は、現実を単純化してモデル化する過程と、モデルの限界を同じ画面で扱う。

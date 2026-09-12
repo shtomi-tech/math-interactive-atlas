@@ -121,9 +121,11 @@ const requiredFiles = [
   "tests/e2e/all-atlas-content.spec.js",
   "tests/e2e/learning-loop.spec.js",
   "tests/e2e/pages-smoke.spec.js",
+  "tests/e2e/helpers.js",
   "static/atlas/content-data.json",
   "static/atlas/interactions/range-graph.js",
   "docs/atlas/DESIGN.md",
+  "docs/RELEASE_CHECKLIST.md",
   ".github/workflows/atlas-checks.yml",
   ".github/workflows/pages.yml"
 ];
@@ -212,6 +214,10 @@ const progressSummarySource = read("static/progress/summary.js");
 const progressRecordSource = read("static/progress/record.js");
 const workflowSource = read(".github/workflows/atlas-checks.yml");
 const pagesWorkflowSource = read(".github/workflows/pages.yml");
+const e2eHelperSource = read("tests/e2e/helpers.js");
+const allAtlasE2eSource = read("tests/e2e/all-atlas-content.spec.js");
+const learningLoopE2eSource = read("tests/e2e/learning-loop.spec.js");
+const pagesSmokeE2eSource = read("tests/e2e/pages-smoke.spec.js");
 const atlasSource = ["static/atlas/main.js", "static/atlas/catalog.js", "static/atlas/viewer.js", "static/atlas/router.js", "static/atlas/interactions/index.js", "static/atlas/interactions/function-graph.js", "static/atlas/interactions/range-graph.js", "static/atlas/interactions/geometry-board.js", "static/atlas/interactions/region-selector.js", "static/atlas/interactions/combinatorics-viewer.js", "static/atlas/interactions/data-lab.js", "static/atlas/interactions/simulation-lab.js", "static/atlas/interactions/algebra-lab.js", "static/atlas/interactions/number-line-lab.js", "static/atlas/interactions/algorithm-lab.js", "static/atlas/math/set-regions.js", "static/atlas/math/set-relations.js", "static/atlas/math/event-regions.js", "static/atlas/math/conditional-probability.js", "static/atlas/math/combinatorics.js", "static/atlas/math/statistics.js", "static/atlas/math/probability.js", "static/atlas/math/hypothesis-test.js", "static/atlas/math/algebra.js", "static/atlas/math/number-line.js", "static/atlas/math/sample-space.js", "static/atlas/math/number-theory.js"].map(read).join("\n");
 
 let contents = [];
@@ -529,6 +535,11 @@ requireCondition(pagesWorkflowSource.includes("workflow_dispatch:") && !pagesWor
 requireCondition(pagesWorkflowSource.includes("test -f static/atlas/interactions/sequence-lab.js") && pagesWorkflowSource.includes("test -f static/atlas/math/exponential-logarithm.js") && pagesWorkflowSource.includes("test -f static/atlas/math/calculus.js") && pagesWorkflowSource.includes("test -f static/atlas/math/sequences.js") && pagesWorkflowSource.includes("test -f static/atlas/math/algebra2.js") && pagesWorkflowSource.includes("test -f static/atlas/math/coordinate-geometry.js") && pagesWorkflowSource.includes("test -f static/atlas/math/statistical-inference.js") && pagesWorkflowSource.includes("test -f static/atlas/math/modeling.js") && pagesWorkflowSource.includes("test -f static/atlas/interactions/function-scenes/index.js") && pagesWorkflowSource.includes("test -f static/atlas/interactions/geometry-scenes/index.js"), "Phase 7B Pages assets are missing");
 requireCondition(pagesWorkflowSource.includes("Smoke test deployed Pages") && pagesWorkflowSource.includes("curl --fail"), "Pages post-deploy smoke check is missing");
 requireCondition(pagesWorkflowSource.includes("PLAYWRIGHT_BASE_URL") && pagesWorkflowSource.includes("tests/e2e/pages-smoke.spec.js") && pagesWorkflowSource.includes("npx playwright install --with-deps chromium"), "Pages browser smoke check is missing");
+requireCondition(e2eHelperSource.includes("function appPath") && e2eHelperSource.includes('replace(/^\\/+/, "")'), "E2E base-path helper is missing");
+requireCondition(allAtlasE2eSource.includes("readFileSync") && allAtlasE2eSource.includes("for (const content of contents)") && allAtlasE2eSource.includes("test(`${content.id}"), "Atlas regression must create independent data-driven tests");
+requireCondition(learningLoopE2eSource.includes("algebra-factor-01") && learningLoopE2eSource.includes("prob-permutation-01") && learningLoopE2eSource.includes("math2-exponent-extension-01") && learningLoopE2eSource.includes("mathB-arithmetic-sequence-01") && learningLoopE2eSource.includes('problem.type === "single-choice"') && learningLoopE2eSource.includes('getByLabel("数値の答え")'), "Learning loop scenario coverage is incomplete");
+requireCondition(pagesSmokeE2eSource.includes("EXPECTED_ASSET_VERSION") && pagesSmokeE2eSource.includes("toBe(expectedAssetVersion)"), "Pages smoke must verify the exact asset version");
+requireCondition(pagesWorkflowSource.includes("EXPECTED_ASSET_VERSION") && pagesWorkflowSource.includes("tests/e2e/all-atlas-content.spec.js") && pagesWorkflowSource.includes("tests/e2e/learning-loop.spec.js") && pagesWorkflowSource.includes("tests/e2e/responsive.spec.js"), "Pages workflow must run the full public browser gate");
 requireCondition(!viewerSource.includes("function-graph.js") && !viewerSource.includes("range-graph.js") && !viewerSource.includes("geometry-board.js") && !viewerSource.includes("region-selector.js") && !viewerSource.includes("combinatorics-viewer.js") && !viewerSource.includes("data-lab.js") && !viewerSource.includes("simulation-lab.js"), "viewer imports a concrete interaction engine");
 requireCondition(!/currentExamKey|app\.progress|answerDrafts|examFlow|MINI_EXAMS/.test(atlasSource), "atlas source references existing practice or exam state");
 requireCondition(index.includes("./atlas.html") || index.includes("atlas.html"), "index.html does not link to atlas.html");

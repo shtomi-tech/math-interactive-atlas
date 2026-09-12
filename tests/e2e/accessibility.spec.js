@@ -1,13 +1,13 @@
 import { test, expect } from "@playwright/test";
-import { collectBrowserErrors, expectNoBrowserErrors } from "./helpers.js";
+import { appPath, collectBrowserErrors, expectNoBrowserErrors } from "./helpers.js";
 
 test("interactive controls have accessible names", async ({ page }) => {
   const errors = collectBrowserErrors(page);
   for (const url of [
-    "/atlas.html?content=confidence-interval",
-    "/atlas.html?content=inequality-region-2d",
-    "/practice.html",
-    "/sets.html"
+    appPath("atlas.html?content=confidence-interval"),
+    appPath("atlas.html?content=inequality-region-2d"),
+    appPath("practice.html"),
+    appPath("sets.html")
   ]) {
     await page.goto(url);
     const unnamed = await page.locator("button:visible, input:visible, select:visible, textarea:visible").evaluateAll((elements) => elements.filter((element) => {

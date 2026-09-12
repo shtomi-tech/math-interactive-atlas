@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { collectBrowserErrors, expectNoBrowserErrors, expectNoHorizontalOverflow } from "./helpers.js";
+import { appPath, collectBrowserErrors, expectNoBrowserErrors, expectNoHorizontalOverflow } from "./helpers.js";
 
 for (const viewport of [
   { width: 1440, height: 900 },
@@ -12,11 +12,14 @@ for (const viewport of [
     const page = await context.newPage();
     const errors = collectBrowserErrors(page);
     for (const url of [
-      "/atlas.html",
-      "/atlas.html?content=confidence-interval",
-      "/practice.html",
-      "/sets.html",
-      "/progress.html"
+      appPath("atlas.html"),
+      appPath("atlas.html?content=confidence-interval"),
+      appPath("atlas.html?content=inequality-region-2d"),
+      appPath("atlas.html?content=function-and-derivative"),
+      appPath("atlas.html?content=sequence-partial-sum"),
+      appPath("practice.html"),
+      appPath("sets.html"),
+      appPath("progress.html")
     ]) {
       await page.goto(url);
       await expectNoHorizontalOverflow(page);
