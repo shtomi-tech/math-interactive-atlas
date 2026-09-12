@@ -12,6 +12,9 @@ const requiredFiles = [
   "static/atlas/router.js",
   "static/atlas/interactions/index.js",
   "static/atlas/interactions/geometry-board.js",
+  "static/atlas/interactions/region-selector.js",
+  "static/atlas/math/set-regions.js",
+  "scripts/check-set-regions.js",
   "static/atlas/content-data.json",
   "static/atlas/interactions/function-graph.js",
   "static/atlas/interactions/range-graph.js",
@@ -41,7 +44,9 @@ const viewerSource = read("static/atlas/viewer.js");
 const registrySource = read("static/atlas/interactions/index.js");
 const catalogSource = read("static/atlas/catalog.js");
 const geometrySource = read("static/atlas/interactions/geometry-board.js");
-const atlasSource = ["static/atlas/main.js", "static/atlas/catalog.js", "static/atlas/viewer.js", "static/atlas/router.js", "static/atlas/interactions/index.js", "static/atlas/interactions/function-graph.js", "static/atlas/interactions/range-graph.js", "static/atlas/interactions/geometry-board.js"].map(read).join("\n");
+const regionSource = read("static/atlas/interactions/region-selector.js");
+const setRegionsSource = read("static/atlas/math/set-regions.js");
+const atlasSource = ["static/atlas/main.js", "static/atlas/catalog.js", "static/atlas/viewer.js", "static/atlas/router.js", "static/atlas/interactions/index.js", "static/atlas/interactions/function-graph.js", "static/atlas/interactions/range-graph.js", "static/atlas/interactions/geometry-board.js", "static/atlas/interactions/region-selector.js", "static/atlas/math/set-regions.js"].map(read).join("\n");
 
 let contents = [];
 try {
@@ -95,6 +100,7 @@ if (Array.isArray(contents)) {
 requireCondition(ids.has("quadratic-range"), "missing Phase 2A content: quadratic-range");
 requireCondition(ids.has("unit-circle"), "missing Phase 2B content: unit-circle");
 requireCondition(ids.has("triangle-area-sine"), "missing Phase 2C content: triangle-area-sine");
+requireCondition(ids.has("set-regions"), "missing Phase 2D content: set-regions");
 const rangeContent = contents.find((content) => content.id === "quadratic-range");
 if (rangeContent) {
   requireCondition(rangeContent.interaction.engine === "rangeGraph", "quadratic-range must use rangeGraph");
@@ -114,18 +120,29 @@ if (triangleAreaContent) {
   requireCondition(triangleAreaContent.interaction.mode === "triangle-area-sine", "triangle-area-sine must use triangle-area-sine mode");
   requireCondition(triangleAreaContent.related.includes("unit-circle"), "triangle-area-sine must link unit-circle");
 }
+const setRegionsContent = contents.find((content) => content.id === "set-regions");
+if (setRegionsContent) {
+  requireCondition(setRegionsContent.interaction.engine === "regionSelector", "set-regions must use regionSelector");
+  requireCondition(setRegionsContent.interaction.mode === "set-regions", "set-regions must use set-regions mode");
+  requireCondition(setRegionsContent.interactionType === "select", "set-regions must use select interactionType");
+  requireCondition(setRegionsContent.interaction.initial.selectedMask === 0, "set-regions must start with selectedMask 0");
+}
 requireCondition(/katex@\d/.test(html), "KaTeX CDN version is not fixed in atlas.html");
 requireCondition(/jsxgraph@\d/.test(html), "JSXGraph CDN version is not fixed in atlas.html");
 requireCondition(html.includes("static/atlas/main.js"), "atlas main module is not loaded");
 requireCondition(css.includes("--atlas-bg"), "atlas CSS variables are not namespaced");
 requireCondition(registrySource.includes("Unknown interaction engine"), "registry does not handle unknown engines");
 requireCondition(registrySource.includes("geometryBoard") && registrySource.includes("geometry-board.js"), "registry does not register geometryBoard");
+requireCondition(registrySource.includes("regionSelector") && registrySource.includes("region-selector.js"), "registry does not register regionSelector");
 requireCondition(geometrySource.includes("mountGeometryBoard"), "geometry board mount function is missing");
 requireCondition(geometrySource.includes("keepAspectRatio: true"), "geometry board does not preserve aspect ratio");
 requireCondition(geometrySource.includes('"unit-circle": mountUnitCircleScene') && geometrySource.includes('"triangle-area-sine": mountTriangleAreaSineScene'), "geometry mode dispatch is incomplete");
 requireCondition(geometrySource.includes("areaByHeight") && geometrySource.includes("areaBySine") && geometrySource.includes("areaCalculationError"), "triangle area calculation cross-check is missing");
-requireCondition(catalogSource.includes("UNIT_ORDER") && catalogSource.includes("CONTENT_ORDER"), "catalog does not define stable content order");
-requireCondition(!viewerSource.includes("function-graph.js") && !viewerSource.includes("range-graph.js") && !viewerSource.includes("geometry-board.js"), "viewer imports a concrete interaction engine");
+requireCondition(regionSource.includes("mountRegionSelector") && regionSource.includes("selectedMask"), "region selector mount or state is missing");
+requireCondition(!/JXG|JSXGraph/.test(regionSource), "region selector must not depend on JSXGraph");
+requireCondition(setRegionsSource.includes("REGION_BITS") && setRegionsSource.includes("expressionForMask") && setRegionsSource.includes("toggleRegion"), "set regions math module is incomplete");
+requireCondition(catalogSource.includes("UNIT_ORDER") && catalogSource.includes("CONTENT_ORDER") && catalogSource.includes("algebra") && catalogSource.includes("set-regions"), "catalog does not define the Phase 2D order");
+requireCondition(!viewerSource.includes("function-graph.js") && !viewerSource.includes("range-graph.js") && !viewerSource.includes("geometry-board.js") && !viewerSource.includes("region-selector.js"), "viewer imports a concrete interaction engine");
 requireCondition(!/localStorage|currentExamKey|app\.progress|answerDrafts|examFlow|practiceCatalogState|MINI_EXAMS/.test(atlasSource), "atlas source references existing practice or exam state");
 requireCondition(index.includes("./atlas.html") || index.includes("atlas.html"), "index.html does not link to atlas.html");
 

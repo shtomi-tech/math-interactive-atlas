@@ -6,9 +6,9 @@
 
 - URL: [`atlas.html`](./atlas.html)
 - 目的: 「触る → 観察 → 気づく」の流れで、数学の関係を視覚的に理解する
-- 実装済み: `y = ax²`、頂点形式、判別式と交点数、最大・最小と定義域、単位円でsin・cosを見る、三角形の面積とsinの6コンテンツ
+- 実装済み: 集合を塗って式を作る、`y = ax²`、頂点形式、判別式と交点数、最大・最小と定義域、単位円でsin・cosを見る、三角形の面積とsinの7コンテンツ
 - 教材データ: [`static/atlas/content-data.json`](./static/atlas/content-data.json) を正本とするデータ駆動構成
-- Interaction Engine: `static/atlas/interactions/index.js` のRegistry経由でFunctionGraph / RangeGraph / GeometryBoardを切り替える。GeometryBoardは単位円と三角形のSceneで再利用する
+- Interaction Engine: `static/atlas/interactions/index.js` のRegistry経由でRegionSelector / FunctionGraph / RangeGraph / GeometryBoardを切り替える。RegionSelectorは集合の領域選択、GeometryBoardは単位円と三角形のSceneで再利用する
 - 設計書: [`docs/atlas/DESIGN.md`](./docs/atlas/DESIGN.md)
 - 契約チェック: `node scripts/check-atlas-contract.js`
 
@@ -23,6 +23,7 @@
 /atlas.html?content=quadratic-range
 /atlas.html?content=unit-circle
 /atlas.html?content=triangle-area-sine
+/atlas.html?content=set-regions
 /atlas.html?subject=math1&unit=quadratic
 ```
 

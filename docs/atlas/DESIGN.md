@@ -51,11 +51,13 @@ Good Design = Invisible UI + Visible Mathematics + Meaningful Interaction
 
 ## インタラクション
 
-`static/atlas/interactions/index.js` のInteraction Engine Registryを入口とする。ViewerはRegistryだけを呼び、`interaction.engine` に応じて `functionGraph`、`rangeGraph`、または `geometryBoard` をmountする。すべてのEngineは `reset()`、`destroy()`、`getState()` を返し、パラメータ型Engineは `setParameter()` も返す。
+`static/atlas/interactions/index.js` のInteraction Engine Registryを入口とする。ViewerはRegistryだけを呼び、`interaction.engine` に応じて `functionGraph`、`rangeGraph`、`geometryBoard`、または `regionSelector` をmountする。すべてのEngineは `reset()`、`destroy()`、`getState()` を返し、パラメータ型Engineは `setParameter()` も返す。
 
 `static/atlas/interactions/function-graph.js` は軸、グリッド、関数グラフ、点、補助線、動的ラベル、パラメータ更新、Reset、Destroyを提供する。`range-graph.js` はこれを使って関数全体、定義域内の強調曲線、左右端の44pxドラッグハンドル、最大・最小候補を表示する。
 
 `geometry-board.js` は動的図形の共通入口である。図形はドラッグで動かせるようにし、動点と固定点を視覚的に区別する。円の教材では `keepAspectRatio: true` を使い、座標・角度・長さはCanvas外でも確認できるようにする。`unit-circle` modeは点P、OP、射影線、角度、sin・cosの座標関係を表示し、`triangle-area-sine` modeは固定辺 `a = 3`、`b = 4` と動く角Cから高さ・sin C・面積を表示する。
+
+`region-selector.js` はSVGとVanilla JavaScriptで全体集合U、集合A・B、4つの原子的領域を表示する。領域クリックと4つのtoggle buttonは同じ `selectedMask` を更新し、塗り分け・`aria-pressed`・集合式を同時に同期する。集合論のbit maskと式変換は `static/atlas/math/set-regions.js` に分離する。
 
 GeometryBoardの共通CoreはBoard生成、座標変換、44pxタッチ領域、Resize、Reset、Destroyを担当し、教材固有の図形はSceneとしてdispatchする。`triangle-area-sine` では `h = a sin C` と `S = 1/2 × b × h = 1/2 ab sin C` を同じ状態から計算する。
 
@@ -87,6 +89,7 @@ Discovery Pointは結論ではなく観察の問いにする。利用者が値�
 - `/atlas.html?content=quadratic-range` — 最大・最小と定義域の教材Viewer
 - `/atlas.html?content=unit-circle` — 単位円でsin・cosを見る教材Viewer
 - `/atlas.html?content=triangle-area-sine` — 三角形の面積とsinの教材Viewer
+- `/atlas.html?content=set-regions` — 集合を塗って式を作る教材Viewer
 - `/atlas.html?subject=math1&unit=quadratic` — 単元指定カタログ
 
 不正な `content` はエラー画面を作らず、履歴を置き換えて図鑑トップへ戻す。Viewer切り替え時は前のInteraction Engineを必ずDestroyする。

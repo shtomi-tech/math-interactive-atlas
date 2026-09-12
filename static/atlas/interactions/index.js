@@ -1,11 +1,13 @@
 import { mountFunctionGraph } from "./function-graph.js";
 import { mountGeometryBoard } from "./geometry-board.js";
 import { mountRangeGraph } from "./range-graph.js";
+import { mountRegionSelector } from "./region-selector.js";
 
 const ENGINES = Object.freeze({
   functionGraph: mountFunctionGraph,
   rangeGraph: mountRangeGraph,
-  geometryBoard: mountGeometryBoard
+  geometryBoard: mountGeometryBoard,
+  regionSelector: mountRegionSelector
 });
 
 function unavailableEngine(container, error) {

@@ -9,8 +9,11 @@ const INTERACTION_LABELS = {
   build: "BUILD"
 };
 
-const UNIT_ORDER = Object.freeze(["quadratic", "trigonometry"]);
+const UNIT_ORDER = Object.freeze(["algebra", "trigonometry", "quadratic", "statistics"]);
 const CONTENT_ORDER = Object.freeze({
+  algebra: Object.freeze([
+    "set-regions"
+  ]),
   quadratic: Object.freeze([
     "quadratic-basic",
     "quadratic-vertex",

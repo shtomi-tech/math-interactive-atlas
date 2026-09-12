@@ -1,5 +1,35 @@
 [
   {
+    "id": "set-regions",
+    "subject": "math1",
+    "subjectLabel": "数学I",
+    "unit": "algebra",
+    "unitLabel": "数と式",
+    "title": "集合を塗って式を作る",
+    "shortDescription": "ベン図の領域を選び、塗った部分と集合の式の対応を観察します。",
+    "instructions": "ベン図の領域をクリックして、表示される集合の式がどう変化するか観察します。",
+    "formula": "A\\cap B\\quad /\\quad A\\cup B\\quad /\\quad A^c",
+    "interactionType": "select",
+    "interaction": {
+      "engine": "regionSelector",
+      "mode": "set-regions",
+      "initial": {
+        "selectedMask": 0
+      }
+    },
+    "discoveryPoints": [
+      "AとBの両方に入る部分だけを選ぶと、どんな式になるだろう？",
+      "AまたはBに入る部分をすべて選ぶと、どんな式になるだろう？",
+      "Aの外側をすべて選ぶと、Aを使ってどう表せるだろう？"
+    ],
+    "related": [],
+    "source": {
+      "usage": "original",
+      "library": "SVG / Vanilla JavaScript",
+      "license": "Original implementation"
+    }
+  },
+  {
     "id": "quadratic-basic",
     "subject": "math1",
     "subjectLabel": "数学I",
