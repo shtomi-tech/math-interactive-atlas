@@ -1,4 +1,4 @@
-import { euclideanSteps, gcd } from "../math/number-theory.js?v=20260912-7a";
+import { euclideanSteps, gcd } from "../math/number-theory.js?v=20260912-7i";
 
 const ALGORITHM_MODES = Object.freeze({ "euclidean-algorithm": true });
 

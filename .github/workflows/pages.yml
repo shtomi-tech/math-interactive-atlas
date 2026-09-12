@@ -35,6 +35,10 @@ jobs:
           test -f static/atlas.css
           test -f static/atlas/main.js
           test -f static/atlas/content-data.json
+          test -f static/atlas/interactions/sequence-lab.js
+          test -f static/atlas/math/exponential-logarithm.js
+          test -f static/atlas/math/calculus.js
+          test -f static/atlas/math/sequences.js
           test -f static/practice.css
           test -f static/practice/main.js
           test -f static/practice/problem-data.json

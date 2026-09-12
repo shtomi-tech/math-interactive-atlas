@@ -25,6 +25,7 @@ const requiredFiles = [
   "static/atlas/interactions/number-line-lab.js",
   "static/atlas/interactions/algorithm-lab.js",
   "static/atlas/interactions/function-graph.js",
+  "static/atlas/interactions/sequence-lab.js",
   "static/atlas/curriculum.js",
   "static/atlas/math/set-regions.js",
   "static/atlas/math/set-relations.js",
@@ -41,6 +42,9 @@ const requiredFiles = [
   "static/atlas/math/number-theory.js",
   "static/atlas/math/quadratic.js",
   "static/atlas/math/trigonometry.js",
+  "static/atlas/math/exponential-logarithm.js",
+  "static/atlas/math/calculus.js",
+  "static/atlas/math/sequences.js",
   "static/atlas/storage.js",
   "static/practice.css",
   "static/practice/main.js",
@@ -80,6 +84,9 @@ const requiredFiles = [
   "scripts/check-number-theory.js",
   "scripts/check-quadratic.js",
   "scripts/check-trigonometry.js",
+  "scripts/check-exponential-logarithm.js",
+  "scripts/check-calculus.js",
+  "scripts/check-sequences.js",
   "scripts/check-curriculum.js",
   "scripts/check-related-content.js",
   "scripts/check-practice-data.js",
@@ -132,6 +139,8 @@ const algebraLabSource = read("static/atlas/interactions/algebra-lab.js");
 const numberLineLabSource = read("static/atlas/interactions/number-line-lab.js");
 const algorithmLabSource = read("static/atlas/interactions/algorithm-lab.js");
 const functionGraphSource = read("static/atlas/interactions/function-graph.js");
+const sequenceLabSource = read("static/atlas/interactions/sequence-lab.js");
+const rangeGraphSource = read("static/atlas/interactions/range-graph.js");
 const curriculumSource = read("static/atlas/curriculum.js");
 const setRegionsSource = read("static/atlas/math/set-regions.js");
 const setRelationsSource = read("static/atlas/math/set-relations.js");
@@ -147,6 +156,9 @@ const sampleSpaceSource = read("static/atlas/math/sample-space.js");
 const numberTheorySource = read("static/atlas/math/number-theory.js");
 const quadraticSource = read("static/atlas/math/quadratic.js");
 const trigonometrySource = read("static/atlas/math/trigonometry.js");
+const exponentialLogarithmSource = read("static/atlas/math/exponential-logarithm.js");
+const calculusSource = read("static/atlas/math/calculus.js");
+const sequencesSource = read("static/atlas/math/sequences.js");
 const storageSource = read("static/atlas/storage.js");
 const practiceMainSource = read("static/practice/main.js");
 const practiceRouterSource = read("static/practice/router.js");
@@ -203,7 +215,7 @@ const requiredFields = [
   "source"
 ];
 const allowedInteractionTypes = new Set(["slider", "drag", "geometry", "select", "cards", "data", "simulation", "build"]);
-const engineSources = { functionGraph: functionGraphSource, rangeGraph: read("static/atlas/interactions/range-graph.js"), geometryBoard: geometrySource, regionSelector: regionSource, combinatoricsViewer: combinatoricsViewerSource, dataLab: dataLabSource, simulationLab: simulationLabSource, algebraLab: algebraLabSource, numberLineLab: numberLineLabSource, algorithmLab: algorithmLabSource };
+const engineSources = { functionGraph: functionGraphSource, rangeGraph: rangeGraphSource, geometryBoard: geometrySource, regionSelector: regionSource, combinatoricsViewer: combinatoricsViewerSource, dataLab: dataLabSource, simulationLab: simulationLabSource, algebraLab: algebraLabSource, numberLineLab: numberLineLabSource, algorithmLab: algorithmLabSource, sequenceLab: sequenceLabSource };
 
 if (Array.isArray(contents)) {
   contents.forEach((content, index) => {
@@ -268,8 +280,9 @@ requireCondition(ids.has("hypothesis-test-coin"), "missing Phase 3B content: hyp
   requireCondition(content.interaction.engine === engine && content.interaction.mode === mode, `${id} engine or mode is incorrect`);
   requireCondition(content.interactionType === interactionType, `${id} interactionType is incorrect`);
 });
-requireCondition(contents.length === 40, "Phase 4B/5A must provide 40 contents");
-requireCondition(new Set(contents.map((content) => content.interaction.engine)).size === 10, "Phase 4B/5A must keep 10 interaction engines");
+requireCondition(contents.length === 60, "Phase 7A must provide 60 contents");
+requireCondition(new Set(contents.map((content) => content.interaction.engine)).size === 11, "Phase 7A must provide 11 interaction engines");
+requireCondition(new Set(contents.map((content) => content.subject)).size === 4, "Phase 7A must provide 4 subjects");
 const rangeContent = contents.find((content) => content.id === "quadratic-range");
 if (rangeContent) {
   requireCondition(rangeContent.interaction.engine === "rangeGraph", "quadratic-range must use rangeGraph");
@@ -403,8 +416,10 @@ requireCondition(simulationLabSource.includes("mountSimulationLab") && simulatio
 requireCondition(!simulationLabSource.includes("atlas-simulation-five-percent"), "hypothesis chart must not draw a 5% height line");
 requireCondition(simulationLabSource.includes("config.initial?.n") && simulationLabSource.includes("config.initial?.p") && simulationLabSource.includes("config.initial?.k") && simulationLabSource.includes("config.parameters"), "independent trials must be data-driven");
 requireCondition(algebraLabSource.includes("mountAlgebraLab") && algebraLabSource.includes("expansion-area") && algebraLabSource.includes("factorization-reverse") && algebraLabSource.includes("perfect-square-build") && algebraLabSource.includes("completing-square"), "algebra lab implementation is incomplete");
-requireCondition(numberLineLabSource.includes("mountNumberLineLab") && numberLineLabSource.includes("sqrt-location") && numberLineLabSource.includes("absolute-distance") && numberLineLabSource.includes("inequality-ray"), "number line lab implementation is incomplete");
+requireCondition(numberLineLabSource.includes("mountNumberLineLab") && numberLineLabSource.includes("sqrt-location") && numberLineLabSource.includes("absolute-distance") && numberLineLabSource.includes("inequality-ray") && numberLineLabSource.includes("exponent-extension"), "number line lab implementation is incomplete");
 requireCondition(algorithmLabSource.includes("mountAlgorithmLab") && algorithmLabSource.includes("euclideanSteps"), "algorithm lab implementation is incomplete");
+requireCondition(rangeGraphSource.includes("signed-integral") && rangeGraphSource.includes("signedAreaParts") && rangeGraphSource.includes("definiteIntegral"), "range graph signed-integral mode is incomplete");
+requireCondition(sequenceLabSource.includes("SEQUENCE_MODES") && sequenceLabSource.includes("partialSums") && sequenceLabSource.includes("generateRecurrence") && sequenceLabSource.includes("atlas-sequence-table"), "SequenceLab implementation is incomplete");
 requireCondition(algebraSource.includes("expandMonicProduct") && algebraSource.includes("perfectSquareCoefficients") && algebraSource.includes("factorPairExpansion") && algebraSource.includes("completeSquare"), "algebra math module is incomplete");
 requireCondition(numberLineSource.includes("sqrtBounds") && numberLineSource.includes("absoluteDistance") && numberLineSource.includes("inequalityFacts"), "number line math module is incomplete");
 requireCondition(sampleSpaceSource.includes("diceOutcomes") && sampleSpaceSource.includes("outcomesForEvent") && sampleSpaceSource.includes("probabilityForEvent"), "sample space math module is incomplete");
@@ -412,7 +427,11 @@ requireCondition(numberTheorySource.includes("gcd") && numberTheorySource.includ
 requireCondition(quadraticSource.includes("quadraticValue") && quadraticSource.includes("quadraticDiscriminant") && quadraticSource.includes("quadraticRoots") && quadraticSource.includes("quadraticVertex") && quadraticSource.includes("quadraticThroughPoints") && quadraticSource.includes("quadraticInequalityIntervals") && quadraticSource.includes("quadraticLineIntersections"), "quadratic math module is incomplete");
 requireCondition(quadraticSource.includes("quadraticExpression") && quadraticSource.includes("formatIntervalSet"), "quadratic summary helpers are missing");
 requireCondition(trigonometrySource.includes("rightTriangleTrig") && trigonometrySource.includes("trigRelations"), "trigonometry math module is incomplete");
-requireCondition(functionGraphSource.includes("FUNCTION_GRAPH_MODES") && functionGraphSource.includes('"three-point-parabola"') && functionGraphSource.includes('"quadratic-inequality"') && functionGraphSource.includes('"parameter-intersections"'), "FunctionGraph V2 modes are incomplete");
+requireCondition(trigonometrySource.includes("degreesToRadians") && trigonometrySource.includes("radiansToDegrees") && trigonometrySource.includes("trigFunctionValue") && trigonometrySource.includes("transformedTrigValue") && trigonometrySource.includes("additionFormulaFacts") && trigonometrySource.includes("doubleAngleFacts"), "Phase 7A trigonometry helpers are incomplete");
+requireCondition(exponentialLogarithmSource.includes("exponentialValue") && exponentialLogarithmSource.includes("logarithmValue") && exponentialLogarithmSource.includes("changeOfBase") && exponentialLogarithmSource.includes("solveSimpleExponential") && exponentialLogarithmSource.includes("solveSimpleLogarithm"), "exponential/logarithm math module is incomplete");
+requireCondition(calculusSource.includes("polynomialValue") && calculusSource.includes("derivativeCoefficients") && calculusSource.includes("derivativeValue") && calculusSource.includes("secantSlope") && calculusSource.includes("tangentLine") && calculusSource.includes("criticalPoints") && calculusSource.includes("antiderivativeCoefficients") && calculusSource.includes("definiteIntegral") && calculusSource.includes("signedAreaParts"), "calculus math module is incomplete");
+requireCondition(sequencesSource.includes("arithmeticTerm") && sequencesSource.includes("arithmeticSum") && sequencesSource.includes("geometricTerm") && sequencesSource.includes("geometricSum") && sequencesSource.includes("partialSums") && sequencesSource.includes("differenceSequence") && sequencesSource.includes("generateRecurrence") && sequencesSource.includes("sigmaSum"), "sequences math module is incomplete");
+requireCondition(functionGraphSource.includes("FUNCTION_GRAPH_MODES") && functionGraphSource.includes('"three-point-parabola"') && functionGraphSource.includes('"quadratic-inequality"') && functionGraphSource.includes('"parameter-intersections"') && functionGraphSource.includes('"exponential-base"') && functionGraphSource.includes('"log-inverse"') && functionGraphSource.includes('"logarithm-base"') && functionGraphSource.includes('"exponential-equation"') && functionGraphSource.includes('"trig-function-graphs"') && functionGraphSource.includes('"trig-transform"') && functionGraphSource.includes('"secant-to-tangent"') && functionGraphSource.includes('"derivative-at-point"') && functionGraphSource.includes('"function-and-derivative"') && functionGraphSource.includes('"cubic-extrema"') && functionGraphSource.includes('"indefinite-integral"'), "FunctionGraph Phase 7A modes are incomplete");
 requireCondition(functionGraphSource.includes("quadraticExpression") && functionGraphSource.includes("formatIntervalSet") && functionGraphSource.includes(" ／ 解："), "quadratic inequality summary format regressed");
 requireCondition(functionGraphSource.includes("const xs = [-2, 0, 2]") && functionGraphSource.includes("create(\"glider\"") && functionGraphSource.includes("three-point-parabola"), "three-point parabola drag constraints are missing");
 requireCondition(curriculumSource.includes("orderedContentIds") && curriculumSource.includes("neighborsForContent") && curriculumSource.includes("SUBJECT_META") && curriculumSource.includes("UNIT_META") && curriculumSource.includes("subjectLabel") && curriculumSource.includes("unitLabel"), "curriculum metadata module is incomplete");
@@ -422,6 +441,7 @@ requireCondition(registrySource.includes("simulationLab") && registrySource.incl
 requireCondition(registrySource.includes("algebraLab") && registrySource.includes("algebra-lab.js"), "registry does not register algebraLab");
 requireCondition(registrySource.includes("numberLineLab") && registrySource.includes("number-line-lab.js"), "registry does not register numberLineLab");
 requireCondition(registrySource.includes("algorithmLab") && registrySource.includes("algorithm-lab.js"), "registry does not register algorithmLab");
+requireCondition(registrySource.includes("sequenceLab") && registrySource.includes("sequence-lab.js"), "registry does not register sequenceLab");
 requireCondition(curriculumSource.includes('"math1", "mathA"') && curriculumSource.includes('"event-regions"') && curriculumSource.includes('"mean-median-outlier"') && curriculumSource.includes('"expansion-area"') && curriculumSource.includes('"euclidean-algorithm"'), "curriculum metadata order is incomplete");
 requireCondition(catalogSource.includes("教材を検索") || catalogSource.includes("searchMatch"), "catalog search is missing");
 requireCondition(routerSource.includes('params.get("q")') && routerSource.includes('params.get("type")') && routerSource.includes("replaceCatalogFilters"), "catalog filter URL state is incomplete");
@@ -448,12 +468,15 @@ requireCondition(worksheetModelSource.includes("MAX_WORKSHEET_PROBLEMS") && work
 requireCondition(progressSummarySource.includes("summarizeLearning") && progressSummarySource.includes("practiceStatus") && progressSummarySource.includes("recentActivity"), "Progress summary is incomplete");
 requireCondition(progressSource.includes("学習記録をバックアップ") && progressSource.includes("replaceLearningRecord") && progressSource.includes("progressContents") && progressSource.includes("要復習"), "Progress report flow is incomplete");
 requireCondition(progressRecordSource.includes("math-interactive-atlas-learning-record") && progressRecordSource.includes("LEARNING_RECORD_VERSION = 2") && progressRecordSource.includes("normalizeState"), "Learning record schema is incomplete");
-requireCondition(practiceProblems.length === 120 && new Set(practiceProblems.map((problem) => problem.unit)).size === 7, "Practice must provide 120 problems across 7 units");
+requireCondition(practiceProblems.length === 180 && new Set(practiceProblems.map((problem) => problem.unit)).size === 11 && new Set(practiceProblems.map((problem) => problem.subject)).size === 4, "Practice must provide 180 problems across 11 units and 4 subjects");
 requireCondition(routerSource.includes('subject: params.get("subject") || null'), "catalog route must show all subjects when subject is omitted");
 requireCondition(workflowSource.includes("node-version: 22"), "GitHub Actions must use Node.js 22");
 requireCondition(workflowSource.includes("node scripts/check-atlas-contract.js") && workflowSource.includes("node scripts/check-set-regions.js") && workflowSource.includes("node scripts/check-set-relations.js") && workflowSource.includes("node scripts/check-event-regions.js") && workflowSource.includes("node scripts/check-conditional-probability.js") && workflowSource.includes("node scripts/check-combinatorics.js") && workflowSource.includes("node scripts/check-statistics.js") && workflowSource.includes("node scripts/check-probability.js") && workflowSource.includes("node scripts/check-hypothesis-test.js") && workflowSource.includes("node scripts/check-geometry.js") && workflowSource.includes("node scripts/check-algebra.js") && workflowSource.includes("node scripts/check-number-line.js") && workflowSource.includes("node scripts/check-sample-space.js") && workflowSource.includes("node scripts/check-number-theory.js") && workflowSource.includes("node scripts/check-quadratic.js") && workflowSource.includes("node scripts/check-trigonometry.js") && workflowSource.includes("node scripts/check-curriculum.js") && workflowSource.includes("node scripts/check-related-content.js") && workflowSource.includes("node scripts/check-practice-data.js") && workflowSource.includes("node scripts/check-practice-answer.js") && workflowSource.includes("node scripts/check-practice-links.js") && workflowSource.includes("node scripts/check-practice-coverage.js") && workflowSource.includes("node scripts/check-practice-quality.js") && workflowSource.includes("node scripts/check-practice-session.js") && workflowSource.includes("node scripts/check-learning-state.js") && workflowSource.includes("node scripts/check-problem-set.js") && workflowSource.includes("node scripts/check-set-storage.js") && workflowSource.includes("node scripts/check-worksheet.js") && workflowSource.includes("node scripts/check-progress-summary.js") && workflowSource.includes("node scripts/check-learning-record.js") && workflowSource.includes("node scripts/check-asset-version.js"), "GitHub Actions check scripts are incomplete");
 requireCondition(workflowSource.includes("node --check static/atlas/interactions/region-selector.js") && workflowSource.includes("node --check static/atlas/math/set-relations.js") && workflowSource.includes("node --check static/atlas/math/event-regions.js") && workflowSource.includes("node --check static/atlas/math/conditional-probability.js") && workflowSource.includes("node --check static/atlas/math/combinatorics.js") && workflowSource.includes("node --check static/atlas/interactions/combinatorics-viewer.js") && workflowSource.includes("node --check static/atlas/interactions/data-lab.js") && workflowSource.includes("node --check static/atlas/interactions/simulation-lab.js") && workflowSource.includes("node --check static/atlas/interactions/algebra-lab.js") && workflowSource.includes("node --check static/atlas/interactions/number-line-lab.js") && workflowSource.includes("node --check static/atlas/interactions/algorithm-lab.js") && workflowSource.includes("node --check static/atlas/math/statistics.js") && workflowSource.includes("node --check static/atlas/math/probability.js") && workflowSource.includes("node --check static/atlas/math/hypothesis-test.js") && workflowSource.includes("node --check static/atlas/math/algebra.js") && workflowSource.includes("node --check static/atlas/math/number-line.js") && workflowSource.includes("node --check static/atlas/math/sample-space.js") && workflowSource.includes("node --check static/atlas/math/number-theory.js") && workflowSource.includes("node --check static/atlas/interactions/function-graph.js") && workflowSource.includes("node --check static/atlas/interactions/geometry-board.js") && workflowSource.includes("node --check static/atlas/math/quadratic.js") && workflowSource.includes("node --check static/atlas/math/trigonometry.js") && workflowSource.includes("node --check static/atlas/curriculum.js") && workflowSource.includes("node --check static/atlas/storage.js") && workflowSource.includes("node --check static/practice/main.js") && workflowSource.includes("node --check static/practice/router.js") && workflowSource.includes("node --check static/practice/catalog.js") && workflowSource.includes("node --check static/practice/runner.js") && workflowSource.includes("node --check static/practice/answer.js") && workflowSource.includes("node --check static/practice/validation.js") && workflowSource.includes("node --check static/practice/filter.js") && workflowSource.includes("node --check static/practice/session.js"), "GitHub Actions syntax checks are incomplete");
+requireCondition(workflowSource.includes("node scripts/check-exponential-logarithm.js") && workflowSource.includes("node scripts/check-calculus.js") && workflowSource.includes("node scripts/check-sequences.js"), "Phase 7A math checks are missing from GitHub Actions");
+requireCondition(workflowSource.includes("node --check static/atlas/interactions/sequence-lab.js") && workflowSource.includes("node --check static/atlas/math/exponential-logarithm.js") && workflowSource.includes("node --check static/atlas/math/calculus.js") && workflowSource.includes("node --check static/atlas/math/sequences.js"), "Phase 7A syntax checks are missing from GitHub Actions");
 requireCondition(pagesWorkflowSource.includes("workflow_dispatch:") && !pagesWorkflowSource.includes("  push:") && pagesWorkflowSource.includes("actions/configure-pages@v5") && !pagesWorkflowSource.includes("enablement:") && pagesWorkflowSource.includes("test -f atlas.html") && pagesWorkflowSource.includes("test -f index.html") && pagesWorkflowSource.includes("test -f practice.html") && pagesWorkflowSource.includes("test -f static/tokens.css") && pagesWorkflowSource.includes("test -f static/atlas.css") && pagesWorkflowSource.includes("test -f static/atlas/main.js") && pagesWorkflowSource.includes("test -f static/atlas/content-data.json") && pagesWorkflowSource.includes("test -f static/practice.css") && pagesWorkflowSource.includes("test -f static/practice/main.js") && pagesWorkflowSource.includes("test -f static/practice/problem-data.json") && pagesWorkflowSource.includes("cp static/tokens.css static/atlas.css static/practice.css _site/static/") && pagesWorkflowSource.includes("cp -R static/atlas _site/static/atlas") && pagesWorkflowSource.includes("cp -R static/practice _site/static/practice") && pagesWorkflowSource.includes("touch _site/.nojekyll") && pagesWorkflowSource.includes("actions/upload-pages-artifact@v3") && pagesWorkflowSource.includes("actions/deploy-pages@v4"), "GitHub Pages deploy workflow is incomplete");
+requireCondition(pagesWorkflowSource.includes("test -f static/atlas/interactions/sequence-lab.js") && pagesWorkflowSource.includes("test -f static/atlas/math/exponential-logarithm.js") && pagesWorkflowSource.includes("test -f static/atlas/math/calculus.js") && pagesWorkflowSource.includes("test -f static/atlas/math/sequences.js"), "Phase 7A Pages assets are missing");
 requireCondition(!viewerSource.includes("function-graph.js") && !viewerSource.includes("range-graph.js") && !viewerSource.includes("geometry-board.js") && !viewerSource.includes("region-selector.js") && !viewerSource.includes("combinatorics-viewer.js") && !viewerSource.includes("data-lab.js") && !viewerSource.includes("simulation-lab.js"), "viewer imports a concrete interaction engine");
 requireCondition(!/currentExamKey|app\.progress|answerDrafts|examFlow|MINI_EXAMS/.test(atlasSource), "atlas source references existing practice or exam state");
 requireCondition(index.includes("./atlas.html") || index.includes("atlas.html"), "index.html does not link to atlas.html");

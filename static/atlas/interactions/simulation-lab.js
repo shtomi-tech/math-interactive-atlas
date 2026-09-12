@@ -1,5 +1,5 @@
-import { coinTestFacts } from "../math/hypothesis-test.js?v=20260912-7a";
-import { binomialDistribution, binomialProbability } from "../math/probability.js?v=20260912-7a";
+import { coinTestFacts } from "../math/hypothesis-test.js?v=20260912-7i";
+import { binomialDistribution, binomialProbability } from "../math/probability.js?v=20260912-7i";
 
 const NS = "http://www.w3.org/2000/svg";
 const clamp = (value, min, max) => Math.min(max, Math.max(min, Number(value)));

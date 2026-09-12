@@ -4,7 +4,8 @@ import { validateProblemData } from "../static/practice/validation.js";
 
 const problems = JSON.parse(fs.readFileSync(new URL("../static/practice/problem-data.json", import.meta.url), "utf8"));
 const contents = JSON.parse(fs.readFileSync(new URL("../static/atlas/content-data.json", import.meta.url), "utf8"));
-assert.equal(problems.length, 120);
+assert.equal(problems.length, 180);
 assert.deepEqual(validateProblemData(problems, contents), []);
-assert.equal(new Set(problems.map((problem) => `${problem.subject}:${problem.unit}`)).size, 7);
-console.log("Practice data: PASS (120 problems, 7 units)");
+assert.equal(new Set(problems.map((problem) => `${problem.subject}:${problem.unit}`)).size, 11);
+assert.deepEqual(new Set(problems.map((problem) => problem.subject)), new Set(["math1", "mathA", "math2", "mathB"]));
+console.log("Practice data: PASS (180 problems, 11 units, 4 subjects)");

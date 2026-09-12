@@ -1,7 +1,7 @@
 # 高校数学インタラクティブ図鑑 Design Contract
 
 Version: 1.0
-Scope: `atlas.html`、`practice.html`、`static/atlas/`、`static/practice/` の学習UI
+Scope: `atlas.html`、`practice.html`、`static/atlas/`、`static/practice/` の学習UI。数学I・A・Ⅱ・Bの60教材を対象とする。
 
 ## 原則
 
@@ -47,11 +47,11 @@ Good Design = Invisible UI + Visible Mathematics + Meaningful Interaction
 8. 関連する概念
 9. Source / License
 
-カタログは `SUBJECT_ORDER` とSubjectごとの単元順で科目・単元見出しを安定させる。科目未指定時は利用可能な全科目、`subject` 指定時はその科目だけを表示する。カードには、タイトル、一言説明、Interaction Typeだけを表示する。数学Iと数学Aの教材を表示し、数学Aは「場合の数と確率」から始める。
+カタログは `SUBJECT_ORDER` とSubjectごとの単元順で科目・単元見出しを安定させる。科目未指定時は利用可能な全科目、`subject` 指定時はその科目だけを表示する。カードには、タイトル、一言説明、Interaction Typeだけを表示する。数学I・数学A・数学Ⅱ・数学Bを表示し、未実装の将来単元は空の見出しを保つ。
 
 ### Catalog Discovery
 
-40教材を一覧から探せるよう、検索語、科目、単元、Interaction Typeのフィルタをカタログに置く。結果件数と空状態を表示し、条件は `q`、`subject`、`unit`、`type` のURLパラメータへ同期する。検索欄の入力中はフォーカスと入力位置を保持する。
+60教材を一覧から探せるよう、検索語、科目、単元、Interaction Typeのフィルタをカタログに置く。結果件数と空状態を表示し、条件は `q`、`subject`、`unit`、`type` のURLパラメータへ同期する。検索は日本語・英語のタイトル、説明、単元名、タグ相当の本文を対象にする。
 
 ### Learning Navigation
 
@@ -92,11 +92,31 @@ Worksheet / Web Practice
 
 ## インタラクション
 
-`static/atlas/interactions/index.js` のInteraction Engine Registryを入口とする。ViewerはRegistryだけを呼び、`interaction.engine` に応じて10種類のEngineをmountする。すべてのEngineは `reset()`、`destroy()`、`getState()` を返し、パラメータ型Engineは `setParameter()` も返す。
+`static/atlas/interactions/index.js` のInteraction Engine Registryを入口とする。ViewerはRegistryだけを呼び、`interaction.engine` に応じて11種類のEngineをmountする。すべてのEngineは `reset()`、`destroy()`、`getState()` を返し、パラメータ型Engineは `setParameter()` も返す。
 
-Phase 4B以降はInteraction Engine v1としてこの10種類を一旦固定する。新教材は既存Engineへのmode追加を第一候補とし、新Engineを追加する場合は既存Engineで表現できない理由を設計書へ記録する。
+Phase 7AではInteraction Engineを11種類へ拡張する。新教材は既存Engineへのmode追加を第一候補とし、連続的な変化はFunctionGraph / GeometryBoard / RangeGraph、数列のような離散的な変化はSequenceLabへ寄せる。
 
 `static/atlas/interactions/function-graph.js` は軸、グリッド、関数グラフ、点、補助線、動的ラベル、パラメータ更新、Reset、Destroyを提供する。`range-graph.js` はこれを使って関数全体、定義域内の強調曲線、左右端の44pxドラッグハンドル、最大・最小候補を表示する。
+
+### Continuous Mathematics
+
+連続量の教材は、値を連続的に変えたときの形・変化率・蓄積を同じ学習順序で見せる。
+
+```text
+入力を連続的に変える
+↓
+関数の形が変わる
+↓
+変化率を観察する
+↓
+面積を蓄積する
+```
+
+指数・対数と三角関数は定義域と周期を明示し、微分は割線から接線、積分は符号付き面積へ接続する。`calculus.js` の多項式係数は低次から並べる `[a0, a1, a2, a3]` を正本とする。
+
+### Discrete Mathematics
+
+数列は連続曲線として補間せず、`SequenceLab` の離散点・項の表・部分和で表示する。等差・等比・漸化式を同じ表構造で比較し、点と点を線で結ばない。操作は初項、公差、公比、漸化式の係数、表示項数へ分ける。
 
 `geometry-board.js` は動的図形の共通入口である。図形はドラッグで動かせるようにし、動点と固定点を視覚的に区別する。円の教材では `keepAspectRatio: true` を使い、座標・角度・長さはCanvas外でも確認できるようにする。`unit-circle` modeは点P、OP、射影線、角度、sin・cosの座標関係を表示し、`triangle-area-sine` modeは固定辺 `a = 3`、`b = 4` と動く角Cから高さ・sin C・面積を表示する。
 

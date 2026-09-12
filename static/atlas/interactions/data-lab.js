@@ -5,7 +5,7 @@ import {
   quartiles,
   standardDeviation,
   variance
-} from "../math/statistics.js?v=20260912-7a";
+} from "../math/statistics.js?v=20260912-7i";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 const COLORS = Object.freeze({

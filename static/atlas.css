@@ -828,9 +828,21 @@ h3 { font-size: 1.25rem; line-height: 1.45; }
 .atlas-algorithm-steps { display: grid; gap: 8px; margin: 0; padding-left: 2rem; }
 .atlas-algorithm-steps li { padding: 10px 12px; border: 1px solid var(--atlas-border); border-radius: 8px; font-family: ui-monospace, monospace; }
 .atlas-algorithm-steps li.is-current { border-color: var(--atlas-math-highlight); background: #fffbeb; }
+.atlas-function-graph-secondary-board { width: 100%; min-height: 280px; height: min(52vw, 360px); margin-top: 14px; border-top: 1px solid var(--atlas-border); }
+.atlas-sequence-lab { display: grid; gap: 12px; width: 100%; }
+.atlas-sequence-svg { display: block; width: 100%; min-height: 180px; background: var(--atlas-canvas); border: 1px solid var(--atlas-border); }
+.atlas-sequence-result { margin: 0; color: var(--atlas-text); font-weight: 650; }
+.atlas-sequence-controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.atlas-sequence-controls button { min-width: 44px; min-height: 44px; }
+.atlas-sequence-controls button[aria-pressed="true"] { border-color: var(--atlas-accent); background: var(--atlas-selected); }
+.atlas-sequence-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.atlas-sequence-table th, .atlas-sequence-table td { padding: 8px 10px; border: 1px solid var(--atlas-border); text-align: right; }
+.atlas-sequence-table th { background: var(--atlas-selected); color: var(--atlas-text); }
 
 @media (max-width: 420px) {
   .atlas-geometry-canvas { min-height: 280px; height: 280px; }
   .atlas-geometry-touch-layer { height: 280px; }
   .atlas-algebra-control { min-width: 100%; }
+  .atlas-function-graph-secondary-board { min-height: 240px; height: 240px; }
+  .atlas-sequence-table { display: block; overflow-x: auto; white-space: nowrap; }
 }

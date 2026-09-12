@@ -1,8 +1,10 @@
-export const SUBJECT_ORDER = Object.freeze(["math1", "mathA"]);
+export const SUBJECT_ORDER = Object.freeze(["math1", "mathA", "math2", "mathB"]);
 
 export const SUBJECT_META = Object.freeze({
   math1: Object.freeze({ label: "数学I" }),
-  mathA: Object.freeze({ label: "数学A" })
+  mathA: Object.freeze({ label: "数学A" }),
+  math2: Object.freeze({ label: "数学Ⅱ" }),
+  mathB: Object.freeze({ label: "数学B" })
 });
 
 export const UNIT_META = Object.freeze({
@@ -12,7 +14,15 @@ export const UNIT_META = Object.freeze({
   statistics: Object.freeze({ label: "データの分析" }),
   probability: Object.freeze({ label: "場合の数と確率" }),
   "geometry-a": Object.freeze({ label: "図形の性質" }),
-  "human-activity": Object.freeze({ label: "数学と人間の活動" })
+  "human-activity": Object.freeze({ label: "数学と人間の活動" }),
+  "expressions-2": Object.freeze({ label: "いろいろな式" }),
+  "geometry-equations": Object.freeze({ label: "図形と方程式" }),
+  "exponential-logarithm": Object.freeze({ label: "指数関数・対数関数" }),
+  "trigonometric-functions": Object.freeze({ label: "三角関数" }),
+  "calculus-2": Object.freeze({ label: "微分・積分の考え" }),
+  sequences: Object.freeze({ label: "数列" }),
+  "statistical-inference": Object.freeze({ label: "統計的な推測" }),
+  "math-social-life": Object.freeze({ label: "数学と社会生活" })
 });
 
 export function subjectLabel(id) {
@@ -25,7 +35,9 @@ export function unitLabel(id) {
 
 export const SUBJECT_UNIT_ORDER = Object.freeze({
   math1: Object.freeze(["algebra", "trigonometry", "quadratic", "statistics"]),
-  mathA: Object.freeze(["probability", "geometry-a", "human-activity"])
+  mathA: Object.freeze(["probability", "geometry-a", "human-activity"]),
+  math2: Object.freeze(["expressions-2", "geometry-equations", "exponential-logarithm", "trigonometric-functions", "calculus-2"]),
+  mathB: Object.freeze(["sequences", "statistical-inference", "math-social-life"])
 });
 
 export const CONTENT_ORDER = Object.freeze({
@@ -35,7 +47,15 @@ export const CONTENT_ORDER = Object.freeze({
   statistics: Object.freeze(["mean-median-outlier", "variance-distance", "boxplot-drag", "correlation-builder", "hypothesis-test-coin"]),
   probability: Object.freeze(["event-regions", "conditional-probability", "counting-tree", "permutations-all", "combinations-order", "independent-trials", "circular-permutations", "sample-space-grid"]),
   "geometry-a": Object.freeze(["triangle-centers", "angle-bisector-ratio", "inscribed-angle", "power-of-point"]),
-  "human-activity": Object.freeze(["euclidean-algorithm"])
+  "human-activity": Object.freeze(["euclidean-algorithm"]),
+  "exponential-logarithm": Object.freeze(["exponent-extension", "exponential-base", "log-inverse", "logarithm-base", "exponential-equation"]),
+  "trigonometric-functions": Object.freeze(["radian-measure", "trig-function-graphs", "trig-transform", "trig-addition-formula", "double-angle"]),
+  "calculus-2": Object.freeze(["secant-to-tangent", "derivative-at-point", "function-and-derivative", "cubic-extrema", "indefinite-integral", "definite-integral-signed-area"]),
+  sequences: Object.freeze(["arithmetic-sequence", "geometric-sequence", "sequence-partial-sum", "recurrence-iteration"]),
+  "expressions-2": Object.freeze([]),
+  "geometry-equations": Object.freeze([]),
+  "statistical-inference": Object.freeze([]),
+  "math-social-life": Object.freeze([])
 });
 
 export function orderedContentIds() {

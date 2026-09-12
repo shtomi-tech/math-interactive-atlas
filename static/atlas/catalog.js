@@ -1,12 +1,18 @@
-import { SUBJECT_ORDER, SUBJECT_UNIT_ORDER, orderedContents, subjectLabel, unitLabel } from "./curriculum.js?v=20260912-7a";
-import { practiceStatus } from "./storage.js?v=20260912-7a";
+import { SUBJECT_ORDER, SUBJECT_UNIT_ORDER, orderedContents, subjectLabel, unitLabel } from "./curriculum.js?v=20260912-7i";
+import { practiceStatus } from "./storage.js?v=20260912-7i";
 
 const INTERACTION_LABELS = { slider: "SLIDER", drag: "DRAG", geometry: "GEOMETRY", select: "SELECT", cards: "CARDS", data: "DATA", simulation: "SIMULATION", build: "BUILD" };
 const PROGRESS_OPTIONS = [["all", "すべて"], ["unvisited", "未閲覧"], ["visited", "閲覧済み"], ["favorites", "お気に入り"]];
 
 function safeState(state = {}) { return { favorites: Array.isArray(state.favorites) ? state.favorites : [], visited: state.visited && typeof state.visited === "object" ? state.visited : {} }; }
 function uniqueOptions(contents, key) { return [...new Map(contents.map((content) => [content[key], content[`${key}Label`] || content[key]])).entries()]; }
-function searchMatch(content, query) { if (!query) return true; const haystack = [content.title, content.shortDescription, subjectLabel(content.subject), unitLabel(content.unit), content.formula, ...(content.discoveryPoints || [])].join(" ").toLocaleLowerCase(); return haystack.includes(query.toLocaleLowerCase()); }
+const SEARCH_ALIASES = Object.freeze({
+  "exponential-logarithm": ["exponent", "exponential", "logarithm", "log"],
+  "trigonometric-functions": ["trigonometric", "sine", "cosine", "tangent", "radian", "sin", "cos", "tan"],
+  "calculus-2": ["calculus", "derivative", "differentiation", "integral", "integration", "tangent", "secant"],
+  sequences: ["sequence", "arithmetic", "geometric", "recurrence", "series", "sum"]
+});
+function searchMatch(content, query) { if (!query) return true; const haystack = [content.title, content.shortDescription, subjectLabel(content.subject), unitLabel(content.unit), content.formula, ...(content.discoveryPoints || []), ...(SEARCH_ALIASES[content.unit] || [])].join(" ").toLocaleLowerCase(); return haystack.includes(query.toLocaleLowerCase()); }
 function isVisibleByProgress(content, progress, state) { const visited = Boolean(state.visited[content.id]); const favorite = state.favorites.includes(content.id); return progress === "unvisited" ? !visited : progress === "visited" ? visited : progress === "favorites" ? favorite : true; }
 
 function createCard(content, state, onSelect, onToggleFavorite, practiceProblems = []) {

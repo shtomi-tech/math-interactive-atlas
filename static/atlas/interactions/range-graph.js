@@ -1,3 +1,5 @@
+import { definiteIntegral, signedAreaParts } from "../math/calculus.js?v=20260912-7i";
+
 const COLORS = {
   primary: "#2563eb",
   secondary: "#e11d48",
@@ -13,7 +15,8 @@ const MAX_X = 4;
 const MIN_GAP = 0.25;
 const BOARD_BOUNDS = [-4, 14, 5, -2];
 let boardSequence = 0;
-const RANGE_GRAPH_MODES = Object.freeze({ "quadratic-range": true });
+const RANGE_GRAPH_MODES = Object.freeze({ "quadratic-range": true, "signed-integral": true });
+const SIGNED_INTEGRAL_COEFFICIENTS = [-1, 0, 1];
 
 function finite(value, fallback = 0) {
   return Number.isFinite(Number(value)) ? Number(value) : fallback;
@@ -25,8 +28,8 @@ function formatNumber(value) {
   return Number.isInteger(number) ? String(number) : number.toFixed(2).replace(/0+$/, "").replace(/\.$/, "");
 }
 
-function functionValue(x) {
-  return (x - 1) ** 2 + 1;
+function functionValue(x, mode = "quadratic-range") {
+  return mode === "signed-integral" ? x ** 2 - 1 : (x - 1) ** 2 + 1;
 }
 
 function candidatesFor(state) {
@@ -47,6 +50,15 @@ function extremaFor(state) {
 }
 
 function summaryFor(state) {
+  if (state.mode === "signed-integral") {
+    const signed = definiteIntegral(SIGNED_INTEGRAL_COEFFICIENTS, state.l, state.r);
+    const displayedSigned = Math.abs(signed) < 1e-12 ? 0 : signed;
+    const parts = signedAreaParts(SIGNED_INTEGRAL_COEFFICIENTS, state.l, state.r);
+    const geometric = parts.reduce((total, part) => total + part.geometricArea, 0);
+    const positive = parts.filter((part) => part.sign === "positive").reduce((total, part) => total + part.geometricArea, 0);
+    const negative = parts.filter((part) => part.sign === "negative").reduce((total, part) => total + part.geometricArea, 0);
+    return `区間：${formatNumber(state.l)} ≤ x ≤ ${formatNumber(state.r)}　／　定積分：${formatNumber(displayedSigned)}　／　正の面積：${formatNumber(positive)}　／　負の面積：${formatNumber(negative)}　／　幾何学的面積：${formatNumber(geometric)}`;
+  }
   const { minimum, maximum } = extremaFor(state);
   return `定義域：${formatNumber(state.l)} ≤ x ≤ ${formatNumber(state.r)}　／　最小値：${formatNumber(minimum.value)}（x = ${formatNumber(minimum.x)}）　／　最大値：${formatNumber(maximum.value)}（x = ${formatNumber(maximum.x)}）`;
 }
@@ -91,9 +103,12 @@ function mountFallback(container) {
 
 export function mountRangeGraph(container, config) {
   if (!RANGE_GRAPH_MODES[config?.mode]) throw new Error(`Unsupported range graph mode: ${config?.mode || "(empty)"}`);
-  const initial = { l: finite(config.initial?.l, -2), r: finite(config.initial?.r, 3) };
+  const mode = config.mode;
+  const initial = mode === "signed-integral"
+    ? { l: finite(config.initial?.l, -1), r: finite(config.initial?.r, 2) }
+    : { l: finite(config.initial?.l, -2), r: finite(config.initial?.r, 3) };
   const parameters = config.parameters || {};
-  const state = { l: Math.min(initial.l, initial.r - MIN_GAP), r: Math.max(initial.r, initial.l + MIN_GAP) };
+  const state = { mode, l: Math.min(initial.l, initial.r - MIN_GAP), r: Math.max(initial.r, initial.l + MIN_GAP) };
   const boardId = `atlas-range-graph-${boardSequence += 1}`;
   let board = createBoard(container, boardId);
   const handles = new Map();
@@ -102,75 +117,49 @@ export function mountRangeGraph(container, config) {
   if (!board) mountFallback(container);
 
   if (board) {
-    board.create("functiongraph", [functionValue, MIN_X, MAX_X], {
+    const curveFunction = (x) => functionValue(x, mode);
+    board.create("functiongraph", [curveFunction, MIN_X, MAX_X], {
       strokeColor: COLORS.construction,
       strokeWidth: 2,
       dash: 2,
       fixed: true,
       highlight: false
     });
-    board.create("curve", [
-      (t) => state.l + (state.r - state.l) * t,
-      (t) => functionValue(state.l + (state.r - state.l) * t),
-      0,
-      1
-    ], {
-      strokeColor: COLORS.primary,
-      strokeWidth: 4,
-      fixed: true,
-      highlight: false
-    });
-    board.create("point", [() => state.l, () => functionValue(state.l)], {
-      name: "l",
-      size: 4,
-      strokeColor: COLORS.text,
-      fillColor: COLORS.primary,
-      fixed: true,
-      highlight: false
-    });
-    board.create("point", [() => state.r, () => functionValue(state.r)], {
-      name: "r",
-      size: 4,
-      strokeColor: COLORS.text,
-      fillColor: COLORS.primary,
-      fixed: true,
-      highlight: false
-    });
-    const vertex = board.create("point", [1, 1], {
-      name: "V",
-      size: 4,
-      strokeColor: COLORS.text,
-      fillColor: COLORS.construction,
-      fixed: true,
-      highlight: false
-    });
-    const minimum = board.create("point", [() => extremaFor(state).minimum.x, () => extremaFor(state).minimum.value], {
-      name: "min",
-      size: 4,
-      strokeColor: COLORS.text,
-      fillColor: COLORS.success,
-      fixed: true,
-      highlight: false
-    });
-    const maximum = board.create("point", [() => extremaFor(state).maximum.x, () => extremaFor(state).maximum.value], {
-      name: "max",
-      size: 4,
-      strokeColor: COLORS.text,
-      fillColor: COLORS.highlight,
-      fixed: true,
-      highlight: false
-    });
-    addText(board, -3.7, 13, () => `定義域：${formatNumber(state.l)} ≤ x ≤ ${formatNumber(state.r)}`, { fontSize: 15, strokeColor: COLORS.primary });
-    addText(board, -3.7, 12.3, () => {
-      const { minimum: candidate } = extremaFor(state);
-      return `最小値 ${formatNumber(candidate.value)}（x = ${formatNumber(candidate.x)}）`;
-    }, { fontSize: 12, strokeColor: COLORS.success });
-    addText(board, -3.7, 11.7, () => {
-      const { maximum: candidate } = extremaFor(state);
-      return `最大値 ${formatNumber(candidate.value)}（x = ${formatNumber(candidate.x)}）`;
-    }, { fontSize: 12, strokeColor: COLORS.highlight });
-    addText(board, 1.15, 1.5, () => state.l <= 1 && state.r >= 1 ? "頂点" : "頂点（定義域外）", { fontSize: 12, strokeColor: COLORS.helper });
-    board.__atlasRangeParts = { vertex, minimum, maximum };
+    if (mode === "signed-integral") {
+      const createArea = (getStart, getEnd, color) => board.create("curve", [
+        (t) => getStart() + (getEnd() - getStart()) * t,
+        (t) => curveFunction(getStart() + (getEnd() - getStart()) * t),
+        0,
+        1
+      ], { strokeColor: color, strokeWidth: 3, fillColor: color, fillOpacity: 0.22, visible: () => getEnd() - getStart() > MIN_GAP, fixed: true, highlight: false });
+      createArea(() => state.l, () => Math.min(state.r, -1), COLORS.success);
+      createArea(() => Math.max(state.l, -1), () => Math.min(state.r, 1), COLORS.secondary);
+      createArea(() => Math.max(state.l, 1), () => state.r, COLORS.primary);
+      addText(board, -3.7, 13, () => "f(x)=x²−1　／　x軸の上下を色分け", { fontSize: 15, strokeColor: COLORS.primary });
+      addText(board, -3.7, 12.3, () => {
+        const signed = definiteIntegral(SIGNED_INTEGRAL_COEFFICIENTS, state.l, state.r);
+        return `定積分 = ${formatNumber(Math.abs(signed) < 1e-12 ? 0 : signed)}`;
+      }, { fontSize: 12, strokeColor: COLORS.secondary });
+      addText(board, -3.7, 11.7, () => `区間：${formatNumber(state.l)} ≤ x ≤ ${formatNumber(state.r)}`, { fontSize: 12, strokeColor: COLORS.helper });
+      board.__atlasRangeParts = {};
+    } else {
+      board.create("curve", [
+        (t) => state.l + (state.r - state.l) * t,
+        (t) => curveFunction(state.l + (state.r - state.l) * t),
+        0,
+        1
+      ], { strokeColor: COLORS.primary, strokeWidth: 4, fixed: true, highlight: false });
+      board.create("point", [() => state.l, () => curveFunction(state.l)], { name: "l", size: 4, strokeColor: COLORS.text, fillColor: COLORS.primary, fixed: true, highlight: false });
+      board.create("point", [() => state.r, () => curveFunction(state.r)], { name: "r", size: 4, strokeColor: COLORS.text, fillColor: COLORS.primary, fixed: true, highlight: false });
+      const vertex = board.create("point", [1, 1], { name: "V", size: 4, strokeColor: COLORS.text, fillColor: COLORS.construction, fixed: true, highlight: false });
+      const minimum = board.create("point", [() => extremaFor(state).minimum.x, () => extremaFor(state).minimum.value], { name: "min", size: 4, strokeColor: COLORS.text, fillColor: COLORS.success, fixed: true, highlight: false });
+      const maximum = board.create("point", [() => extremaFor(state).maximum.x, () => extremaFor(state).maximum.value], { name: "max", size: 4, strokeColor: COLORS.text, fillColor: COLORS.highlight, fixed: true, highlight: false });
+      addText(board, -3.7, 13, () => `定義域：${formatNumber(state.l)} ≤ x ≤ ${formatNumber(state.r)}`, { fontSize: 15, strokeColor: COLORS.primary });
+      addText(board, -3.7, 12.3, () => { const { minimum: candidate } = extremaFor(state); return `最小値 ${formatNumber(candidate.value)}（x = ${formatNumber(candidate.x)}）`; }, { fontSize: 12, strokeColor: COLORS.success });
+      addText(board, -3.7, 11.7, () => { const { maximum: candidate } = extremaFor(state); return `最大値 ${formatNumber(candidate.value)}（x = ${formatNumber(candidate.x)}）`; }, { fontSize: 12, strokeColor: COLORS.highlight });
+      addText(board, 1.15, 1.5, () => state.l <= 1 && state.r >= 1 ? "頂点" : "頂点（定義域外）", { fontSize: 12, strokeColor: COLORS.helper });
+      board.__atlasRangeParts = { vertex, minimum, maximum };
+    }
   }
 
   function setHandlePosition(side) {
@@ -179,7 +168,7 @@ export function mountRangeGraph(container, config) {
     const rect = container.getBoundingClientRect();
     const [left, top, right, bottom] = board.getBoundingBox();
     const x = state[side];
-    const y = functionValue(x);
+    const y = functionValue(x, mode);
     handle.element.style.left = `${(x - left) / (right - left) * rect.width}px`;
     handle.element.style.top = `${(top - y) / (top - bottom) * rect.height}px`;
     handle.element.setAttribute("aria-valuenow", String(x));
@@ -240,8 +229,10 @@ export function mountRangeGraph(container, config) {
 
   function draw() {
     if (board) {
-      const { vertex } = board.__atlasRangeParts;
-      vertex.setAttribute({ fillColor: state.l <= 1 && state.r >= 1 ? COLORS.highlight : COLORS.construction });
+      if (mode === "quadratic-range") {
+        const { vertex } = board.__atlasRangeParts;
+        vertex.setAttribute({ fillColor: state.l <= 1 && state.r >= 1 ? COLORS.highlight : COLORS.construction });
+      }
       board.update();
       setHandlePosition("l");
       setHandlePosition("r");

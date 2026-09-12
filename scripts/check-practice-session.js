@@ -9,6 +9,8 @@ assert.equal(contentSession.problems.length, 3);
 assert.deepEqual(contentSession.problems.map((problem) => problem.difficulty), [1, 2, 3]);
 assert.equal(buildSession(problems, { unit: "quadratic" }).problems.length, 24);
 assert.equal(buildSession(problems, { unit: "quadratic", difficulty: 1 }).problems.length, 8);
+assert.equal(buildSession(problems, { unit: "sequences" }).problems.length, 12);
+assert.deepEqual(buildSession(problems, { content: "arithmetic-sequence" }).problems.map((problem) => problem.difficulty), [1, 2, 3]);
 assert.equal(buildSession(problems, { query: "判別式" }).problems.length > 0, true);
 const state = { practice: {
   [contentSession.problems[0].id]: { attempts: 1, correct: 0, wrong: 1, lastResult: "incorrect", correctStreak: 0 },

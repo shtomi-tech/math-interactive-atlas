@@ -1,5 +1,5 @@
-import { SUBJECT_ORDER, SUBJECT_UNIT_ORDER, orderedContentIds } from "../atlas/curriculum.js?v=20260912-7a";
-import { practiceStatus } from "../atlas/storage.js?v=20260912-7a";
+import { SUBJECT_ORDER, SUBJECT_UNIT_ORDER, orderedContentIds } from "../atlas/curriculum.js?v=20260912-7i";
+import { practiceStatus } from "../atlas/storage.js?v=20260912-7i";
 
 export const STATUS_OPTIONS = Object.freeze([
   ["all", "すべて"],
@@ -23,10 +23,16 @@ export function normalizeStatus(status, mode = "") {
   return statusValues.has(status) ? status : "all";
 }
 
+const SEARCH_ALIASES = Object.freeze({
+  "exponential-logarithm": ["exponent", "exponential", "logarithm", "log"],
+  "trigonometric-functions": ["trigonometric", "sine", "cosine", "tangent", "radian", "sin", "cos", "tan"],
+  "calculus-2": ["calculus", "derivative", "differentiation", "integral", "integration", "tangent", "secant"],
+  sequences: ["sequence", "arithmetic", "geometric", "recurrence", "series", "sum"]
+});
 function searchMatch(problem, query) {
   const normalized = String(query || "").trim().toLocaleLowerCase();
   if (!normalized) return true;
-  return [problem.title, problem.prompt, ...(problem.tags || [])].join(" ").toLocaleLowerCase().includes(normalized);
+  return [problem.title, problem.prompt, ...(problem.tags || []), ...(SEARCH_ALIASES[problem.unit] || [])].join(" ").toLocaleLowerCase().includes(normalized);
 }
 
 export function problemMatches(problem, filters = {}, state = {}) {

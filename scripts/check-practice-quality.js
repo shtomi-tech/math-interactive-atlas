@@ -4,8 +4,8 @@ import fs from "node:fs";
 const problems = JSON.parse(fs.readFileSync(new URL("../static/practice/problem-data.json", import.meta.url), "utf8"));
 const contents = JSON.parse(fs.readFileSync(new URL("../static/atlas/content-data.json", import.meta.url), "utf8"));
 const contentIds = new Set(contents.map((content) => content.id));
-assert.equal(problems.length, 120);
-assert.equal(new Set(problems.map((problem) => problem.id)).size, 120);
+assert.equal(problems.length, 180);
+assert.equal(new Set(problems.map((problem) => problem.id)).size, 180);
 const byContent = new Map();
 const issues = [];
 for (const problem of problems) {
@@ -29,4 +29,4 @@ for (const content of contents) {
   assert.deepEqual(items.map((problem) => problem.difficulty).sort(), [1, 2, 3], `${content.id}: expected d1/d2/d3`);
 }
 assert.equal(issues.length, 0, issues.join("\n"));
-console.log("Practice quality audit: PASS (120 prompts, unique answers, conditions/text, 40 content x 3 difficulty levels)");
+console.log("Practice quality audit: PASS (180 prompts, unique answers, conditions/text, 60 content x 3 difficulty levels)");

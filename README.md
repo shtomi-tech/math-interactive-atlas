@@ -9,13 +9,13 @@
 - 問題セット: [`sets.html`](./sets.html)
 - 学習レポート: [`progress.html`](./progress.html)
 - 目的: 「触る → 観察 → 気づく」の流れで、数学の関係を視覚的に理解する
-- 実装済み: 数学I・数学Aの7単元、40教材。二次関数・集合・場合の数・確率・データ分析・図形と計量・図形の性質・数と式・数学と人間の活動を扱う
+- 実装済み: 数学I・数学A・数学Ⅱ・数学Bの11単元、60教材。数学Ⅱは指数・対数、三角関数、微分・積分、数学Bは数列から段階的に扱う
 - 教材データ: [`static/atlas/content-data.json`](./static/atlas/content-data.json) を正本とするデータ駆動構成
-- Practice問題: [`static/practice/problem-data.json`](./static/practice/problem-data.json) に7単元120問を収録。40教材をそれぞれ基礎・標準・発展の3問でカバーする
+- Practice問題: [`static/practice/problem-data.json`](./static/practice/problem-data.json) に11単元180問を収録。60教材をそれぞれ基礎・標準・発展の3問でカバーする
 - 学習ループ: 図鑑で観察し、Practiceで使い、間違えた問題から図鑑へ戻る。お気に入り・閲覧・問題結果はブラウザのlocalStorageにだけ保存する
 - Classroom Pack: 問題を最大30問のセットへまとめ、教師指定順のPractice、問題プリント、解答付きプリントへつなげる。セットと学習記録はこの端末のlocalStorageにだけ保存する
 - 学習レポート: 教材の閲覧数、問題の習熟状態、単元ごとの状況、最近の学習を表示し、学習記録をJSONでバックアップ・置換復元する
-- Interaction Engine: `static/atlas/interactions/index.js` のRegistry経由で10エンジンを切り替える。AlgebraLab / NumberLineLab / AlgorithmLabを追加し、既存Engineの新modeもRegistryで再利用する
+- Interaction Engine: `static/atlas/interactions/index.js` のRegistry経由で11エンジンを切り替える。連続量はFunctionGraph / GeometryBoard / RangeGraph、離散量はSequenceLabで表示する
 - 設計書: [`docs/atlas/DESIGN.md`](./docs/atlas/DESIGN.md)
 
 ## 教材構成
@@ -27,6 +27,10 @@
 - 数学A・場合の数と確率: 余事象・和事象を塗る、条件付き確率で世界を絞る、数え上げの樹形図、順列を全部並べる、組合せは順序を無視する、独立試行を大量実験する、円順列を回してみる、確率を標本空間で見る
 - 数学A・図形の性質: 三角形の五心を追いかける、角の二等分線と辺の比、円周角を動かす、方べきの定理を動かす
 - 数学A・数学と人間の活動: ユークリッド互除法を動かす
+- 数学Ⅱ・指数関数・対数関数: 指数を実数へ広げる、指数関数の底を動かす、logは指数の逆、対数関数の底を動かす、指数・対数方程式をグラフで解く
+- 数学Ⅱ・三角関数: 弧度法を円で見る、sin・cos・tanのグラフ、振幅・周期・位相を動かす、加法定理を図で見る、2倍角を動かす
+- 数学Ⅱ・微分・積分の考え: 割線から接線へ、微分係数を動かす、導関数と元の関数、三次関数の増減・極値、不定積分と定数C、定積分と符号付き面積
+- 数学B・数列: 等差数列を並べる、等比数列を拡大縮小で見る、数列の和を積み上げる、漸化式を反復する
 - カタログは検索、科目・単元・Interaction Typeの絞り込み、同一科目内の前後移動に対応する
 - カタログは閲覧済み・未閲覧・お気に入りでも絞り込める。URLには `q`、`subject`、`unit`、`type`、`progress` を同期する
 
@@ -41,7 +45,7 @@ Classroom Pack: static/sets/ / static/worksheet/ / static/progress/
 
 ## Practice
 
-- [`practice.html`](./practice.html): 120問の問題一覧。検索、科目・単元・難易度・習熟状態で絞り込める
+- [`practice.html`](./practice.html): 180問の問題一覧。検索、科目・単元・難易度・習熟状態で絞り込める
 - [`practice.html?problem=quad-discriminant-01`](./practice.html?problem=quad-discriminant-01): 問題を開く
 - [`practice.html?status=review`](./practice.html?status=review): 要復習の問題だけを表示する。旧 `mode=mistakes` も互換対応する
 - [`practice.html?content=quadratic-discriminant`](./practice.html?content=quadratic-discriminant): 1教材の基礎→標準→発展セッション
@@ -71,6 +75,9 @@ node scripts/check-number-theory.js
 node scripts/check-geometry.js
 node scripts/check-quadratic.js
 node scripts/check-trigonometry.js
+node scripts/check-exponential-logarithm.js
+node scripts/check-calculus.js
+node scripts/check-sequences.js
 node scripts/check-curriculum.js
 node scripts/check-related-content.js
 node scripts/check-practice-data.js
