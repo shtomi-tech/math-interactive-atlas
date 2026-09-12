@@ -1,5 +1,5 @@
-import { angleBisectorFoot, angleDegrees, centroid, circumcenter, distance, excenterA, incenter, lawOfCosinesSide, lineCircleIntersections, orthocenter, pointOnCircle, triangleArea2 } from "../math/geometry.js?v=20260912-4b";
-import { rightTriangleTrig, trigRelations } from "../math/trigonometry.js?v=20260912-5c";
+import { angleBisectorFoot, angleDegrees, centroid, circumcenter, distance, excenterA, incenter, lawOfCosinesSide, lineCircleIntersections, orthocenter, pointOnCircle, triangleArea2 } from "../math/geometry.js?v=20260912-7a";
+import { rightTriangleTrig, trigRelations } from "../math/trigonometry.js?v=20260912-7a";
 
 let sequence = 0;
 const COLORS = { primary: "#2563eb", secondary: "#0f766e", highlight: "#d97706", helper: "#64748b", construction: "#94a3b8" };

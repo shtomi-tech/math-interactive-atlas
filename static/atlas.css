@@ -122,6 +122,10 @@ select:focus-visible {
   text-decoration: none;
 }
 
+.atlas-primary-nav { display: flex; flex-wrap: wrap; gap: 4px; }
+.atlas-primary-nav a { padding: 6px 9px; border-radius: 6px; text-decoration: none; }
+.atlas-primary-nav a:hover, .atlas-primary-nav a[aria-current="page"] { background: var(--atlas-selected); }
+
 .atlas-shell { padding: 32px 0 56px; }
 .atlas-status { min-height: 0; margin: 0 0 12px; color: var(--atlas-error); font-size: .875rem; }
 .atlas-status:empty { display: none; }
@@ -757,7 +761,8 @@ h3 { font-size: 1.25rem; line-height: 1.45; }
 
 @media (max-width: 767px) {
   :root { --atlas-gutter: 16px; }
-  .atlas-header-inner { min-height: 68px; }
+  .atlas-header-inner { min-height: 68px; flex-direction: column; align-items: flex-start; padding-block: 12px; }
+  .atlas-primary-nav { width: 100%; justify-content: flex-start; font-size: .85rem; }
   .atlas-shell { padding-top: 20px; }
   .atlas-page-heading { grid-template-columns: 1fr; gap: 20px; padding: 24px; }
   .atlas-catalog-unit-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }

@@ -1,7 +1,8 @@
 export function parseRoute(problems, location = window.location, historyState = window.history.state) {
   const params = new URLSearchParams(location.search);
   const problemId = params.get("problem");
-  if (problemId) return { view: "runner", problemId, fromCatalog: historyState?.fromCatalog || null };
+  const ids = params.get("ids") ? params.get("ids").split(",").map((id) => id.trim()).filter(Boolean) : [];
+  if (problemId) return { view: "runner", problemId, ids, fromCatalog: historyState?.fromCatalog || null };
   const mode = params.get("mode") || "";
   return {
     view: "catalog",
@@ -17,7 +18,7 @@ export function parseRoute(problems, location = window.location, historyState = 
   };
 }
 
-function practiceUrl(params = {}) {
+export function practiceUrl(params = {}) {
   const url = new URL("./practice.html", document.baseURI);
   Object.entries(params).forEach(([key, value]) => {
     if (value) url.searchParams.set(key === "query" ? "q" : key, value);
@@ -25,8 +26,9 @@ function practiceUrl(params = {}) {
   return `${url.pathname}${url.search}`;
 }
 
-export function goToProblem(id, { fromCatalog = null } = {}) {
-  window.history.pushState({ view: "runner", problemId: id, fromCatalog }, "", practiceUrl({ problem: id }));
+export function goToProblem(id, { fromCatalog = null, ids = [] } = {}) {
+  const safeIds = Array.isArray(ids) ? ids.slice(0, 30).join(",") : "";
+  window.history.pushState({ view: "runner", problemId: id, fromCatalog, ids: safeIds }, "", practiceUrl({ problem: id, ids: safeIds }));
   window.dispatchEvent(new Event("popstate"));
 }
 

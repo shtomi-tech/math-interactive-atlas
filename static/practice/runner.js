@@ -1,7 +1,7 @@
-import { evaluateAnswer } from "./answer.js?v=20260912-5c";
-import { subjectLabel, unitLabel } from "../atlas/curriculum.js?v=20260912-5c";
-import { practiceStatus } from "../atlas/storage.js?v=20260912-5c";
-import { nextProblem, sessionPosition } from "./session.js?v=20260912-5c";
+import { evaluateAnswer } from "./answer.js?v=20260912-7a";
+import { subjectLabel, unitLabel } from "../atlas/curriculum.js?v=20260912-7a";
+import { practiceStatus } from "../atlas/storage.js?v=20260912-7a";
+import { nextProblem, sessionPosition } from "./session.js?v=20260912-7a";
 
 const STATUS_LABELS = { unattempted: "未挑戦", practicing: "練習中", review: "要復習", mastered: "習得" };
 
@@ -167,7 +167,7 @@ export function createProblemRunner(root, { onBack = () => {}, onResult = () => 
         firstInput?.focus();
       });
       const following = nextProblem(session, problem.id);
-      const next = makeButton(following ? "次の問題" : "Practice一覧へ", "practice-next-button", () => following ? onNext(following.id, fromCatalog) : onBack(fromCatalog));
+      const next = makeButton(following ? "次の問題" : "Practice一覧へ", "practice-next-button", () => following ? onNext(following.id, fromCatalog, session.problemIds || []) : onBack(fromCatalog));
       feedback.append(retry, next);
     }
 

@@ -1,9 +1,9 @@
-import { renderPracticeCatalog } from "./catalog.js?v=20260912-5c";
-import { createProblemRunner } from "./runner.js?v=20260912-5c";
-import { buildSession } from "./session.js?v=20260912-5c";
-import { goToCatalog, goToProblem, replaceCatalogFilters, watchRoute } from "./router.js?v=20260912-5c";
-import { loadLearningState, recordPracticeAttempt, saveLearningState } from "../atlas/storage.js?v=20260912-5c";
-import { validateProblemData } from "./validation.js?v=20260912-5c";
+import { renderPracticeCatalog } from "./catalog.js?v=20260912-7a";
+import { createProblemRunner } from "./runner.js?v=20260912-7a";
+import { buildExplicitSession, buildSession } from "./session.js?v=20260912-7a";
+import { goToCatalog, goToProblem, replaceCatalogFilters, watchRoute } from "./router.js?v=20260912-7a";
+import { loadLearningState, recordPracticeAttempt, saveLearningState } from "../atlas/storage.js?v=20260912-7a";
+import { validateProblemData } from "./validation.js?v=20260912-7a";
 
 const dom = {
   status: document.querySelector("#practiceStatus"),
@@ -27,7 +27,7 @@ async function start() {
     const runner = createProblemRunner(dom.runnerRoot, {
       onBack: (fromCatalog) => fromCatalog ? goToCatalog({ ...fromCatalog, replace: true }) : goToCatalog(),
       onResult: (problemId, correct) => persist(recordPracticeAttempt(learningState, problemId, { correct })),
-      onNext: (problemId, fromCatalog) => goToProblem(problemId, { fromCatalog })
+      onNext: (problemId, fromCatalog, ids = []) => goToProblem(problemId, { fromCatalog, ids })
     });
     let activeCatalogRoute = null;
     const catalogContext = () => ({
@@ -50,12 +50,18 @@ async function start() {
     watchRoute(problems, (route) => {
       if (route.view === "runner") {
         const problem = problems.find((item) => item.id === route.problemId);
-        showStatus();
+        const explicitIds = route.ids.length ? route.ids : route.fromCatalog?.ids || [];
+        const explicitSession = explicitIds.length ? buildExplicitSession(problems, explicitIds) : null;
+        showStatus(explicitSession?.unknownIds.length ? "一部の問題を読み込めませんでした" : explicitSession && !explicitSession.problems.length ? "指定された問題セットを読み込めませんでした。" : "");
         dom.catalogView.hidden = true;
         dom.runnerView.hidden = false;
-        let session = buildSession(problems, route.fromCatalog || {}, learningState);
-        if (problem && !session.problems.some((item) => item.id === problem.id)) session = buildSession(problems, {}, learningState);
-        runner.render(problem, session.problems.length ? session : { problems }, learningState, { fromCatalog: route.fromCatalog });
+        const session = explicitSession || buildSession(problems, route.fromCatalog || {}, learningState);
+        const renderSession = explicitSession ? session : (session.problems.length ? session : { problems });
+        if (problem && !renderSession.problems.some((item) => item.id === problem.id) && !explicitSession) {
+          runner.render(null, renderSession, learningState, { fromCatalog: route.fromCatalog, ids: explicitIds });
+        } else {
+          runner.render(problem, renderSession, learningState, { fromCatalog: route.fromCatalog, ids: explicitIds });
+        }
         dom.runnerView.focus({ preventScroll: true });
         return;
       }

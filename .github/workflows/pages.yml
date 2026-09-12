@@ -28,6 +28,9 @@ jobs:
           test -f atlas.html
           test -f index.html
           test -f practice.html
+          test -f sets.html
+          test -f worksheet.html
+          test -f progress.html
           test -f static/tokens.css
           test -f static/atlas.css
           test -f static/atlas/main.js
@@ -35,15 +38,33 @@ jobs:
           test -f static/practice.css
           test -f static/practice/main.js
           test -f static/practice/problem-data.json
+          test -f static/asset-version.txt
           test -f static/practice/filter.js
           test -f static/practice/session.js
+          test -f static/sets.css
+          test -f static/sets/main.js
+          test -f static/sets/model.js
+          test -f static/sets/storage.js
+          test -f static/sets/io.js
+          test -f static/worksheet.css
+          test -f static/worksheet/main.js
+          test -f static/worksheet/model.js
+          test -f static/progress.css
+          test -f static/progress/main.js
+          test -f static/progress/summary.js
+          test -f static/progress/record.js
       - name: Prepare static files
         run: |
           mkdir -p _site/static
-          cp atlas.html index.html practice.html _site/
+          cp atlas.html index.html practice.html sets.html worksheet.html progress.html _site/
           cp static/tokens.css static/atlas.css static/practice.css _site/static/
+          cp static/sets.css static/worksheet.css static/progress.css _site/static/
+          cp static/asset-version.txt _site/static/
           cp -R static/atlas _site/static/atlas
           cp -R static/practice _site/static/practice
+          cp -R static/sets _site/static/sets
+          cp -R static/worksheet _site/static/worksheet
+          cp -R static/progress _site/static/progress
           touch _site/.nojekyll
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

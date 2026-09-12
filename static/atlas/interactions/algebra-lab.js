@@ -1,4 +1,4 @@
-import { completeSquare, expandMonicProduct, factorPairExpansion, perfectSquareCoefficients } from "../math/algebra.js?v=20260912-5c";
+import { completeSquare, expandMonicProduct, factorPairExpansion, perfectSquareCoefficients } from "../math/algebra.js?v=20260912-7a";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 const svgElement = (name, attrs = {}) => { const node = document.createElementNS(SVG_NS, name); Object.entries(attrs).forEach(([key, value]) => node.setAttribute(key, String(value))); return node; };

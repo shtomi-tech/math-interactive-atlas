@@ -41,8 +41,15 @@ jobs:
           node scripts/check-practice-answer.js
           node scripts/check-practice-links.js
           node scripts/check-practice-coverage.js
+          node scripts/check-practice-quality.js
           node scripts/check-practice-session.js
           node scripts/check-learning-state.js
+          node scripts/check-problem-set.js
+          node scripts/check-set-storage.js
+          node scripts/check-worksheet.js
+          node scripts/check-progress-summary.js
+          node scripts/check-learning-record.js
+          node scripts/check-asset-version.js
       - name: Check JavaScript syntax
         shell: bash
         run: |
@@ -87,3 +94,12 @@ jobs:
           node --check static/practice/validation.js
           node --check static/practice/filter.js
           node --check static/practice/session.js
+          node --check static/sets/main.js
+          node --check static/sets/model.js
+          node --check static/sets/storage.js
+          node --check static/sets/io.js
+          node --check static/worksheet/main.js
+          node --check static/worksheet/model.js
+          node --check static/progress/main.js
+          node --check static/progress/summary.js
+          node --check static/progress/record.js

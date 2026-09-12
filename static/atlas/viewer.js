@@ -1,6 +1,6 @@
-import { mountInteraction } from "./interactions/index.js?v=20260912-5c";
-import { neighborsForContent, subjectLabel, unitLabel } from "./curriculum.js?v=20260912-5c";
-import { practiceStatus } from "./storage.js?v=20260912-5c";
+import { mountInteraction } from "./interactions/index.js?v=20260912-7a";
+import { neighborsForContent, subjectLabel, unitLabel } from "./curriculum.js?v=20260912-7a";
+import { practiceStatus } from "./storage.js?v=20260912-7a";
 
 const STATUS_LABELS = { unattempted: "未挑戦", practicing: "練習中", review: "要復習", mastered: "習得" };
 

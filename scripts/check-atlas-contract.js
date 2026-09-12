@@ -6,6 +6,9 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const requiredFiles = [
   "atlas.html",
   "practice.html",
+  "sets.html",
+  "worksheet.html",
+  "progress.html",
   "static/tokens.css",
   "static/atlas.css",
   "static/atlas/main.js",
@@ -49,6 +52,19 @@ const requiredFiles = [
   "static/practice/filter.js",
   "static/practice/session.js",
   "static/practice/problem-data.json",
+  "static/asset-version.txt",
+  "static/sets.css",
+  "static/sets/main.js",
+  "static/sets/model.js",
+  "static/sets/storage.js",
+  "static/sets/io.js",
+  "static/worksheet.css",
+  "static/worksheet/main.js",
+  "static/worksheet/model.js",
+  "static/progress.css",
+  "static/progress/main.js",
+  "static/progress/summary.js",
+  "static/progress/record.js",
   "scripts/check-set-regions.js",
   "scripts/check-set-relations.js",
   "scripts/check-event-regions.js",
@@ -70,6 +86,7 @@ const requiredFiles = [
   "scripts/check-practice-answer.js",
   "scripts/check-practice-links.js",
   "scripts/check-practice-coverage.js",
+  "scripts/check-practice-quality.js",
   "scripts/check-practice-session.js",
   "scripts/check-learning-state.js",
   "static/atlas/content-data.json",
@@ -139,6 +156,16 @@ const practiceAnswerSource = read("static/practice/answer.js");
 const practiceValidationSource = read("static/practice/validation.js");
 const practiceFilterSource = read("static/practice/filter.js");
 const practiceSessionSource = read("static/practice/session.js");
+const setsHtml = read("sets.html");
+const setsSource = read("static/sets/main.js");
+const setModelSource = read("static/sets/model.js");
+const setStorageSource = read("static/sets/storage.js");
+const setIoSource = read("static/sets/io.js");
+const worksheetSource = read("static/worksheet/main.js");
+const worksheetModelSource = read("static/worksheet/model.js");
+const progressSource = read("static/progress/main.js");
+const progressSummarySource = read("static/progress/summary.js");
+const progressRecordSource = read("static/progress/record.js");
 const workflowSource = read(".github/workflows/atlas-checks.yml");
 const pagesWorkflowSource = read(".github/workflows/pages.yml");
 const atlasSource = ["static/atlas/main.js", "static/atlas/catalog.js", "static/atlas/viewer.js", "static/atlas/router.js", "static/atlas/interactions/index.js", "static/atlas/interactions/function-graph.js", "static/atlas/interactions/range-graph.js", "static/atlas/interactions/geometry-board.js", "static/atlas/interactions/region-selector.js", "static/atlas/interactions/combinatorics-viewer.js", "static/atlas/interactions/data-lab.js", "static/atlas/interactions/simulation-lab.js", "static/atlas/interactions/algebra-lab.js", "static/atlas/interactions/number-line-lab.js", "static/atlas/interactions/algorithm-lab.js", "static/atlas/math/set-regions.js", "static/atlas/math/set-relations.js", "static/atlas/math/event-regions.js", "static/atlas/math/conditional-probability.js", "static/atlas/math/combinatorics.js", "static/atlas/math/statistics.js", "static/atlas/math/probability.js", "static/atlas/math/hypothesis-test.js", "static/atlas/math/algebra.js", "static/atlas/math/number-line.js", "static/atlas/math/sample-space.js", "static/atlas/math/number-theory.js"].map(read).join("\n");
@@ -411,11 +438,20 @@ requireCondition(practiceRunnerSource.includes("もう一度確認してみよ�
 requireCondition(practiceAnswerSource.includes("parseNumericResponse") && practiceAnswerSource.includes("evaluateAnswer") && practiceAnswerSource.includes("checkSingleChoice") && practiceAnswerSource.includes("checkNumeric") && practiceAnswerSource.includes("checkAnswer"), "Practice answer checker is incomplete");
 requireCondition(practiceValidationSource.includes("validateProblem") && practiceValidationSource.includes("validateProblemData") && practiceValidationSource.includes("single-choice") && practiceValidationSource.includes("numeric"), "Practice data validation is incomplete");
 requireCondition(practiceFilterSource.includes("problemMatches") && practiceFilterSource.includes("statusForProblem") && practiceFilterSource.includes("searchMatch"), "Practice filter pure logic is incomplete");
-requireCondition(practiceSessionSource.includes("buildSession") && practiceSessionSource.includes("nextProblem") && practiceSessionSource.includes("sessionPosition"), "Practice session pure logic is incomplete");
+requireCondition(practiceSessionSource.includes("buildSession") && practiceSessionSource.includes("buildExplicitSession") && practiceSessionSource.includes("nextProblem") && practiceSessionSource.includes("sessionPosition"), "Practice session pure logic is incomplete");
+requireCondition(setsSource.includes("problemBank") && setsSource.includes("saveCurrentSet") && setsHtml.includes("Share Link") && setsHtml.includes("セットをJSONで保存"), "Problem set builder flow is incomplete");
+requireCondition(setModelSource.includes("createProblemSet") && setModelSource.includes("addProblem") && setModelSource.includes("removeProblem") && setModelSource.includes("moveProblem") && setModelSource.includes("normalizeProblemSet"), "Problem set model is incomplete");
+requireCondition(setStorageSource.includes("math-interactive-atlas-problem-sets-v1") && setStorageSource.includes("MAX_SAVED_SETS") && setStorageSource.includes("loadProblemSets") && setStorageSource.includes("duplicateProblemSet"), "Problem set storage is incomplete");
+requireCondition(setIoSource.includes("math-interactive-atlas-problem-set") && setIoSource.includes("parseProblemSetImport") && setIoSource.includes("problemSetUrls"), "Problem set import/export is incomplete");
+requireCondition(worksheetSource.includes("buildWorksheetModel") && worksheetSource.includes("answers") && worksheetSource.includes("katex"), "Worksheet rendering is incomplete");
+requireCondition(worksheetModelSource.includes("MAX_WORKSHEET_PROBLEMS") && worksheetModelSource.includes("unknownIds"), "Worksheet model is incomplete");
+requireCondition(progressSummarySource.includes("summarizeLearning") && progressSummarySource.includes("practiceStatus") && progressSummarySource.includes("recentActivity"), "Progress summary is incomplete");
+requireCondition(progressSource.includes("学習記録をバックアップ") && progressSource.includes("replaceLearningRecord") && progressSource.includes("progressContents") && progressSource.includes("要復習"), "Progress report flow is incomplete");
+requireCondition(progressRecordSource.includes("math-interactive-atlas-learning-record") && progressRecordSource.includes("LEARNING_RECORD_VERSION = 2") && progressRecordSource.includes("normalizeState"), "Learning record schema is incomplete");
 requireCondition(practiceProblems.length === 120 && new Set(practiceProblems.map((problem) => problem.unit)).size === 7, "Practice must provide 120 problems across 7 units");
 requireCondition(routerSource.includes('subject: params.get("subject") || null'), "catalog route must show all subjects when subject is omitted");
 requireCondition(workflowSource.includes("node-version: 22"), "GitHub Actions must use Node.js 22");
-requireCondition(workflowSource.includes("node scripts/check-atlas-contract.js") && workflowSource.includes("node scripts/check-set-regions.js") && workflowSource.includes("node scripts/check-set-relations.js") && workflowSource.includes("node scripts/check-event-regions.js") && workflowSource.includes("node scripts/check-conditional-probability.js") && workflowSource.includes("node scripts/check-combinatorics.js") && workflowSource.includes("node scripts/check-statistics.js") && workflowSource.includes("node scripts/check-probability.js") && workflowSource.includes("node scripts/check-hypothesis-test.js") && workflowSource.includes("node scripts/check-geometry.js") && workflowSource.includes("node scripts/check-algebra.js") && workflowSource.includes("node scripts/check-number-line.js") && workflowSource.includes("node scripts/check-sample-space.js") && workflowSource.includes("node scripts/check-number-theory.js") && workflowSource.includes("node scripts/check-quadratic.js") && workflowSource.includes("node scripts/check-trigonometry.js") && workflowSource.includes("node scripts/check-curriculum.js") && workflowSource.includes("node scripts/check-related-content.js") && workflowSource.includes("node scripts/check-practice-data.js") && workflowSource.includes("node scripts/check-practice-answer.js") && workflowSource.includes("node scripts/check-practice-links.js") && workflowSource.includes("node scripts/check-practice-coverage.js") && workflowSource.includes("node scripts/check-practice-session.js") && workflowSource.includes("node scripts/check-learning-state.js"), "GitHub Actions check scripts are incomplete");
+requireCondition(workflowSource.includes("node scripts/check-atlas-contract.js") && workflowSource.includes("node scripts/check-set-regions.js") && workflowSource.includes("node scripts/check-set-relations.js") && workflowSource.includes("node scripts/check-event-regions.js") && workflowSource.includes("node scripts/check-conditional-probability.js") && workflowSource.includes("node scripts/check-combinatorics.js") && workflowSource.includes("node scripts/check-statistics.js") && workflowSource.includes("node scripts/check-probability.js") && workflowSource.includes("node scripts/check-hypothesis-test.js") && workflowSource.includes("node scripts/check-geometry.js") && workflowSource.includes("node scripts/check-algebra.js") && workflowSource.includes("node scripts/check-number-line.js") && workflowSource.includes("node scripts/check-sample-space.js") && workflowSource.includes("node scripts/check-number-theory.js") && workflowSource.includes("node scripts/check-quadratic.js") && workflowSource.includes("node scripts/check-trigonometry.js") && workflowSource.includes("node scripts/check-curriculum.js") && workflowSource.includes("node scripts/check-related-content.js") && workflowSource.includes("node scripts/check-practice-data.js") && workflowSource.includes("node scripts/check-practice-answer.js") && workflowSource.includes("node scripts/check-practice-links.js") && workflowSource.includes("node scripts/check-practice-coverage.js") && workflowSource.includes("node scripts/check-practice-quality.js") && workflowSource.includes("node scripts/check-practice-session.js") && workflowSource.includes("node scripts/check-learning-state.js") && workflowSource.includes("node scripts/check-problem-set.js") && workflowSource.includes("node scripts/check-set-storage.js") && workflowSource.includes("node scripts/check-worksheet.js") && workflowSource.includes("node scripts/check-progress-summary.js") && workflowSource.includes("node scripts/check-learning-record.js") && workflowSource.includes("node scripts/check-asset-version.js"), "GitHub Actions check scripts are incomplete");
 requireCondition(workflowSource.includes("node --check static/atlas/interactions/region-selector.js") && workflowSource.includes("node --check static/atlas/math/set-relations.js") && workflowSource.includes("node --check static/atlas/math/event-regions.js") && workflowSource.includes("node --check static/atlas/math/conditional-probability.js") && workflowSource.includes("node --check static/atlas/math/combinatorics.js") && workflowSource.includes("node --check static/atlas/interactions/combinatorics-viewer.js") && workflowSource.includes("node --check static/atlas/interactions/data-lab.js") && workflowSource.includes("node --check static/atlas/interactions/simulation-lab.js") && workflowSource.includes("node --check static/atlas/interactions/algebra-lab.js") && workflowSource.includes("node --check static/atlas/interactions/number-line-lab.js") && workflowSource.includes("node --check static/atlas/interactions/algorithm-lab.js") && workflowSource.includes("node --check static/atlas/math/statistics.js") && workflowSource.includes("node --check static/atlas/math/probability.js") && workflowSource.includes("node --check static/atlas/math/hypothesis-test.js") && workflowSource.includes("node --check static/atlas/math/algebra.js") && workflowSource.includes("node --check static/atlas/math/number-line.js") && workflowSource.includes("node --check static/atlas/math/sample-space.js") && workflowSource.includes("node --check static/atlas/math/number-theory.js") && workflowSource.includes("node --check static/atlas/interactions/function-graph.js") && workflowSource.includes("node --check static/atlas/interactions/geometry-board.js") && workflowSource.includes("node --check static/atlas/math/quadratic.js") && workflowSource.includes("node --check static/atlas/math/trigonometry.js") && workflowSource.includes("node --check static/atlas/curriculum.js") && workflowSource.includes("node --check static/atlas/storage.js") && workflowSource.includes("node --check static/practice/main.js") && workflowSource.includes("node --check static/practice/router.js") && workflowSource.includes("node --check static/practice/catalog.js") && workflowSource.includes("node --check static/practice/runner.js") && workflowSource.includes("node --check static/practice/answer.js") && workflowSource.includes("node --check static/practice/validation.js") && workflowSource.includes("node --check static/practice/filter.js") && workflowSource.includes("node --check static/practice/session.js"), "GitHub Actions syntax checks are incomplete");
 requireCondition(pagesWorkflowSource.includes("workflow_dispatch:") && !pagesWorkflowSource.includes("  push:") && pagesWorkflowSource.includes("actions/configure-pages@v5") && !pagesWorkflowSource.includes("enablement:") && pagesWorkflowSource.includes("test -f atlas.html") && pagesWorkflowSource.includes("test -f index.html") && pagesWorkflowSource.includes("test -f practice.html") && pagesWorkflowSource.includes("test -f static/tokens.css") && pagesWorkflowSource.includes("test -f static/atlas.css") && pagesWorkflowSource.includes("test -f static/atlas/main.js") && pagesWorkflowSource.includes("test -f static/atlas/content-data.json") && pagesWorkflowSource.includes("test -f static/practice.css") && pagesWorkflowSource.includes("test -f static/practice/main.js") && pagesWorkflowSource.includes("test -f static/practice/problem-data.json") && pagesWorkflowSource.includes("cp static/tokens.css static/atlas.css static/practice.css _site/static/") && pagesWorkflowSource.includes("cp -R static/atlas _site/static/atlas") && pagesWorkflowSource.includes("cp -R static/practice _site/static/practice") && pagesWorkflowSource.includes("touch _site/.nojekyll") && pagesWorkflowSource.includes("actions/upload-pages-artifact@v3") && pagesWorkflowSource.includes("actions/deploy-pages@v4"), "GitHub Pages deploy workflow is incomplete");
 requireCondition(!viewerSource.includes("function-graph.js") && !viewerSource.includes("range-graph.js") && !viewerSource.includes("geometry-board.js") && !viewerSource.includes("region-selector.js") && !viewerSource.includes("combinatorics-viewer.js") && !viewerSource.includes("data-lab.js") && !viewerSource.includes("simulation-lab.js"), "viewer imports a concrete interaction engine");

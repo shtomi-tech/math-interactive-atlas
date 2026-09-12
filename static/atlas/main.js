@@ -1,7 +1,7 @@
-import { renderCatalog } from "./catalog.js?v=20260912-5c";
-import { createViewer } from "./viewer.js?v=20260912-5c";
-import { goToCatalog, goToContent, replaceCatalogFilters, watchRoute } from "./router.js?v=20260912-5c";
-import { loadLearningState, recordVisit, saveLearningState, toggleFavorite } from "./storage.js?v=20260912-5c";
+import { renderCatalog } from "./catalog.js?v=20260912-7a";
+import { createViewer } from "./viewer.js?v=20260912-7a";
+import { goToCatalog, goToContent, replaceCatalogFilters, watchRoute } from "./router.js?v=20260912-7a";
+import { loadLearningState, recordVisit, saveLearningState, toggleFavorite } from "./storage.js?v=20260912-7a";
 
 const dom = {
   status: document.querySelector("#atlasStatus"),

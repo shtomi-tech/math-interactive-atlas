@@ -1,4 +1,4 @@
-import { formatIntervalSet, quadraticDiscriminant, quadraticExpression, quadraticInequalityIntervals, quadraticLineIntersections, quadraticRoots, quadraticThroughPoints, quadraticValue } from "../math/quadratic.js?v=20260912-6g";
+import { formatIntervalSet, quadraticDiscriminant, quadraticExpression, quadraticInequalityIntervals, quadraticLineIntersections, quadraticRoots, quadraticThroughPoints, quadraticValue } from "../math/quadratic.js?v=20260912-7a";
 
 const COLORS = { primary: "#2563eb", secondary: "#e11d48", helper: "#64748b", construction: "#94a3b8", highlight: "#f59e0b", text: "#1f2937" };
 const BOARD_BOUNDS = [-6, 6, 6, -6];

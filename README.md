@@ -6,11 +6,15 @@
 
 - URL: [`atlas.html`](./atlas.html)
 - Practice: [`practice.html`](./practice.html)
+- 問題セット: [`sets.html`](./sets.html)
+- 学習レポート: [`progress.html`](./progress.html)
 - 目的: 「触る → 観察 → 気づく」の流れで、数学の関係を視覚的に理解する
 - 実装済み: 数学I・数学Aの7単元、40教材。二次関数・集合・場合の数・確率・データ分析・図形と計量・図形の性質・数と式・数学と人間の活動を扱う
 - 教材データ: [`static/atlas/content-data.json`](./static/atlas/content-data.json) を正本とするデータ駆動構成
 - Practice問題: [`static/practice/problem-data.json`](./static/practice/problem-data.json) に7単元120問を収録。40教材をそれぞれ基礎・標準・発展の3問でカバーする
 - 学習ループ: 図鑑で観察し、Practiceで使い、間違えた問題から図鑑へ戻る。お気に入り・閲覧・問題結果はブラウザのlocalStorageにだけ保存する
+- Classroom Pack: 問題を最大30問のセットへまとめ、教師指定順のPractice、問題プリント、解答付きプリントへつなげる。セットと学習記録はこの端末のlocalStorageにだけ保存する
+- 学習レポート: 教材の閲覧数、問題の習熟状態、単元ごとの状況、最近の学習を表示し、学習記録をJSONでバックアップ・置換復元する
 - Interaction Engine: `static/atlas/interactions/index.js` のRegistry経由で10エンジンを切り替える。AlgebraLab / NumberLineLab / AlgorithmLabを追加し、既存Engineの新modeもRegistryで再利用する
 - 設計書: [`docs/atlas/DESIGN.md`](./docs/atlas/DESIGN.md)
 
@@ -32,6 +36,7 @@
 Atlas: static/atlas/content-data.json
 Practice: static/practice/problem-data.json
 Shared: static/atlas/curriculum.js / static/atlas/storage.js / static/tokens.css
+Classroom Pack: static/sets/ / static/worksheet/ / static/progress/
 ```
 
 ## Practice
@@ -42,6 +47,9 @@ Shared: static/atlas/curriculum.js / static/atlas/storage.js / static/tokens.css
 - [`practice.html?content=quadratic-discriminant`](./practice.html?content=quadratic-discriminant): 1教材の基礎→標準→発展セッション
 - `practice.html?unit=quadratic`、`?unit=quadratic&difficulty=1`、`?q=判別式`、`?status=mastered` で単元・難易度・検索語・習得状態を指定できる
 - 正解判定後は自動で次へ進まず、次の問題ボタンを明示的に押す。誤答時は該当する図鑑教材へ戻れる
+- 問題セットは [`sets.html`](./sets.html) で作成・保存・複製・JSON入出力できる。保存JSONにはタイトル、説明、問題IDだけを含め、教師指定の順番をPracticeへ引き継ぐ
+- [`worksheet.html`](./worksheet.html) は `?ids=id1,id2` で問題を並べ、`&answers=1` で解答・解説を後ろに付ける。A4印刷を前提とする
+- [`progress.html`](./progress.html) は現在の状態を `math-interactive-atlas-learning-record` v2 としてバックアップできる。読み込みは確認後の置き換えだけで、記録の結合は行わない
 - 学習状態は `math-interactive-atlas-state-v1` の同じlocalStorage領域でv1からv2へ互換移行し、このブラウザ内だけに保存する。習熟状態は未挑戦・練習中・要復習・習得の4段階で、2回連続正解を習得の条件とする
 
 ## Checks
@@ -70,12 +78,19 @@ node scripts/check-practice-answer.js
 node scripts/check-practice-links.js
 node scripts/check-learning-state.js
 node scripts/check-practice-coverage.js
+node scripts/check-practice-quality.js
 node scripts/check-practice-session.js
+node scripts/check-problem-set.js
+node scripts/check-set-storage.js
+node scripts/check-worksheet.js
+node scripts/check-progress-summary.js
+node scripts/check-learning-record.js
+node scripts/check-asset-version.js
 ```
 
 GitHub Actionsでも、同じ契約・数学ロジック検査と対象JavaScriptの構文検査を実行します。
 
-GitHub ActionsのAtlas checksはpush / pull requestで実行します。Pages公開は手動実行の [`.github/workflows/pages.yml`](./.github/workflows/pages.yml) から行い、AtlasとPracticeのHTML・CSS・JS・データを公開します。GitHub Pages deployment requires repository-side Pages configuration. PagesがRepository設定またはGitHubプランで有効化できない場合は、`Pages configuration required` として扱います。
+GitHub ActionsのAtlas checksはpush / pull requestで実行します。Pages公開は手動実行の [`.github/workflows/pages.yml`](./.github/workflows/pages.yml) から行い、Atlas、Practice、問題セット、問題プリント、学習レポートのHTML・CSS・JS・データを公開します。GitHub Pages deployment requires repository-side Pages configuration. PagesがRepository設定またはGitHubプランで有効化できない場合は、`Pages configuration required` として扱います。
 
 `zukan.html` / `static/zukan/` は旧プロトタイプです。新規実装の正本は `atlas.html` / `static/atlas/` です。Legacy prototype. Do not add new features here.
 

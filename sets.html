@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="数学インタラクティブ図鑑の問題セット作成。">
+  <title>問題セット | 数学インタラクティブ図鑑</title>
+  <link rel="stylesheet" href="./static/tokens.css?v=20260912-7a">
+  <link rel="stylesheet" href="./static/sets.css?v=20260912-7a">
+  <script type="module" src="./static/sets/main.js?v=20260912-7a"></script>
+</head>
+<body>
+  <a class="sets-skip-link" href="#setsMain">本文へ移動</a>
+  <header class="sets-header"><div class="sets-header-inner"><a class="sets-brand" href="./atlas.html"><span class="sets-brand-mark" aria-hidden="true">∑</span><span><span class="sets-eyebrow">INTERACTIVE MATHEMATICS ATLAS</span><strong>数学インタラクティブ図鑑</strong></span></a><nav class="sets-primary-nav" aria-label="主要メニュー"><a href="./atlas.html">図鑑</a><a href="./practice.html">問題演習</a><a aria-current="page" href="./sets.html">問題セット</a><a href="./progress.html">学習レポート</a></nav></div></header>
+  <main id="setsMain" class="sets-shell"><p id="setsStatus" class="sets-status" role="status" aria-live="polite"></p>
+    <section class="sets-page-heading"><div><p class="sets-eyebrow">CLASSROOM PACK / BUILD</p><h1>問題セットを作る</h1><p class="sets-lead">授業や小テストに使う問題を、順番どおりにまとめます。保存先はこの端末だけです。</p></div><button id="newSetButton" type="button" class="sets-secondary-button">新しいセット</button></section>
+    <section class="saved-sets-section" aria-labelledby="savedSetsTitle"><div class="sets-section-heading"><h2 id="savedSetsTitle">保存した問題セット</h2></div><div id="savedSets" class="saved-sets-grid"></div></section>
+    <section class="set-builder" aria-labelledby="builderTitle"><div class="sets-section-heading"><h2 id="builderTitle">セットを編集</h2><span id="selectedCount">0 / 30問</span></div>
+      <div class="set-metadata"><label for="setTitle">タイトル（必須）</label><input id="setTitle" type="text" maxlength="100" placeholder="例：二次関数 小テスト"><label for="setInstructions">説明（必須）</label><textarea id="setInstructions" rows="3" maxlength="500" placeholder="例：途中式を書いて解きましょう。"></textarea></div>
+      <div class="sets-builder-grid"><section class="set-bank-panel" aria-labelledby="bankTitle"><h3 id="bankTitle">問題一覧</h3><div class="set-filters"><input id="setSearch" type="search" placeholder="問題を検索" aria-label="問題セットの問題を検索"><select id="setSubject" aria-label="科目"></select><select id="setUnit" aria-label="単元"></select><select id="setDifficulty" aria-label="難易度"><option value="">すべての難易度</option><option value="1">基礎</option><option value="2">標準</option><option value="3">発展</option></select></div><div id="problemBank" class="problem-bank"></div></section><section class="selected-panel" aria-labelledby="selectedTitle"><h3 id="selectedTitle">選択した問題</h3><ol id="selectedProblems" class="selected-problems"></ol></section></div>
+      <div class="sets-builder-actions"><button id="saveSetButton" type="button" class="sets-primary-button">問題セットを保存</button><button id="practiceSetButton" type="button">このセットを練習</button><button id="shareSetButton" type="button">Share Link</button><button id="worksheetButton" type="button">問題プリントを開く</button><button id="answerWorksheetButton" type="button">解答付きプリントを開く</button><button id="exportSetButton" type="button">セットをJSONで保存</button><button id="importSetButton" type="button">セットJSONを読み込む</button><input id="setImportInput" type="file" accept="application/json,.json" hidden><input id="shareFallback" class="share-fallback" type="text" readonly aria-label="共有リンク" hidden></div>
+    </section>
+  </main>
+</body>
+</html>

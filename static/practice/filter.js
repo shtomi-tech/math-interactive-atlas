@@ -1,5 +1,5 @@
-import { SUBJECT_ORDER, SUBJECT_UNIT_ORDER } from "../atlas/curriculum.js";
-import { practiceStatus } from "../atlas/storage.js";
+import { SUBJECT_ORDER, SUBJECT_UNIT_ORDER, orderedContentIds } from "../atlas/curriculum.js?v=20260912-7a";
+import { practiceStatus } from "../atlas/storage.js?v=20260912-7a";
 
 export const STATUS_OPTIONS = Object.freeze([
   ["all", "すべて"],
@@ -12,6 +12,7 @@ export const STATUS_OPTIONS = Object.freeze([
 const statusValues = new Set(STATUS_OPTIONS.map(([value]) => value));
 const subjectRank = new Map(SUBJECT_ORDER.map((id, index) => [id, index]));
 const unitRank = new Map(SUBJECT_ORDER.flatMap((subject) => (SUBJECT_UNIT_ORDER[subject] || []).map((id, index) => [`${subject}:${id}`, index])));
+const contentRank = new Map(orderedContentIds().map((id, index) => [id, index]));
 
 export function statusForProblem(problem, state = {}) {
   return practiceStatus(state.practice?.[problem?.id]);
@@ -49,6 +50,9 @@ export function orderProblems(problems) {
     const leftUnit = unitRank.get(`${left.subject}:${left.unit}`) ?? Number.MAX_SAFE_INTEGER;
     const rightUnit = unitRank.get(`${right.subject}:${right.unit}`) ?? Number.MAX_SAFE_INTEGER;
     if (leftUnit !== rightUnit) return leftUnit - rightUnit;
+    const leftContent = contentRank.get(left.atlasContentId) ?? Number.MAX_SAFE_INTEGER;
+    const rightContent = contentRank.get(right.atlasContentId) ?? Number.MAX_SAFE_INTEGER;
+    if (leftContent !== rightContent) return leftContent - rightContent;
     if (left.difficulty !== right.difficulty) return left.difficulty - right.difficulty;
     return String(left.id).localeCompare(String(right.id));
   });
