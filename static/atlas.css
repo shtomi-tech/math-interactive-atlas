@@ -791,3 +791,10 @@ h3 { font-size: 1.25rem; line-height: 1.45; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
+.atlas-geometry-scene-controls { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+.atlas-geometry-scene-controls button, .atlas-geometry-touch-target { min-width:44px; min-height:44px; }
+.atlas-geometry-touch-layer { position:absolute; inset:0; pointer-events:none; }
+.atlas-geometry-touch-target { position:absolute; transform:translate(-50%,-50%); border-radius:50%; opacity:.18; pointer-events:auto; }
+.atlas-geometry-summary, .atlas-simulation-result { color:var(--atlas-text); }
+.atlas-simulation-legend { font-size:.875rem; color:var(--atlas-muted); }
+.atlas-simulation-comparison { font-weight:700; }

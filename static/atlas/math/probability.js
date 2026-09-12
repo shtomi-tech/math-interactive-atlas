@@ -39,3 +39,12 @@ export function binomialUpperTail(n, k, p) {
   }
   return total;
 }
+
+export function binomialDistribution(n, p) {
+  const trials = nonNegativeInteger(n, "n");
+  const probability = probabilityValue(p);
+  return Array.from({ length: trials + 1 }, (_, k) => ({
+    k,
+    probability: binomialProbability(trials, k, probability)
+  }));
+}

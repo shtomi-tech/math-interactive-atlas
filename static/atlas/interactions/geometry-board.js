@@ -1,535 +1,73 @@
-const COLORS = {
-  primary: "#2563eb",
-  secondary: "#e11d48",
-  helper: "#64748b",
-  construction: "#94a3b8",
-  highlight: "#f59e0b",
-  success: "#16a34a",
-  text: "#1f2937"
-};
+import { angleBisectorFoot, angleDegrees, centroid, circumcenter, distance, excenterA, incenter, lawOfCosinesSide, lineCircleIntersections, orthocenter, pointOnCircle, triangleArea2 } from "../math/geometry.js?v=20260912-3c";
 
-const UNIT_CIRCLE_BOUNDS = [-1.5, 1.5, 1.5, -1.5];
-const TRIANGLE_BOUNDS = [-3.6, 4.2, 4.6, -1];
-const DEFAULT_MIN_THETA = 0;
-const DEFAULT_MAX_THETA = 180;
-let boardSequence = 0;
+let sequence = 0;
+const COLORS = { primary: "#2563eb", secondary: "#0f766e", highlight: "#d97706", helper: "#64748b", construction: "#94a3b8" };
+const finite = (value, fallback) => Number.isFinite(Number(value)) ? Number(value) : fallback;
+const rad = (degrees) => degrees * Math.PI / 180;
+const fixed = (value, digits = 2) => Number(value).toFixed(digits);
 
-function finite(value, fallback = 0) {
-  return Number.isFinite(Number(value)) ? Number(value) : fallback;
-}
-
-function clamp(value, minimum, maximum) {
-  return Math.min(maximum, Math.max(minimum, value));
-}
-
-function clean(value) {
-  const number = finite(value);
-  if (Math.abs(number) < 0.0005) return 0;
-  if (Math.abs(number - 1) < 0.0005) return 1;
-  if (Math.abs(number + 1) < 0.0005) return -1;
-  return number;
-}
-
-function formatFixed(value) {
-  return clean(value).toFixed(3);
-}
-
-function formatAngle(value) {
-  return String(Math.round(clean(value)));
-}
-
-function snap(value, minimum, maximum, step) {
-  const raw = finite(value, minimum);
-  const stepped = step > 0 ? minimum + Math.round((raw - minimum) / step) * step : raw;
-  return clamp(stepped, minimum, maximum);
-}
-
-function createBoard(container, id, boundingbox, mode) {
-  if (!window.JXG?.JSXGraph?.initBoard) return null;
-  const host = document.createElement("div");
-  host.id = id;
-  host.className = "jxgbox atlas-geometry-jxgbox";
-  host.dataset.geometryMode = mode;
-  container.replaceChildren(host);
-  return window.JXG.JSXGraph.initBoard(id, {
-    boundingbox,
-    axis: true,
-    keepAspectRatio: true,
-    showCopyright: false,
-    showNavigation: false,
-    pan: { enabled: false },
-    zoom: { enabled: false },
-    axisX: { strokeColor: COLORS.helper, strokeWidth: 1.5 },
-    axisY: { strokeColor: COLORS.helper, strokeWidth: 1.5 },
-    grid: { strokeColor: "#e2e8f0", strokeWidth: 1 }
-  });
-}
-
-function mountFallback(container) {
-  const fallback = document.createElement("p");
-  fallback.className = "atlas-canvas-fallback";
-  fallback.textContent = "図形ライブラリを読み込めません。下の操作欄で角度を変更できます。";
-  container.replaceChildren(fallback);
-}
-
-function addText(board, x, y, getText, options = {}) {
-  return board.create("text", [x, y, getText], {
-    fixed: true,
-    highlight: false,
-    fontSize: 13,
-    strokeColor: COLORS.text,
-    useMathJax: false,
-    ...options
-  });
-}
-
-function createCore(container, config, boundingbox) {
-  const parameters = config.parameters || {};
-  const definition = parameters.theta || {
-    min: DEFAULT_MIN_THETA,
-    max: DEFAULT_MAX_THETA,
-    step: 1
+function createContext(container, config, boundingbox) {
+  container.replaceChildren(); container.classList.add("atlas-geometry-stage");
+  const boardHost = document.createElement("div");
+  boardHost.id = `atlas-geometry-board-${++sequence}`; boardHost.className = "jxgbox atlas-geometry-canvas";
+  const touchLayer = document.createElement("div"); touchLayer.className = "atlas-geometry-touch-layer";
+  const controls = document.createElement("div"); controls.className = "atlas-geometry-scene-controls";
+  const summary = document.createElement("p"); summary.className = "atlas-geometry-summary"; summary.setAttribute("aria-live", "polite");
+  container.append(boardHost, touchLayer, controls, summary);
+  const board = globalThis.JXG?.JSXGraph?.initBoard(boardHost.id, { boundingbox, axis: true, showCopyright: false, showNavigation: false, keepAspectRatio: true, pan: { enabled: false }, zoom: { enabled: false } }) || null;
+  const cleanups = [];
+  const context = {
+    board, controls, summary, config,
+    point(coords, options = {}) { return board?.create("point", coords, { size: 4, strokeColor: COLORS.primary, fillColor: COLORS.primary, fixed: true, highlight: false, ...options }); },
+    segment(a, b, options = {}) { return board?.create("segment", [a, b], { strokeWidth: 3, strokeColor: COLORS.primary, fixed: true, highlight: false, ...options }); },
+    circle(center, radius, options = {}) { return board?.create("circle", [center, radius], { strokeWidth: 2, strokeColor: COLORS.helper, fixed: true, highlight: false, ...options }); },
+    text(x, y, text, options = {}) { return board?.create("text", [x, y, text], { fixed: true, highlight: false, fontSize: 14, strokeColor: COLORS.helper, ...options }); },
+    button(label, active, onClick) { const button = document.createElement("button"); button.type = "button"; button.textContent = label; button.setAttribute("aria-pressed", String(active)); button.addEventListener("click", onClick); controls.append(button); return button; },
+    touchTarget({ label, position, onMove, onKey }) {
+      const button = document.createElement("button"); button.type = "button"; button.className = "atlas-geometry-touch-target"; button.setAttribute("aria-label", label);
+      const place = () => { if (!board) return; const [x, y] = position(); const c = new globalThis.JXG.Coords(globalThis.JXG.COORDS_BY_USER, [x, y], board); button.style.left = `${c.scrCoords[1]}px`; button.style.top = `${c.scrCoords[2]}px`; };
+      const move = (event) => { if (!board) return; const rect = boardHost.getBoundingClientRect(); const c = new globalThis.JXG.Coords(globalThis.JXG.COORDS_BY_SCREEN, [event.clientX - rect.left, event.clientY - rect.top], board); onMove(c.usrCoords[1], c.usrCoords[2]); };
+      button.addEventListener("pointerdown", (event) => { button.setPointerCapture(event.pointerId); move(event); }); button.addEventListener("pointermove", (event) => { if (button.hasPointerCapture(event.pointerId)) move(event); });
+      button.addEventListener("keydown", onKey); touchLayer.append(button); cleanups.push(() => button.remove()); return place;
+    },
+    update(text, placers = []) { board?.update(); placers.forEach((place) => place()); summary.textContent = text; }
   };
-  const minimum = finite(definition.min, DEFAULT_MIN_THETA);
-  const maximum = finite(definition.max, DEFAULT_MAX_THETA);
-  const step = finite(definition.step, 0);
-  const initialTheta = snap(finite(config.initial?.theta, 30), minimum, maximum, step);
-  const state = { theta: initialTheta };
-  const boardId = `atlas-geometry-board-${boardSequence += 1}`;
-  const board = createBoard(container, boardId, boundingbox, config.mode);
-  const boardHost = container.querySelector(`#${boardId}`);
-  let scene = null;
-  let touchTarget = null;
-  let resizeObserver = null;
-  let resizeHandler = null;
-  let dragging = false;
-
-  function notify() {
-    config.onStateChange?.({ ...state }, scene?.summary?.() || `θ = ${formatAngle(state.theta)}°`);
-  }
-
-  function setTouchTargetPoint(x, y) {
-    if (!board || !boardHost || !touchTarget) return;
-    const containerRect = container.getBoundingClientRect();
-    const boardRect = boardHost.getBoundingClientRect();
-    const [left, top, right, bottom] = board.getBoundingBox();
-    const localX = (x - left) / (right - left) * boardRect.width;
-    const localY = (top - y) / (top - bottom) * boardRect.height;
-    touchTarget.style.left = `${boardRect.left - containerRect.left - container.clientLeft + localX}px`;
-    touchTarget.style.top = `${boardRect.top - containerRect.top - container.clientTop + localY}px`;
-    touchTarget.setAttribute("aria-valuenow", formatAngle(state.theta));
-  }
-
-  function setTouchTargetNode(node) {
-    if (!board || !boardHost || !touchTarget || !node?.getBoundingClientRect) return;
-    const containerRect = container.getBoundingClientRect();
-    const pointRect = node.getBoundingClientRect();
-    touchTarget.style.left = `${pointRect.left - containerRect.left - container.clientLeft + pointRect.width / 2}px`;
-    touchTarget.style.top = `${pointRect.top - containerRect.top - container.clientTop + pointRect.height / 2}px`;
-    touchTarget.setAttribute("aria-valuenow", formatAngle(state.theta));
-  }
-
-  function syncTouchTarget() {
-    const node = scene?.touchNode?.();
-    if (node) {
-      setTouchTargetNode(node);
-      return;
-    }
-    const position = scene?.touchPosition?.();
-    if (position) setTouchTargetPoint(position[0], position[1]);
-  }
-
-  function thetaFromPoint(x, y) {
-    return clamp(Math.atan2(Math.max(0, y), x) * 180 / Math.PI, minimum, maximum);
-  }
-
-  function thetaFromPointer(event) {
-    if (typeof board?.getUsrCoordsOfMouse === "function") {
-      const [x, y] = board.getUsrCoordsOfMouse(event);
-      return thetaFromPoint(x, y);
-    }
-    const rect = boardHost.getBoundingClientRect();
-    const [left, top, right, bottom] = board.getBoundingBox();
-    const x = left + ((event.clientX - rect.left) / rect.width) * (right - left);
-    const y = top - ((event.clientY - rect.top) / rect.height) * (top - bottom);
-    return thetaFromPoint(x, y);
-  }
-
-  function setTheta(value) {
-    state.theta = snap(value, minimum, maximum, step);
-    scene?.update?.();
-    notify();
-  }
-
-  function createTouchTarget(label = "P") {
-    if (!board) return null;
-    touchTarget = document.createElement("button");
-    touchTarget.type = "button";
-    touchTarget.className = "atlas-geometry-touch-target";
-    touchTarget.textContent = label;
-    touchTarget.setAttribute("role", "slider");
-    touchTarget.setAttribute("aria-label", `円周上の点${label}を動かす`);
-    touchTarget.setAttribute("aria-valuemin", String(minimum));
-    touchTarget.setAttribute("aria-valuemax", String(maximum));
-    touchTarget.setAttribute("aria-valuenow", formatAngle(state.theta));
-    touchTarget.addEventListener("pointerdown", (event) => {
-      event.preventDefault();
-      dragging = true;
-      touchTarget.setPointerCapture(event.pointerId);
-      setTheta(thetaFromPointer(event));
-    });
-    touchTarget.addEventListener("pointermove", (event) => {
-      if (dragging) setTheta(thetaFromPointer(event));
-    });
-    touchTarget.addEventListener("pointerup", () => { dragging = false; });
-    touchTarget.addEventListener("pointercancel", () => { dragging = false; });
-    touchTarget.addEventListener("keydown", (event) => {
-      if (!["ArrowLeft", "ArrowRight"].includes(event.key)) return;
-      event.preventDefault();
-      setTheta(state.theta + (event.key === "ArrowRight" ? step || 1 : -(step || 1)));
-    });
-    container.append(touchTarget);
-    return touchTarget;
-  }
-
-  function setScene(nextScene) {
-    scene = nextScene;
-    scene?.update?.();
-    notify();
-  }
-
-  function resize() {
-    if (!board || !boardHost) return;
-    const rect = boardHost.getBoundingClientRect();
-    if (typeof board.resizeContainer === "function") board.resizeContainer(rect.width, rect.height, true);
-    board.update();
-    syncTouchTarget();
-  }
-
-  function installResizeHandling() {
-    if (!board || !boardHost) return;
-    resizeHandler = resize;
-    window.addEventListener("resize", resizeHandler);
-    if (typeof ResizeObserver !== "undefined") {
-      resizeObserver = new ResizeObserver(resizeHandler);
-      resizeObserver.observe(boardHost);
-    }
-  }
-
-  function destroy() {
-    if (resizeObserver) resizeObserver.disconnect();
-    if (resizeHandler) window.removeEventListener("resize", resizeHandler);
-    if (board && window.JXG?.JSXGraph?.freeBoard) window.JXG.JSXGraph.freeBoard(board);
-    scene = null;
-    touchTarget = null;
-    container.replaceChildren();
-  }
-
-  return {
-    board,
-    boardHost,
-    container,
-    config,
-    state,
-    minimum,
-    maximum,
-    step,
-    addText,
-    createTouchTarget,
-    installResizeHandling,
-    notify,
-    setScene,
-    setTheta,
-    setTouchTargetNode,
-    syncTouchTarget,
-    thetaFromPoint,
-    thetaFromPointer,
-    destroy,
-    initialTheta
-  };
+  const observer = globalThis.ResizeObserver ? new ResizeObserver(() => { board?.resizeContainer(boardHost.clientWidth, boardHost.clientHeight); board?.fullUpdate(); }) : null;
+  observer?.observe(boardHost); cleanups.push(() => observer?.disconnect());
+  context.destroy = () => { cleanups.forEach((cleanup) => cleanup()); if (board) globalThis.JXG.JSXGraph.freeBoard(board); container.replaceChildren(); };
+  return context;
 }
 
-function mountUnitCircleScene(core) {
-  const { board, state } = core;
-  let point = null;
-  let syncingPoint = false;
-
-  function updateState() {
-    const radians = state.theta * Math.PI / 180;
-    state.cos = clean(Math.cos(radians));
-    state.sin = clean(Math.sin(radians));
-    state.x = state.cos;
-    state.y = state.sin;
-  }
-
-  function summary() {
-    return `θ = ${formatAngle(state.theta)}°　／　P = (${formatFixed(state.x)}, ${formatFixed(state.y)})　／　cos θ = ${formatFixed(state.cos)}　／　sin θ = ${formatFixed(state.sin)}`;
-  }
-
-  if (!board) {
-    return { update: updateState, summary, touchPosition: () => null };
-  }
-
-  board.create("point", [0, 0], {
-    name: "O",
-    size: 4,
-    strokeColor: COLORS.text,
-    fillColor: COLORS.text,
-    fixed: true,
-    highlight: false
-  });
-  board.create("circle", [[0, 0], 1], {
-    strokeColor: COLORS.construction,
-    strokeWidth: 2,
-    fillColor: "none",
-    fixed: true,
-    highlight: false
-  });
-  const upperSemicircle = board.create("curve", [
-    (t) => Math.cos(t),
-    (t) => Math.sin(t),
-    0,
-    Math.PI
-  ], {
-    strokeOpacity: 0,
-    highlight: false,
-    fixed: true
-  });
-  point = board.create("glider", [state.cos || 1, state.sin || 0, upperSemicircle], {
-    name: "P",
-    size: 7,
-    strokeColor: COLORS.text,
-    fillColor: COLORS.highlight,
-    fixed: false,
-    highlight: false
-  });
-  point.on("drag", () => {
-    if (!syncingPoint) core.setTheta(core.thetaFromPoint(point.X(), point.Y()));
-  });
-
-  board.create("segment", [[0, 0], [() => point.X(), () => point.Y()]], {
-    strokeColor: COLORS.primary,
-    strokeWidth: 3,
-    fixed: true,
-    highlight: false
-  });
-  board.create("segment", [[() => point.X(), 0], [() => point.X(), () => point.Y()]], {
-    strokeColor: COLORS.secondary,
-    strokeWidth: 2,
-    dash: 2,
-    fixed: true,
-    highlight: false
-  });
-  board.create("segment", [[0, () => point.Y()], [() => point.X(), () => point.Y()]], {
-    strokeColor: COLORS.helper,
-    strokeWidth: 2,
-    dash: 2,
-    fixed: true,
-    highlight: false
-  });
-  board.create("curve", [
-    (t) => 0.28 * Math.cos(t),
-    (t) => 0.28 * Math.sin(t),
-    0,
-    () => state.theta * Math.PI / 180
-  ], {
-    strokeColor: COLORS.secondary,
-    strokeWidth: 2,
-    fixed: true,
-    highlight: false
-  });
-  core.addText(board, -1.35, 1.3, () => `θ = ${formatAngle(state.theta)}°`, { fontSize: 15, strokeColor: COLORS.secondary });
-  core.addText(board, 1.2, -0.12, () => "x", { fontSize: 14, strokeColor: COLORS.helper });
-  core.addText(board, -0.1, 1.35, () => "y", { fontSize: 14, strokeColor: COLORS.helper });
-  core.addText(board, () => point.X() / 2, -0.13, () => "cos θ", { fontSize: 12, strokeColor: COLORS.primary });
-  core.addText(board, -0.48, () => point.Y() / 2, () => "sin θ", { fontSize: 12, strokeColor: COLORS.secondary });
-  core.createTouchTarget("P");
-
-  function update() {
-    updateState();
-    syncingPoint = true;
-    point.moveTo([state.cos, state.sin], 0);
-    board.update();
-    syncingPoint = false;
-    core.syncTouchTarget();
-  }
-
-  return {
-    update,
-    summary,
-    touchPosition: () => [point.X(), point.Y()],
-    touchNode: () => point.rendNode
-  };
+function polarScene(context, initial, min, max, draw, summaryFor) {
+  const state = { ...initial }; const placers = [];
+  const set = (name, value) => { state[name] = Math.min(max[name] ?? Infinity, Math.max(min[name] ?? -Infinity, finite(value, state[name]))); draw(state, placers); context.update(summaryFor(state), placers); };
+  draw(state, placers);
+  return { state, setParameter: set, reset() { Object.entries(initial).forEach(([k,v]) => state[k]=v); draw(state, placers); context.update(summaryFor(state), placers); }, placers };
 }
 
-function mountTriangleAreaSineScene(core) {
-  const { board, state } = core;
-  const a = 3;
-  const b = 4;
-  const baseA = { x: b, y: 0 };
-  let point = null;
-  let syncingPoint = false;
-
-  function updateState() {
-    const radians = state.theta * Math.PI / 180;
-    state.cos = clean(Math.cos(radians));
-    state.sin = clean(Math.sin(radians));
-    state.x = clean(a * state.cos);
-    state.y = clean(a * state.sin);
-    state.height = Math.abs(state.y);
-    state.areaByHeight = 0.5 * b * state.height;
-    state.areaBySine = 0.5 * a * b * state.sin;
-    state.areaCalculationError = Math.abs(state.areaByHeight - state.areaBySine);
-    if (state.areaCalculationError > 0.000000001) throw new Error("Triangle area calculations diverged");
-    state.area = state.areaByHeight;
-  }
-
-  function summary() {
-    return `C = ${formatAngle(state.theta)}°　／　sin C = ${formatFixed(state.sin)}　／　高さ h = ${formatFixed(state.height)}　／　面積 S = ${formatFixed(state.area)}`;
-  }
-
-  if (!board) {
-    return { update: updateState, summary, touchPosition: () => null };
-  }
-
-  const origin = board.create("point", [0, 0], {
-    name: "C",
-    size: 4,
-    strokeColor: COLORS.text,
-    fillColor: COLORS.text,
-    fixed: true,
-    highlight: false
-  });
-  const fixedA = board.create("point", [baseA.x, baseA.y], {
-    name: "A",
-    size: 4,
-    strokeColor: COLORS.text,
-    fillColor: COLORS.text,
-    fixed: true,
-    highlight: false
-  });
-  const arc = board.create("curve", [
-    (t) => a * Math.cos(t),
-    (t) => a * Math.sin(t),
-    core.minimum * Math.PI / 180,
-    core.maximum * Math.PI / 180
-  ], {
-    strokeColor: COLORS.construction,
-    strokeWidth: 2,
-    dash: 2,
-    fixed: true,
-    highlight: false
-  });
-  point = board.create("glider", [a * Math.cos(state.theta * Math.PI / 180), a * Math.sin(state.theta * Math.PI / 180), arc], {
-    name: "B",
-    size: 7,
-    strokeColor: COLORS.text,
-    fillColor: COLORS.highlight,
-    fixed: false,
-    highlight: false
-  });
-  point.on("drag", () => {
-    if (!syncingPoint) core.setTheta(core.thetaFromPoint(point.X(), point.Y()));
-  });
-
-  board.create("segment", [[() => origin.X(), () => origin.Y()], [() => point.X(), () => point.Y()]], {
-    strokeColor: COLORS.primary,
-    strokeWidth: 3,
-    fixed: true,
-    highlight: false
-  });
-  board.create("segment", [[() => point.X(), () => point.Y()], [() => fixedA.X(), () => fixedA.Y()]], {
-    strokeColor: COLORS.primary,
-    strokeWidth: 3,
-    fixed: true,
-    highlight: false
-  });
-  board.create("segment", [[() => origin.X(), () => origin.Y()], [() => fixedA.X(), () => fixedA.Y()]], {
-    strokeColor: COLORS.helper,
-    strokeWidth: 3,
-    fixed: true,
-    highlight: false
-  });
-  board.create("segment", [[() => point.X(), 0], [() => point.X(), () => point.Y()]], {
-    strokeColor: COLORS.secondary,
-    strokeWidth: 3,
-    dash: 2,
-    fixed: true,
-    highlight: false
-  });
-  board.create("point", [() => point.X(), 0], {
-    name: "H",
-    size: 4,
-    strokeColor: COLORS.secondary,
-    fillColor: COLORS.secondary,
-    fixed: true,
-    highlight: false
-  });
-  board.create("curve", [
-    (t) => 0.55 * Math.cos(t),
-    (t) => 0.55 * Math.sin(t),
-    0,
-    () => state.theta * Math.PI / 180
-  ], {
-    strokeColor: COLORS.secondary,
-    strokeWidth: 2,
-    fixed: true,
-    highlight: false
-  });
-  core.addText(board, -0.55, 3.35, () => `C = ${formatAngle(state.theta)}°`, { fontSize: 15, strokeColor: COLORS.secondary });
-  core.addText(board, 1.55, 3.35, () => `sin C = ${formatFixed(state.sin)}`, { fontSize: 13, strokeColor: COLORS.secondary });
-  core.addText(board, 1.55, 2.95, () => `h = ${formatFixed(state.height)}`, { fontSize: 13, strokeColor: COLORS.secondary });
-  core.addText(board, 1.55, 2.55, () => `S = ${formatFixed(state.area)}`, { fontSize: 13, strokeColor: COLORS.highlight });
-  core.addText(board, 1.7, -0.25, () => `CA = b = ${b}`, { fontSize: 12, strokeColor: COLORS.helper });
-  core.addText(board, () => point.X() / 2 - 0.2, () => point.Y() / 2, () => `BC = a = ${a}`, { fontSize: 12, strokeColor: COLORS.primary });
-  core.addText(board, () => point.X() + 0.12, () => point.Y() / 2, () => "BH = h", { fontSize: 12, strokeColor: COLORS.secondary });
-  core.createTouchTarget("B");
-
-  function update() {
-    updateState();
-    syncingPoint = true;
-    point.moveTo([state.x, state.y], 0);
-    board.update();
-    syncingPoint = false;
-    core.syncTouchTarget();
-  }
-
-  return {
-    update,
-    summary,
-    touchPosition: () => [point.X(), point.Y()],
-    touchNode: () => point.rendNode
-  };
+function mountUnitCircleScene(context, config) {
+  return makeScene(context,config,{initial:{theta:30},clamp:(n,v)=>Math.max(0,Math.min(180,v)),derive:s=>{s.P=pointOnCircle([0,0],1,s.theta);},build:(c,s,api,p)=>{const O=c.point([0,0],{name:"O"});const P=c.point([()=>s.P.x,()=>s.P.y],{name:"P"});c.circle(O,1);c.segment(O,P);c.segment([()=>s.P.x,0],P,{strokeColor:COLORS.secondary,dash:2});c.text(-1.7,1.45,()=>`P = (${fixed(s.P.x)}, ${fixed(s.P.y)})`);p.push(c.touchTarget({label:"円周上の点P",position:()=>[s.P.x,s.P.y],onMove:(x,y)=>api.setParameter("theta",Math.atan2(y,x)*180/Math.PI),onKey:e=>{if(e.key.startsWith("Arrow"))api.setParameter("theta",s.theta+(e.key==="ArrowLeft"||e.key==="ArrowDown"?-1:1));}}));},summary:s=>`θ=${fixed(s.theta,0)}°、cosθ=${fixed(s.P.x)}、sinθ=${fixed(s.P.y)}`});
 }
 
-const GEOMETRY_MODES = Object.freeze({
-  "unit-circle": mountUnitCircleScene,
-  "triangle-area-sine": mountTriangleAreaSineScene
-});
-
-export function mountGeometryBoard(container, config) {
-  const mountScene = GEOMETRY_MODES[config.mode];
-  if (!mountScene) throw new Error(`Unsupported geometry mode: ${config.mode || "(empty)"}`);
-  const bounds = config.boundingbox || (config.mode === "triangle-area-sine" ? TRIANGLE_BOUNDS : UNIT_CIRCLE_BOUNDS);
-  const core = createCore(container, config, bounds);
-
-  if (!core.board) mountFallback(container);
-  const scene = mountScene(core, config);
-  core.setScene(scene);
-  core.installResizeHandling();
-
-  function reset() {
-    core.setTheta(core.initialTheta);
-  }
-
-  function setParameter(name, value) {
-    if (name === "theta") core.setTheta(value);
-  }
-
-  return {
-    reset,
-    destroy: core.destroy,
-    getState: () => ({ ...core.state }),
-    setParameter
-  };
+// The following factory keeps numeric state inside each scene; the shared context only owns lifecycle and input surfaces.
+function makeScene(context, config, spec) {
+  const initial = { ...spec.initial, ...(config.initial || {}) }; const state = { ...initial }; let built = false; const placers=[];
+  const api = { state, setParameter(name,value){ if (!(name in state)) return; state[name]=spec.clamp?.(name,finite(value,state[name]),state) ?? finite(value,state[name]); spec.derive(state); if(!built){ spec.build(context,state,api,placers); built=true; } context.update(spec.summary(state),placers); }, reset(){Object.assign(state,initial); spec.derive(state); context.update(spec.summary(state),placers);}, placers };
+  spec.derive(state); spec.build(context,state,api,placers); built=true; context.update(spec.summary(state),placers); return api;
 }
+
+function triangleAreaScene(context, config) { return makeScene(context,config,{ initial:{theta:60}, clamp:(n,v)=>Math.max(10,Math.min(170,v)), derive:s=>{s.B={x:4*Math.cos(rad(s.theta)),y:4*Math.sin(rad(s.theta))};s.areaByHeight=0.5*5*s.B.y;s.areaBySine=0.5*4*5*Math.sin(rad(s.theta));s.areaCalculationError=Math.abs(s.areaByHeight-s.areaBySine);}, build:(c,s,api,p)=>{c.segment([0,0],[5,0]);c.segment([0,0],[()=>s.B.x,()=>s.B.y]);c.segment([5,0],[()=>s.B.x,()=>s.B.y]);c.segment([()=>s.B.x,0],[()=>s.B.x,()=>s.B.y],{dash:2,strokeColor:COLORS.secondary});p.push(c.touchTarget({label:"頂点B",position:()=>[s.B.x,s.B.y],onMove:(x,y)=>api.setParameter("theta",Math.atan2(y,x)*180/Math.PI),onKey:e=>{if(e.key.startsWith("Arrow"))api.setParameter("theta",s.theta+(e.key==="ArrowLeft"?-1:1));}}));}, summary:s=>`C=${fixed(s.theta,0)}°、高さ=${fixed(s.B.y)}、面積=${fixed(s.areaBySine)}` }); }
+
+function sineLawScene(context,config){return makeScene(context,config,{initial:{thetaC:80},clamp:(n,v)=>Math.max(20,Math.min(160,v)),derive:s=>{s.A=pointOnCircle([0,0],3,210);s.B=pointOnCircle([0,0],3,330);s.C=pointOnCircle([0,0],3,s.thetaC);s.a=distance(s.B,s.C);s.b=distance(s.C,s.A);s.c=distance(s.A,s.B);s.Adeg=angleDegrees(s.B,s.A,s.C);s.Bdeg=angleDegrees(s.A,s.B,s.C);s.Cdeg=angleDegrees(s.A,s.C,s.B);},build:(c,s,api,p)=>{c.circle([0,0],3);[["A","A"],["B","B"],["C","C"]].forEach(([key,name])=>c.point([()=>s[key].x,()=>s[key].y],{name}));c.segment([()=>s.A.x,()=>s.A.y],[()=>s.B.x,()=>s.B.y]);c.segment([()=>s.B.x,()=>s.B.y],[()=>s.C.x,()=>s.C.y]);c.segment([()=>s.C.x,()=>s.C.y],[()=>s.A.x,()=>s.A.y]);p.push(c.touchTarget({label:"円周上の頂点C",position:()=>[s.C.x,s.C.y],onMove:(x,y)=>api.setParameter("thetaC",Math.atan2(y,x)*180/Math.PI),onKey:e=>{if(e.key.startsWith("Arrow"))api.setParameter("thetaC",s.thetaC+(e.key==="ArrowLeft"?-1:1));}}));},summary:s=>`a/sin A=${fixed(s.a/Math.sin(rad(s.Adeg)))}、b/sin B=${fixed(s.b/Math.sin(rad(s.Bdeg)))}、c/sin C=${fixed(s.c/Math.sin(rad(s.Cdeg)))} = 2R`});}
+
+function cosineLawScene(context,config){return makeScene(context,config,{initial:{b:4,c:3,angleA:60},clamp:(n,v)=>n==="angleA"?Math.max(20,Math.min(160,v)):v,derive:s=>{s.C={x:s.b,y:0};s.B={x:s.c*Math.cos(rad(s.angleA)),y:s.c*Math.sin(rad(s.angleA))};s.a=lawOfCosinesSide(s.b,s.c,s.angleA);},build:(c,s)=>{c.segment([0,0],[()=>s.B.x,()=>s.B.y]);c.segment([0,0],[()=>s.C.x,()=>s.C.y]);c.segment([()=>s.B.x,()=>s.B.y],[()=>s.C.x,()=>s.C.y],{strokeColor:COLORS.highlight});},summary:s=>`a=${fixed(s.a)}、a²=${fixed(s.a*s.a)} = ${s.b}²+${s.c}²−2·${s.b}·${s.c}·cos ${fixed(s.angleA,0)}°${Math.abs(s.angleA-90)<.1?"（直角では余弦項が0）":""}`});}
+
+const CENTER_FUNCS={centroid,circumcenter,incenter,orthocenter,excenterA};
+function centersScene(context,config){const scene=makeScene(context,config,{initial:{cx:0,cy:2.5},derive:s=>{s.A={x:-3,y:-2};s.B={x:3,y:-2};s.C={x:s.cx,y:s.cy};s.center=CENTER_FUNCS[s.selected||"centroid"](s.A,s.B,s.C);},build:(c,s,api,p)=>{s.selected="centroid";c.segment([()=>s.A.x,()=>s.A.y],[()=>s.B.x,()=>s.B.y]);c.segment([()=>s.B.x,()=>s.B.y],[()=>s.C.x,()=>s.C.y]);c.segment([()=>s.C.x,()=>s.C.y],[()=>s.A.x,()=>s.A.y]);c.point([()=>s.center?.x??0,()=>s.center?.y??0],{name:()=>s.selected,fillColor:COLORS.highlight,strokeColor:COLORS.highlight});const buttons={};Object.keys(CENTER_FUNCS).forEach(key=>buttons[key]=c.button({centroid:"重心",circumcenter:"外心",incenter:"内心",orthocenter:"垂心",excenterA:"傍心"}[key],key===s.selected,()=>{s.selected=key;Object.entries(buttons).forEach(([k,b])=>b.setAttribute("aria-pressed",String(k===key)));api.setParameter("cx",s.cx);}));p.push(c.touchTarget({label:"頂点C",position:()=>[s.C.x,s.C.y],onMove:(x,y)=>{api.setParameter("cx",x);api.setParameter("cy",y);},onKey:e=>{if(e.key.startsWith("Arrow"))api.setParameter(e.key==="ArrowUp"||e.key==="ArrowDown"?"cy":"cx",(e.key==="ArrowLeft"||e.key==="ArrowDown"?-0.1:0.1)+(e.key==="ArrowUp"||e.key==="ArrowDown"?s.cy:s.cx));}}));},summary:s=>`${{centroid:"重心",circumcenter:"外心",incenter:"内心",orthocenter:"垂心",excenterA:"傍心"}[s.selected]}：(${fixed(s.center?.x??0)}, ${fixed(s.center?.y??0)})`});return scene;}
+
+function bisectorScene(context,config){return makeScene(context,config,{initial:{ax:0,ay:3},derive:s=>{s.A={x:s.ax,y:s.ay};s.B={x:-3,y:-2};s.C={x:3,y:-2};s.D=angleBisectorFoot(s.A,s.B,s.C);},build:(c,s)=>{c.segment([()=>s.A.x,()=>s.A.y],[()=>s.B.x,()=>s.B.y]);c.segment([()=>s.A.x,()=>s.A.y],[()=>s.C.x,()=>s.C.y]);c.segment([()=>s.B.x,()=>s.B.y],[()=>s.C.x,()=>s.C.y]);c.segment([()=>s.A.x,()=>s.A.y],[()=>s.D.x,()=>s.D.y],{strokeColor:COLORS.highlight});},summary:s=>`BD/DC=${fixed(distance(s.B,s.D)/distance(s.D,s.C))}、AB/AC=${fixed(distance(s.A,s.B)/distance(s.A,s.C))}`});}
+function inscribedScene(context,config){return makeScene(context,config,{initial:{pointAngle:90},clamp:(n,v)=>Math.max(30,Math.min(150,v)),derive:s=>{s.O={x:0,y:0};s.A=pointOnCircle(s.O,3,200);s.B=pointOnCircle(s.O,3,340);s.P=pointOnCircle(s.O,3,s.pointAngle);s.central=angleDegrees(s.A,s.O,s.B);s.inscribed=angleDegrees(s.A,s.P,s.B);},build:(c,s)=>{c.circle([0,0],3);c.segment([()=>s.P.x,()=>s.P.y],[()=>s.A.x,()=>s.A.y]);c.segment([()=>s.P.x,()=>s.P.y],[()=>s.B.x,()=>s.B.y]);c.segment([0,0],[()=>s.A.x,()=>s.A.y],{strokeColor:COLORS.helper});c.segment([0,0],[()=>s.B.x,()=>s.B.y],{strokeColor:COLORS.helper});},summary:s=>`中心角=${fixed(s.central,1)}°、円周角=${fixed(s.inscribed,1)}°、中心角=2×円周角`});}
+function powerScene(context,config){return makeScene(context,config,{initial:{secantAngle:180},clamp:(n,v)=>Math.max(150,Math.min(210,v)),derive:s=>{s.P={x:5,y:0};const d={x:Math.cos(rad(s.secantAngle)),y:Math.sin(rad(s.secantAngle))};[s.C,s.D]=lineCircleIntersections(s.P,d,[0,0],3);},build:(c,s)=>{c.circle([0,0],3);c.point([5,0],{name:"P"});c.segment([5,0],[()=>s.D.x,()=>s.D.y],{strokeColor:COLORS.highlight});},summary:s=>`PC·PD=${fixed(distance(s.P,s.C)*distance(s.P,s.D))} = OP²−R² = 16`});}
+
+const GEOMETRY_MODES=Object.freeze({"unit-circle":mountUnitCircleScene,"triangle-area-sine":triangleAreaScene,"sine-law-circumcircle":sineLawScene,"cosine-law":cosineLawScene,"triangle-centers":centersScene,"angle-bisector-ratio":bisectorScene,"inscribed-angle":inscribedScene,"power-of-point":powerScene});
+export function mountGeometryBoard(container,config={}){const mount=GEOMETRY_MODES[config.mode];if(!mount)throw new Error(`Unsupported geometry mode: ${config.mode||"(empty)"}`);const bounds=config.boundingbox||[-6,5,6,-5];const context=createContext(container,config,bounds);const scene=mount(context,config);return{reset:scene.reset,destroy:context.destroy,getState:()=>({...scene.state}),setParameter:scene.setParameter};}

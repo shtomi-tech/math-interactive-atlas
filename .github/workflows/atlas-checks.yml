@@ -27,6 +27,7 @@ jobs:
           node scripts/check-combinatorics.js
           node scripts/check-statistics.js
           node scripts/check-probability.js
+          node scripts/check-geometry.js
           node scripts/check-hypothesis-test.js
       - name: Check JavaScript syntax
         shell: bash
@@ -50,4 +51,5 @@ jobs:
           node --check static/atlas/math/combinatorics.js
           node --check static/atlas/math/statistics.js
           node --check static/atlas/math/probability.js
+          node --check static/atlas/math/geometry.js
           node --check static/atlas/math/hypothesis-test.js

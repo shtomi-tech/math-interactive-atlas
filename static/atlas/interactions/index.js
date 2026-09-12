@@ -1,10 +1,10 @@
 import { mountFunctionGraph } from "./function-graph.js?v=20260912-3a";
-import { mountGeometryBoard } from "./geometry-board.js?v=20260912-3a";
+import { mountGeometryBoard } from "./geometry-board.js?v=20260912-3c";
 import { mountRangeGraph } from "./range-graph.js?v=20260912-3a";
 import { mountRegionSelector } from "./region-selector.js?v=20260912-3a";
 import { mountCombinatoricsViewer } from "./combinatorics-viewer.js?v=20260912-3a";
-import { mountDataLab } from "./data-lab.js?v=20260912-3b";
-import { mountSimulationLab } from "./simulation-lab.js?v=20260912-3b";
+import { mountDataLab } from "./data-lab.js?v=20260912-3c";
+import { mountSimulationLab } from "./simulation-lab.js?v=20260912-3c";
 
 const ENGINES = Object.freeze({
   functionGraph: mountFunctionGraph,

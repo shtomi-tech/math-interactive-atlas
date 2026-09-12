@@ -75,5 +75,6 @@ export function correlationCoefficient(xs, ys) {
     ySquared += yDistance ** 2;
   });
   if (xSquared === 0 || ySquared === 0) return null;
-  return numerator / Math.sqrt(xSquared * ySquared);
+  const result = numerator / Math.sqrt(xSquared * ySquared);
+  return Math.max(-1, Math.min(1, result));
 }

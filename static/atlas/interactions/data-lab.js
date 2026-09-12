@@ -5,7 +5,7 @@ import {
   quartiles,
   standardDeviation,
   variance
-} from "../math/statistics.js?v=20260912-3b";
+} from "../math/statistics.js?v=20260912-3c";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 const COLORS = Object.freeze({
@@ -48,6 +48,21 @@ function formatNumber(value, digits = 2) {
 
 function formatCorrelation(value) {
   return value === null ? "定義できません" : formatNumber(value, 3);
+}
+
+function dataBounds(values, { padding = 1, minimumSpan = 4 } = {}) {
+  const finiteValues = values.map(Number).filter(Number.isFinite);
+  if (finiteValues.length === 0) return { min: -2, max: 2, tickStep: 1 };
+  let min = Math.floor(Math.min(...finiteValues) - padding);
+  let max = Math.ceil(Math.max(...finiteValues) + padding);
+  if (max - min < minimumSpan) {
+    const center = (min + max) / 2;
+    min = Math.floor(center - minimumSpan / 2);
+    max = Math.ceil(center + minimumSpan / 2);
+  }
+  const span = max - min;
+  const tickStep = span <= 12 ? 1 : span <= 24 ? 2 : 5;
+  return { min, max, tickStep };
 }
 
 function createLayout(container, { controlsLabel, resultLabel, rootClass }) {
@@ -302,8 +317,9 @@ function mountVarianceScene(container, config = {}) {
     const values = deviations.map((deviation) => center + spread * deviation);
     const average = mean(values);
     const currentVariance = variance(values);
+    const bounds = dataBounds([...values, average]);
     svg.replaceChildren();
-    const scale = drawAxis(svg, { min: -1, max: 11, y: 110, tickStep: 1 });
+    const scale = drawAxis(svg, { min: bounds.min, max: bounds.max, y: 110, tickStep: bounds.tickStep });
     values.forEach((value, index) => {
       const x = scale(value);
       const meanX = scale(average);

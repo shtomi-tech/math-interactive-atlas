@@ -385,7 +385,7 @@
     "unit": "statistics",
     "unitLabel": "データの分析",
     "title": "仮説検定をシミュレーション",
-    "shortDescription": "公平なコインを仮定し、観測された表の回数以上が起こる確率を理論値と実験で比べます。",
+    "shortDescription": "公平なコインという帰無仮説のもとで、表が出やすいという上側片側検定を体験します。",
     "instructions": "観測値を動かし、二項分布の上側確率とシミュレーション結果を分けて観察します。",
     "formula": "P(X\\ge k)=\\sum_{i=k}^{n}\\binom{n}{i}p^i(1-p)^{n-i}",
     "interactionType": "simulation",
@@ -404,7 +404,8 @@
       "「めったに起こらない」と判断する基準を変えると、結論はどう変わるだろう？"
     ],
     "related": [
-      "correlation-builder"
+      "correlation-builder",
+      "independent-trials"
     ],
     "source": {
       "usage": "original",
@@ -582,7 +583,8 @@
       "90°を超えると、cosθの符号はどう変わるだろう？"
     ],
     "related": [
-      "triangle-area-sine"
+      "triangle-area-sine",
+      "sine-law-circumcircle"
     ],
     "source": {
       "usage": "original",
@@ -616,7 +618,9 @@
       "高さとsinCの値には、どんな関係があるだろう？"
     ],
     "related": [
-      "unit-circle"
+      "unit-circle",
+      "sine-law-circumcircle",
+      "cosine-law"
     ],
     "source": {
       "usage": "original",
@@ -624,5 +628,26 @@
       "license": "MIT OR LGPL-3.0-or-later",
       "repository": "https://github.com/jsxgraph/jsxgraph"
     }
+  },
+  {
+    "id":"independent-trials","subject":"mathA","subjectLabel":"数学A","unit":"probability","unitLabel":"場合の数と確率","title":"独立試行を大量実験する","shortDescription":"二項分布の理論値と大量実験の分布を重ねて比べます。","instructions":"n・p・kを変え、100回または1000回の実験で理論値への近づき方を観察します。","formula":"P(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}","interactionType":"simulation","interaction":{"engine":"simulationLab","mode":"independent-trials","initial":{"n":5,"p":0.4,"k":2},"parameters":{"n":{"label":"n","min":1,"max":10,"step":1},"p":{"label":"p","min":0.1,"max":0.9,"step":0.1},"k":{"label":"k","min":0,"max":10,"step":1}}},"discoveryPoints":["実験回数を増やすと分布は理論値へどう近づくだろう？","pを変えると山の位置はどう動くだろう？","nを変えると分布の広がりはどう変わるだろう？"],"related":["hypothesis-test-coin","combinations-order"],"source":{"usage":"original","library":"SVG / Vanilla JavaScript","license":"Original implementation"}
+  },
+  {
+    "id":"sine-law-circumcircle","subject":"math1","subjectLabel":"数学I","unit":"trigonometry","unitLabel":"図形と計量","title":"正弦定理と外接円","shortDescription":"円周上の頂点を動かし、辺と対角の正弦の比が直径になることを確かめます。","instructions":"頂点Cを円周上で動かし、3つの比を比べます。","formula":"\\frac{a}{\\sin A}=\\frac{b}{\\sin B}=\\frac{c}{\\sin C}=2R","interactionType":"geometry","interaction":{"engine":"geometryBoard","mode":"sine-law-circumcircle","initial":{"thetaC":80},"parameters":{"thetaC":{"label":"Cの位置","min":20,"max":160,"step":1}}},"discoveryPoints":["Cを動かしても3つの比は一致するだろうか？","共通の値は円の半径とどう関係するだろう？"],"related":["triangle-area-sine","cosine-law"],"source":{"usage":"original","library":"JSXGraph 1.8.0","license":"MIT OR LGPL-3.0-or-later"}
+  },
+  {
+    "id":"cosine-law","subject":"math1","subjectLabel":"数学I","unit":"trigonometry","unitLabel":"図形と計量","title":"余弦定理を変形で見る","shortDescription":"2辺と間の角から残りの辺が決まる様子を観察します。","instructions":"角Aを動かし、余弦項と辺aの変化を見比べます。","formula":"a^2=b^2+c^2-2bc\\cos A","interactionType":"geometry","interaction":{"engine":"geometryBoard","mode":"cosine-law","initial":{"b":4,"c":3,"angleA":60},"parameters":{"angleA":{"label":"A","min":20,"max":160,"step":1}}},"discoveryPoints":["Aが大きくなるとaはどう変わるだろう？","A=90°でどの項が消えるだろう？"],"related":["sine-law-circumcircle","triangle-area-sine"],"source":{"usage":"original","library":"JSXGraph 1.8.0","license":"MIT OR LGPL-3.0-or-later"}
+  },
+  {
+    "id":"triangle-centers","subject":"mathA","subjectLabel":"数学A","unit":"geometry-a","unitLabel":"図形の性質","title":"三角形の五心を追いかける","shortDescription":"頂点を動かし、重心・外心・内心・垂心・傍心の位置を比べます。","instructions":"中心を選び、頂点Cを動かして位置の変化を観察します。","formula":"G,O,I,H,I_A","interactionType":"geometry","interaction":{"engine":"geometryBoard","mode":"triangle-centers","initial":{"cx":0,"cy":2.5},"parameters":{"cx":{"label":"Cのx","min":-2.5,"max":2.5,"step":0.1},"cy":{"label":"Cのy","min":0.5,"max":4,"step":0.1}}},"discoveryPoints":["どの中心は三角形の外へ出ることがあるだろう？","重心は頂点の動きにどう追随するだろう？"],"related":["angle-bisector-ratio","inscribed-angle"],"source":{"usage":"original","library":"JSXGraph 1.8.0","license":"MIT OR LGPL-3.0-or-later"}
+  },
+  {
+    "id":"angle-bisector-ratio","subject":"mathA","subjectLabel":"数学A","unit":"geometry-a","unitLabel":"図形の性質","title":"角の二等分線と辺の比","shortDescription":"頂点を動かして、角の二等分線が対辺を分ける比を確かめます。","instructions":"頂点Aを動かし、BD:DCとAB:ACを比べます。","formula":"\\frac{BD}{DC}=\\frac{AB}{AC}","interactionType":"geometry","interaction":{"engine":"geometryBoard","mode":"angle-bisector-ratio","initial":{"ax":0,"ay":3},"parameters":{"ax":{"label":"Aのx","min":-2.5,"max":2.5,"step":0.1},"ay":{"label":"Aのy","min":1,"max":4,"step":0.1}}},"discoveryPoints":["2つの比はAを動かしても一致するだろうか？"],"related":["triangle-centers"],"source":{"usage":"original","library":"JSXGraph 1.8.0","license":"MIT OR LGPL-3.0-or-later"}
+  },
+  {
+    "id":"inscribed-angle","subject":"mathA","subjectLabel":"数学A","unit":"geometry-a","unitLabel":"図形の性質","title":"円周角を動かす","shortDescription":"円周上の点を動かし、中心角と円周角の関係を観察します。","instructions":"点Pの位置を動かし、2つの角度を比べます。","formula":"\\angle AOB=2\\angle APB","interactionType":"geometry","interaction":{"engine":"geometryBoard","mode":"inscribed-angle","initial":{"pointAngle":90},"parameters":{"pointAngle":{"label":"Pの位置","min":30,"max":150,"step":1}}},"discoveryPoints":["Pを動かしても円周角は変わらないだろうか？","中心角は円周角の何倍だろう？"],"related":["triangle-centers","power-of-point"],"source":{"usage":"original","library":"JSXGraph 1.8.0","license":"MIT OR LGPL-3.0-or-later"}
+  },
+  {
+    "id":"power-of-point","subject":"mathA","subjectLabel":"数学A","unit":"geometry-a","unitLabel":"図形の性質","title":"方べきの定理を動かす","shortDescription":"円の外の点から割線を動かし、2つの距離の積が一定になることを確かめます。","instructions":"割線の角度を動かし、PC・PDを観察します。","formula":"PC\\cdot PD=OP^2-R^2","interactionType":"geometry","interaction":{"engine":"geometryBoard","mode":"power-of-point","initial":{"secantAngle":180},"parameters":{"secantAngle":{"label":"割線の角度","min":150,"max":210,"step":1}}},"discoveryPoints":["割線を動かしても積が16になるだろうか？","一定値はOPと半径からどう求められるだろう？"],"related":["inscribed-angle"],"source":{"usage":"original","library":"JSXGraph 1.8.0","license":"MIT OR LGPL-3.0-or-later"}
   }
 ]

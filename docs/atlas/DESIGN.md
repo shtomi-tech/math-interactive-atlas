@@ -71,7 +71,9 @@ Good Design = Invisible UI + Visible Mathematics + Meaningful Interaction
 
 `simulation-lab.js` は理論値と1回ごとのシミュレーション結果を別の表示領域で扱う。`hypothesis-coin` では公平なコイン `p = 0.5`、20回試行、観測値以上の上側確率を使い、純粋な二項分布計算は `static/atlas/math/probability.js`、仮説検定の表示用事実は `static/atlas/math/hypothesis-test.js` に分離する。乱数結果を正確なp値や公式の証明として扱わない。
 
-GeometryBoardの共通CoreはBoard生成、座標変換、44pxタッチ領域、Resize、Reset、Destroyを担当し、教材固有の図形はSceneとしてdispatchする。`triangle-area-sine` では `h = a sin C` と `S = 1/2 × b × h = 1/2 ab sin C` を同じ状態から計算する。
+GeometryBoardの共通ContextはBoard生成、座標変換、複数の44pxタッチ領域、Resize、Reset、Destroyだけを担当し、数値状態と作図は8つのSceneが所有する。補助線は主図形より細く淡くし、注目する辺・角・中心だけに強調色を使う。座標計算は純粋関数へ分離し、退化三角形では中心を描かない。
+
+SimulationLabはモードRegistryで教材を分ける。理論分布と実験分布は色と凡例の両方で区別し、有意水準は確率分布の高さとして描かず、計算した確率との数値比較として示す。
 
 Discovery Pointは結論ではなく観察の問いにする。利用者が値を動かして関係を見つけられるよう、教材の発見ポイントへ答えを先に固定表示しない。
 

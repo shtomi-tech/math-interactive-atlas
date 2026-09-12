@@ -28,15 +28,19 @@ const CONTENT_ORDER = Object.freeze({
   ]),
   trigonometry: Object.freeze([
     "unit-circle",
-    "triangle-area-sine"
+    "triangle-area-sine",
+    "sine-law-circumcircle",
+    "cosine-law"
   ]),
   probability: Object.freeze([
     "event-regions",
     "conditional-probability",
     "counting-tree",
     "permutations-all",
-    "combinations-order"
+    "combinations-order",
+    "independent-trials"
   ]),
+  "geometry-a": Object.freeze(["triangle-centers", "angle-bisector-ratio", "inscribed-angle", "power-of-point"]),
   statistics: Object.freeze([
     "mean-median-outlier",
     "variance-distance",

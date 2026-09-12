@@ -1,236 +1,138 @@
-import { coinTestFacts } from "../math/hypothesis-test.js?v=20260912-3b";
+import { coinTestFacts } from "../math/hypothesis-test.js?v=20260912-3c";
+import { binomialDistribution, binomialProbability } from "../math/probability.js?v=20260912-3c";
 
-const SVG_NS = "http://www.w3.org/2000/svg";
-const COLORS = Object.freeze({
-  primary: "#2563eb",
-  highlight: "#f59e0b",
-  helper: "#64748b",
-  construction: "#94a3b8",
-  text: "#1f2937",
-  border: "#d1d5db"
-});
+const NS = "http://www.w3.org/2000/svg";
+const clamp = (value, min, max) => Math.min(max, Math.max(min, Number(value)));
+const svg = (name, attrs = {}) => {
+  const node = document.createElementNS(NS, name);
+  Object.entries(attrs).forEach(([key, value]) => node.setAttribute(key, String(value)));
+  return node;
+};
 
-function svgElement(name, attributes = {}) {
-  const element = document.createElementNS(SVG_NS, name);
-  Object.entries(attributes).forEach(([key, value]) => element.setAttribute(key, String(value)));
-  return element;
+function sampleBinomial(n, p) {
+  let successes = 0;
+  for (let i = 0; i < n; i += 1) successes += Math.random() < p ? 1 : 0;
+  return successes;
 }
 
-function finite(value, fallback = 0) {
-  return Number.isFinite(Number(value)) ? Number(value) : fallback;
-}
-
-function clamp(value, minimum, maximum) {
-  return Math.min(maximum, Math.max(minimum, value));
-}
-
-function formatProbability(value) {
-  return Number(value).toFixed(4);
-}
-
-function formatNumber(value) {
-  const number = finite(value);
-  return Number.isInteger(number) ? String(number) : number.toFixed(2).replace(/0+$/, "").replace(/\.$/, "");
-}
-
-function createLayout(container) {
+function createLayout(container, title) {
   container.replaceChildren();
-  container.classList.add("atlas-simulation-canvas");
-  const root = document.createElement("div");
-  root.className = "atlas-simulation-lab atlas-hypothesis-coin-scene";
-  const diagram = document.createElement("div");
-  diagram.className = "atlas-simulation-diagram";
+  container.classList.add("atlas-simulation-lab");
+  const heading = document.createElement("h3");
+  heading.textContent = title;
   const controls = document.createElement("div");
   controls.className = "atlas-simulation-controls";
-  controls.setAttribute("aria-label", "仮説検定シミュレーションの操作");
-  const result = document.createElement("section");
+  const chart = svg("svg", { viewBox: "0 0 640 280", role: "img" });
+  chart.classList.add("atlas-simulation-chart");
+  const result = document.createElement("div");
   result.className = "atlas-simulation-result";
-  result.setAttribute("aria-live", "polite");
-  const heading = document.createElement("p");
-  heading.className = "atlas-simulation-result-label";
-  heading.textContent = "理論値とシミュレーション結果";
-  result.append(heading);
-  root.append(diagram, controls, result);
-  container.append(root);
-  return { diagram, controls, result };
+  const actions = document.createElement("div");
+  actions.className = "atlas-simulation-actions";
+  container.append(heading, controls, chart, result, actions);
+  return { controls, chart, result, actions };
 }
 
-function createRangeControl({ label, min, max, step, value, onInput }) {
-  const wrapper = document.createElement("label");
-  wrapper.className = "atlas-simulation-range-control";
-  const heading = document.createElement("span");
-  heading.className = "atlas-simulation-control-heading";
-  const labelText = document.createElement("span");
-  labelText.textContent = label;
+function addRange(parent, label, min, max, step, value, onInput) {
+  const wrap = document.createElement("label");
+  wrap.className = "atlas-simulation-range";
+  const caption = document.createElement("span");
   const output = document.createElement("output");
-  output.textContent = formatNumber(value);
-  heading.append(labelText, output);
   const input = document.createElement("input");
   input.type = "range";
-  input.min = String(min);
-  input.max = String(max);
-  input.step = String(step);
-  input.value = String(value);
-  input.setAttribute("aria-label", label);
-  const listener = () => {
-    output.textContent = formatNumber(input.value);
-    onInput(Number(input.value));
-  };
-  input.addEventListener("input", listener);
-  wrapper.append(heading, input);
-  return {
-    wrapper,
-    input,
-    setValue(nextValue) { input.value = String(nextValue); output.textContent = formatNumber(nextValue); },
-    cleanup() { input.removeEventListener("input", listener); }
-  };
+  input.min = String(min); input.max = String(max); input.step = String(step); input.value = String(value);
+  const refresh = () => { output.value = input.value; output.textContent = input.value; };
+  caption.textContent = label;
+  input.addEventListener("input", () => { refresh(); onInput(Number(input.value)); });
+  refresh(); wrap.append(caption, input, output); parent.append(wrap);
+  return { input, output, set(valueToSet) { input.value = String(valueToSet); refresh(); } };
 }
 
-function createButton(label, onActivate) {
+function addButton(parent, label, onClick) {
   const button = document.createElement("button");
-  button.type = "button";
-  button.className = "atlas-simulation-button";
-  button.setAttribute("aria-label", label);
-  button.textContent = label;
-  const listener = () => onActivate();
-  button.addEventListener("click", listener);
-  return { button, cleanup: () => button.removeEventListener("click", listener) };
+  button.type = "button"; button.textContent = label;
+  button.addEventListener("click", onClick); parent.append(button);
 }
 
-function renderFormula(target, latex, fallback) {
-  target.replaceChildren();
-  target.setAttribute("aria-label", fallback);
-  if (window.katex?.render && latex) {
-    try {
-      window.katex.render(latex, target, { displayMode: true, throwOnError: false });
-      return;
-    } catch {
-      // Keep the plain formula when KaTeX is unavailable.
+function drawDistribution(chart, distribution, { selectedK, tailFrom = null, frequencies = null, trials = 0 } = {}) {
+  chart.replaceChildren();
+  const width = 640, height = 280, left = 44, right = 16, top = 24, bottom = 44;
+  const plotWidth = width - left - right, plotHeight = height - top - bottom;
+  const sampleRates = frequencies?.map((count) => count / Math.max(1, trials));
+  const maxValue = Math.max(0.05, ...distribution.map((item) => item.probability), ...(sampleRates || [0]));
+  chart.append(svg("line", { x1: left, y1: top + plotHeight, x2: width - right, y2: top + plotHeight, stroke: "#64748b" }));
+  const slot = plotWidth / distribution.length;
+  distribution.forEach((item, index) => {
+    const theoryHeight = (item.probability / maxValue) * plotHeight;
+    const highlighted = item.k === selectedK || (tailFrom !== null && item.k >= tailFrom);
+    chart.append(svg("rect", {
+      x: left + index * slot + slot * 0.12, y: top + plotHeight - theoryHeight,
+      width: slot * (sampleRates ? 0.34 : 0.76), height: theoryHeight,
+      fill: highlighted ? "#f59e0b" : "#2563eb", rx: 2
+    }));
+    if (sampleRates) {
+      const sampleHeight = (sampleRates[index] / maxValue) * plotHeight;
+      chart.append(svg("rect", {
+        x: left + index * slot + slot * 0.52, y: top + plotHeight - sampleHeight,
+        width: slot * 0.34, height: sampleHeight, fill: "#14b8a6", rx: 2
+      }));
     }
-  }
-  target.textContent = fallback;
-}
-
-function cleanupScene(container, cleanup) {
-  cleanup.forEach((remove) => remove?.());
-  container.replaceChildren();
-  container.classList.remove("atlas-simulation-canvas");
-}
-
-export function mountSimulationLab(container, config = {}) {
-  if (config.mode !== "hypothesis-coin") throw new Error(`Unsupported simulation lab mode: ${config.mode || "(empty)"}`);
-  const initialObserved = clamp(Math.round(finite(config.initial?.observedHeads, 15)), 0, 20);
-  const nullProbability = clamp(finite(config.initial?.nullProbability, 0.5), 0, 1);
-  let observedHeads = initialObserved;
-  let simulationTrials = 0;
-  let simulationTailCount = 0;
-  let destroyed = false;
-  const { controls, result, diagram } = createLayout(container);
-  const svg = svgElement("svg", { class: "atlas-simulation-svg", viewBox: "0 0 760 380", role: "img", "aria-label": "公平なコインを20回投げたときの表の回数の二項分布" });
-  diagram.append(svg);
-  const formula = document.createElement("div");
-  formula.className = "atlas-simulation-formula";
-  const theory = document.createElement("p");
-  theory.className = "atlas-simulation-theory";
-  const simulation = document.createElement("p");
-  simulation.className = "atlas-simulation-observation";
-  result.append(formula, theory, simulation);
-  const observedControl = createRangeControl({
-    label: "観測された表の回数",
-    min: 0,
-    max: 20,
-    step: 1,
-    value: observedHeads,
-    onInput: (value) => setObservedHeads(value)
+    const label = svg("text", { x: left + (index + 0.5) * slot, y: height - 17, "text-anchor": "middle", fill: "#334155", "font-size": 12 });
+    label.textContent = item.k; chart.append(label);
   });
-  const run100 = createButton("100回シミュレーション", () => runSimulation(100));
-  const run1000 = createButton("1000回シミュレーション", () => runSimulation(1000));
-  controls.append(observedControl.wrapper, run100.button, run1000.button);
+  chart.setAttribute("aria-label", sampleRates ? "青と橙が理論値、緑が実験値の二項分布" : "二項分布の理論値");
+}
 
-  function runSimulation(trials) {
-    if (destroyed) return;
-    let tailCount = 0;
-    for (let trial = 0; trial < trials; trial += 1) {
-      let heads = 0;
-      for (let toss = 0; toss < 20; toss += 1) {
-        if (Math.random() < nullProbability) heads += 1;
-      }
-      if (heads >= observedHeads) tailCount += 1;
-    }
-    simulationTrials = trials;
-    simulationTailCount = tailCount;
-    render();
+function mountHypothesisCoinScene(container) {
+  const ui = createLayout(container, "コインで仮説検定を体験する");
+  const state = { n: 20, p: 0.5, observed: 15, trials: 0, extreme: 0 };
+  const nControl = addRange(ui.controls, "投げる回数 n", 5, 50, 1, state.n, (value) => { state.n = value; state.observed = Math.min(state.observed, value); observedControl.input.max = value; observedControl.set(state.observed); resetSimulation(); render(); });
+  const observedControl = addRange(ui.controls, "表の回数", 0, state.n, 1, state.observed, (value) => { state.observed = value; resetSimulation(); render(); });
+  const resetSimulation = () => { state.trials = 0; state.extreme = 0; };
+  function simulate(count) {
+    for (let i = 0; i < count; i += 1) if (sampleBinomial(state.n, state.p) >= state.observed) state.extreme += 1;
+    state.trials += count; render();
   }
-
-  function setObservedHeads(value) {
-    if (destroyed) return;
-    observedHeads = clamp(Math.round(finite(value, initialObserved)), 0, 20);
-    simulationTrials = 0;
-    simulationTailCount = 0;
-    observedControl.setValue(observedHeads);
-    render();
-  }
-
+  addButton(ui.actions, "100回実験", () => simulate(100));
+  addButton(ui.actions, "1000回実験", () => simulate(1000));
   function render() {
-    const facts = coinTestFacts({ n: 20, observedHeads, nullProbability });
-    const maxProbability = Math.max(...facts.distribution.map((item) => item.probability), 0.05);
-    const left = 54;
-    const right = 730;
-    const top = 42;
-    const bottom = 300;
-    const slot = (right - left) / facts.distribution.length;
-    const barWidth = Math.max(8, slot * 0.7);
-    const yFor = (probability) => bottom - (probability / maxProbability) * (bottom - top);
-    const xFor = (heads) => left + slot * heads + slot / 2;
-    svg.replaceChildren();
-    svg.append(svgElement("line", { class: "atlas-simulation-axis", x1: left, y1: bottom, x2: right, y2: bottom }));
-    svg.append(svgElement("line", { class: "atlas-simulation-axis", x1: left, y1: top, x2: left, y2: bottom }));
-    facts.distribution.forEach(({ heads, probability, inUpperTail }) => {
-      const height = Math.max(1, bottom - yFor(probability));
-      const bar = svgElement("rect", { class: `atlas-simulation-bar${inUpperTail ? " is-tail" : ""}`, x: xFor(heads) - barWidth / 2, y: yFor(probability), width: barWidth, height, rx: 3 });
-      bar.setAttribute("aria-label", `表${heads}回: ${formatProbability(probability)}`);
-      svg.append(bar);
-      const tick = svgElement("text", { class: "atlas-simulation-axis-label", x: xFor(heads), y: bottom + 24 });
-      tick.textContent = String(heads);
-      svg.append(tick);
-    });
-    const thresholdX = xFor(observedHeads) - slot / 2;
-    svg.append(svgElement("line", { class: "atlas-simulation-threshold", x1: thresholdX, y1: top, x2: thresholdX, y2: bottom }));
-    const thresholdLabel = svgElement("text", { class: "atlas-simulation-threshold-label", x: thresholdX + 4, y: top - 12 });
-    thresholdLabel.textContent = `観測値 ${observedHeads}`;
-    svg.append(thresholdLabel);
-    const fivePercentY = yFor(0.05);
-    svg.append(svgElement("line", { class: "atlas-simulation-five-percent", x1: left, y1: fivePercentY, x2: right, y2: fivePercentY }));
-    const fivePercentLabel = svgElement("text", { class: "atlas-simulation-five-percent-label", x: right - 4, y: fivePercentY - 6 });
-    fivePercentLabel.textContent = "5%";
-    svg.append(fivePercentLabel);
-    const xLabel = svgElement("text", { class: "atlas-simulation-axis-title", x: (left + right) / 2, y: 360 });
-    xLabel.textContent = "表の回数";
-    svg.append(xLabel);
-    const factsText = `P(X ≥ ${observedHeads}) = ${formatProbability(facts.upperTail)}`;
-    renderFormula(formula, `P(X\\ge ${observedHeads})=${formatProbability(facts.upperTail)}`, factsText);
-    theory.textContent = `理論値：公平なコインで20回中${observedHeads}回以上表になる確率 = ${formatProbability(facts.upperTail)}`;
-    simulation.textContent = simulationTrials === 0
-      ? "シミュレーション結果：未実行（理論値とは別の実験結果です）"
-      : `シミュレーション結果：${simulationTrials}回中${simulationTailCount}回（${formatProbability(simulationTailCount / simulationTrials)}）　※理論値とは別の実験結果です`;
-    observedControl.setValue(observedHeads);
-    config.onStateChange?.({ observedHeads, simulationTrials, simulationTailCount }, `${theory.textContent} ／ ${simulation.textContent}`);
-  }
-
-  function reset() {
-    observedHeads = initialObserved;
-    simulationTrials = 0;
-    simulationTailCount = 0;
-    render();
-  }
-  function destroy() {
-    if (destroyed) return;
-    destroyed = true;
-    cleanupScene(container, [observedControl.cleanup, run100.cleanup, run1000.cleanup]);
-  }
-  function setParameter(name, value) {
-    if (name === "observedHeads") setObservedHeads(value);
+    const facts = coinTestFacts({ n: state.n, observedHeads: state.observed, nullProbability: state.p });
+    drawDistribution(ui.chart, binomialDistribution(state.n, state.p), { selectedK: state.observed, tailFrom: state.observed });
+    const comparison = facts.tailProbability < 0.05 ? "0.05 より小さい" : "0.05 以上";
+    const simulation = state.trials ? `実験：${state.extreme}/${state.trials} = ${(state.extreme / state.trials).toFixed(4)}` : "実験ボタンで近似値を確かめられます。";
+    ui.result.innerHTML = `<p class="atlas-simulation-hypothesis">帰無仮説 H₀：表の確率 p = 0.5 ／ 対立仮説：表が出やすいのではないか</p><p class="atlas-simulation-comparison">上側確率 P(X ≥ ${state.observed}) = ${facts.tailProbability.toFixed(4)}（${comparison}）</p><p class="atlas-simulation-interpretation">${facts.tailProbability < 0.05 ? "H₀のもとでは起こりにくい結果です。" : "この結果だけではH₀を退けるほど珍しいとはいえません。"}</p><p>${simulation}</p>`;
   }
   render();
-  return { reset, destroy, getState: () => ({ observedHeads, simulationTrials, simulationTailCount }), setParameter };
+  return { setParameter(name, value) { if (name === "n") nControl.input.value = value; if (name === "observed") observedControl.input.value = value; }, getState: () => ({ ...state }), destroy() { container.replaceChildren(); } };
+}
+
+function mountIndependentTrialsScene(container) {
+  const ui = createLayout(container, "独立試行を大量実験する");
+  const state = { n: 5, p: 0.4, k: 2, trials: 0, frequencies: Array(6).fill(0) };
+  let kControl;
+  const clear = () => { state.trials = 0; state.frequencies = Array(state.n + 1).fill(0); };
+  const nControl = addRange(ui.controls, "試行回数 n", 1, 10, 1, state.n, (value) => { state.n = value; state.k = Math.min(state.k, value); kControl.input.max = value; kControl.set(state.k); clear(); render(); });
+  const pControl = addRange(ui.controls, "成功確率 p", 0.1, 0.9, 0.1, state.p, (value) => { state.p = value; clear(); render(); });
+  kControl = addRange(ui.controls, "注目する成功回数 k", 0, state.n, 1, state.k, (value) => { state.k = value; render(); });
+  function simulate(count) { for (let i = 0; i < count; i += 1) state.frequencies[sampleBinomial(state.n, state.p)] += 1; state.trials += count; render(); }
+  addButton(ui.actions, "100回実験", () => simulate(100)); addButton(ui.actions, "1000回実験", () => simulate(1000));
+  function render() {
+    const distribution = binomialDistribution(state.n, state.p);
+    drawDistribution(ui.chart, distribution, { selectedK: state.k, frequencies: state.trials ? state.frequencies : null, trials: state.trials });
+    const exact = binomialProbability(state.n, state.k, state.p);
+    const observed = state.trials ? state.frequencies[state.k] / state.trials : null;
+    ui.result.innerHTML = `<p class="atlas-simulation-formula">P(X=${state.k}) = C(${state.n}, ${state.k}) × ${state.p}<sup>${state.k}</sup> × ${(1-state.p).toFixed(1)}<sup>${state.n-state.k}</sup> = ${exact.toFixed(4)}</p><p>理論値：${exact.toFixed(4)} ／ 実験値：${observed === null ? "未実施" : observed.toFixed(4)}${state.trials ? `（${state.trials}回）` : ""}</p><p class="atlas-simulation-legend">青・橙：理論値　緑：実験値</p>`;
+  }
+  render();
+  return { setParameter(name, value) { const control = { n: nControl, p: pControl, k: kControl }[name]; if (control) { control.set(value); control.input.dispatchEvent(new Event("input")); } }, getState: () => ({ ...state, frequencies: [...state.frequencies] }), destroy() { container.replaceChildren(); } };
+}
+
+export const SIMULATION_MODES = Object.freeze({
+  "hypothesis-coin": mountHypothesisCoinScene,
+  "independent-trials": mountIndependentTrialsScene
+});
+
+export function mountSimulationLab(container, config = {}) {
+  const mount = SIMULATION_MODES[config.mode];
+  if (!mount) throw new Error(`Unsupported SimulationLab mode: ${config.mode}`);
+  return mount(container, config);
 }

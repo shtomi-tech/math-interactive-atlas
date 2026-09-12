@@ -6,9 +6,9 @@
 
 - URL: [`atlas.html`](./atlas.html)
 - 目的: 「触る → 観察 → 気づく」の流れで、数学の関係を視覚的に理解する
-- 実装済み: 集合を塗って式を作る、必要条件・十分条件、余事象・和事象を塗る、条件付き確率で世界を絞る、数え上げの樹形図、順列を全部並べる、組合せは順序を無視する、平均と中央値を壊してみる、分散を距離として見る、箱ひげ図を動かす、相関係数を作る、仮説検定をシミュレーション、`y = ax²`、頂点形式、判別式と交点数、最大・最小と定義域、単位円でsin・cosを見る、三角形の面積とsinの18コンテンツ
+- 実装済み: 二次関数・集合・場合の数・確率・データ分析・図形と計量・図形の性質を扱う25コンテンツ
 - 教材データ: [`static/atlas/content-data.json`](./static/atlas/content-data.json) を正本とするデータ駆動構成
-- Interaction Engine: `static/atlas/interactions/index.js` のRegistry経由でRegionSelector / FunctionGraph / RangeGraph / GeometryBoard / CombinatoricsViewer / DataLab / SimulationLabを切り替える。RegionSelectorは集合・条件付き確率のScene、CombinatoricsViewerは樹形図・順列・組合せのScene、DataLabは統計4 Sceneで再利用する
+- Interaction Engine: `static/atlas/interactions/index.js` のRegistry経由で7エンジンを切り替える。GeometryBoardは8 Scene、SimulationLabは2 Sceneを共通基盤で再利用する
 - 設計書: [`docs/atlas/DESIGN.md`](./docs/atlas/DESIGN.md)
 
 ## Checks

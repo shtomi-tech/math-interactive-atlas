@@ -24,6 +24,7 @@ const requiredFiles = [
   "static/atlas/math/statistics.js",
   "static/atlas/math/probability.js",
   "static/atlas/math/hypothesis-test.js",
+  "static/atlas/math/geometry.js",
   "scripts/check-set-regions.js",
   "scripts/check-set-relations.js",
   "scripts/check-event-regions.js",
@@ -32,6 +33,7 @@ const requiredFiles = [
   "scripts/check-statistics.js",
   "scripts/check-probability.js",
   "scripts/check-hypothesis-test.js",
+  "scripts/check-geometry.js",
   "static/atlas/content-data.json",
   "static/atlas/interactions/function-graph.js",
   "static/atlas/interactions/range-graph.js",
@@ -144,7 +146,12 @@ requireCondition(ids.has("variance-distance"), "missing Phase 3B content: varian
 requireCondition(ids.has("boxplot-drag"), "missing Phase 3B content: boxplot-drag");
 requireCondition(ids.has("correlation-builder"), "missing Phase 3B content: correlation-builder");
 requireCondition(ids.has("hypothesis-test-coin"), "missing Phase 3B content: hypothesis-test-coin");
-requireCondition(contents.length === 18, "Phase 3B must provide 18 contents");
+[
+  "independent-trials", "sine-law-circumcircle", "cosine-law", "triangle-centers",
+  "angle-bisector-ratio", "inscribed-angle", "power-of-point"
+].forEach((id) => requireCondition(ids.has(id), `missing Phase 3C content: ${id}`));
+requireCondition(contents.length === 25, "Phase 3C must provide 25 contents");
+requireCondition(new Set(contents.map((content) => content.interaction.engine)).size === 7, "Phase 3C must keep 7 interaction engines");
 const rangeContent = contents.find((content) => content.id === "quadratic-range");
 if (rangeContent) {
   requireCondition(rangeContent.interaction.engine === "rangeGraph", "quadratic-range must use rangeGraph");
@@ -248,7 +255,10 @@ requireCondition(registrySource.includes("geometryBoard") && registrySource.incl
 requireCondition(registrySource.includes("regionSelector") && registrySource.includes("region-selector.js"), "registry does not register regionSelector");
 requireCondition(geometrySource.includes("mountGeometryBoard"), "geometry board mount function is missing");
 requireCondition(geometrySource.includes("keepAspectRatio: true"), "geometry board does not preserve aspect ratio");
-requireCondition(geometrySource.includes('"unit-circle": mountUnitCircleScene') && geometrySource.includes('"triangle-area-sine": mountTriangleAreaSineScene'), "geometry mode dispatch is incomplete");
+[
+  "unit-circle", "triangle-area-sine", "sine-law-circumcircle", "cosine-law", "triangle-centers",
+  "angle-bisector-ratio", "inscribed-angle", "power-of-point"
+].forEach((mode) => requireCondition(geometrySource.includes(`"${mode}"`), `geometry mode dispatch is missing ${mode}`));
 requireCondition(geometrySource.includes("areaByHeight") && geometrySource.includes("areaBySine") && geometrySource.includes("areaCalculationError"), "triangle area calculation cross-check is missing");
 requireCondition(regionSource.includes("mountRegionSelector") && regionSource.includes("selectedMask"), "region selector mount or state is missing");
 requireCondition(!/JXG|JSXGraph/.test(regionSource), "region selector must not depend on JSXGraph");
@@ -262,12 +272,13 @@ requireCondition(eventRegionsSource.includes("EVENT_TYPES") && eventRegionsSourc
 requireCondition(conditionalProbabilitySource.includes("CONDITIONAL_STEPS") && conditionalProbabilitySource.includes("conditionalStepFacts"), "conditional probability math module is incomplete");
 requireCondition(combinatoricsSource.includes("factorial") && combinatoricsSource.includes("permutationCount") && combinatoricsSource.includes("combinationCount") && combinatoricsSource.includes("enumeratePermutations") && combinatoricsSource.includes("enumerateCombinations") && combinatoricsSource.includes("treePaths"), "combinatorics math module is incomplete");
 requireCondition(["mean", "median", "variance", "standardDeviation", "quartiles", "covariance", "correlationCoefficient"].every((name) => statisticsSource.includes(`export function ${name}`)), "statistics math module is incomplete");
-requireCondition(probabilitySource.includes("binomialCoefficient") && probabilitySource.includes("binomialProbability") && probabilitySource.includes("binomialUpperTail"), "probability math module is incomplete");
+requireCondition(probabilitySource.includes("binomialCoefficient") && probabilitySource.includes("binomialProbability") && probabilitySource.includes("binomialUpperTail") && probabilitySource.includes("binomialDistribution"), "probability math module is incomplete");
 requireCondition(hypothesisSource.includes("coinTestFacts"), "hypothesis test math module is incomplete");
 requireCondition(combinatoricsViewerSource.includes("COMBINATORICS_MODES") && combinatoricsViewerSource.includes('"tree-count": mountTreeCount') && combinatoricsViewerSource.includes("permutations: mountPermutations") && combinatoricsViewerSource.includes("combinations: mountCombinations"), "combinatorics viewer mode dispatch is incomplete");
 requireCondition(combinatoricsViewerSource.includes("config.data?.stages") && !combinatoricsViewerSource.includes("TREE_STAGES"), "counting tree stages must come from content data");
 requireCondition(dataLabSource.includes("DATA_LAB_MODES") && dataLabSource.includes("mountMeanMedianScene") && dataLabSource.includes("mountVarianceScene") && dataLabSource.includes("mountBoxplotScene") && dataLabSource.includes("mountCorrelationScene"), "data lab mode dispatch is incomplete");
-requireCondition(simulationLabSource.includes("mountSimulationLab") && simulationLabSource.includes("hypothesis-coin") && simulationLabSource.includes("Math.random"), "simulation lab implementation is incomplete");
+requireCondition(simulationLabSource.includes("mountSimulationLab") && simulationLabSource.includes('"hypothesis-coin"') && simulationLabSource.includes('"independent-trials"') && simulationLabSource.includes("Math.random"), "simulation lab implementation is incomplete");
+requireCondition(!simulationLabSource.includes("atlas-simulation-five-percent"), "hypothesis chart must not draw a 5% height line");
 requireCondition(registrySource.includes("combinatoricsViewer") && registrySource.includes("combinatorics-viewer.js"), "registry does not register combinatoricsViewer");
 requireCondition(registrySource.includes("dataLab") && registrySource.includes("data-lab.js"), "registry does not register dataLab");
 requireCondition(registrySource.includes("simulationLab") && registrySource.includes("simulation-lab.js"), "registry does not register simulationLab");
@@ -275,7 +286,7 @@ requireCondition(catalogSource.includes("SUBJECT_ORDER") && catalogSource.includ
 requireCondition(catalogSource.includes("statistics: Object.freeze") && catalogSource.includes('"mean-median-outlier"') && catalogSource.includes('"hypothesis-test-coin"'), "catalog does not define the Phase 3B statistics order");
 requireCondition(routerSource.includes('subject: params.get("subject") || null'), "catalog route must show all subjects when subject is omitted");
 requireCondition(workflowSource.includes("node-version: 22"), "GitHub Actions must use Node.js 22");
-requireCondition(workflowSource.includes("node scripts/check-atlas-contract.js") && workflowSource.includes("node scripts/check-set-regions.js") && workflowSource.includes("node scripts/check-set-relations.js") && workflowSource.includes("node scripts/check-event-regions.js") && workflowSource.includes("node scripts/check-conditional-probability.js") && workflowSource.includes("node scripts/check-combinatorics.js") && workflowSource.includes("node scripts/check-statistics.js") && workflowSource.includes("node scripts/check-probability.js") && workflowSource.includes("node scripts/check-hypothesis-test.js"), "GitHub Actions check scripts are incomplete");
+requireCondition(workflowSource.includes("node scripts/check-atlas-contract.js") && workflowSource.includes("node scripts/check-set-regions.js") && workflowSource.includes("node scripts/check-set-relations.js") && workflowSource.includes("node scripts/check-event-regions.js") && workflowSource.includes("node scripts/check-conditional-probability.js") && workflowSource.includes("node scripts/check-combinatorics.js") && workflowSource.includes("node scripts/check-statistics.js") && workflowSource.includes("node scripts/check-probability.js") && workflowSource.includes("node scripts/check-hypothesis-test.js") && workflowSource.includes("node scripts/check-geometry.js"), "GitHub Actions check scripts are incomplete");
 requireCondition(workflowSource.includes("node --check static/atlas/interactions/region-selector.js") && workflowSource.includes("node --check static/atlas/math/set-relations.js") && workflowSource.includes("node --check static/atlas/math/event-regions.js") && workflowSource.includes("node --check static/atlas/math/conditional-probability.js") && workflowSource.includes("node --check static/atlas/math/combinatorics.js") && workflowSource.includes("node --check static/atlas/interactions/combinatorics-viewer.js") && workflowSource.includes("node --check static/atlas/interactions/data-lab.js") && workflowSource.includes("node --check static/atlas/interactions/simulation-lab.js") && workflowSource.includes("node --check static/atlas/math/statistics.js") && workflowSource.includes("node --check static/atlas/math/probability.js") && workflowSource.includes("node --check static/atlas/math/hypothesis-test.js"), "GitHub Actions syntax checks are incomplete");
 requireCondition(pagesWorkflowSource.includes("workflow_dispatch:") && !pagesWorkflowSource.includes("  push:") && pagesWorkflowSource.includes("actions/configure-pages@v5") && !pagesWorkflowSource.includes("enablement:") && pagesWorkflowSource.includes("test -f atlas.html") && pagesWorkflowSource.includes("test -f index.html") && pagesWorkflowSource.includes("test -f static/atlas.css") && pagesWorkflowSource.includes("test -f static/atlas/main.js") && pagesWorkflowSource.includes("test -f static/atlas/content-data.json") && pagesWorkflowSource.includes("cp static/atlas.css _site/static/atlas.css") && pagesWorkflowSource.includes("cp -R static/atlas _site/static/atlas") && pagesWorkflowSource.includes("touch _site/.nojekyll") && pagesWorkflowSource.includes("actions/upload-pages-artifact@v3") && pagesWorkflowSource.includes("actions/deploy-pages@v4"), "GitHub Pages deploy workflow is incomplete");
 requireCondition(!viewerSource.includes("function-graph.js") && !viewerSource.includes("range-graph.js") && !viewerSource.includes("geometry-board.js") && !viewerSource.includes("region-selector.js") && !viewerSource.includes("combinatorics-viewer.js") && !viewerSource.includes("data-lab.js") && !viewerSource.includes("simulation-lab.js"), "viewer imports a concrete interaction engine");
