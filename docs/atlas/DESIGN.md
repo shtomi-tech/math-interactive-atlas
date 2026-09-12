@@ -55,7 +55,9 @@ Good Design = Invisible UI + Visible Mathematics + Meaningful Interaction
 
 `static/atlas/interactions/function-graph.js` は軸、グリッド、関数グラフ、点、補助線、動的ラベル、パラメータ更新、Reset、Destroyを提供する。`range-graph.js` はこれを使って関数全体、定義域内の強調曲線、左右端の44pxドラッグハンドル、最大・最小候補を表示する。
 
-`geometry-board.js` は動的図形の共通入口である。図形はドラッグで動かせるようにし、動点と固定点を視覚的に区別する。円の教材では `keepAspectRatio: true` を使い、座標・角度・長さはCanvas外でも確認できるようにする。今回の `unit-circle` modeは、点P、OP、射影線、角度、sin・cosの座標関係を表示する。
+`geometry-board.js` は動的図形の共通入口である。図形はドラッグで動かせるようにし、動点と固定点を視覚的に区別する。円の教材では `keepAspectRatio: true` を使い、座標・角度・長さはCanvas外でも確認できるようにする。`unit-circle` modeは点P、OP、射影線、角度、sin・cosの座標関係を表示し、`triangle-area-sine` modeは固定辺 `a = 3`、`b = 4` と動く角Cから高さ・sin C・面積を表示する。
+
+GeometryBoardの共通CoreはBoard生成、座標変換、44pxタッチ領域、Resize、Reset、Destroyを担当し、教材固有の図形はSceneとしてdispatchする。`triangle-area-sine` では `h = a sin C` と `S = 1/2 × b × h = 1/2 ab sin C` を同じ状態から計算する。
 
 Discovery Pointは結論ではなく観察の問いにする。利用者が値を動かして関係を見つけられるよう、教材の発見ポイントへ答えを先に固定表示しない。
 
@@ -84,6 +86,7 @@ Discovery Pointは結論ではなく観察の問いにする。利用者が値�
 - `/atlas.html?content=quadratic-basic` — 教材Viewer
 - `/atlas.html?content=quadratic-range` — 最大・最小と定義域の教材Viewer
 - `/atlas.html?content=unit-circle` — 単位円でsin・cosを見る教材Viewer
+- `/atlas.html?content=triangle-area-sine` — 三角形の面積とsinの教材Viewer
 - `/atlas.html?subject=math1&unit=quadratic` — 単元指定カタログ
 
 不正な `content` はエラー画面を作らず、履歴を置き換えて図鑑トップへ戻す。Viewer切り替え時は前のInteraction Engineを必ずDestroyする。

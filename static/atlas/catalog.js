@@ -10,6 +10,18 @@ const INTERACTION_LABELS = {
 };
 
 const UNIT_ORDER = Object.freeze(["quadratic", "trigonometry"]);
+const CONTENT_ORDER = Object.freeze({
+  quadratic: Object.freeze([
+    "quadratic-basic",
+    "quadratic-vertex",
+    "quadratic-discriminant",
+    "quadratic-range"
+  ]),
+  trigonometry: Object.freeze([
+    "unit-circle",
+    "triangle-area-sine"
+  ])
+});
 
 function createCard(content, onSelect) {
   const card = document.createElement("button");
@@ -56,7 +68,14 @@ export function renderCatalog(root, contents, { subject = "math1", unit = null, 
 
   const units = [...UNIT_ORDER, ...visible.map((content) => content.unit).filter((value, index, values) => !UNIT_ORDER.includes(value) && values.indexOf(value) === index)];
   units.filter((unitId) => visible.some((content) => content.unit === unitId)).forEach((unitId) => {
-    const items = visible.filter((content) => content.unit === unitId);
+    const order = CONTENT_ORDER[unitId] || [];
+    const items = visible
+      .filter((content) => content.unit === unitId)
+      .sort((left, right) => {
+        const leftIndex = order.indexOf(left.id);
+        const rightIndex = order.indexOf(right.id);
+        return (leftIndex < 0 ? Number.MAX_SAFE_INTEGER : leftIndex) - (rightIndex < 0 ? Number.MAX_SAFE_INTEGER : rightIndex);
+      });
     const unitSection = document.createElement("section");
     unitSection.className = "atlas-catalog-unit";
     const unitTitle = document.createElement("h3");

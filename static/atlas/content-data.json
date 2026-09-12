@@ -168,7 +168,43 @@
       "θが90°のとき、x座標とy座標はそれぞれどうなるだろう？",
       "90°を超えると、cosθの符号はどう変わるだろう？"
     ],
-    "related": [],
+    "related": [
+      "triangle-area-sine"
+    ],
+    "source": {
+      "usage": "original",
+      "library": "JSXGraph 1.8.0",
+      "license": "MIT OR LGPL-3.0-or-later",
+      "repository": "https://github.com/jsxgraph/jsxgraph"
+    }
+  },
+  {
+    "id": "triangle-area-sine",
+    "subject": "math1",
+    "subjectLabel": "数学I",
+    "unit": "trigonometry",
+    "unitLabel": "図形と計量",
+    "title": "三角形の面積とsin",
+    "shortDescription": "頂点Bを動かして、角C・高さ・sinC・面積の関係を観察します。",
+    "instructions": "頂点Bまたは角Cを動かして、高さと面積がどのように変化するか見比べます。",
+    "formula": "S=\\frac12 ab\\sin C",
+    "interactionType": "geometry",
+    "interaction": {
+      "engine": "geometryBoard",
+      "mode": "triangle-area-sine",
+      "initial": { "theta": 60 },
+      "parameters": {
+        "theta": { "label": "C", "min": 10, "max": 170, "step": 1 }
+      }
+    },
+    "discoveryPoints": [
+      "角Cを大きくすると、高さはいつまで大きくなるだろう？",
+      "面積が最も大きくなるのは、角Cが何度のときだろう？",
+      "高さとsinCの値には、どんな関係があるだろう？"
+    ],
+    "related": [
+      "unit-circle"
+    ],
     "source": {
       "usage": "original",
       "library": "JSXGraph 1.8.0",

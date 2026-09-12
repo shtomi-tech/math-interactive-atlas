@@ -94,6 +94,7 @@ if (Array.isArray(contents)) {
 ["quadratic-basic", "quadratic-vertex", "quadratic-discriminant"].forEach((id) => requireCondition(ids.has(id), `missing Phase 1 content: ${id}`));
 requireCondition(ids.has("quadratic-range"), "missing Phase 2A content: quadratic-range");
 requireCondition(ids.has("unit-circle"), "missing Phase 2B content: unit-circle");
+requireCondition(ids.has("triangle-area-sine"), "missing Phase 2C content: triangle-area-sine");
 const rangeContent = contents.find((content) => content.id === "quadratic-range");
 if (rangeContent) {
   requireCondition(rangeContent.interaction.engine === "rangeGraph", "quadratic-range must use rangeGraph");
@@ -104,6 +105,14 @@ if (unitCircleContent) {
   requireCondition(unitCircleContent.interaction.engine === "geometryBoard", "unit-circle must use geometryBoard");
   requireCondition(unitCircleContent.interactionType === "geometry", "unit-circle must use geometry interactionType");
   requireCondition(unitCircleContent.interaction.mode === "unit-circle", "unit-circle must use unit-circle mode");
+  requireCondition(unitCircleContent.related.includes("triangle-area-sine"), "unit-circle must link triangle-area-sine");
+}
+const triangleAreaContent = contents.find((content) => content.id === "triangle-area-sine");
+if (triangleAreaContent) {
+  requireCondition(triangleAreaContent.interaction.engine === "geometryBoard", "triangle-area-sine must use geometryBoard");
+  requireCondition(triangleAreaContent.interactionType === "geometry", "triangle-area-sine must use geometry interactionType");
+  requireCondition(triangleAreaContent.interaction.mode === "triangle-area-sine", "triangle-area-sine must use triangle-area-sine mode");
+  requireCondition(triangleAreaContent.related.includes("unit-circle"), "triangle-area-sine must link unit-circle");
 }
 requireCondition(/katex@\d/.test(html), "KaTeX CDN version is not fixed in atlas.html");
 requireCondition(/jsxgraph@\d/.test(html), "JSXGraph CDN version is not fixed in atlas.html");
@@ -113,7 +122,9 @@ requireCondition(registrySource.includes("Unknown interaction engine"), "registr
 requireCondition(registrySource.includes("geometryBoard") && registrySource.includes("geometry-board.js"), "registry does not register geometryBoard");
 requireCondition(geometrySource.includes("mountGeometryBoard"), "geometry board mount function is missing");
 requireCondition(geometrySource.includes("keepAspectRatio: true"), "geometry board does not preserve aspect ratio");
-requireCondition(catalogSource.includes("UNIT_ORDER"), "catalog does not define stable unit order");
+requireCondition(geometrySource.includes('"unit-circle": mountUnitCircleScene') && geometrySource.includes('"triangle-area-sine": mountTriangleAreaSineScene'), "geometry mode dispatch is incomplete");
+requireCondition(geometrySource.includes("areaByHeight") && geometrySource.includes("areaBySine") && geometrySource.includes("areaCalculationError"), "triangle area calculation cross-check is missing");
+requireCondition(catalogSource.includes("UNIT_ORDER") && catalogSource.includes("CONTENT_ORDER"), "catalog does not define stable content order");
 requireCondition(!viewerSource.includes("function-graph.js") && !viewerSource.includes("range-graph.js") && !viewerSource.includes("geometry-board.js"), "viewer imports a concrete interaction engine");
 requireCondition(!/localStorage|currentExamKey|app\.progress|answerDrafts|examFlow|practiceCatalogState|MINI_EXAMS/.test(atlasSource), "atlas source references existing practice or exam state");
 requireCondition(index.includes("./atlas.html") || index.includes("atlas.html"), "index.html does not link to atlas.html");

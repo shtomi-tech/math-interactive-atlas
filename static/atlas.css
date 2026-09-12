@@ -293,7 +293,8 @@ h3 { font-size: 1.25rem; line-height: 1.45; }
   touch-action: none;
 }
 
-.atlas-geometry-jxgbox { width: min(100%, 360px); margin-inline: auto; }
+.atlas-canvas .atlas-geometry-jxgbox { width: min(100%, 360px); margin-inline: auto; }
+.atlas-canvas .atlas-geometry-jxgbox[data-geometry-mode="triangle-area-sine"] { width: min(100%, 520px); }
 .atlas-canvas .jxgbox { border: 0; }
 
 .atlas-range-handle {
