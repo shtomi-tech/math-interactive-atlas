@@ -5,6 +5,7 @@ import {
   centroid,
   circumcenter,
   distance,
+  excenterA,
   incenter,
   lawOfCosinesSide,
   lineCircleIntersections,
@@ -28,6 +29,9 @@ pointClose(centroid(A, B, C), { x: 4 / 3, y: 1 }, "centroid");
 pointClose(circumcenter(A, B, C), { x: 2, y: 1.5 }, "circumcenter");
 pointClose(incenter(A, B, C), { x: 1, y: 1 }, "incenter");
 pointClose(orthocenter(A, B, C), { x: 0, y: 0 }, "orthocenter");
+pointClose(excenterA(A, B, C), { x: 6, y: 6 }, "A-excenter");
+assert.equal(centroid(A, B, { x: 8, y: 0 }), null, "degenerate centroid");
+assert.equal(circumcenter(A, B, { x: 8, y: 0 }), null, "degenerate circumcenter");
 close(lawOfCosinesSide(4, 3, 90), 5, "cosine law");
 
 const foot = angleBisectorFoot(A, B, C);
@@ -52,5 +56,6 @@ close(fixed[0].t * fixed[1].t, 16, "fixed secant power");
 const radians = 165 * Math.PI / 180;
 const moving = lineCircleIntersections(P, { x: Math.cos(radians), y: Math.sin(radians) }, O, 3).filter((point) => point.t >= 0);
 close(moving[0].t * moving[1].t, 16, "moving secant power");
+assert.deepEqual(lineCircleIntersections({ x: 5, y: 0 }, { x: 0, y: 1 }, O, 3), [], "no intersection");
 
 console.log("Geometry math: PASS (centers, laws, bisector, circle, power)");

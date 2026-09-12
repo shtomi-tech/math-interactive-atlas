@@ -6,9 +6,9 @@
 
 - URL: [`atlas.html`](./atlas.html)
 - 目的: 「触る → 観察 → 気づく」の流れで、数学の関係を視覚的に理解する
-- 実装済み: 二次関数・集合・場合の数・確率・データ分析・図形と計量・図形の性質を扱う25コンテンツ
+- 実装済み: 二次関数・集合・場合の数・確率・データ分析・図形と計量・図形の性質・数と式・数学と人間の活動を扱う34コンテンツ
 - 教材データ: [`static/atlas/content-data.json`](./static/atlas/content-data.json) を正本とするデータ駆動構成
-- Interaction Engine: `static/atlas/interactions/index.js` のRegistry経由で7エンジンを切り替える。GeometryBoardは8 Scene、SimulationLabは2 Sceneを共通基盤で再利用する
+- Interaction Engine: `static/atlas/interactions/index.js` のRegistry経由で10エンジンを切り替える。AlgebraLab / NumberLineLab / AlgorithmLabを追加し、既存Engineの新modeもRegistryで再利用する
 - 設計書: [`docs/atlas/DESIGN.md`](./docs/atlas/DESIGN.md)
 
 ## Checks
@@ -23,6 +23,11 @@ node scripts/check-combinatorics.js
 node scripts/check-statistics.js
 node scripts/check-probability.js
 node scripts/check-hypothesis-test.js
+node scripts/check-algebra.js
+node scripts/check-number-line.js
+node scripts/check-sample-space.js
+node scripts/check-number-theory.js
+node scripts/check-geometry.js
 ```
 
 GitHub Actionsでも、同じ契約・数学ロジック検査と対象JavaScriptの構文検査を実行します。
@@ -52,6 +57,15 @@ GitHub ActionsのAtlas checksはpush / pull requestで実行します。Pages公
 /atlas.html?content=boxplot-drag
 /atlas.html?content=correlation-builder
 /atlas.html?content=hypothesis-test-coin
+/atlas.html?content=expansion-area
+/atlas.html?content=factorization-reverse
+/atlas.html?content=perfect-square-build
+/atlas.html?content=sqrt-numberline
+/atlas.html?content=absolute-distance
+/atlas.html?content=inequality-numberline
+/atlas.html?content=circular-permutations
+/atlas.html?content=sample-space-grid
+/atlas.html?content=euclidean-algorithm
 /atlas.html?subject=math1
 /atlas.html?subject=mathA
 /atlas.html?subject=math1&unit=quadratic

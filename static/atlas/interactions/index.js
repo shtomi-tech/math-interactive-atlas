@@ -1,10 +1,13 @@
 import { mountFunctionGraph } from "./function-graph.js?v=20260912-3a";
-import { mountGeometryBoard } from "./geometry-board.js?v=20260912-3c";
+import { mountGeometryBoard } from "./geometry-board.js?v=20260912-4b";
 import { mountRangeGraph } from "./range-graph.js?v=20260912-3a";
 import { mountRegionSelector } from "./region-selector.js?v=20260912-3a";
-import { mountCombinatoricsViewer } from "./combinatorics-viewer.js?v=20260912-3a";
-import { mountDataLab } from "./data-lab.js?v=20260912-3c";
-import { mountSimulationLab } from "./simulation-lab.js?v=20260912-3c";
+import { mountCombinatoricsViewer } from "./combinatorics-viewer.js?v=20260912-4b";
+import { mountDataLab } from "./data-lab.js?v=20260912-4b";
+import { mountSimulationLab } from "./simulation-lab.js?v=20260912-4b";
+import { mountAlgebraLab } from "./algebra-lab.js?v=20260912-4b";
+import { mountNumberLineLab } from "./number-line-lab.js?v=20260912-4b";
+import { mountAlgorithmLab } from "./algorithm-lab.js?v=20260912-4b";
 
 const ENGINES = Object.freeze({
   functionGraph: mountFunctionGraph,
@@ -13,7 +16,10 @@ const ENGINES = Object.freeze({
   regionSelector: mountRegionSelector,
   combinatoricsViewer: mountCombinatoricsViewer,
   dataLab: mountDataLab,
-  simulationLab: mountSimulationLab
+  simulationLab: mountSimulationLab,
+  algebraLab: mountAlgebraLab,
+  numberLineLab: mountNumberLineLab,
+  algorithmLab: mountAlgorithmLab
 });
 
 function unavailableEngine(container, error) {

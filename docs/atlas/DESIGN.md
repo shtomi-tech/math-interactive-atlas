@@ -51,7 +51,7 @@ Good Design = Invisible UI + Visible Mathematics + Meaningful Interaction
 
 ## インタラクション
 
-`static/atlas/interactions/index.js` のInteraction Engine Registryを入口とする。ViewerはRegistryだけを呼び、`interaction.engine` に応じて `functionGraph`、`rangeGraph`、`geometryBoard`、`regionSelector`、`combinatoricsViewer`、`dataLab`、または `simulationLab` をmountする。すべてのEngineは `reset()`、`destroy()`、`getState()` を返し、パラメータ型Engineは `setParameter()` も返す。
+`static/atlas/interactions/index.js` のInteraction Engine Registryを入口とする。ViewerはRegistryだけを呼び、`interaction.engine` に応じて10種類のEngineをmountする。すべてのEngineは `reset()`、`destroy()`、`getState()` を返し、パラメータ型Engineは `setParameter()` も返す。
 
 `static/atlas/interactions/function-graph.js` は軸、グリッド、関数グラフ、点、補助線、動的ラベル、パラメータ更新、Reset、Destroyを提供する。`range-graph.js` はこれを使って関数全体、定義域内の強調曲線、左右端の44pxドラッグハンドル、最大・最小候補を表示する。
 
@@ -74,6 +74,18 @@ Good Design = Invisible UI + Visible Mathematics + Meaningful Interaction
 GeometryBoardの共通ContextはBoard生成、座標変換、複数の44pxタッチ領域、Resize、Reset、Destroyだけを担当し、数値状態と作図は8つのSceneが所有する。補助線は主図形より細く淡くし、注目する辺・角・中心だけに強調色を使う。座標計算は純粋関数へ分離し、退化三角形では中心を描かない。
 
 SimulationLabはモードRegistryで教材を分ける。理論分布と実験分布は色と凡例の両方で区別し、有意水準は確率分布の高さとして描かず、計算した確率との数値比較として示す。
+
+### Algebra Visualization
+
+記号 → 部品 → 組み立て → 式の順に表示する。面積図では正の長さで構造を見せ、負の数を含む式の一般性は短い注記で補う。BUILD教材は前へ・次へ・最初からをbuttonとして提供する。
+
+### Number Line Visualization
+
+数 → 位置 → 距離 / 範囲の順に変換する。平方根は前後の平方数、絶対値は2点間の距離、不等式は開点・閉点と塗る向きで表す。
+
+### Algorithm Visualization
+
+結果を先に見せず、各stepで状態がどう縮約されるかを見せる。ユークリッド互除法では割り算の式と余りを段階ごとに表示し、最後に最大公約数へ接続する。
 
 Discovery Pointは結論ではなく観察の問いにする。利用者が値を動かして関係を見つけられるよう、教材の発見ポイントへ答えを先に固定表示しない。
 

@@ -1,4 +1,4 @@
-import { mountInteraction } from "./interactions/index.js?v=20260912-3c";
+import { mountInteraction } from "./interactions/index.js?v=20260912-4b";
 
 function renderFormula(target, expression) {
   target.className = "atlas-formula-fallback";

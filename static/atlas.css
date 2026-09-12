@@ -798,3 +798,29 @@ h3 { font-size: 1.25rem; line-height: 1.45; }
 .atlas-geometry-summary, .atlas-simulation-result { color:var(--atlas-text); }
 .atlas-simulation-legend { font-size:.875rem; color:var(--atlas-muted); }
 .atlas-simulation-comparison { font-weight:700; }
+
+.atlas-geometry-stage { position: relative; }
+.atlas-geometry-canvas { width: 100%; min-height: 320px; height: min(62vw, 440px); border: 0; }
+.atlas-geometry-touch-layer { position: absolute; inset: 0 auto auto 0; width: 100%; height: min(62vw, 440px); pointer-events: none; }
+.atlas-geometry-scene-controls { position: relative; z-index: 1; }
+.atlas-algebra-lab, .atlas-number-line-lab, .atlas-algorithm-lab { display: grid; gap: 12px; width: 100%; }
+.atlas-algebra-svg, .atlas-number-line-svg { display: block; width: 100%; max-height: 360px; background: var(--atlas-canvas); }
+.atlas-algebra-controls, .atlas-algorithm-controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.atlas-algebra-control { display: grid; grid-template-columns: auto minmax(120px, 1fr) auto; gap: 8px; align-items: center; min-width: 220px; }
+.atlas-algebra-control input { min-width: 0; }
+.atlas-algebra-result, .atlas-number-line-result, .atlas-algorithm-result { margin: 0; color: var(--atlas-text); }
+.atlas-number-line-lab select { min-height: 44px; padding: 6px 10px; }
+.atlas-circular-circle { position: relative; width: min(100%, 280px); aspect-ratio: 1; margin: 12px auto; border: 2px solid var(--atlas-border-strong); border-radius: 50%; }
+.atlas-circular-item { position: absolute; left: calc(50% + 42% * cos(2 * 3.14159 * var(--circular-index) / var(--circular-total))); top: calc(50% + 42% * sin(2 * 3.14159 * var(--circular-index) / var(--circular-total))); transform: translate(-50%, -50%); display: grid; place-items: center; width: 44px; height: 44px; border: 2px solid var(--atlas-math-primary); border-radius: 50%; background: var(--atlas-canvas); font-weight: 700; }
+.atlas-sample-space-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 3px; width: min(100%, 480px); margin-inline: auto; }
+.atlas-sample-space-cell { display: grid; place-items: center; min-width: 0; aspect-ratio: 1; border: 1px solid var(--atlas-border); font-size: clamp(.6rem, 2vw, .85rem); }
+.atlas-sample-space-cell.is-selected { background: #fef3c7; border-color: var(--atlas-math-highlight); font-weight: 700; }
+.atlas-algorithm-steps { display: grid; gap: 8px; margin: 0; padding-left: 2rem; }
+.atlas-algorithm-steps li { padding: 10px 12px; border: 1px solid var(--atlas-border); border-radius: 8px; font-family: ui-monospace, monospace; }
+.atlas-algorithm-steps li.is-current { border-color: var(--atlas-math-highlight); background: #fffbeb; }
+
+@media (max-width: 420px) {
+  .atlas-geometry-canvas { min-height: 280px; height: 280px; }
+  .atlas-geometry-touch-layer { height: 280px; }
+  .atlas-algebra-control { min-width: 100%; }
+}

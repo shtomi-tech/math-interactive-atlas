@@ -17,6 +17,12 @@ const SUBJECT_UNIT_ORDER = Object.freeze({
 });
 const CONTENT_ORDER = Object.freeze({
   algebra: Object.freeze([
+    "expansion-area",
+    "factorization-reverse",
+    "perfect-square-build",
+    "sqrt-numberline",
+    "absolute-distance",
+    "inequality-numberline",
     "set-regions",
     "necessary-sufficient"
   ]),
@@ -38,8 +44,11 @@ const CONTENT_ORDER = Object.freeze({
     "counting-tree",
     "permutations-all",
     "combinations-order",
-    "independent-trials"
+    "independent-trials",
+    "circular-permutations",
+    "sample-space-grid"
   ]),
+  "human-activity": Object.freeze(["euclidean-algorithm"]),
   "geometry-a": Object.freeze(["triangle-centers", "angle-bisector-ratio", "inscribed-angle", "power-of-point"]),
   statistics: Object.freeze([
     "mean-median-outlier",

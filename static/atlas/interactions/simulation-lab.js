@@ -1,5 +1,5 @@
-import { coinTestFacts } from "../math/hypothesis-test.js?v=20260912-3c";
-import { binomialDistribution, binomialProbability } from "../math/probability.js?v=20260912-3c";
+import { coinTestFacts } from "../math/hypothesis-test.js?v=20260912-4b";
+import { binomialDistribution, binomialProbability } from "../math/probability.js?v=20260912-4b";
 
 const NS = "http://www.w3.org/2000/svg";
 const clamp = (value, min, max) => Math.min(max, Math.max(min, Number(value)));
@@ -45,6 +45,15 @@ function addRange(parent, label, min, max, step, value, onInput) {
   input.addEventListener("input", () => { refresh(); onInput(Number(input.value)); });
   refresh(); wrap.append(caption, input, output); parent.append(wrap);
   return { input, output, set(valueToSet) { input.value = String(valueToSet); refresh(); } };
+}
+
+function rangeDefinition(config, name, fallback) {
+  const definition = config.parameters?.[name] || {};
+  return {
+    min: Number.isFinite(Number(definition.min)) ? Number(definition.min) : fallback.min,
+    max: Number.isFinite(Number(definition.max)) ? Number(definition.max) : fallback.max,
+    step: Number.isFinite(Number(definition.step)) ? Number(definition.step) : fallback.step
+  };
 }
 
 function addButton(parent, label, onClick) {
@@ -105,14 +114,20 @@ function mountHypothesisCoinScene(container) {
   return { setParameter(name, value) { if (name === "n") nControl.input.value = value; if (name === "observed") observedControl.input.value = value; }, getState: () => ({ ...state }), destroy() { container.replaceChildren(); } };
 }
 
-function mountIndependentTrialsScene(container) {
+function mountIndependentTrialsScene(container, config = {}) {
   const ui = createLayout(container, "独立試行を大量実験する");
-  const state = { n: 5, p: 0.4, k: 2, trials: 0, frequencies: Array(6).fill(0) };
-  let kControl;
+  const nDefinition = rangeDefinition(config, "n", { min: 1, max: 10, step: 1 });
+  const pDefinition = rangeDefinition(config, "p", { min: 0.1, max: 0.9, step: 0.1 });
+  const kDefinition = rangeDefinition(config, "k", { min: 0, max: nDefinition.max, step: 1 });
+  const state = {
+    n: clamp(config.initial?.n ?? 5, nDefinition.min, nDefinition.max),
+    p: clamp(config.initial?.p ?? 0.4, pDefinition.min, pDefinition.max),
+    k: clamp(config.initial?.k ?? 2, kDefinition.min, Math.min(kDefinition.max, config.initial?.n ?? nDefinition.max)),
+    trials: 0,
+    frequencies: []
+  };
+  state.n = Math.round(state.n); state.k = Math.round(state.k); state.frequencies = Array(state.n + 1).fill(0);
   const clear = () => { state.trials = 0; state.frequencies = Array(state.n + 1).fill(0); };
-  const nControl = addRange(ui.controls, "試行回数 n", 1, 10, 1, state.n, (value) => { state.n = value; state.k = Math.min(state.k, value); kControl.input.max = value; kControl.set(state.k); clear(); render(); });
-  const pControl = addRange(ui.controls, "成功確率 p", 0.1, 0.9, 0.1, state.p, (value) => { state.p = value; clear(); render(); });
-  kControl = addRange(ui.controls, "注目する成功回数 k", 0, state.n, 1, state.k, (value) => { state.k = value; render(); });
   function simulate(count) { for (let i = 0; i < count; i += 1) state.frequencies[sampleBinomial(state.n, state.p)] += 1; state.trials += count; render(); }
   addButton(ui.actions, "100回実験", () => simulate(100)); addButton(ui.actions, "1000回実験", () => simulate(1000));
   function render() {
@@ -123,7 +138,7 @@ function mountIndependentTrialsScene(container) {
     ui.result.innerHTML = `<p class="atlas-simulation-formula">P(X=${state.k}) = C(${state.n}, ${state.k}) × ${state.p}<sup>${state.k}</sup> × ${(1-state.p).toFixed(1)}<sup>${state.n-state.k}</sup> = ${exact.toFixed(4)}</p><p>理論値：${exact.toFixed(4)} ／ 実験値：${observed === null ? "未実施" : observed.toFixed(4)}${state.trials ? `（${state.trials}回）` : ""}</p><p class="atlas-simulation-legend">青・橙：理論値　緑：実験値</p>`;
   }
   render();
-  return { setParameter(name, value) { const control = { n: nControl, p: pControl, k: kControl }[name]; if (control) { control.set(value); control.input.dispatchEvent(new Event("input")); } }, getState: () => ({ ...state, frequencies: [...state.frequencies] }), destroy() { container.replaceChildren(); } };
+  return { setParameter(name, value) { if (name === "n") { state.n = Math.round(clamp(value, nDefinition.min, nDefinition.max)); state.k = Math.min(state.k, state.n); clear(); } if (name === "p") { state.p = clamp(value, pDefinition.min, pDefinition.max); clear(); } if (name === "k") state.k = Math.min(state.n, Math.round(clamp(value, kDefinition.min, kDefinition.max))); render(); }, getState: () => ({ ...state, frequencies: [...state.frequencies] }), destroy() { container.replaceChildren(); } };
 }
 
 export const SIMULATION_MODES = Object.freeze({

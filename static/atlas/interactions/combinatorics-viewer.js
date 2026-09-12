@@ -5,7 +5,9 @@ import {
   factorial,
   permutationCount,
   treePaths
-} from "../math/combinatorics.js?v=20260912-3a";
+  ,circularPermutationCount, rotatePermutation
+} from "../math/combinatorics.js?v=20260912-4b";
+import { diceOutcomes, outcomesForEvent, probabilityForEvent } from "../math/sample-space.js?v=20260912-4b";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 const DISPLAY_LIMIT = 240;
@@ -502,10 +504,28 @@ function mountCombinations(container, config = {}) {
   return { reset, destroy, getState: () => ({ n, r, view }), setParameter };
 }
 
+function mountCircularPermutations(container, config = {}) {
+  const { controls, result, diagram } = createLayout(container, { controlsLabel: "円順列の表示設定", resultLabel: "円順列の数", rootClass: "atlas-circular-permutations-viewer" });
+  const initialN = Math.min(6, Math.max(3, Number(config.initial?.n ?? 4))); const state = { n: initialN, offset: 0 };
+  const row = document.createElement("div"); row.className = "atlas-combinatorics-control-row"; const select = document.createElement("select"); select.setAttribute("aria-label", "円に置く数 n"); [3,4,5,6].forEach((n)=>{const option=document.createElement("option");option.value=n;option.textContent=n;select.append(option);}); select.value=state.n;
+  const rotate = document.createElement("button"); rotate.type="button"; rotate.textContent="回転"; rotate.setAttribute("aria-label","円順列を回転する"); row.append(select,rotate); controls.append(row);
+  const formula=document.createElement("div");formula.className="atlas-combinatorics-formula";const note=document.createElement("p");note.className="atlas-combinatorics-note";result.append(formula,note);
+  function render(){const items=Array.from({length:state.n},(_,index)=>String.fromCharCode(65+index));const rotated=rotatePermutation(items,state.offset);diagram.replaceChildren();const circle=document.createElement("div");circle.className="atlas-circular-circle";rotated.forEach((item,index)=>{const chip=document.createElement("span");chip.className="atlas-circular-item";chip.textContent=item;chip.style.setProperty("--circular-index",index);chip.style.setProperty("--circular-total",state.n);circle.append(chip);});diagram.append(circle);formula.textContent=`${state.n}! ÷ ${state.n} = ${circularPermutationCount(state.n)} = (${state.n}−1)!`;note.textContent=`線形では ${state.n}! 通り。回転した ${items.join("")}・${rotated.join("")} などは、円順列では同じ1グループとして扱います。`;config.onStateChange?.({...state},note.textContent);}
+  select.addEventListener("change",()=>{state.n=Number(select.value);state.offset=0;render();});rotate.addEventListener("click",()=>{state.offset=(state.offset+1)%state.n;render();});render();return{reset(){state.n=initialN;state.offset=0;select.value=state.n;render();},destroy(){cleanupScene(container,[()=>select.remove(),()=>rotate.remove()]);},getState:()=>({...state}),setParameter(name,value){if(name==="n"){state.n=Number(value);select.value=state.n;render();}}};
+}
+
+function mountSampleSpaceGrid(container, config = {}) {
+  const { controls, result, diagram } = createLayout(container, { controlsLabel: "標本空間の事象", resultLabel: "確率", rootClass: "atlas-sample-space-viewer" });
+  const events = [["sum-7","和が7"],["sum-8-or-more","和が8以上"],["at-least-one-6","少なくとも一方が6"],["same","同じ目"]]; const state={event:events.some(([value])=>value===config.initial?.event)?config.initial.event:"sum-7"};const select=document.createElement("select");select.setAttribute("aria-label","事象");events.forEach(([value,label])=>{const option=document.createElement("option");option.value=value;option.textContent=label;select.append(option);});select.value=state.event;controls.append(select);const grid=document.createElement("div");grid.className="atlas-sample-space-grid";diagram.append(grid);const summary=document.createElement("p");summary.className="atlas-combinatorics-summary";result.append(summary);
+  function render(){const selected=new Set(outcomesForEvent(state.event).map(({first,second})=>`${first}-${second}`));grid.replaceChildren();for(let first=1;first<=6;first+=1)for(let second=1;second<=6;second+=1){const cell=document.createElement("span");cell.className="atlas-sample-space-cell";cell.textContent=`${first},${second}`;cell.classList.toggle("is-selected",selected.has(`${first}-${second}`));cell.setAttribute("aria-label",`(${first},${second})${selected.has(`${first}-${second}`)?" 該当":""}`);grid.append(cell);}const count=selected.size;summary.textContent=`該当：${count}個 ／ 全体：36個 ／ P = ${count}/36 = ${probabilityForEvent(state.event)}`;config.onStateChange?.({...state},summary.textContent);}select.addEventListener("change",()=>{state.event=select.value;render();});render();return{reset(){state.event=config.initial?.event||"sum-7";select.value=state.event;render();},destroy(){container.replaceChildren();},getState:()=>({...state}),setParameter(name,value){if(name==="event"){state.event=value;select.value=value;render();}}};
+}
+
 const COMBINATORICS_MODES = Object.freeze({
   "tree-count": mountTreeCount,
   permutations: mountPermutations,
-  combinations: mountCombinations
+  combinations: mountCombinations,
+  "circular-permutations": mountCircularPermutations,
+  "sample-space-grid": mountSampleSpaceGrid
 });
 
 export function mountCombinatoricsViewer(container, config = {}) {

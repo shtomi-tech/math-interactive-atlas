@@ -106,3 +106,23 @@ export function treePaths(stages) {
   visit(0);
   return result;
 }
+
+export function circularPermutationCount(n) {
+  assertNonNegativeInteger(n, "n");
+  return n === 0 ? 1 : factorial(Math.max(0, n - 1));
+}
+
+export function rotatePermutation(items, offset) {
+  assertItems(items);
+  if (!Number.isInteger(offset)) throw new TypeError("offset must be an integer");
+  if (items.length === 0) return [];
+  const start = ((offset % items.length) + items.length) % items.length;
+  return items.slice(start).concat(items.slice(0, start));
+}
+
+export function canonicalCircularPermutation(items) {
+  assertItems(items);
+  if (items.length === 0) return "";
+  return Array.from({ length: items.length }, (_, offset) => rotatePermutation(items, offset).join(""))
+    .sort()[0];
+}
