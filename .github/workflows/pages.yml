@@ -39,6 +39,13 @@ jobs:
           test -f static/atlas/math/exponential-logarithm.js
           test -f static/atlas/math/calculus.js
           test -f static/atlas/math/sequences.js
+          test -f static/atlas/math/algebra2.js
+          test -f static/atlas/math/coordinate-geometry.js
+          test -f static/atlas/math/statistical-inference.js
+          test -f static/atlas/math/sampling.js
+          test -f static/atlas/math/modeling.js
+          test -f static/atlas/interactions/function-scenes/index.js
+          test -f static/atlas/interactions/geometry-scenes/index.js
           test -f static/practice.css
           test -f static/practice/main.js
           test -f static/practice/problem-data.json

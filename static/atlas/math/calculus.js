@@ -74,10 +74,11 @@ export function definiteIntegral(coefficients, a, b) {
 
 export function signedAreaParts(coefficients, a, b) {
   const start = Number(a); const end = Number(b);
-  if (!Number.isFinite(start) || !Number.isFinite(end)) return [];
+  const values = safeCoefficients(coefficients);
+  if (!values || !Number.isFinite(start) || !Number.isFinite(end)) return [];
   const direction = end >= start ? 1 : -1;
   const from = Math.min(start, end); const to = Math.max(start, end);
-  const boundaries = [from, ...roots(safeCoefficients(coefficients) || []).filter((x) => x > from + EPSILON && x < to - EPSILON), to].sort((left, right) => left - right);
+  const boundaries = [from, ...roots(values).filter((x) => x > from + EPSILON && x < to - EPSILON), to].sort((left, right) => left - right);
   const parts = [];
   for (let index = 0; index < boundaries.length - 1; index += 1) {
     const left = boundaries[index]; const right = boundaries[index + 1];

@@ -1,7 +1,7 @@
-import { evaluateAnswer } from "./answer.js?v=20260912-7i";
-import { subjectLabel, unitLabel } from "../atlas/curriculum.js?v=20260912-7i";
-import { practiceStatus } from "../atlas/storage.js?v=20260912-7i";
-import { nextProblem, sessionPosition } from "./session.js?v=20260912-7i";
+import { evaluateAnswer } from "./answer.js?v=20260912-7k";
+import { subjectLabel, unitLabel } from "../atlas/curriculum.js?v=20260912-7k";
+import { practiceStatus } from "../atlas/storage.js?v=20260912-7k";
+import { nextProblem, sessionPosition } from "./session.js?v=20260912-7k";
 
 const STATUS_LABELS = { unattempted: "未挑戦", practicing: "練習中", review: "要復習", mastered: "習得" };
 

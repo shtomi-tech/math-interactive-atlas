@@ -5,7 +5,9 @@ import {
   quartiles,
   standardDeviation,
   variance
-} from "../math/statistics.js?v=20260912-7i";
+} from "../math/statistics.js?v=20260912-7k";
+import { distributionStandardDeviation, distributionVariance, expectedValue, normalCdf, normalPdf, standardize } from "../math/statistical-inference.js?v=20260912-7k";
+import { leastSquaresLinear, quadraticModel, residuals, rmse } from "../math/modeling.js?v=20260912-7k";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 const COLORS = Object.freeze({
@@ -23,7 +25,13 @@ const DATA_LAB_MODES = Object.freeze({
   "mean-median": mountMeanMedianScene,
   "variance-distance": mountVarianceScene,
   boxplot: mountBoxplotScene,
-  correlation: mountCorrelationScene
+  correlation: mountCorrelationScene,
+  "random-variable": mountRandomVariableScene,
+  "distribution-mean-variance": mountDistributionMeanVarianceScene,
+  "normal-distribution": mountNormalDistributionScene,
+  "standard-normalization": mountStandardNormalizationScene,
+  "modeling-cycle": mountModelingCycleScene,
+  "model-comparison": mountModelComparisonScene
 });
 
 function svgElement(name, attributes = {}) {
@@ -562,6 +570,50 @@ function mountCorrelationScene(container, config = {}) {
   }
   render();
   return { reset, destroy, getState: () => ({ trend, noise }), setParameter };
+}
+
+function drawDistributionBars(svg, entries, valueKey = "probability") {
+  svg.replaceChildren(); const width = DISPLAY_WIDTH; const baseline = 250; const maxValue = Math.max(0.01, ...entries.map((entry) => Number(entry[valueKey]) || 0)); const slot = (width - 80) / entries.length;
+  svg.append(svgElement("line", { class: "atlas-data-axis", x1: 40, y1: baseline, x2: width - 20, y2: baseline }));
+  entries.forEach((entry, index) => { const value = Number(entry[valueKey]) || 0; const height = value / maxValue * 185; const x = 48 + index * slot + slot * .12; svg.append(svgElement("rect", { class: "atlas-data-bar", x, y: baseline - height, width: slot * .72, height, "aria-label": `${entry.label ?? entry.k}: ${formatNumber(value, 3)}` })); const label = svgElement("text", { class: "atlas-data-axis-label", x: x + slot * .36, y: baseline + 22, "text-anchor": "middle" }); label.textContent = String(entry.label ?? entry.k); svg.append(label); });
+}
+
+function mountRandomVariableScene(container, config = {}) {
+  const { controls, result, diagram } = createLayout(container, { controlsLabel: "確率変数の操作", resultLabel: "確率分布", rootClass: "atlas-random-variable-scene" });
+  const svg = createSvg(`0 0 ${DISPLAY_WIDTH} 300`, "サイコロ2個の目の和の確率分布"); diagram.append(svg); const formula = document.createElement("div"); formula.className = "atlas-data-formula"; const summary = document.createElement("p"); summary.className = "atlas-data-summary"; result.append(formula, summary);
+  const entries = Array.from({ length: 11 }, (_, index) => ({ k: index + 2, probability: (index < 5 ? index + 1 : 11 - index) / 36 }));
+  function render() { drawDistributionBars(svg, entries); renderFormula(formula, "E(X)=\\sum xP(X=x)", "E(X) = Σ xP(X=x)"); summary.textContent = `X=出た目の和 ／ E(X)=${formatNumber(entries.reduce((sum, entry) => sum + entry.k * entry.probability, 0))} ／ 最頻値はX=7`; config.onStateChange?.({}, summary.textContent); }
+  render(); return { reset: render, destroy() { container.replaceChildren(); }, getState: () => ({ distribution: entries.map((entry) => ({ ...entry })) }), setParameter() {} };
+}
+
+function mountDistributionMeanVarianceScene(container, config = {}) {
+  const { controls, result, diagram } = createLayout(container, { controlsLabel: "確率分布の操作", resultLabel: "分布の統計量", rootClass: "atlas-distribution-summary-scene" }); const svg = createSvg(`0 0 ${DISPLAY_WIDTH} 300`, "二点分布の確率を示す棒グラフ"); diagram.append(svg); const formula = document.createElement("div"); formula.className = "atlas-data-formula"; const summary = document.createElement("p"); summary.className = "atlas-data-summary"; result.append(formula, summary); const state = { probabilityOne: finite(config.initial?.probabilityOne, 0.5) }; const control = createRangeControl({ label: "P(X=1)", min: 0, max: 1, step: .05, value: state.probabilityOne, onInput: (value) => setParameter("probabilityOne", value) }); controls.append(control.wrapper);
+  function render() { const values = [0, 1]; const probabilities = [1 - state.probabilityOne, state.probabilityOne]; drawDistributionBars(svg, values.map((value, index) => ({ label: value, probability: probabilities[index] }))); const average = expectedValue(values, probabilities); const currentVariance = distributionVariance(values, probabilities); const sd = distributionStandardDeviation(values, probabilities); control.setValue(state.probabilityOne); renderFormula(formula, "E(X)=\\sum xP(X=x),\\quad V(X)=\\sum(x-E(X))^2P(X=x)", "E(X) = ΣxP(X=x), V(X) = Σ(x−E(X))²P(X=x)"); summary.textContent = `E(X)=${formatNumber(average)} ／ V(X)=${formatNumber(currentVariance)} ／ σ(X)=${formatNumber(sd)}`; config.onStateChange?.({ ...state }, summary.textContent); }
+  function setParameter(name, value) { if (name === "probabilityOne") state.probabilityOne = clamp(finite(value, .5), 0, 1); render(); } function reset() { state.probabilityOne = finite(config.initial?.probabilityOne, .5); render(); } render(); return { reset, destroy() { control.cleanup(); container.replaceChildren(); }, getState: () => ({ ...state }), setParameter };
+}
+
+function mountNormalDistributionScene(container, config = {}) {
+  const { controls, result, diagram } = createLayout(container, { controlsLabel: "正規分布の操作", resultLabel: "正規分布", rootClass: "atlas-normal-distribution-scene" }); const svg = createSvg(`0 0 ${DISPLAY_WIDTH} 310`, "平均と標準偏差を変えられる正規分布"); diagram.append(svg); const formula = document.createElement("div"); formula.className = "atlas-data-formula"; const summary = document.createElement("p"); summary.className = "atlas-data-summary"; result.append(formula, summary); const initial = { mean: finite(config.initial?.mean, 0), sd: Math.max(.2, finite(config.initial?.sd, 1)) }; const state = { ...initial }; const meanControl = createRangeControl({ label: "平均 μ", min: -3, max: 3, step: .1, value: state.mean, onInput: (value) => setParameter("mean", value) }); const sdControl = createRangeControl({ label: "標準偏差 σ", min: .2, max: 3, step: .1, value: state.sd, onInput: (value) => setParameter("sd", value) }); controls.append(meanControl.wrapper, sdControl.wrapper);
+  function render() { svg.replaceChildren(); const left = 42, right = 638, baseline = 250; const scale = (x) => left + ((x + 5) / 10) * (right - left); svg.append(svgElement("line", { class: "atlas-data-axis", x1: left, y1: baseline, x2: right, y2: baseline })); const points = []; for (let index = 0; index <= 100; index += 1) { const x = -5 + index / 10; points.push(`${scale(x)},${baseline - (normalPdf(x, state.mean, state.sd) || 0) * 480}`); } svg.append(svgElement("polyline", { class: "atlas-data-line", points: points.join(" ") })); meanControl.setValue(state.mean); sdControl.setValue(state.sd); renderFormula(formula, "f(x)=\\frac{1}{\\sqrt{2\\pi}\\sigma}e^{-(x-\\mu)^2/(2\\sigma^2)}", "正規分布 N(μ,σ²) の密度"); summary.textContent = `μ=${formatNumber(state.mean)} ／ σ=${formatNumber(state.sd)} ／ μを中心に左右対称`; config.onStateChange?.({ ...state }, summary.textContent); }
+  function setParameter(name, value) { if (name === "mean") state.mean = clamp(finite(value, initial.mean), -3, 3); if (name === "sd") state.sd = clamp(finite(value, initial.sd), .2, 3); render(); } function reset() { Object.assign(state, initial); render(); } render(); return { reset, destroy() { meanControl.cleanup(); sdControl.cleanup(); container.replaceChildren(); }, getState: () => ({ ...state }), setParameter };
+}
+
+function mountStandardNormalizationScene(container, config = {}) {
+  const { controls, result, diagram } = createLayout(container, { controlsLabel: "標準化の操作", resultLabel: "標準化", rootClass: "atlas-standard-normalization-scene" }); const svg = createSvg(`0 0 ${DISPLAY_WIDTH} 280`, "標準化前後の分布を示す図"); diagram.append(svg); const formula = document.createElement("div"); formula.className = "atlas-data-formula"; const summary = document.createElement("p"); summary.className = "atlas-data-summary"; result.append(formula, summary); const initial = { x: 70, mean: 50, sd: 10 }; const state = { ...initial }; const xControl = createRangeControl({ label: "値 X", min: 30, max: 90, step: 1, value: state.x, onInput: (value) => setParameter("x", value) }); controls.append(xControl.wrapper);
+  function render() { svg.replaceChildren(); const z = standardize(state.x, state.mean, state.sd); const left = 42, right = 638; svg.append(svgElement("line", { class: "atlas-data-axis", x1: left, y1: 110, x2: right, y2: 110 }), svgElement("line", { class: "atlas-data-axis", x1: left, y1: 230, x2: right, y2: 230 })); const before = svgElement("circle", { class: "atlas-data-point", cx: left + ((state.x - 30) / 60) * (right - left), cy: 110, r: 9 }); const after = svgElement("circle", { class: "atlas-data-point atlas-data-point-secondary", cx: left + ((z + 3) / 6) * (right - left), cy: 230, r: 9 }); before.setAttribute("aria-label", `変換前 X=${formatNumber(state.x)}`); after.setAttribute("aria-label", `変換後 Z=${formatNumber(z)}`); svg.append(before, after); xControl.setValue(state.x); renderFormula(formula, "Z=\\frac{X-\\mu}{\\sigma}", "Z = (X−μ) / σ"); summary.textContent = `X=${formatNumber(state.x)}、μ=${formatNumber(state.mean)}、σ=${formatNumber(state.sd)} ／ Z=${formatNumber(z)} ／ 標準化後はN(0,1)の尺度`; config.onStateChange?.({ ...state, z }, summary.textContent); }
+  function setParameter(name, value) { if (name === "x") state.x = clamp(finite(value, initial.x), 30, 90); render(); } function reset() { Object.assign(state, initial); render(); } render(); return { reset, destroy() { xControl.cleanup(); container.replaceChildren(); }, getState: () => ({ ...state, z: standardize(state.x, state.mean, state.sd) }), setParameter };
+}
+
+function mountModelingCycleScene(container, config = {}) {
+  const { controls, result, diagram } = createLayout(container, { controlsLabel: "モデル化の手順", resultLabel: "モデル化サイクル", rootClass: "atlas-modeling-cycle-scene" }); const steps = ["現実の問題", "仮定を置く", "変数を決める", "式にする", "計算する", "現実的か評価する"]; const state = { step: Math.max(0, Math.min(steps.length - 1, Number(config.initial?.step ?? 0))) }; const text = document.createElement("ol"); text.className = "atlas-modeling-steps"; diagram.append(text); const previous = document.createElement("button"); previous.type = "button"; previous.textContent = "前へ"; const next = document.createElement("button"); next.type = "button"; next.textContent = "次へ"; controls.append(previous, next); previous.addEventListener("click", () => setParameter("step", state.step - 1)); next.addEventListener("click", () => setParameter("step", state.step + 1));
+  function render() { text.replaceChildren(); steps.forEach((step, index) => { const item = document.createElement("li"); item.textContent = step; item.setAttribute("aria-current", index === state.step ? "step" : "false"); if (index === state.step) item.className = "is-active"; text.append(item); }); previous.disabled = state.step === 0; next.disabled = state.step === steps.length - 1; summary.textContent = `BUILD ${state.step + 1} / ${steps.length}：${steps[state.step]}`; config.onStateChange?.({ ...state }, summary.textContent); }
+  const summary = document.createElement("p"); summary.className = "atlas-data-summary"; result.append(summary); function setParameter(name, value) { if (name === "step") state.step = Math.max(0, Math.min(steps.length - 1, Math.round(Number(value)))); render(); } function reset() { state.step = 0; render(); } render(); return { reset, destroy() { container.replaceChildren(); }, getState: () => ({ ...state }), setParameter };
+}
+
+function mountModelComparisonScene(container, config = {}) {
+  const { controls, result, diagram } = createLayout(container, { controlsLabel: "モデル比較", resultLabel: "予測と誤差", rootClass: "atlas-model-comparison-scene" }); const svg = createSvg(`0 0 ${DISPLAY_WIDTH} 320`, "線形モデルと二次モデルの比較"); diagram.append(svg); const summary = document.createElement("p"); summary.className = "atlas-data-summary"; const formula = document.createElement("div"); formula.className = "atlas-data-formula"; result.append(formula, summary); const xs = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; const ys = [2, 4, 5, 8, 10, 13, 16, 18, 21, 25]; const linear = leastSquaresLinear(xs, ys); const state = { kind: config.initial?.kind === "quadratic" ? "quadratic" : "linear" }; const linearButton = document.createElement("button"); linearButton.type = "button"; linearButton.textContent = "線形モデル"; const quadraticButton = document.createElement("button"); quadraticButton.type = "button"; quadraticButton.textContent = "二次モデル"; controls.append(linearButton, quadraticButton); linearButton.addEventListener("click", () => setParameter("kind", "linear")); quadraticButton.addEventListener("click", () => setParameter("kind", "quadratic"));
+  function render() { const model = state.kind === "linear" ? linear : { predict: quadraticModel({ a: .12, b: 1.2, c: .7 }) }; const predicted = xs.map((x) => model.predict(x)); const errors = residuals(ys, predicted); const error = rmse(ys, predicted); svg.replaceChildren(); xs.forEach((x, index) => { const point = svgElement("circle", { class: "atlas-data-point", cx: 48 + (x - 1) * 60, cy: 270 - ys[index] * 8, r: 6 }); point.setAttribute("aria-label", `(${x},${ys[index]})`); svg.append(point); }); const line = svgElement("polyline", { class: "atlas-data-line", points: xs.map((x, index) => `${48 + (x - 1) * 60},${270 - predicted[index] * 8}`).join(" ") }); svg.append(line); linearButton.setAttribute("aria-pressed", String(state.kind === "linear")); quadraticButton.setAttribute("aria-pressed", String(state.kind === "quadratic")); renderFormula(formula, "RMSE=\\sqrt{\\frac{1}{n}\\sum(y_i-\\hat{y}_i)^2}", "RMSE = √(Σ残差² / n)"); summary.textContent = `${state.kind === "linear" ? "線形" : "二次"}モデル ／ RMSE=${formatNumber(error)} ／ 残差：${errors.map((value) => formatNumber(value)).join("、")} ／ 複雑さと目的も評価`; config.onStateChange?.({ kind: state.kind, rmse: error }, summary.textContent); }
+  function setParameter(name, value) { if (name === "kind" && ["linear", "quadratic"].includes(value)) state.kind = value; render(); } function reset() { state.kind = config.initial?.kind === "quadratic" ? "quadratic" : "linear"; render(); } render(); return { reset, destroy() { container.replaceChildren(); }, getState: () => ({ ...state }), setParameter };
 }
 
 export function mountDataLab(container, config = {}) {

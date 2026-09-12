@@ -1,0 +1,22 @@
+export const COLORS = Object.freeze({ primary: "#2563eb", secondary: "#e11d48", helper: "#64748b", construction: "#94a3b8", highlight: "#f59e0b", text: "#1f2937" });
+export const BOARD_BOUNDS = Object.freeze([-6, 6, 6, -6]);
+export const EPSILON = 1e-8;
+let sequence = 0;
+export const finite = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
+export const format = (value) => { const number = finite(value); if (Object.is(number, -0)) return "0"; return Number.isInteger(number) ? String(number) : number.toFixed(2).replace(/0+$/, "").replace(/\.$/, ""); };
+export const createState = (config, defaults) => ({ ...defaults, ...(config.initial || {}) });
+export function parameterBounds(config, name, fallback = { min: -Infinity, max: Infinity }) { const item = config.parameters?.[name] || {}; return { min: Number.isFinite(Number(item.min)) ? Number(item.min) : fallback.min, max: Number.isFinite(Number(item.max)) ? Number(item.max) : fallback.max }; }
+export function clampParameter(config, name, value, fallback) { const bounds = parameterBounds(config, name, fallback); return Math.min(bounds.max, Math.max(bounds.min, finite(value))); }
+export function createContext(container) {
+  const host = document.createElement("div"); host.id = `atlas-function-graph-${++sequence}`; host.className = "jxgbox atlas-function-graph-board"; container.replaceChildren(host);
+  const board = globalThis.JXG?.JSXGraph?.initBoard(host.id, { boundingbox: BOARD_BOUNDS, axis: true, keepAspectRatio: false, showCopyright: false, showNavigation: false, pan: { enabled: false }, zoom: { enabled: false }, grid: { strokeColor: "#e2e8f0", strokeWidth: 1 } }) || null;
+  if (!board) { const fallback = document.createElement("p"); fallback.className = "atlas-canvas-fallback"; fallback.textContent = "グラフライブラリを読み込めません。グラフ以外の表示で関係を観察できます。"; container.append(fallback); }
+  const controls = document.createElement("div"); controls.className = "atlas-function-graph-scene-controls"; container.append(controls);
+  const cleanup = []; const observer = globalThis.ResizeObserver ? new ResizeObserver(() => { board?.resizeContainer(host.clientWidth, host.clientHeight); board?.fullUpdate(); }) : null; observer?.observe(host); cleanup.push(() => observer?.disconnect());
+  const text = (x, y, value, options = {}) => board?.create("text", [x, y, value], { fixed: true, highlight: false, fontSize: 14, strokeColor: COLORS.text, ...options });
+  const graph = (value, options = {}) => { const { domain = [-6, 6], ...graphOptions } = options; return board?.create("functiongraph", [value, domain[0], domain[1]], { strokeColor: COLORS.primary, strokeWidth: 3, fixed: true, highlight: false, ...graphOptions }); };
+  const point = (coords, options = {}) => board?.create("point", coords, { name: "", size: 5, strokeColor: COLORS.secondary, fillColor: COLORS.highlight, fixed: true, highlight: false, ...options });
+  function button(label, pressedOrOnClick, maybeOnClick) { const pressed = typeof pressedOrOnClick === "boolean" ? pressedOrOnClick : false; const onClick = typeof pressedOrOnClick === "function" ? pressedOrOnClick : maybeOnClick; const item = document.createElement("button"); item.type = "button"; item.textContent = label; if (maybeOnClick) item.setAttribute("aria-pressed", String(pressed)); item.addEventListener("click", onClick); controls.append(item); cleanup.push(() => item.remove()); return item; }
+  function secondaryBoard(bounds = BOARD_BOUNDS) { const secondaryHost = document.createElement("div"); secondaryHost.className = "jxgbox atlas-function-graph-secondary-board"; secondaryHost.id = `atlas-function-graph-secondary-${++sequence}`; container.insertBefore(secondaryHost, controls); const secondary = globalThis.JXG?.JSXGraph?.initBoard(secondaryHost.id, { boundingbox: bounds, axis: true, keepAspectRatio: false, showCopyright: false, showNavigation: false, pan: { enabled: false }, zoom: { enabled: false }, grid: { strokeColor: "#e2e8f0", strokeWidth: 1 } }) || null; if (secondary) cleanup.push(() => globalThis.JXG.JSXGraph.freeBoard(secondary)); else { const fallback = document.createElement("p"); fallback.textContent = "補助グラフを読み込めません。下の数値表示を確認してください。"; secondaryHost.append(fallback); } cleanup.push(() => secondaryHost.remove()); return secondary; }
+  return { board, controls, host, text, graph, point, button, secondaryBoard, destroy() { cleanup.forEach((fn) => fn()); if (board && globalThis.JXG?.JSXGraph?.freeBoard) globalThis.JXG.JSXGraph.freeBoard(board); container.replaceChildren(); } };
+}

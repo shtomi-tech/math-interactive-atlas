@@ -48,14 +48,14 @@ export const CONTENT_ORDER = Object.freeze({
   probability: Object.freeze(["event-regions", "conditional-probability", "counting-tree", "permutations-all", "combinations-order", "independent-trials", "circular-permutations", "sample-space-grid"]),
   "geometry-a": Object.freeze(["triangle-centers", "angle-bisector-ratio", "inscribed-angle", "power-of-point"]),
   "human-activity": Object.freeze(["euclidean-algorithm"]),
+  "expressions-2": Object.freeze(["cubic-expansion", "polynomial-division", "rational-expression-domain", "complex-arithmetic", "roots-coefficients", "factor-theorem", "identity-coefficients"]),
+  "geometry-equations": Object.freeze(["section-formula", "line-equation", "line-relations", "circle-equation", "circle-line-intersections", "locus-distance-ratio", "inequality-region-2d"]),
   "exponential-logarithm": Object.freeze(["exponent-extension", "exponential-base", "log-inverse", "logarithm-base", "exponential-equation"]),
   "trigonometric-functions": Object.freeze(["radian-measure", "trig-function-graphs", "trig-transform", "trig-addition-formula", "double-angle"]),
   "calculus-2": Object.freeze(["secant-to-tangent", "derivative-at-point", "function-and-derivative", "cubic-extrema", "indefinite-integral", "definite-integral-signed-area"]),
-  sequences: Object.freeze(["arithmetic-sequence", "geometric-sequence", "sequence-partial-sum", "recurrence-iteration"]),
-  "expressions-2": Object.freeze([]),
-  "geometry-equations": Object.freeze([]),
-  "statistical-inference": Object.freeze([]),
-  "math-social-life": Object.freeze([])
+  sequences: Object.freeze(["arithmetic-sequence", "geometric-sequence", "sequence-partial-sum", "recurrence-iteration", "sigma-notation", "difference-sequence", "mathematical-induction"]),
+  "statistical-inference": Object.freeze(["population-sample", "random-variable-distribution", "distribution-mean-variance", "binomial-distribution-b", "normal-distribution", "standard-normalization", "sampling-distribution-mean", "confidence-interval", "normal-hypothesis-test"]),
+  "math-social-life": Object.freeze(["modeling-cycle", "model-comparison", "decision-sensitivity"])
 });
 
 export function orderedContentIds() {

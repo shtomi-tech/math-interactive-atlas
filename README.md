@@ -9,9 +9,9 @@
 - 問題セット: [`sets.html`](./sets.html)
 - 学習レポート: [`progress.html`](./progress.html)
 - 目的: 「触る → 観察 → 気づく」の流れで、数学の関係を視覚的に理解する
-- 実装済み: 数学I・数学A・数学Ⅱ・数学Bの11単元、60教材。数学Ⅱは指数・対数、三角関数、微分・積分、数学Bは数列から段階的に扱う
+- 実装済み: 数学I・数学A・数学Ⅱ・数学Bの15単元、89教材。数学Ⅱは指数・対数、三角関数、微分・積分、いろいろな式、図形と方程式、数学Bは数列、統計的な推測、数学と社会生活まで扱う
 - 教材データ: [`static/atlas/content-data.json`](./static/atlas/content-data.json) を正本とするデータ駆動構成
-- Practice問題: [`static/practice/problem-data.json`](./static/practice/problem-data.json) に11単元180問を収録。60教材をそれぞれ基礎・標準・発展の3問でカバーする
+- Practice問題: [`static/practice/problem-data.json`](./static/practice/problem-data.json) に15単元267問を収録。89教材をそれぞれ基礎・標準・発展の3問でカバーする
 - 学習ループ: 図鑑で観察し、Practiceで使い、間違えた問題から図鑑へ戻る。お気に入り・閲覧・問題結果はブラウザのlocalStorageにだけ保存する
 - Classroom Pack: 問題を最大30問のセットへまとめ、教師指定順のPractice、問題プリント、解答付きプリントへつなげる。セットと学習記録はこの端末のlocalStorageにだけ保存する
 - 学習レポート: 教材の閲覧数、問題の習熟状態、単元ごとの状況、最近の学習を表示し、学習記録をJSONでバックアップ・置換復元する
@@ -31,6 +31,11 @@
 - 数学Ⅱ・三角関数: 弧度法を円で見る、sin・cos・tanのグラフ、振幅・周期・位相を動かす、加法定理を図で見る、2倍角を動かす
 - 数学Ⅱ・微分・積分の考え: 割線から接線へ、微分係数を動かす、導関数と元の関数、三次関数の増減・極値、不定積分と定数C、定積分と符号付き面積
 - 数学B・数列: 等差数列を並べる、等比数列を拡大縮小で見る、数列の和を積み上げる、漸化式を反復する
+- 数学Ⅱ・いろいろな式: 3次式の展開、整式の割り算、分数式の約分、複素数の計算、解と係数の関係、因数定理、恒等式の係数比較
+- 数学Ⅱ・図形と方程式: 内分・外分、直線の方程式、直線の関係、円の方程式、円と直線の共有点、軌跡、不等式の表す領域
+- 数学B・数列の発展: Σ記号、階差数列、数学的帰納法
+- 数学B・統計的な推測: 母集団と標本、確率変数、確率分布の平均・分散、二項分布、正規分布、標準化、標本平均、信頼区間、仮説検定
+- 数学B・数学と社会生活: 数学的モデルの構築、モデル比較、意思決定と感度分析
 - カタログは検索、科目・単元・Interaction Typeの絞り込み、同一科目内の前後移動に対応する
 - カタログは閲覧済み・未閲覧・お気に入りでも絞り込める。URLには `q`、`subject`、`unit`、`type`、`progress` を同期する
 
@@ -45,7 +50,7 @@ Classroom Pack: static/sets/ / static/worksheet/ / static/progress/
 
 ## Practice
 
-- [`practice.html`](./practice.html): 180問の問題一覧。検索、科目・単元・難易度・習熟状態で絞り込める
+- [`practice.html`](./practice.html): 267問の問題一覧。検索、科目・単元・難易度・習熟状態で絞り込める
 - [`practice.html?problem=quad-discriminant-01`](./practice.html?problem=quad-discriminant-01): 問題を開く
 - [`practice.html?status=review`](./practice.html?status=review): 要復習の問題だけを表示する。旧 `mode=mistakes` も互換対応する
 - [`practice.html?content=quadratic-discriminant`](./practice.html?content=quadratic-discriminant): 1教材の基礎→標準→発展セッション

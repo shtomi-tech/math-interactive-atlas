@@ -4,10 +4,10 @@ import {
   latexForMask,
   normalizeMask,
   toggleRegion
-} from "../math/set-regions.js?v=20260912-7i";
-import { CONDITIONAL_STEPS, conditionalStepFacts } from "../math/conditional-probability.js?v=20260912-7i";
-import { EVENT_TYPES, eventFacts } from "../math/event-regions.js?v=20260912-7i";
-import { SET_RELATIONS, relationFacts } from "../math/set-relations.js?v=20260912-7i";
+} from "../math/set-regions.js?v=20260912-7k";
+import { CONDITIONAL_STEPS, conditionalStepFacts } from "../math/conditional-probability.js?v=20260912-7k";
+import { EVENT_TYPES, eventFacts } from "../math/event-regions.js?v=20260912-7k";
+import { SET_RELATIONS, relationFacts } from "../math/set-relations.js?v=20260912-7k";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 let selectorSequence = 0;

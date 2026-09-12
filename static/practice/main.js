@@ -1,9 +1,9 @@
-import { renderPracticeCatalog } from "./catalog.js?v=20260912-7i";
-import { createProblemRunner } from "./runner.js?v=20260912-7i";
-import { buildExplicitSession, buildSession } from "./session.js?v=20260912-7i";
-import { goToCatalog, goToProblem, replaceCatalogFilters, watchRoute } from "./router.js?v=20260912-7i";
-import { loadLearningState, recordPracticeAttempt, saveLearningState } from "../atlas/storage.js?v=20260912-7i";
-import { validateProblemData } from "./validation.js?v=20260912-7i";
+import { renderPracticeCatalog } from "./catalog.js?v=20260912-7k";
+import { createProblemRunner } from "./runner.js?v=20260912-7k";
+import { buildExplicitSession, buildSession } from "./session.js?v=20260912-7k";
+import { goToCatalog, goToProblem, replaceCatalogFilters, watchRoute } from "./router.js?v=20260912-7k";
+import { loadLearningState, recordPracticeAttempt, saveLearningState } from "../atlas/storage.js?v=20260912-7k";
+import { validateProblemData } from "./validation.js?v=20260912-7k";
 
 const dom = {
   status: document.querySelector("#practiceStatus"),

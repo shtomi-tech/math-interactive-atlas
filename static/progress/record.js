@@ -1,4 +1,4 @@
-import { normalizeState } from "../atlas/storage.js?v=20260912-7i";
+import { normalizeState } from "../atlas/storage.js?v=20260912-7k";
 
 export const LEARNING_RECORD_SCHEMA = "math-interactive-atlas-learning-record";
 export const LEARNING_RECORD_VERSION = 2;

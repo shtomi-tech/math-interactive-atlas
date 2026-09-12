@@ -37,6 +37,10 @@ jobs:
           node scripts/check-exponential-logarithm.js
           node scripts/check-calculus.js
           node scripts/check-sequences.js
+          node scripts/check-algebra2.js
+          node scripts/check-coordinate-geometry.js
+          node scripts/check-statistical-inference.js
+          node scripts/check-modeling.js
           node scripts/check-curriculum.js
           node scripts/check-related-content.js
           node scripts/check-hypothesis-test.js
@@ -91,6 +95,24 @@ jobs:
           node --check static/atlas/math/exponential-logarithm.js
           node --check static/atlas/math/calculus.js
           node --check static/atlas/math/sequences.js
+          node --check static/atlas/math/algebra2.js
+          node --check static/atlas/math/coordinate-geometry.js
+          node --check static/atlas/math/statistical-inference.js
+          node --check static/atlas/math/sampling.js
+          node --check static/atlas/math/modeling.js
+          node --check static/atlas/interactions/function-scenes/common.js
+          node --check static/atlas/interactions/function-scenes/index.js
+          node --check static/atlas/interactions/function-scenes/quadratic.js
+          node --check static/atlas/interactions/function-scenes/exponential.js
+          node --check static/atlas/interactions/function-scenes/trigonometric.js
+          node --check static/atlas/interactions/function-scenes/calculus.js
+          node --check static/atlas/interactions/function-scenes/social-models.js
+          node --check static/atlas/interactions/geometry-scenes/common.js
+          node --check static/atlas/interactions/geometry-scenes/index.js
+          node --check static/atlas/interactions/geometry-scenes/triangle.js
+          node --check static/atlas/interactions/geometry-scenes/circle.js
+          node --check static/atlas/interactions/geometry-scenes/trigonometry.js
+          node --check static/atlas/interactions/geometry-scenes/coordinate.js
           node --check static/atlas/math/hypothesis-test.js
           node --check static/atlas/storage.js
           node --check static/practice/main.js

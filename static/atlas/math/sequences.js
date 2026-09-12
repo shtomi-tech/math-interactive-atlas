@@ -1,4 +1,7 @@
-function finite(value, fallback = 0) { return Number.isFinite(Number(value)) ? Number(value) : fallback; }
+function finiteNumber(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
+}
 
 export function arithmeticTerm(a1, d, n) {
   const first = Number(a1); const difference = Number(d); const index = Number(n);
@@ -33,16 +36,21 @@ export function geometricSum(a1, r, n) {
 
 export function partialSums(values) {
   if (!Array.isArray(values)) return [];
-  let sum = 0; return values.map((value) => { sum += finite(value); return sum; });
+  const numbers = values.map(finiteNumber);
+  if (numbers.some((value) => value === null)) return [];
+  let sum = 0; return numbers.map((value) => { sum += value; return sum; });
 }
 
 export function differenceSequence(values) {
   if (!Array.isArray(values) || values.length < 2) return [];
-  return values.slice(1).map((value, index) => finite(value) - finite(values[index]));
+  const numbers = values.map(finiteNumber);
+  if (numbers.some((value) => value === null)) return [];
+  return numbers.slice(1).map((value, index) => value - numbers[index]);
 }
 
 export function generateRecurrence({ initial, next, count } = {}) {
   const total = Number(count); if (!Number.isInteger(total) || total < 0 || !Number.isFinite(Number(initial)) || typeof next !== "function") return [];
+  if (total === 0) return [];
   const values = [Number(initial)];
   while (values.length < total) { const value = Number(next(values.at(-1), values.length, values)); if (!Number.isFinite(value)) break; values.push(value); }
   return values;

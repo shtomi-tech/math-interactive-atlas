@@ -6,7 +6,7 @@ const contents = JSON.parse(fs.readFileSync(new URL("../static/atlas/content-dat
 const contentIds = new Set(contents.map((content) => content.id));
 problems.forEach((problem) => assert.equal(contentIds.has(problem.atlasContentId), true, `${problem.id} has an unknown atlasContentId`));
 const covered = new Set(problems.map((problem) => problem.atlasContentId));
-assert.equal(problems.length, 180);
-assert.equal(covered.size, 60);
+assert.equal(problems.length, contents.length * 3);
+assert.equal(covered.size, contents.length);
 contents.forEach((content) => assert.equal(problems.filter((problem) => problem.atlasContentId === content.id).length, 3, `${content.id} must have 3 linked problems`));
 console.log(`Practice links: PASS (${covered.size} / ${contents.length} contents, 3 problems each)`);

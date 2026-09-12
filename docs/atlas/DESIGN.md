@@ -1,7 +1,7 @@
 # 高校数学インタラクティブ図鑑 Design Contract
 
 Version: 1.0
-Scope: `atlas.html`、`practice.html`、`static/atlas/`、`static/practice/` の学習UI。数学I・A・Ⅱ・Bの60教材を対象とする。
+Scope: `atlas.html`、`practice.html`、`static/atlas/`、`static/practice/` の学習UI。数学I・A・Ⅱ・Bの89教材を対象とする。
 
 ## 原則
 
@@ -51,7 +51,7 @@ Good Design = Invisible UI + Visible Mathematics + Meaningful Interaction
 
 ### Catalog Discovery
 
-60教材を一覧から探せるよう、検索語、科目、単元、Interaction Typeのフィルタをカタログに置く。結果件数と空状態を表示し、条件は `q`、`subject`、`unit`、`type` のURLパラメータへ同期する。検索は日本語・英語のタイトル、説明、単元名、タグ相当の本文を対象にする。
+89教材を一覧から探せるよう、検索語、科目、単元、Interaction Typeのフィルタをカタログに置く。結果件数と空状態を表示し、条件は `q`、`subject`、`unit`、`type` のURLパラメータへ同期する。検索は日本語・英語のタイトル、説明、単元名、タグ相当の本文を対象にする。
 
 ### Learning Navigation
 
@@ -94,7 +94,7 @@ Worksheet / Web Practice
 
 `static/atlas/interactions/index.js` のInteraction Engine Registryを入口とする。ViewerはRegistryだけを呼び、`interaction.engine` に応じて11種類のEngineをmountする。すべてのEngineは `reset()`、`destroy()`、`getState()` を返し、パラメータ型Engineは `setParameter()` も返す。
 
-Phase 7AではInteraction Engineを11種類へ拡張する。新教材は既存Engineへのmode追加を第一候補とし、連続的な変化はFunctionGraph / GeometryBoard / RangeGraph、数列のような離散的な変化はSequenceLabへ寄せる。
+Phase 7B完了時点でInteraction Engineは11種類、教材は89種類とする。新教材は既存Engineへのmode追加を第一候補とし、連続的な変化はFunctionGraph / GeometryBoard / RangeGraph、数列のような離散的な変化はSequenceLabへ寄せる。FunctionGraphとGeometryBoardのScene実装は共通ContextとRegistryから分離し、教材固有の描画分岐を入口へ戻さない。
 
 `static/atlas/interactions/function-graph.js` は軸、グリッド、関数グラフ、点、補助線、動的ラベル、パラメータ更新、Reset、Destroyを提供する。`range-graph.js` はこれを使って関数全体、定義域内の強調曲線、左右端の44pxドラッグハンドル、最大・最小候補を表示する。
 
@@ -137,6 +137,42 @@ Phase 7AではInteraction Engineを11種類へ拡張する。新教材は既存E
 GeometryBoardの共通ContextはBoard生成、座標変換、複数の44pxタッチ領域、Resize、Reset、Destroyだけを担当し、数値状態と作図は10個のSceneが所有する。補助線は主図形より細く淡くし、注目する辺・角・中心だけに強調色を使う。座標計算は純粋関数へ分離し、退化三角形では中心を描かない。
 
 SimulationLabはモードRegistryで教材を分ける。理論分布と実験分布は色と凡例の両方で区別し、有意水準は確率分布の高さとして描かず、計算した確率との数値比較として示す。
+
+### Statistical Inference
+
+統計的な推測は、理論値と乱数実験を混同させず、次の順序で表示する。
+
+```text
+標本
+↓
+分布
+↓
+推定
+↓
+判断
+```
+
+標本平均のばらつき、信頼区間、仮説検定は数値と前提を併記する。「帰無仮説が正しい確率」のような誤解を招く表現は使わず、観測結果が仮定した分布のもとでどれほど極端かを示す。`statistical-inference.js` と `sampling.js` はDOMや乱数表示に依存しない純粋計算を担当する。
+
+### Modeling
+
+数学と社会生活の教材は、現実を単純化してモデル化する過程と、モデルの限界を同じ画面で扱う。
+
+```text
+現実
+↓
+単純化・理想化
+↓
+モデル
+↓
+計算
+↓
+解釈
+↓
+モデル評価
+```
+
+モデル比較では残差やRMSEを表示し、複雑な式が常によいとは限らないことを明示する。意思決定では入力値を動かしたとき結論が変わる境界を示し、予測を事実として断定しない。
 
 ### Algebra Visualization
 
