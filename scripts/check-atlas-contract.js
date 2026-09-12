@@ -11,6 +11,7 @@ const requiredFiles = [
   "static/atlas/viewer.js",
   "static/atlas/router.js",
   "static/atlas/interactions/index.js",
+  "static/atlas/interactions/geometry-board.js",
   "static/atlas/content-data.json",
   "static/atlas/interactions/function-graph.js",
   "static/atlas/interactions/range-graph.js",
@@ -38,7 +39,9 @@ const css = read("static/atlas.css");
 const dataText = read("static/atlas/content-data.json");
 const viewerSource = read("static/atlas/viewer.js");
 const registrySource = read("static/atlas/interactions/index.js");
-const atlasSource = ["static/atlas/main.js", "static/atlas/catalog.js", "static/atlas/viewer.js", "static/atlas/router.js", "static/atlas/interactions/index.js", "static/atlas/interactions/function-graph.js", "static/atlas/interactions/range-graph.js"].map(read).join("\n");
+const catalogSource = read("static/atlas/catalog.js");
+const geometrySource = read("static/atlas/interactions/geometry-board.js");
+const atlasSource = ["static/atlas/main.js", "static/atlas/catalog.js", "static/atlas/viewer.js", "static/atlas/router.js", "static/atlas/interactions/index.js", "static/atlas/interactions/function-graph.js", "static/atlas/interactions/range-graph.js", "static/atlas/interactions/geometry-board.js"].map(read).join("\n");
 
 let contents = [];
 try {
@@ -57,6 +60,7 @@ const requiredFields = [
   "unitLabel",
   "title",
   "shortDescription",
+  "instructions",
   "formula",
   "interactionType",
   "discoveryPoints",
@@ -89,17 +93,28 @@ if (Array.isArray(contents)) {
 
 ["quadratic-basic", "quadratic-vertex", "quadratic-discriminant"].forEach((id) => requireCondition(ids.has(id), `missing Phase 1 content: ${id}`));
 requireCondition(ids.has("quadratic-range"), "missing Phase 2A content: quadratic-range");
+requireCondition(ids.has("unit-circle"), "missing Phase 2B content: unit-circle");
 const rangeContent = contents.find((content) => content.id === "quadratic-range");
 if (rangeContent) {
   requireCondition(rangeContent.interaction.engine === "rangeGraph", "quadratic-range must use rangeGraph");
   requireCondition(rangeContent.interactionType === "drag", "quadratic-range must use drag interactionType");
+}
+const unitCircleContent = contents.find((content) => content.id === "unit-circle");
+if (unitCircleContent) {
+  requireCondition(unitCircleContent.interaction.engine === "geometryBoard", "unit-circle must use geometryBoard");
+  requireCondition(unitCircleContent.interactionType === "geometry", "unit-circle must use geometry interactionType");
+  requireCondition(unitCircleContent.interaction.mode === "unit-circle", "unit-circle must use unit-circle mode");
 }
 requireCondition(/katex@\d/.test(html), "KaTeX CDN version is not fixed in atlas.html");
 requireCondition(/jsxgraph@\d/.test(html), "JSXGraph CDN version is not fixed in atlas.html");
 requireCondition(html.includes("static/atlas/main.js"), "atlas main module is not loaded");
 requireCondition(css.includes("--atlas-bg"), "atlas CSS variables are not namespaced");
 requireCondition(registrySource.includes("Unknown interaction engine"), "registry does not handle unknown engines");
-requireCondition(!viewerSource.includes("function-graph.js") && !viewerSource.includes("range-graph.js"), "viewer imports a concrete interaction engine");
+requireCondition(registrySource.includes("geometryBoard") && registrySource.includes("geometry-board.js"), "registry does not register geometryBoard");
+requireCondition(geometrySource.includes("mountGeometryBoard"), "geometry board mount function is missing");
+requireCondition(geometrySource.includes("keepAspectRatio: true"), "geometry board does not preserve aspect ratio");
+requireCondition(catalogSource.includes("UNIT_ORDER"), "catalog does not define stable unit order");
+requireCondition(!viewerSource.includes("function-graph.js") && !viewerSource.includes("range-graph.js") && !viewerSource.includes("geometry-board.js"), "viewer imports a concrete interaction engine");
 requireCondition(!/localStorage|currentExamKey|app\.progress|answerDrafts|examFlow|practiceCatalogState|MINI_EXAMS/.test(atlasSource), "atlas source references existing practice or exam state");
 requireCondition(index.includes("./atlas.html") || index.includes("atlas.html"), "index.html does not link to atlas.html");
 

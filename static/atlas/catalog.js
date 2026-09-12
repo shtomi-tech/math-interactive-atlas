@@ -9,6 +9,34 @@ const INTERACTION_LABELS = {
   build: "BUILD"
 };
 
+const UNIT_ORDER = Object.freeze(["quadratic", "trigonometry"]);
+
+function createCard(content, onSelect) {
+  const card = document.createElement("button");
+  card.type = "button";
+  card.className = "atlas-catalog-card";
+  card.dataset.contentId = content.id;
+  card.setAttribute("aria-label", `${content.title}を開く`);
+
+  const body = document.createElement("span");
+  const location = document.createElement("span");
+  location.className = "atlas-card-location";
+  location.textContent = `${content.subjectLabel}　＞　${content.unitLabel}`;
+  const title = document.createElement("h3");
+  title.textContent = content.title;
+  const description = document.createElement("span");
+  description.className = "atlas-card-description";
+  description.textContent = content.shortDescription;
+  body.append(location, title, description);
+
+  const type = document.createElement("span");
+  type.className = "atlas-card-type";
+  type.textContent = INTERACTION_LABELS[content.interactionType] || String(content.interactionType).toUpperCase();
+  card.append(body, type);
+  card.addEventListener("click", () => onSelect(content.id));
+  return card;
+}
+
 export function renderCatalog(root, contents, { subject = "math1", unit = null, onSelect }) {
   root.replaceChildren();
   const visible = contents.filter((content) => content.subject === subject && (!unit || content.unit === unit));
@@ -21,29 +49,23 @@ export function renderCatalog(root, contents, { subject = "math1", unit = null, 
     return;
   }
 
-  visible.forEach((content) => {
-    const card = document.createElement("button");
-    card.type = "button";
-    card.className = "atlas-catalog-card";
-    card.dataset.contentId = content.id;
-    card.setAttribute("aria-label", `${content.title}を開く`);
+  const subjectHeading = document.createElement("h2");
+  subjectHeading.className = "atlas-catalog-subject";
+  subjectHeading.textContent = visible[0].subjectLabel;
+  root.append(subjectHeading);
 
-    const body = document.createElement("span");
-    const location = document.createElement("span");
-    location.className = "atlas-card-location";
-    location.textContent = `${content.subjectLabel}　＞　${content.unitLabel}`;
-    const title = document.createElement("h2");
-    title.textContent = content.title;
-    const description = document.createElement("span");
-    description.className = "atlas-card-description";
-    description.textContent = content.shortDescription;
-    body.append(location, title, description);
-
-    const type = document.createElement("span");
-    type.className = "atlas-card-type";
-    type.textContent = INTERACTION_LABELS[content.interactionType] || String(content.interactionType).toUpperCase();
-    card.append(body, type);
-    card.addEventListener("click", () => onSelect(content.id));
-    root.append(card);
+  const units = [...UNIT_ORDER, ...visible.map((content) => content.unit).filter((value, index, values) => !UNIT_ORDER.includes(value) && values.indexOf(value) === index)];
+  units.filter((unitId) => visible.some((content) => content.unit === unitId)).forEach((unitId) => {
+    const items = visible.filter((content) => content.unit === unitId);
+    const unitSection = document.createElement("section");
+    unitSection.className = "atlas-catalog-unit";
+    const unitTitle = document.createElement("h3");
+    unitTitle.className = "atlas-catalog-unit-title";
+    unitTitle.textContent = items[0].unitLabel;
+    const grid = document.createElement("div");
+    grid.className = "atlas-catalog-unit-grid";
+    items.forEach((content) => grid.append(createCard(content, onSelect)));
+    unitSection.append(unitTitle, grid);
+    root.append(unitSection);
   });
 }

@@ -47,13 +47,17 @@ Good Design = Invisible UI + Visible Mathematics + Meaningful Interaction
 8. 関連する概念
 9. Source / License
 
-カタログカードには、タイトル、一言説明、Interaction Typeだけを表示する。未実装の数学Aは非操作の「準備中」として扱う。
+カタログは数学Iの単元見出しごとにグループ化し、単元順はCatalog側の定義で安定させる。カードには、タイトル、一言説明、Interaction Typeだけを表示する。未実装の数学Aは非操作の「準備中」として扱う。
 
 ## インタラクション
 
-`static/atlas/interactions/index.js` のInteraction Engine Registryを入口とする。ViewerはRegistryだけを呼び、`interaction.engine` に応じて `functionGraph` または `rangeGraph` をmountする。すべてのEngineは `reset()`、`destroy()`、`getState()` を返し、パラメータ型Engineは `setParameter()` も返す。
+`static/atlas/interactions/index.js` のInteraction Engine Registryを入口とする。ViewerはRegistryだけを呼び、`interaction.engine` に応じて `functionGraph`、`rangeGraph`、または `geometryBoard` をmountする。すべてのEngineは `reset()`、`destroy()`、`getState()` を返し、パラメータ型Engineは `setParameter()` も返す。
 
 `static/atlas/interactions/function-graph.js` は軸、グリッド、関数グラフ、点、補助線、動的ラベル、パラメータ更新、Reset、Destroyを提供する。`range-graph.js` はこれを使って関数全体、定義域内の強調曲線、左右端の44pxドラッグハンドル、最大・最小候補を表示する。
+
+`geometry-board.js` は動的図形の共通入口である。図形はドラッグで動かせるようにし、動点と固定点を視覚的に区別する。円の教材では `keepAspectRatio: true` を使い、座標・角度・長さはCanvas外でも確認できるようにする。今回の `unit-circle` modeは、点P、OP、射影線、角度、sin・cosの座標関係を表示する。
+
+Discovery Pointは結論ではなく観察の問いにする。利用者が値を動かして関係を見つけられるよう、教材の発見ポイントへ答えを先に固定表示しない。
 
 コンテンツ固有の違いは `content-data.json` の `interaction.engine`、`interaction.mode`、初期値、パラメータ定義へ寄せる。Viewerへ教材固有の描画分岐を追加しない。
 
@@ -79,6 +83,7 @@ Good Design = Invisible UI + Visible Mathematics + Meaningful Interaction
 - `/atlas.html` — カタログ
 - `/atlas.html?content=quadratic-basic` — 教材Viewer
 - `/atlas.html?content=quadratic-range` — 最大・最小と定義域の教材Viewer
+- `/atlas.html?content=unit-circle` — 単位円でsin・cosを見る教材Viewer
 - `/atlas.html?subject=math1&unit=quadratic` — 単元指定カタログ
 
 不正な `content` はエラー画面を作らず、履歴を置き換えて図鑑トップへ戻す。Viewer切り替え時は前のInteraction Engineを必ずDestroyする。

@@ -21,7 +21,7 @@
     "discoveryPoints": [
       "aを大きくすると、放物線の開き方はどう変わるだろう？",
       "aを負にすると、グラフの向きはどう変わるだろう？",
-      "a = 0 では、二次関数ではなくなる。"
+      "aを0にすると、グラフはどんな形になるだろう？"
     ],
     "related": [
       "quadratic-vertex",
@@ -56,9 +56,9 @@
       }
     },
     "discoveryPoints": [
-      "pを変えると、頂点は左右へ動く。",
-      "qを変えると、頂点は上下へ動く。",
-      "aを変えても、頂点の座標は変わらない。"
+      "pだけを変えると、頂点はどちらへ動くだろう？",
+      "qだけを変えると、頂点はどちらへ動くだろう？",
+      "aだけを変えたとき、頂点の位置と放物線の形のどちらが変わるだろう？"
     ],
     "related": [
       "quadratic-basic",
@@ -93,9 +93,9 @@
       }
     },
     "discoveryPoints": [
-      "D > 0 では、x軸との交点が2個ある。",
-      "D = 0 では、放物線がx軸に接する。",
-      "D < 0 では、実数の交点がない。"
+      "Dの符号と、x軸との交点数を比べてみよう。",
+      "交点が1個になるとき、Dはいくつになっているだろう？",
+      "Dが負になると、グラフとx軸の位置関係はどうなるだろう？"
     ],
     "related": [
       "quadratic-basic",
@@ -137,6 +137,38 @@
       "quadratic-basic",
       "quadratic-vertex"
     ],
+    "source": {
+      "usage": "original",
+      "library": "JSXGraph 1.8.0",
+      "license": "MIT OR LGPL-3.0-or-later",
+      "repository": "https://github.com/jsxgraph/jsxgraph"
+    }
+  },
+  {
+    "id": "unit-circle",
+    "subject": "math1",
+    "subjectLabel": "数学I",
+    "unit": "trigonometry",
+    "unitLabel": "図形と計量",
+    "title": "単位円でsin・cosを見る",
+    "shortDescription": "円周上の点を動かして、cosとsinが座標として現れる様子を観察します。",
+    "instructions": "円周上の点Pまたはθを動かして、点Pの座標とsin・cosの値を見比べます。",
+    "formula": "\\cos\\theta=x\\quad /\\quad \\sin\\theta=y",
+    "interactionType": "geometry",
+    "interaction": {
+      "engine": "geometryBoard",
+      "mode": "unit-circle",
+      "initial": { "theta": 30 },
+      "parameters": {
+        "theta": { "label": "θ", "min": 0, "max": 180, "step": 1 }
+      }
+    },
+    "discoveryPoints": [
+      "点Pを動かすと、cosθとsinθはそれぞれどの座標と一致するだろう？",
+      "θが90°のとき、x座標とy座標はそれぞれどうなるだろう？",
+      "90°を超えると、cosθの符号はどう変わるだろう？"
+    ],
+    "related": [],
     "source": {
       "usage": "original",
       "library": "JSXGraph 1.8.0",

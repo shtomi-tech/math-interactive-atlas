@@ -1,9 +1,11 @@
 import { mountFunctionGraph } from "./function-graph.js";
+import { mountGeometryBoard } from "./geometry-board.js";
 import { mountRangeGraph } from "./range-graph.js";
 
 const ENGINES = Object.freeze({
   functionGraph: mountFunctionGraph,
-  rangeGraph: mountRangeGraph
+  rangeGraph: mountRangeGraph,
+  geometryBoard: mountGeometryBoard
 });
 
 function unavailableEngine(container, error) {
