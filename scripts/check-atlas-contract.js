@@ -13,12 +13,17 @@ const requiredFiles = [
   "static/atlas/interactions/index.js",
   "static/atlas/interactions/geometry-board.js",
   "static/atlas/interactions/region-selector.js",
+  "static/atlas/interactions/combinatorics-viewer.js",
   "static/atlas/math/set-regions.js",
   "static/atlas/math/set-relations.js",
   "static/atlas/math/event-regions.js",
+  "static/atlas/math/conditional-probability.js",
+  "static/atlas/math/combinatorics.js",
   "scripts/check-set-regions.js",
   "scripts/check-set-relations.js",
   "scripts/check-event-regions.js",
+  "scripts/check-conditional-probability.js",
+  "scripts/check-combinatorics.js",
   "static/atlas/content-data.json",
   "static/atlas/interactions/function-graph.js",
   "static/atlas/interactions/range-graph.js",
@@ -52,12 +57,15 @@ const catalogSource = read("static/atlas/catalog.js");
 const routerSource = read("static/atlas/router.js");
 const geometrySource = read("static/atlas/interactions/geometry-board.js");
 const regionSource = read("static/atlas/interactions/region-selector.js");
+const combinatoricsViewerSource = read("static/atlas/interactions/combinatorics-viewer.js");
 const setRegionsSource = read("static/atlas/math/set-regions.js");
 const setRelationsSource = read("static/atlas/math/set-relations.js");
 const eventRegionsSource = read("static/atlas/math/event-regions.js");
+const conditionalProbabilitySource = read("static/atlas/math/conditional-probability.js");
+const combinatoricsSource = read("static/atlas/math/combinatorics.js");
 const workflowSource = read(".github/workflows/atlas-checks.yml");
 const pagesWorkflowSource = read(".github/workflows/pages.yml");
-const atlasSource = ["static/atlas/main.js", "static/atlas/catalog.js", "static/atlas/viewer.js", "static/atlas/router.js", "static/atlas/interactions/index.js", "static/atlas/interactions/function-graph.js", "static/atlas/interactions/range-graph.js", "static/atlas/interactions/geometry-board.js", "static/atlas/interactions/region-selector.js", "static/atlas/math/set-regions.js", "static/atlas/math/set-relations.js", "static/atlas/math/event-regions.js"].map(read).join("\n");
+const atlasSource = ["static/atlas/main.js", "static/atlas/catalog.js", "static/atlas/viewer.js", "static/atlas/router.js", "static/atlas/interactions/index.js", "static/atlas/interactions/function-graph.js", "static/atlas/interactions/range-graph.js", "static/atlas/interactions/geometry-board.js", "static/atlas/interactions/region-selector.js", "static/atlas/interactions/combinatorics-viewer.js", "static/atlas/math/set-regions.js", "static/atlas/math/set-relations.js", "static/atlas/math/event-regions.js", "static/atlas/math/conditional-probability.js", "static/atlas/math/combinatorics.js"].map(read).join("\n");
 
 let contents = [];
 try {
@@ -113,6 +121,11 @@ requireCondition(ids.has("unit-circle"), "missing Phase 2B content: unit-circle"
 requireCondition(ids.has("triangle-area-sine"), "missing Phase 2C content: triangle-area-sine");
 requireCondition(ids.has("set-regions"), "missing Phase 2D content: set-regions");
 requireCondition(ids.has("necessary-sufficient"), "missing Phase 2E content: necessary-sufficient");
+requireCondition(ids.has("event-regions"), "missing Phase 2F content: event-regions");
+requireCondition(ids.has("conditional-probability"), "missing Phase 3A content: conditional-probability");
+requireCondition(ids.has("counting-tree"), "missing Phase 3A content: counting-tree");
+requireCondition(ids.has("permutations-all"), "missing Phase 3A content: permutations-all");
+requireCondition(ids.has("combinations-order"), "missing Phase 3A content: combinations-order");
 const rangeContent = contents.find((content) => content.id === "quadratic-range");
 if (rangeContent) {
   requireCondition(rangeContent.interaction.engine === "rangeGraph", "quadratic-range must use rangeGraph");
@@ -160,7 +173,31 @@ if (eventRegionsContent) {
   requireCondition(eventRegionsContent.interactionType === "select", "event-regions must use select interactionType");
   requireCondition(eventRegionsContent.interaction.initial.event === "union", "event-regions must start with union");
   requireCondition(eventRegionsContent.related.includes("set-regions"), "event-regions must link set-regions");
+  requireCondition(eventRegionsContent.related.includes("conditional-probability"), "event-regions must link conditional-probability");
 }
+const conditionalProbabilityContent = contents.find((content) => content.id === "conditional-probability");
+if (conditionalProbabilityContent) {
+  requireCondition(conditionalProbabilityContent.subject === "mathA", "conditional-probability must use mathA");
+  requireCondition(conditionalProbabilityContent.unit === "probability", "conditional-probability must use probability unit");
+  requireCondition(conditionalProbabilityContent.interaction.engine === "regionSelector", "conditional-probability must use regionSelector");
+  requireCondition(conditionalProbabilityContent.interaction.mode === "conditional-probability", "conditional-probability mode is incorrect");
+  requireCondition(conditionalProbabilityContent.interactionType === "select", "conditional-probability must use select interactionType");
+  requireCondition(conditionalProbabilityContent.interaction.initial.step === "overview", "conditional-probability must start with overview");
+  requireCondition(conditionalProbabilityContent.related.includes("event-regions"), "conditional-probability must link event-regions");
+}
+[
+  ["counting-tree", "tree-count"],
+  ["permutations-all", "permutations"],
+  ["combinations-order", "combinations"]
+].forEach(([id, mode]) => {
+  const content = contents.find((item) => item.id === id);
+  if (!content) return;
+  requireCondition(content.subject === "mathA", `${id} must use mathA`);
+  requireCondition(content.unit === "probability", `${id} must use probability unit`);
+  requireCondition(content.interaction.engine === "combinatoricsViewer", `${id} must use combinatoricsViewer`);
+  requireCondition(content.interaction.mode === mode, `${id} mode is incorrect`);
+  requireCondition(content.interactionType === "select", `${id} must use select interactionType`);
+});
 requireCondition(/katex@\d/.test(html), "KaTeX CDN version is not fixed in atlas.html");
 requireCondition(/jsxgraph@\d/.test(html), "JSXGraph CDN version is not fixed in atlas.html");
 requireCondition(html.includes("static/atlas/main.js"), "atlas main module is not loaded");
@@ -176,17 +213,22 @@ requireCondition(regionSource.includes("mountRegionSelector") && regionSource.in
 requireCondition(!/JXG|JSXGraph/.test(regionSource), "region selector must not depend on JSXGraph");
 requireCondition(regionSource.includes('"set-regions": mountSetRegionsScene') && regionSource.includes('"necessary-sufficient": mountNecessarySufficientScene'), "region selector mode dispatch is incomplete");
 requireCondition(regionSource.includes('"event-regions": mountEventRegionsScene'), "event-regions mode dispatch is missing");
+requireCondition(regionSource.includes('"conditional-probability": mountConditionalProbabilityScene'), "conditional-probability mode dispatch is missing");
 requireCondition(regionSource.includes("latexForMask") && !regionSource.includes("LATEX_EXPRESSIONS"), "region selector must use the set regions LaTeX source");
 requireCondition(setRegionsSource.includes("REGION_BITS") && setRegionsSource.includes("expressionForMask") && setRegionsSource.includes("latexForMask") && setRegionsSource.includes("toggleRegion"), "set regions math module is incomplete");
 requireCondition(setRelationsSource.includes("SET_RELATIONS") && setRelationsSource.includes("relationFacts"), "set relations math module is incomplete");
 requireCondition(eventRegionsSource.includes("EVENT_TYPES") && eventRegionsSource.includes("maskForEvent") && eventRegionsSource.includes("eventFacts"), "event regions math module is incomplete");
-requireCondition(catalogSource.includes("SUBJECT_ORDER") && catalogSource.includes('"math1", "mathA"') && catalogSource.includes("SUBJECT_UNIT_ORDER") && catalogSource.includes("probability") && catalogSource.includes('"event-regions"'), "catalog does not define the Phase 2F subject order");
+requireCondition(conditionalProbabilitySource.includes("CONDITIONAL_STEPS") && conditionalProbabilitySource.includes("conditionalStepFacts"), "conditional probability math module is incomplete");
+requireCondition(combinatoricsSource.includes("factorial") && combinatoricsSource.includes("permutationCount") && combinatoricsSource.includes("combinationCount") && combinatoricsSource.includes("enumeratePermutations") && combinatoricsSource.includes("enumerateCombinations") && combinatoricsSource.includes("treePaths"), "combinatorics math module is incomplete");
+requireCondition(combinatoricsViewerSource.includes("COMBINATORICS_MODES") && combinatoricsViewerSource.includes('"tree-count": mountTreeCount') && combinatoricsViewerSource.includes("permutations: mountPermutations") && combinatoricsViewerSource.includes("combinations: mountCombinations"), "combinatorics viewer mode dispatch is incomplete");
+requireCondition(registrySource.includes("combinatoricsViewer") && registrySource.includes("combinatorics-viewer.js"), "registry does not register combinatoricsViewer");
+requireCondition(catalogSource.includes("SUBJECT_ORDER") && catalogSource.includes('"math1", "mathA"') && catalogSource.includes("SUBJECT_UNIT_ORDER") && catalogSource.includes("probability") && catalogSource.includes('"event-regions"') && catalogSource.includes('"conditional-probability"') && catalogSource.includes('"counting-tree"'), "catalog does not define the Phase 3A subject order");
 requireCondition(routerSource.includes('subject: params.get("subject") || null'), "catalog route must show all subjects when subject is omitted");
 requireCondition(workflowSource.includes("node-version: 22"), "GitHub Actions must use Node.js 22");
-requireCondition(workflowSource.includes("node scripts/check-atlas-contract.js") && workflowSource.includes("node scripts/check-set-regions.js") && workflowSource.includes("node scripts/check-set-relations.js") && workflowSource.includes("node scripts/check-event-regions.js"), "GitHub Actions check scripts are incomplete");
-requireCondition(workflowSource.includes("node --check static/atlas/interactions/region-selector.js") && workflowSource.includes("node --check static/atlas/math/set-relations.js") && workflowSource.includes("node --check static/atlas/math/event-regions.js"), "GitHub Actions syntax checks are incomplete");
-requireCondition(pagesWorkflowSource.includes("actions/configure-pages@v5") && pagesWorkflowSource.includes("enablement: true") && pagesWorkflowSource.includes("actions/upload-pages-artifact@v3") && pagesWorkflowSource.includes("actions/deploy-pages@v4"), "GitHub Pages deploy workflow is incomplete");
-requireCondition(!viewerSource.includes("function-graph.js") && !viewerSource.includes("range-graph.js") && !viewerSource.includes("geometry-board.js") && !viewerSource.includes("region-selector.js"), "viewer imports a concrete interaction engine");
+requireCondition(workflowSource.includes("node scripts/check-atlas-contract.js") && workflowSource.includes("node scripts/check-set-regions.js") && workflowSource.includes("node scripts/check-set-relations.js") && workflowSource.includes("node scripts/check-event-regions.js") && workflowSource.includes("node scripts/check-conditional-probability.js") && workflowSource.includes("node scripts/check-combinatorics.js"), "GitHub Actions check scripts are incomplete");
+requireCondition(workflowSource.includes("node --check static/atlas/interactions/region-selector.js") && workflowSource.includes("node --check static/atlas/math/set-relations.js") && workflowSource.includes("node --check static/atlas/math/event-regions.js") && workflowSource.includes("node --check static/atlas/math/conditional-probability.js") && workflowSource.includes("node --check static/atlas/math/combinatorics.js") && workflowSource.includes("node --check static/atlas/interactions/combinatorics-viewer.js"), "GitHub Actions syntax checks are incomplete");
+requireCondition(pagesWorkflowSource.includes("actions/configure-pages@v5") && !pagesWorkflowSource.includes("enablement:") && pagesWorkflowSource.includes("test -f atlas.html") && pagesWorkflowSource.includes("test -f index.html") && pagesWorkflowSource.includes("test -f static/atlas.css") && pagesWorkflowSource.includes("test -f static/atlas/main.js") && pagesWorkflowSource.includes("test -f static/atlas/content-data.json") && pagesWorkflowSource.includes("cp static/atlas.css _site/static/atlas.css") && pagesWorkflowSource.includes("cp -R static/atlas _site/static/atlas") && pagesWorkflowSource.includes("touch _site/.nojekyll") && pagesWorkflowSource.includes("actions/upload-pages-artifact@v3") && pagesWorkflowSource.includes("actions/deploy-pages@v4"), "GitHub Pages deploy workflow is incomplete");
+requireCondition(!viewerSource.includes("function-graph.js") && !viewerSource.includes("range-graph.js") && !viewerSource.includes("geometry-board.js") && !viewerSource.includes("region-selector.js") && !viewerSource.includes("combinatorics-viewer.js"), "viewer imports a concrete interaction engine");
 requireCondition(!/localStorage|currentExamKey|app\.progress|answerDrafts|examFlow|practiceCatalogState|MINI_EXAMS/.test(atlasSource), "atlas source references existing practice or exam state");
 requireCondition(index.includes("./atlas.html") || index.includes("atlas.html"), "index.html does not link to atlas.html");
 

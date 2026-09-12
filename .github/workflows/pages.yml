@@ -26,12 +26,18 @@ jobs:
         uses: actions/checkout@v4
       - name: Configure Pages
         uses: actions/configure-pages@v5
-        with:
-          enablement: true
+      - name: Verify Pages input files
+        run: |
+          test -f atlas.html
+          test -f index.html
+          test -f static/atlas.css
+          test -f static/atlas/main.js
+          test -f static/atlas/content-data.json
       - name: Prepare static files
         run: |
           mkdir -p _site/static
           cp atlas.html index.html _site/
+          cp static/atlas.css _site/static/atlas.css
           cp -R static/atlas _site/static/atlas
           touch _site/.nojekyll
       - name: Upload Pages artifact

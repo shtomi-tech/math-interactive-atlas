@@ -47,17 +47,21 @@ Good Design = Invisible UI + Visible Mathematics + Meaningful Interaction
 8. 関連する概念
 9. Source / License
 
-カタログは `SUBJECT_ORDER` とSubjectごとの単元順で科目・単元見出しを安定させる。科目未指定時は利用可能な全科目、`subject` 指定時はその科目だけを表示する。カードには、タイトル、一言説明、Interaction Typeだけを表示する。Phase 2Fでは数学Iと数学Aの教材を表示し、数学Aは「場合の数と確率」から始める。
+カタログは `SUBJECT_ORDER` とSubjectごとの単元順で科目・単元見出しを安定させる。科目未指定時は利用可能な全科目、`subject` 指定時はその科目だけを表示する。カードには、タイトル、一言説明、Interaction Typeだけを表示する。数学Iと数学Aの教材を表示し、数学Aは「場合の数と確率」から始める。
 
 ## インタラクション
 
-`static/atlas/interactions/index.js` のInteraction Engine Registryを入口とする。ViewerはRegistryだけを呼び、`interaction.engine` に応じて `functionGraph`、`rangeGraph`、`geometryBoard`、または `regionSelector` をmountする。すべてのEngineは `reset()`、`destroy()`、`getState()` を返し、パラメータ型Engineは `setParameter()` も返す。
+`static/atlas/interactions/index.js` のInteraction Engine Registryを入口とする。ViewerはRegistryだけを呼び、`interaction.engine` に応じて `functionGraph`、`rangeGraph`、`geometryBoard`、`regionSelector`、または `combinatoricsViewer` をmountする。すべてのEngineは `reset()`、`destroy()`、`getState()` を返し、パラメータ型Engineは `setParameter()` も返す。
 
 `static/atlas/interactions/function-graph.js` は軸、グリッド、関数グラフ、点、補助線、動的ラベル、パラメータ更新、Reset、Destroyを提供する。`range-graph.js` はこれを使って関数全体、定義域内の強調曲線、左右端の44pxドラッグハンドル、最大・最小候補を表示する。
 
 `geometry-board.js` は動的図形の共通入口である。図形はドラッグで動かせるようにし、動点と固定点を視覚的に区別する。円の教材では `keepAspectRatio: true` を使い、座標・角度・長さはCanvas外でも確認できるようにする。`unit-circle` modeは点P、OP、射影線、角度、sin・cosの座標関係を表示し、`triangle-area-sine` modeは固定辺 `a = 3`、`b = 4` と動く角Cから高さ・sin C・面積を表示する。
 
-`region-selector.js` はSVGとVanilla JavaScriptのRegionSelector RegistryでSceneを切り替える。`set-regions` は全体集合U、集合A・B、4つの原子的領域を表示し、領域クリックと4つのtoggle buttonが同じ `selectedMask` を更新する。集合論のbit mask、プレーンテキスト、KaTeX式は `static/atlas/math/set-regions.js` に分離する。`necessary-sufficient` はP・Qの包含関係を4状態で表示し、ボタン、SVG、包含関係、命題、必要条件・十分条件を同じ `relation` stateから更新する。`event-regions` は同じ4領域を使い、事象buttonで式を選ぶと対応するmaskを自動で塗る。関係と事象の計算はDOMに依存しない `static/atlas/math/set-relations.js` / `static/atlas/math/event-regions.js` に置く。SVGは表示中心とし、操作はbuttonに集約する。
+`region-selector.js` はSVGとVanilla JavaScriptのRegionSelector RegistryでSceneを切り替える。`set-regions` は全体集合U、集合A・B、4つの原子的領域を表示し、領域クリックと4つのtoggle buttonが同じ `selectedMask` を更新する。集合論のbit mask、プレーンテキスト、KaTeX式は `static/atlas/math/set-regions.js` に分離する。`necessary-sufficient` はP・Qの包含関係を4状態で表示し、ボタン、SVG、包含関係、命題、必要条件・十分条件を同じ `relation` stateから更新する。`event-regions` は同じ4領域を使い、事象buttonで式を選ぶと対応するmaskを自動で塗る。`conditional-probability` はU→B→A∩B→公式の4段階をbuttonで進み、確率値ではなく「分母の世界がBへ変わる」ことを表示する。関係・事象・条件付き確率の計算はDOMに依存しない `static/atlas/math/set-relations.js` / `static/atlas/math/event-regions.js` / `static/atlas/math/conditional-probability.js` に置く。SVGは表示中心とし、操作はbuttonに集約する。
+
+### Combinatorics Visualization
+
+`combinatorics-viewer.js` は `tree-count`、`permutations`、`combinations` のSceneを共通Engine契約で提供する。数を先に固定表示するのではなく、樹形図や並べた結果、組へのグループ化からパターンを観察し、その後に階乗・順列・組合せの公式へ接続する。順列一覧はPhase 3Aの上限を5!までとし、組合せSceneの大きな順列一覧は表示上限を設けてモバイルの可読性を保つ。純粋な階乗・個数・列挙処理は `static/atlas/math/combinatorics.js` に置き、View層へ持ち込まない。
 
 GeometryBoardの共通CoreはBoard生成、座標変換、44pxタッチ領域、Resize、Reset、Destroyを担当し、教材固有の図形はSceneとしてdispatchする。`triangle-area-sine` では `h = a sin C` と `S = 1/2 × b × h = 1/2 ab sin C` を同じ状態から計算する。
 
@@ -92,6 +96,10 @@ Discovery Pointは結論ではなく観察の問いにする。利用者が値�
 - `/atlas.html?content=set-regions` — 集合を塗って式を作る教材Viewer
 - `/atlas.html?content=necessary-sufficient` — 必要条件・十分条件を集合で見る教材Viewer
 - `/atlas.html?content=event-regions` — 余事象・和事象を塗る教材Viewer
+- `/atlas.html?content=conditional-probability` — 条件付き確率で世界を絞る教材Viewer
+- `/atlas.html?content=counting-tree` — 数え上げの樹形図教材Viewer
+- `/atlas.html?content=permutations-all` — 順列を全部並べる教材Viewer
+- `/atlas.html?content=combinations-order` — 組合せは順序を無視する教材Viewer
 - `/atlas.html?subject=math1` — 数学Iだけのカタログ
 - `/atlas.html?subject=mathA` — 数学Aだけのカタログ
 - `/atlas.html?subject=math1&unit=quadratic` — 単元指定カタログ

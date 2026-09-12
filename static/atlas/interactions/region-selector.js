@@ -4,9 +4,10 @@ import {
   latexForMask,
   normalizeMask,
   toggleRegion
-} from "../math/set-regions.js?v=20260912-2f1";
-import { EVENT_TYPES, eventFacts } from "../math/event-regions.js?v=20260912-2f1";
-import { SET_RELATIONS, relationFacts } from "../math/set-relations.js?v=20260912-2f1";
+} from "../math/set-regions.js?v=20260912-3a";
+import { CONDITIONAL_STEPS, conditionalStepFacts } from "../math/conditional-probability.js?v=20260912-3a";
+import { EVENT_TYPES, eventFacts } from "../math/event-regions.js?v=20260912-3a";
+import { SET_RELATIONS, relationFacts } from "../math/set-relations.js?v=20260912-3a";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 let selectorSequence = 0;
@@ -34,6 +35,13 @@ const EVENT_OPTIONS = Object.freeze([
   { value: EVENT_TYPES.UNION, label: "A ∪ B" },
   { value: EVENT_TYPES.UNION_COMPLEMENT, label: "(A ∪ B)ᶜ" },
   { value: EVENT_TYPES.INTERSECTION_COMPLEMENT, label: "(A ∩ B)ᶜ" }
+]);
+
+const CONDITIONAL_OPTIONS = Object.freeze([
+  { value: CONDITIONAL_STEPS.OVERVIEW, label: "① 全体を見る" },
+  { value: CONDITIONAL_STEPS.CONDITION, label: "② Bに絞る" },
+  { value: CONDITIONAL_STEPS.INTERSECTION, label: "③ A∩Bを見る" },
+  { value: CONDITIONAL_STEPS.FORMULA, label: "④ 公式を見る" }
 ]);
 
 function svgElement(name, attributes = {}) {
@@ -519,10 +527,134 @@ function mountEventRegionsScene(container, config = {}) {
   };
 }
 
+function mountConditionalProbabilityScene(container, config = {}) {
+  const stepValues = new Set(Object.values(CONDITIONAL_STEPS));
+  const initialStep = stepValues.has(config.initial?.step) ? config.initial.step : CONDITIONAL_STEPS.OVERVIEW;
+  let step = initialStep;
+  let destroyed = false;
+  const instanceId = `atlas-conditional-selector-${selectorSequence += 1}`;
+  const { controls, result, diagram } = createRegionLayout(container, {
+    controlsLabel: "条件付き確率の学習ステップ",
+    resultLabel: "現在の見方",
+    rootClass: "atlas-conditional-selector"
+  });
+  const stepHeading = document.createElement("p");
+  stepHeading.className = "atlas-conditional-step-heading";
+  const formula = document.createElement("div");
+  formula.className = "atlas-region-expression atlas-conditional-expression";
+  const description = document.createElement("p");
+  description.className = "atlas-conditional-description";
+  const summary = document.createElement("p");
+  summary.className = "atlas-region-summary";
+  result.append(stepHeading, formula, description, summary);
+
+  const svgParts = createSetRegionsSvg(diagram, instanceId);
+  const cleanup = [...svgParts.cleanup];
+  const { regionElements } = svgParts;
+  const buttons = new Map();
+  CONDITIONAL_OPTIONS.forEach(({ value, label }) => {
+    const { button, cleanup: removeListener } = createToggleButton({
+      label,
+      pressed: false,
+      ariaLabel: `${label}を選択`,
+      onActivate: () => setStep(value)
+    });
+    button.classList.add("atlas-conditional-step-button");
+    button.dataset.step = value;
+    controls.append(button);
+    buttons.set(value, button);
+    cleanup.push(removeListener);
+  });
+
+  const navigation = document.createElement("div");
+  navigation.className = "atlas-conditional-navigation";
+  const previous = document.createElement("button");
+  previous.type = "button";
+  previous.className = "atlas-conditional-nav-button";
+  previous.textContent = "← 前へ";
+  previous.setAttribute("aria-label", "前の学習ステップへ");
+  const next = document.createElement("button");
+  next.type = "button";
+  next.className = "atlas-conditional-nav-button";
+  next.textContent = "次へ →";
+  next.setAttribute("aria-label", "次の学習ステップへ");
+  const previousListener = () => moveStep(-1);
+  const nextListener = () => moveStep(1);
+  previous.addEventListener("click", previousListener);
+  next.addEventListener("click", nextListener);
+  navigation.append(previous, next);
+  controls.append(navigation);
+  cleanup.push(() => previous.removeEventListener("click", previousListener));
+  cleanup.push(() => next.removeEventListener("click", nextListener));
+
+  function setStep(nextStep) {
+    if (destroyed || !stepValues.has(nextStep)) return;
+    step = nextStep;
+    const facts = conditionalStepFacts(step);
+    const stepIndex = CONDITIONAL_OPTIONS.findIndex((option) => option.value === step);
+    const summaryText = facts.step === CONDITIONAL_STEPS.FORMULA
+      ? "P(A|B) = P(A∩B) / P(B) ／ 分母はBの世界"
+      : facts.description;
+    diagram.parentElement?.setAttribute("data-conditional-step", facts.step);
+    REGION_DEFINITIONS.forEach(({ bit }) => {
+      const element = regionElements.get(bit);
+      if (!element) return;
+      const inUniverse = Boolean(facts.universeMask & bit);
+      const active = Boolean(facts.activeMask & bit);
+      element.classList.toggle("is-muted", !inUniverse);
+      element.classList.toggle("is-universe", inUniverse && !active && step !== CONDITIONAL_STEPS.OVERVIEW);
+      element.classList.toggle("is-selected", active);
+    });
+    buttons.forEach((button, value) => {
+      const active = value === step;
+      button.setAttribute("aria-pressed", String(active));
+      button.setAttribute("aria-current", active ? "step" : "false");
+      button.textContent = active ? `✓ ${CONDITIONAL_OPTIONS.find((option) => option.value === value)?.label || value}` : CONDITIONAL_OPTIONS.find((option) => option.value === value)?.label || value;
+      button.classList.toggle("is-selected", active);
+    });
+    previous.disabled = stepIndex <= 0;
+    next.disabled = stepIndex >= CONDITIONAL_OPTIONS.length - 1;
+    stepHeading.textContent = facts.title;
+    renderLatex(formula, facts.formulaLatex, facts.formulaText);
+    description.textContent = facts.description;
+    summary.textContent = summaryText;
+    config.onStateChange?.({ step }, summaryText);
+  }
+
+  function moveStep(offset) {
+    const currentIndex = CONDITIONAL_OPTIONS.findIndex((option) => option.value === step);
+    const nextIndex = Math.max(0, Math.min(CONDITIONAL_OPTIONS.length - 1, currentIndex + offset));
+    setStep(CONDITIONAL_OPTIONS[nextIndex].value);
+  }
+
+  function reset() {
+    setStep(initialStep);
+  }
+
+  function destroy() {
+    if (destroyed) return;
+    destroyed = true;
+    cleanupScene(container, cleanup);
+  }
+
+  function setParameter(name, value) {
+    if (name === "step") setStep(value);
+  }
+
+  setStep(initialStep);
+  return {
+    reset,
+    destroy,
+    getState: () => ({ step }),
+    setParameter
+  };
+}
+
 const REGION_MODES = Object.freeze({
   "set-regions": mountSetRegionsScene,
   "necessary-sufficient": mountNecessarySufficientScene,
-  "event-regions": mountEventRegionsScene
+  "event-regions": mountEventRegionsScene,
+  "conditional-probability": mountConditionalProbabilityScene
 });
 
 export function mountRegionSelector(container, config = {}) {

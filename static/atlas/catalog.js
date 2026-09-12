@@ -31,7 +31,11 @@ const CONTENT_ORDER = Object.freeze({
     "triangle-area-sine"
   ]),
   probability: Object.freeze([
-    "event-regions"
+    "event-regions",
+    "conditional-probability",
+    "counting-tree",
+    "permutations-all",
+    "combinations-order"
   ])
 });
 

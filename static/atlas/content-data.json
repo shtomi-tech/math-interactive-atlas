@@ -88,11 +88,143 @@
       "AとBのどちらにも入らない部分は、どんな式で表せるだろう？"
     ],
     "related": [
-      "set-regions"
+      "set-regions",
+      "conditional-probability"
     ],
     "source": {
       "usage": "original",
       "library": "SVG / Vanilla JavaScript",
+      "license": "Original implementation"
+    }
+  },
+  {
+    "id": "conditional-probability",
+    "subject": "mathA",
+    "subjectLabel": "数学A",
+    "unit": "probability",
+    "unitLabel": "場合の数と確率",
+    "title": "条件付き確率で世界を絞る",
+    "shortDescription": "条件Bが起こったとき、標本空間がBへ絞られる様子を観察します。",
+    "instructions": "全体から条件Bへ世界を絞り、その中のA∩Bを見ることで条件付き確率を理解します。",
+    "formula": "P(A\\mid B)=\\frac{P(A\\cap B)}{P(B)}",
+    "interactionType": "select",
+    "interaction": {
+      "engine": "regionSelector",
+      "mode": "conditional-probability",
+      "initial": {
+        "step": "overview"
+      }
+    },
+    "discoveryPoints": [
+      "Bが起こったと分かった後、考えるべき全体はどこになるだろう？",
+      "新しい全体Bの中で、Aが起こる部分はどこだろう？",
+      "なぜ条件付き確率の分母がP(B)になるのだろう？"
+    ],
+    "related": [
+      "event-regions"
+    ],
+    "source": {
+      "usage": "original",
+      "library": "SVG / Vanilla JavaScript",
+      "license": "Original implementation"
+    }
+  },
+  {
+    "id": "counting-tree",
+    "subject": "mathA",
+    "subjectLabel": "数学A",
+    "unit": "probability",
+    "unitLabel": "場合の数と確率",
+    "title": "数え上げの樹形図",
+    "shortDescription": "段階ごとの選び方を樹形図で表示し、積の法則との関係を観察します。",
+    "instructions": "表示する段階を切り替えて、枝の数と選び方の総数の関係を観察します。",
+    "formula": "3\\times 2=6",
+    "interactionType": "select",
+    "interaction": {
+      "engine": "combinatoricsViewer",
+      "mode": "tree-count",
+      "initial": {
+        "visibleDepth": 2
+      }
+    },
+    "discoveryPoints": [
+      "1段階目の選び方が3通り、2段階目が2通りのとき、全部で何通りになるだろう？",
+      "枝の数と掛け算にはどんな関係があるだろう？",
+      "段階がもう1つ増えると、数え方はどう変わるだろう？"
+    ],
+    "related": [
+      "permutations-all"
+    ],
+    "source": {
+      "usage": "original",
+      "library": "SVG / Vanilla JavaScript",
+      "license": "Original implementation"
+    }
+  },
+  {
+    "id": "permutations-all",
+    "subject": "mathA",
+    "subjectLabel": "数学A",
+    "unit": "probability",
+    "unitLabel": "場合の数と確率",
+    "title": "順列を全部並べる",
+    "shortDescription": "文字の並べ方をすべて表示して、順列の個数と階乗の関係を観察します。",
+    "instructions": "文字数を選び、並べ方を一覧で見ながら階乗の積を確かめます。",
+    "formula": "n!",
+    "interactionType": "select",
+    "interaction": {
+      "engine": "combinatoricsViewer",
+      "mode": "permutations",
+      "initial": {
+        "n": 4
+      }
+    },
+    "discoveryPoints": [
+      "最初の文字を固定すると、残りの並べ方は何通りになるだろう？",
+      "文字数を1つ増やすと、並べ方は何倍になるだろう？",
+      "4!の積は、どのように順列の個数を表しているだろう？"
+    ],
+    "related": [
+      "counting-tree",
+      "combinations-order"
+    ],
+    "source": {
+      "usage": "original",
+      "library": "Vanilla JavaScript",
+      "license": "Original implementation"
+    }
+  },
+  {
+    "id": "combinations-order",
+    "subject": "mathA",
+    "subjectLabel": "数学A",
+    "unit": "probability",
+    "unitLabel": "場合の数と確率",
+    "title": "組合せは順序を無視する",
+    "shortDescription": "順序を区別する並べ方を組にまとめ、順列と組合せの関係を観察します。",
+    "instructions": "順序を区別する表示と、同じ組にまとめる表示を切り替えます。",
+    "formula": "nP_r\\div r!=nC_r",
+    "interactionType": "select",
+    "interaction": {
+      "engine": "combinatoricsViewer",
+      "mode": "combinations",
+      "initial": {
+        "n": 5,
+        "r": 2,
+        "view": "ordered"
+      }
+    },
+    "discoveryPoints": [
+      "ABとBAは、組合せでは同じものとして扱われるのはなぜだろう？",
+      "順列の個数を何で割ると組合せの個数になるだろう？",
+      "r個を並べ替える方法は何通りあるだろう？"
+    ],
+    "related": [
+      "permutations-all"
+    ],
+    "source": {
+      "usage": "original",
+      "library": "Vanilla JavaScript",
       "license": "Original implementation"
     }
   },

@@ -1,13 +1,15 @@
-import { mountFunctionGraph } from "./function-graph.js?v=20260912-2f1";
-import { mountGeometryBoard } from "./geometry-board.js?v=20260912-2f1";
-import { mountRangeGraph } from "./range-graph.js?v=20260912-2f1";
-import { mountRegionSelector } from "./region-selector.js?v=20260912-2f1";
+import { mountFunctionGraph } from "./function-graph.js?v=20260912-3a";
+import { mountGeometryBoard } from "./geometry-board.js?v=20260912-3a";
+import { mountRangeGraph } from "./range-graph.js?v=20260912-3a";
+import { mountRegionSelector } from "./region-selector.js?v=20260912-3a";
+import { mountCombinatoricsViewer } from "./combinatorics-viewer.js?v=20260912-3a";
 
 const ENGINES = Object.freeze({
   functionGraph: mountFunctionGraph,
   rangeGraph: mountRangeGraph,
   geometryBoard: mountGeometryBoard,
-  regionSelector: mountRegionSelector
+  regionSelector: mountRegionSelector,
+  combinatoricsViewer: mountCombinatoricsViewer
 });
 
 function unavailableEngine(container, error) {
