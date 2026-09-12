@@ -1,23 +1,20 @@
-import { euclideanSteps, gcd } from "../math/number-theory.js?v=20260912-4b";
+import { euclideanSteps, gcd } from "../math/number-theory.js?v=20260912-5c";
+
+const ALGORITHM_MODES = Object.freeze({ "euclidean-algorithm": true });
+
+function rangeControl(parent, name, value, min, max, onInput) {
+  const label=document.createElement("label");label.className="atlas-algorithm-range";const caption=document.createElement("span");caption.textContent=name;const output=document.createElement("output");const input=document.createElement("input");input.type="range";input.min=min;input.max=max;input.step=1;input.value=value;output.textContent=value;input.setAttribute("aria-label",`${name}を操作`);input.addEventListener("input",()=>{output.textContent=input.value;onInput(Number(input.value));});label.append(caption,input,output);parent.append(label);return{input,output};
+}
 
 function mountAlgorithmLab(container, config = {}) {
-  container.replaceChildren(); container.classList.add("atlas-algorithm-lab");
-  const heading = document.createElement("h3"); heading.textContent = "ユークリッド互除法を動かす";
-  const controls = document.createElement("div"); controls.className = "atlas-algorithm-controls";
-  const list = document.createElement("ol"); list.className = "atlas-algorithm-steps";
-  const result = document.createElement("p"); result.className = "atlas-algorithm-result"; result.setAttribute("aria-live", "polite");
-  container.append(heading, controls, list, result);
-  const initial = { a: Math.max(1, Math.abs(Number(config.initial?.a ?? 84))), b: Math.max(1, Math.abs(Number(config.initial?.b ?? 30))) };
-  if (initial.a < initial.b) [initial.a, initial.b] = [initial.b, initial.a];
-  const steps = euclideanSteps(initial.a, initial.b); let visible = 0;
-  const first = document.createElement("button"); first.type="button"; first.textContent="最初";
-  const next = document.createElement("button"); next.type="button"; next.textContent="次の割り算";
-  const all = document.createElement("button"); all.type="button"; all.textContent="すべて表示";
-  const reset = document.createElement("button"); reset.type="button"; reset.textContent="リセット";
-  controls.append(first,next,all,reset);
-  function render() { list.replaceChildren(); steps.slice(0,visible).forEach((step,index)=>{const item=document.createElement("li");item.className=index===visible-1?"is-current":"";item.textContent=`${step.dividend} = ${step.divisor} × ${step.quotient} + ${step.remainder}`;list.append(item);});const lastNonZero=steps.findLast((step)=>step.remainder===0)?.divisor??initial.b;result.textContent=visible===steps.length?`最後の0でない余り = ${lastNonZero} ／ gcd(${initial.a}, ${initial.b}) = ${gcd(initial.a,initial.b)}`:`${visible} / ${steps.length} 段階を表示中。大きい数を小さい数で割り、余りへ縮約します。`;first.disabled=false;next.disabled=visible>=steps.length;all.disabled=visible>=steps.length;config.onStateChange?.({step:visible},result.textContent); }
-  first.addEventListener("click",()=>{visible=1;render();}); next.addEventListener("click",()=>{visible=Math.min(steps.length,visible+1);render();}); all.addEventListener("click",()=>{visible=steps.length;render();}); reset.addEventListener("click",()=>{visible=0;render();}); controls.addEventListener("keydown",(event)=>{if(event.key==="ArrowRight")next.click();if(event.key==="ArrowLeft")first.click();}); render();
-  return { reset(){visible=0;render();}, destroy(){container.replaceChildren();}, getState:()=>({a:initial.a,b:initial.b,step:visible}), setParameter(name,value){if(name==="step"){visible=Math.max(0,Math.min(steps.length,Number(value)));render();}} };
+  if (!ALGORITHM_MODES[config.mode]) throw new Error(`Unsupported algorithm mode: ${config.mode || "(empty)"}`);
+  container.replaceChildren();container.classList.add("atlas-algorithm-lab");const heading=document.createElement("h3");heading.textContent="ユークリッド互除法を動かす";const inputs=document.createElement("div");inputs.className="atlas-algorithm-inputs";const controls=document.createElement("div");controls.className="atlas-algorithm-controls";const list=document.createElement("ol");list.className="atlas-algorithm-steps";const bars=document.createElement("div");bars.className="atlas-algorithm-bars";const result=document.createElement("p");result.className="atlas-algorithm-result";result.setAttribute("aria-live","polite");container.append(heading,inputs,controls,list,bars,result);
+  const initial={a:Math.max(2,Math.abs(Number(config.initial?.a??84))),b:Math.max(1,Math.abs(Number(config.initial?.b??30)))};if(initial.a<initial.b)[initial.a,initial.b]=[initial.b,initial.a];const state={a:initial.a,b:initial.b,visibleStep:0};let steps=euclideanSteps(state.a,state.b);
+  const aControl=rangeControl(inputs,"a",state.a,2,200,(value)=>setNumbers(value,state.b));const bControl=rangeControl(inputs,"b",state.b,1,100,(value)=>setNumbers(state.a,value));
+  const first=document.createElement("button");first.type="button";first.textContent="最初";const next=document.createElement("button");next.type="button";next.textContent="次の割り算";const all=document.createElement("button");all.type="button";all.textContent="すべて表示";const reset=document.createElement("button");reset.type="button";reset.textContent="リセット";controls.append(first,next,all,reset);
+  function setNumbers(a,b){state.a=Math.max(2,Math.round(a));state.b=Math.max(1,Math.round(b));if(state.a<state.b)[state.a,state.b]=[state.b,state.a];aControl.input.value=state.a;aControl.output.textContent=state.a;bControl.input.value=state.b;bControl.output.textContent=state.b;steps=euclideanSteps(state.a,state.b);state.visibleStep=0;render();}
+  function render(){list.replaceChildren();steps.slice(0,state.visibleStep).forEach((step,index)=>{const item=document.createElement("li");item.className=index===state.visibleStep-1?"is-current":"";item.textContent=`${step.dividend} = ${step.divisor} × ${step.quotient} + ${step.remainder}`;list.append(item);});bars.replaceChildren();steps.slice(0,state.visibleStep).forEach((step)=>{const wrap=document.createElement("div");wrap.className="atlas-algorithm-bar-step";const label=document.createElement("span");label.textContent=`${step.dividend} ÷ ${step.divisor}`;const bar=document.createElement("div");bar.className="atlas-algorithm-bar";bar.style.setProperty("--bar-size",`${Math.max(6,Math.round(step.dividend/state.a*100))}%`);bar.textContent=`${step.divisor} × ${step.quotient} + ${step.remainder}`;wrap.append(label,bar);bars.append(wrap);});const last=steps[steps.length-1]?.divisor??state.b;result.textContent=state.visibleStep===steps.length?`最後の0でない余り = ${last} ／ gcd(${state.a}, ${state.b}) = ${gcd(state.a,state.b)}`:`${state.visibleStep} / ${steps.length} 段階を表示中。大きい長さを小さい長さで何個取るかを見ます。`;first.disabled=false;next.disabled=state.visibleStep>=steps.length;all.disabled=state.visibleStep>=steps.length;config.onStateChange?.({...state},result.textContent);}
+  first.addEventListener("click",()=>{state.visibleStep=Math.min(1,steps.length);render();});next.addEventListener("click",()=>{state.visibleStep=Math.min(steps.length,state.visibleStep+1);render();});all.addEventListener("click",()=>{state.visibleStep=steps.length;render();});reset.addEventListener("click",()=>setNumbers(initial.a,initial.b));render();return{reset(){setNumbers(initial.a,initial.b);},destroy(){container.replaceChildren();},getState:()=>({...state}),setParameter(name,value){if(name==="a")setNumbers(value,state.b);if(name==="b")setNumbers(state.a,value);if(name==="step"){state.visibleStep=Math.min(steps.length,Math.max(0,Number(value)));render();}}};
 }
 
 export { mountAlgorithmLab };

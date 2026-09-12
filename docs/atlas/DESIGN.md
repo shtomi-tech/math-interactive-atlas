@@ -49,9 +49,19 @@ Good Design = Invisible UI + Visible Mathematics + Meaningful Interaction
 
 カタログは `SUBJECT_ORDER` とSubjectごとの単元順で科目・単元見出しを安定させる。科目未指定時は利用可能な全科目、`subject` 指定時はその科目だけを表示する。カードには、タイトル、一言説明、Interaction Typeだけを表示する。数学Iと数学Aの教材を表示し、数学Aは「場合の数と確率」から始める。
 
+### Catalog Discovery
+
+40教材を一覧から探せるよう、検索語、科目、単元、Interaction Typeのフィルタをカタログに置く。結果件数と空状態を表示し、条件は `q`、`subject`、`unit`、`type` のURLパラメータへ同期する。検索欄の入力中はフォーカスと入力位置を保持する。
+
+### Learning Navigation
+
+Viewerのパンくずには同一科目内の位置を表示し、教材末尾には前後の教材への導線を置く。順序は `curriculum.js` の正本に従い、単元をまたいでも同一科目内に限定する。関連教材は別の入口として残し、一本道にはしない。
+
 ## インタラクション
 
 `static/atlas/interactions/index.js` のInteraction Engine Registryを入口とする。ViewerはRegistryだけを呼び、`interaction.engine` に応じて10種類のEngineをmountする。すべてのEngineは `reset()`、`destroy()`、`getState()` を返し、パラメータ型Engineは `setParameter()` も返す。
+
+Phase 4B以降はInteraction Engine v1としてこの10種類を一旦固定する。新教材は既存Engineへのmode追加を第一候補とし、新Engineを追加する場合は既存Engineで表現できない理由を設計書へ記録する。
 
 `static/atlas/interactions/function-graph.js` は軸、グリッド、関数グラフ、点、補助線、動的ラベル、パラメータ更新、Reset、Destroyを提供する。`range-graph.js` はこれを使って関数全体、定義域内の強調曲線、左右端の44pxドラッグハンドル、最大・最小候補を表示する。
 
@@ -71,7 +81,7 @@ Good Design = Invisible UI + Visible Mathematics + Meaningful Interaction
 
 `simulation-lab.js` は理論値と1回ごとのシミュレーション結果を別の表示領域で扱う。`hypothesis-coin` では公平なコイン `p = 0.5`、20回試行、観測値以上の上側確率を使い、純粋な二項分布計算は `static/atlas/math/probability.js`、仮説検定の表示用事実は `static/atlas/math/hypothesis-test.js` に分離する。乱数結果を正確なp値や公式の証明として扱わない。
 
-GeometryBoardの共通ContextはBoard生成、座標変換、複数の44pxタッチ領域、Resize、Reset、Destroyだけを担当し、数値状態と作図は8つのSceneが所有する。補助線は主図形より細く淡くし、注目する辺・角・中心だけに強調色を使う。座標計算は純粋関数へ分離し、退化三角形では中心を描かない。
+GeometryBoardの共通ContextはBoard生成、座標変換、複数の44pxタッチ領域、Resize、Reset、Destroyだけを担当し、数値状態と作図は10個のSceneが所有する。補助線は主図形より細く淡くし、注目する辺・角・中心だけに強調色を使う。座標計算は純粋関数へ分離し、退化三角形では中心を描かない。
 
 SimulationLabはモードRegistryで教材を分ける。理論分布と実験分布は色と凡例の両方で区別し、有意水準は確率分布の高さとして描かず、計算した確率との数値比較として示す。
 
@@ -99,7 +109,7 @@ Discovery Pointは結論ではなく観察の問いにする。利用者が値�
 
 ## Responsive / Accessibility
 
-- 1280px、768px、375px、320pxを基準にする
+- 1440px、1024px、768px、375px、320pxを基準にする
 - MobileはCanvas → Controls → Discoveryの順に縦積みする
 - ページ全体に横スクロールを出さない
 - Sliderにはラベルと現在値を表示する
@@ -113,8 +123,14 @@ Discovery Pointは結論ではなく観察の問いにする。利用者が値�
 
 - `/atlas.html` — カタログ
 - `/atlas.html?content=quadratic-basic` — 教材Viewer
+- `/atlas.html?content=completing-square` — 平方完成をアニメーションする教材Viewer
+- `/atlas.html?content=three-point-parabola` — 3点から放物線を作る教材Viewer
+- `/atlas.html?content=quadratic-inequality` — 二次不等式を塗る教材Viewer
+- `/atlas.html?content=parameter-intersections` — パラメータと共有点の教材Viewer
 - `/atlas.html?content=quadratic-range` — 最大・最小と定義域の教材Viewer
 - `/atlas.html?content=unit-circle` — 単位円でsin・cosを見る教材Viewer
+- `/atlas.html?content=right-triangle-trig` — 直角三角形と三角比の教材Viewer
+- `/atlas.html?content=trig-relations` — 三角比の相互関係の教材Viewer
 - `/atlas.html?content=triangle-area-sine` — 三角形の面積とsinの教材Viewer
 - `/atlas.html?content=set-regions` — 集合を塗って式を作る教材Viewer
 - `/atlas.html?content=necessary-sufficient` — 必要条件・十分条件を集合で見る教材Viewer

@@ -4,10 +4,11 @@ import {
   enumeratePermutations,
   factorial,
   permutationCount,
-  treePaths
-  ,circularPermutationCount, rotatePermutation
-} from "../math/combinatorics.js?v=20260912-4b";
-import { diceOutcomes, outcomesForEvent, probabilityForEvent } from "../math/sample-space.js?v=20260912-4b";
+  treePaths,
+  circularPermutationCount,
+  rotatePermutation
+} from "../math/combinatorics.js?v=20260912-5c";
+import { diceOutcomes, outcomesForEvent, probabilityForEvent } from "../math/sample-space.js?v=20260912-5c";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 const DISPLAY_LIMIT = 240;
@@ -143,7 +144,8 @@ function createTreeSvg(container, stages) {
 }
 
 function mountTreeCount(container, config = {}) {
-  const initialDepth = [1, 2, 3].includes(Number(config.initial?.visibleDepth)) ? Number(config.initial.visibleDepth) : 2;
+  const stageCount = Array.isArray(config.data?.stages) && config.data.stages.length > 0 ? config.data.stages.length : 2;
+  const initialDepth = Number.isInteger(Number(config.initial?.visibleDepth)) && Number(config.initial.visibleDepth) >= 1 && Number(config.initial.visibleDepth) <= stageCount ? Number(config.initial.visibleDepth) : Math.min(2, stageCount);
   let visibleDepth = initialDepth;
   let destroyed = false;
   const { controls, result, diagram } = createLayout(container, {
@@ -160,11 +162,8 @@ function mountTreeCount(container, config = {}) {
   controlsRow.className = "atlas-combinatorics-control-row";
   const stepButtons = new Map();
   const cleanup = [];
-  [
-    [1, "第1段階"],
-    [2, "第2段階"],
-    [3, "すべて表示"]
-  ].forEach(([depth, label]) => {
+  [...Array.from({ length: stages.length }, (_, index) => [index + 1, `第${index + 1}段階`]), [stages.length, "すべて表示"]]
+    .forEach(([depth, label]) => {
     const { button, cleanup: removeListener } = createButton({
       label,
       className: "atlas-combinatorics-step-button",
@@ -173,7 +172,7 @@ function mountTreeCount(container, config = {}) {
     });
     button.setAttribute("aria-pressed", "false");
     controlsRow.append(button);
-    stepButtons.set(depth, button);
+    stepButtons.set(label === "すべて表示" ? "all" : depth, button);
     cleanup.push(removeListener);
   });
   controls.append(controlsRow);
@@ -190,26 +189,27 @@ function mountTreeCount(container, config = {}) {
   const productText = stageCounts.join(" × ");
 
   function setDepth(depth) {
-    if (destroyed || ![1, 2, 3].includes(depth)) return;
+    if (destroyed || !Number.isInteger(depth) || depth < 1 || depth > stages.length) return;
     visibleDepth = depth;
     tree.stageElements.forEach(({ lines, groups }, index) => {
-      const visible = visibleDepth === 3 || index < visibleDepth;
+      const visible = visibleDepth === stages.length || index < visibleDepth;
       lines.forEach((line) => { line.style.display = visible ? "" : "none"; });
       groups.forEach((group) => { group.style.display = visible ? "" : "none"; });
     });
     stepButtons.forEach((button, value) => {
-      button.setAttribute("aria-pressed", String(value === visibleDepth));
-      button.classList.toggle("is-selected", value === visibleDepth);
+      const active = value === "all" ? visibleDepth === stages.length : value === visibleDepth;
+      button.setAttribute("aria-pressed", String(active));
+      button.classList.toggle("is-selected", active);
     });
     if (visibleDepth === 1) {
-      renderFormula(formula, "3", "3");
+      renderFormula(formula, String(stageCounts[0]), String(stageCounts[0]));
       summary.textContent = `1段階目：${stageCounts[0]}通りの選び方`;
     } else {
       renderFormula(formula, `${productText.replaceAll(" × ", "\\times ")}=${allPaths.length}`, `${productText} = ${allPaths.length}`);
-      summary.textContent = visibleDepth === 3 ? `${productText} = ${allPaths.length}通り（すべての経路）` : `${productText} = ${allPaths.length}通り`;
+      summary.textContent = visibleDepth === stages.length ? `${productText} = ${allPaths.length}通り（すべての経路）` : `${productText} = ${allPaths.length}通り`;
     }
     paths.replaceChildren();
-    if (visibleDepth === 3) {
+    if (visibleDepth === stages.length) {
       allPaths.forEach((path) => {
         const chip = document.createElement("span");
         chip.className = "atlas-combinatorics-chip";

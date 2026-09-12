@@ -13,6 +13,8 @@ export function parseRoute(contents, location = window.location) {
     view: "catalog",
     subject: params.get("subject") || null,
     unit: params.get("unit") || null,
+    type: params.get("type") || null,
+    query: params.get("q") || "",
     invalidContent: false
   };
 }
@@ -20,7 +22,7 @@ export function parseRoute(contents, location = window.location) {
 function atlasUrl(params = {}) {
   const url = new URL("./atlas.html", document.baseURI);
   Object.entries(params).forEach(([key, value]) => {
-    if (value) url.searchParams.set(key, value);
+    if (value) url.searchParams.set(key === "query" ? "q" : key, value);
   });
   return `${url.pathname}${url.search}`;
 }
@@ -30,10 +32,15 @@ export function goToContent(id) {
   window.dispatchEvent(new Event("popstate"));
 }
 
-export function goToCatalog({ replace = false, subject = "", unit = "" } = {}) {
+export function goToCatalog({ replace = false, subject = "", unit = "", type = "", query = "" } = {}) {
   const method = replace ? "replaceState" : "pushState";
-  window.history[method]({ view: "catalog", subject, unit }, "", atlasUrl({ subject, unit }));
+  window.history[method]({ view: "catalog", subject, unit, type, query }, "", atlasUrl({ subject, unit, type, query }));
   window.dispatchEvent(new Event("popstate"));
+}
+
+export function replaceCatalogFilters(filters = {}) {
+  const { subject = "", unit = "", type = "", query = "" } = filters;
+  window.history.replaceState({ view: "catalog", subject, unit, type, query }, "", atlasUrl({ subject, unit, type, query }));
 }
 
 export function watchRoute(contents, onRoute) {

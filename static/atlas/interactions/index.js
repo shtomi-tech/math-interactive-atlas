@@ -1,13 +1,13 @@
-import { mountFunctionGraph } from "./function-graph.js?v=20260912-3a";
-import { mountGeometryBoard } from "./geometry-board.js?v=20260912-4b";
+import { mountFunctionGraph } from "./function-graph.js?v=20260912-5c";
+import { mountGeometryBoard } from "./geometry-board.js?v=20260912-5c";
 import { mountRangeGraph } from "./range-graph.js?v=20260912-3a";
 import { mountRegionSelector } from "./region-selector.js?v=20260912-3a";
-import { mountCombinatoricsViewer } from "./combinatorics-viewer.js?v=20260912-4b";
+import { mountCombinatoricsViewer } from "./combinatorics-viewer.js?v=20260912-5c";
 import { mountDataLab } from "./data-lab.js?v=20260912-4b";
 import { mountSimulationLab } from "./simulation-lab.js?v=20260912-4b";
-import { mountAlgebraLab } from "./algebra-lab.js?v=20260912-4b";
-import { mountNumberLineLab } from "./number-line-lab.js?v=20260912-4b";
-import { mountAlgorithmLab } from "./algorithm-lab.js?v=20260912-4b";
+import { mountAlgebraLab } from "./algebra-lab.js?v=20260912-5c";
+import { mountNumberLineLab } from "./number-line-lab.js?v=20260912-5c";
+import { mountAlgorithmLab } from "./algorithm-lab.js?v=20260912-5c";
 
 const ENGINES = Object.freeze({
   functionGraph: mountFunctionGraph,

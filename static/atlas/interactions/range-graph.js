@@ -13,6 +13,7 @@ const MAX_X = 4;
 const MIN_GAP = 0.25;
 const BOARD_BOUNDS = [-4, 14, 5, -2];
 let boardSequence = 0;
+const RANGE_GRAPH_MODES = Object.freeze({ "quadratic-range": true });
 
 function finite(value, fallback = 0) {
   return Number.isFinite(Number(value)) ? Number(value) : fallback;
@@ -89,6 +90,7 @@ function mountFallback(container) {
 }
 
 export function mountRangeGraph(container, config) {
+  if (!RANGE_GRAPH_MODES[config?.mode]) throw new Error(`Unsupported range graph mode: ${config?.mode || "(empty)"}`);
   const initial = { l: finite(config.initial?.l, -2), r: finite(config.initial?.r, 3) };
   const parameters = config.parameters || {};
   const state = { l: Math.min(initial.l, initial.r - MIN_GAP), r: Math.max(initial.r, initial.l + MIN_GAP) };

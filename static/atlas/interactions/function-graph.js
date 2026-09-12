@@ -1,237 +1,50 @@
-const GRAPH_COLORS = {
-  primary: "#2563eb",
-  secondary: "#e11d48",
-  helper: "#64748b",
-  construction: "#94a3b8",
-  highlight: "#f59e0b",
-  text: "#1f2937"
-};
+import { quadraticDiscriminant, quadraticInequalityIntervals, quadraticLineIntersections, quadraticRoots, quadraticThroughPoints, quadraticValue, quadraticVertex } from "../math/quadratic.js?v=20260912-5d";
 
-const BOARD_BOUNDS = [-6, 6, 6, -6];
-let boardSequence = 0;
+const COLORS = { primary: "#2563eb", secondary: "#e11d48", helper: "#64748b", construction: "#94a3b8", highlight: "#f59e0b", text: "#1f2937" };
+const BOARD_BOUNDS = [-6, 6, 6, -6]; const EPSILON = 1e-8; let sequence = 0;
+const finite = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
+const format = (value) => { const number = finite(value); if (Object.is(number, -0)) return "0"; return Number.isInteger(number) ? String(number) : number.toFixed(2).replace(/0+$/, "").replace(/\.$/, ""); };
+const signed = (value) => finite(value) === 0 ? "" : finite(value) > 0 ? ` + ${format(value)}` : ` − ${format(Math.abs(value))}`;
+const equation = ({ a = 0, b = 0, c = 0 }) => `y = ${format(a)}x²${finite(b) === 0 ? "" : `${signed(b)}x`}${signed(c)}`;
 
-function finite(value, fallback = 0) {
-  return Number.isFinite(Number(value)) ? Number(value) : fallback;
+function createContext(container) {
+  const host = document.createElement("div"); host.id = `atlas-function-graph-${++sequence}`; host.className = "jxgbox atlas-function-graph-board"; container.replaceChildren(host);
+  const board = globalThis.JXG?.JSXGraph?.initBoard(host.id, { boundingbox: BOARD_BOUNDS, axis: true, keepAspectRatio: false, showCopyright: false, showNavigation: false, pan: { enabled: false }, zoom: { enabled: false }, grid: { strokeColor: "#e2e8f0", strokeWidth: 1 } }) || null;
+  const controls = document.createElement("div"); controls.className = "atlas-function-graph-scene-controls"; container.append(controls);
+  const cleanup = []; const observer = globalThis.ResizeObserver ? new ResizeObserver(() => { board?.resizeContainer(host.clientWidth, host.clientHeight); board?.fullUpdate(); }) : null; observer?.observe(host); cleanup.push(() => observer?.disconnect());
+  function text(x, y, value, options = {}) { return board?.create("text", [x, y, value], { fixed: true, highlight: false, fontSize: 14, strokeColor: COLORS.text, ...options }); }
+  function graph(value) { return board?.create("functiongraph", [value, -6, 6], { strokeColor: COLORS.primary, strokeWidth: 3, fixed: true, highlight: false }); }
+  function point(coords, options = {}) { return board?.create("point", coords, { name: "", size: 5, strokeColor: COLORS.secondary, fillColor: COLORS.highlight, fixed: true, highlight: false, ...options }); }
+  function button(label, onClick) { const item = document.createElement("button"); item.type = "button"; item.textContent = label; item.addEventListener("click", onClick); controls.append(item); cleanup.push(() => item.remove()); return item; }
+  return { board, controls, text, graph, point, button, cleanup, host, destroy() { cleanup.forEach((fn) => fn()); if (board && globalThis.JXG?.JSXGraph?.freeBoard) globalThis.JXG.JSXGraph.freeBoard(board); container.replaceChildren(); } };
 }
 
-function formatNumber(value) {
-  const number = finite(value);
-  if (Object.is(number, -0)) return "0";
-  return Number.isInteger(number) ? String(number) : number.toFixed(1).replace(/\.0$/, "");
+function createState(config, defaults) { return { ...defaults, ...(config.initial || {}) }; }
+function definition(config, name, fallback) { const item = config.parameters?.[name] || {}; return { min: Number.isFinite(Number(item.min)) ? Number(item.min) : fallback.min, max: Number.isFinite(Number(item.max)) ? Number(item.max) : fallback.max }; }
+
+function mountQuadraticBasicScene(context, config) {
+  const state=createState(config,{a:1}); const params=config.parameters||{}; context.graph((x)=>state.a*x*x); context.text(-5.6,5.2,()=>`a = ${format(state.a)}`,{fontSize:16,strokeColor:COLORS.primary}); context.text(-5.6,4.6,()=>state.a===0?"y = 0":state.a===1?"y = x²":state.a===-1?"y = −x²":`y = ${format(state.a)}x²`); context.text(-5.6,4,()=>state.a===0?"a = 0 では二次関数ではありません。":"",{fontSize:12,strokeColor:COLORS.secondary}); const notify=()=>config.onStateChange?.({...state},state.a===0?"a = 0 では二次関数ではありません。":`y = ${format(state.a)}x²`); return { setParameter(name,value){if(params[name])state[name]=Math.min(params[name].max,Math.max(params[name].min,Number(value)));notify();context.board?.update();},reset(){Object.assign(state,config.initial||{a:1});notify();context.board?.update();},getState:()=>({...state})};
 }
 
-function signed(value) {
-  const number = finite(value);
-  if (number === 0) return "";
-  return number > 0 ? ` + ${formatNumber(number)}` : ` − ${formatNumber(Math.abs(number))}`;
+function mountQuadraticVertexScene(context, config) {
+  const state=createState(config,{a:1,p:0,q:0}); context.graph((x)=>state.a*(x-state.p)**2+state.q); context.board?.create("line",[[()=>state.p,-6],[()=>state.p,6]],{straightFirst:false,straightLast:false,strokeColor:COLORS.construction,strokeWidth:2,dash:2,fixed:true,highlight:false}); context.point([()=>state.p,()=>state.q],{name:"V",fillColor:COLORS.highlight,strokeColor:COLORS.text}); const notify=()=>config.onStateChange?.({...state},`頂点 (${format(state.p)}, ${format(state.q)}) ／ 対称軸 x = ${format(state.p)}`); return {setParameter(name,value){if(config.parameters?.[name])state[name]=Math.min(config.parameters[name].max,Math.max(config.parameters[name].min,Number(value)));notify();context.board?.update();},reset(){Object.assign(state,config.initial||{a:1,p:0,q:0});notify();context.board?.update();},getState:()=>({...state})};
 }
 
-function equationForBasic(a) {
-  if (a === 0) return "y = 0";
-  if (a === 1) return "y = x²";
-  if (a === -1) return "y = −x²";
-  return `y = ${formatNumber(a)}x²`;
+function mountDiscriminantScene(context, config) {
+  const state=createState(config,{a:1,b:0,c:-1}); const roots=[context.point([0,0]),context.point([0,0])]; context.graph((x)=>quadraticValue(state,x)); context.text(-5.6,5.2,()=>Math.abs(state.a)<EPSILON?"判定対象外":`D = ${format(quadraticDiscriminant(state))}`,{fontSize:16,strokeColor:COLORS.secondary}); context.text(-5.6,4.6,()=>equation(state)); context.text(-5.6,4,()=>Math.abs(state.a)<EPSILON?"a = 0 では二次方程式ではありません。":`実数解：${quadraticRoots(state).length}個`,{fontSize:12,strokeColor:COLORS.helper}); const notify=()=>{const values=quadraticRoots(state);roots.forEach((root,index)=>{const value=values[index];root?.moveTo([Number.isFinite(value)?value:0,0],0);root?.setAttribute({visible:Number.isFinite(value)});});context.board?.update();config.onStateChange?.({...state},Math.abs(state.a)<EPSILON?"a = 0 では二次方程式ではありません。":`D = ${format(quadraticDiscriminant(state))} ／ 交点 = ${quadraticRoots(state).length}個`);}; return {setParameter(name,value){if(config.parameters?.[name])state[name]=Math.min(config.parameters[name].max,Math.max(config.parameters[name].min,Number(value)));notify();},reset(){Object.assign(state,config.initial||{a:1,b:0,c:-1});notify();},getState:()=>({...state})};
 }
 
-function equationForVertex({ a, p, q }) {
-  const coefficient = a === 1 ? "" : a === -1 ? "−" : formatNumber(a);
-  const shiftedX = p === 0 ? "x" : p > 0 ? `(x − ${formatNumber(p)})` : `(x + ${formatNumber(Math.abs(p))})`;
-  return `y = ${coefficient}${shiftedX}²${signed(q)}`;
+function mountThreePointScene(context, config) {
+  const state=createState(config,{y1:3,y2:-1,y3:3}); const xs=[-2,0,2]; const points=xs.map((x,index)=>context.point([x,()=>state[`y${index+1}`]],{name:`P${index+1}`,fixed:false})); const updatePoints=()=>points.forEach((point,index)=>point?.moveTo([xs[index],state[`y${index+1}`]],0)); context.graph((x)=>{const result=quadraticThroughPoints(xs.map((value,index)=>({x:value,y:state[`y${index+1}`]})));return result?quadraticValue(result,x):0;}); context.text(-5.6,5.2,()=>{const result=quadraticThroughPoints(xs.map((value,index)=>({x:value,y:state[`y${index+1}`]})));return result?equation(result):"3点から放物線を決められません";},{fontSize:15,strokeColor:COLORS.primary}); points.forEach((point,index)=>point?.on("drag",()=>{state[`y${index+1}`]=point.Y();notify();})); function notify(){updatePoints();const result=quadraticThroughPoints(xs.map((value,index)=>({x:value,y:state[`y${index+1}`]})));context.board?.update();config.onStateChange?.({...state},result?`${equation(result)} ／ 3点を通る放物線`:"x座標が重複すると放物線を決められません");} return {setParameter(name,value){if(["y1","y2","y3"].includes(name))state[name]=Number(value);notify();},reset(){Object.assign(state,config.initial||{y1:3,y2:-1,y3:3});notify();},getState:()=>({...state})};
 }
 
-function equationForDiscriminant({ a, b, c }) {
-  if (a === 0) {
-    if (b === 0) return c === 0 ? "y = 0" : `y = ${c < 0 ? "− " : ""}${formatNumber(Math.abs(c))}`;
-    const linear = b === 0 ? "" : b === 1 ? "x" : b === -1 ? "−x" : `${formatNumber(b)}x`;
-    return `y = ${linear || "0"}${signed(c)}`;
-  }
-  const coefficient = a === 1 ? "" : a === -1 ? "−" : formatNumber(a);
-  const linear = b === 0 ? "" : b === 1 ? " + x" : b === -1 ? " − x" : `${signed(b)}x`;
-  return `y = ${coefficient}x²${linear}${signed(c)}`;
+function mountQuadraticInequalityScene(context, config) {
+  const state=createState(config,{a:1,b:0,c:-4,operator:">"}); context.graph((x)=>quadraticValue(state,x)); const roots=[context.point([0,0]),context.point([0,0])]; const select=document.createElement("select"); select.setAttribute("aria-label","二次不等式の不等号"); [">","≥","<","≤"].forEach((operator)=>{const option=document.createElement("option");option.value=operator;option.textContent=operator;select.append(option);});select.value=state.operator;select.addEventListener("change",()=>{state.operator=select.value;notify();});context.controls.append(select);const line=document.createElement("div");line.className="atlas-inequality-number-line";context.controls.append(line);function notify(){const values=quadraticRoots(state);roots.forEach((point,index)=>{const value=values[index];point?.moveTo([Number.isFinite(value)?value:0,0],0);point?.setAttribute({visible:Number.isFinite(value)});});const intervals=quadraticInequalityIntervals(state);line.textContent=intervals.length?intervals.map((item)=>`${item.from===-Infinity?"−∞":format(item.from)} 〜 ${item.to===Infinity?"∞":format(item.to)}`).join(" / "):"解なし";context.board?.update();config.onStateChange?.({...state},`${equation(state)} ／ x ${state.operator} 0：${line.textContent}`);} return {setParameter(name,value){if(name==="operator")state.operator=value;else if(config.parameters?.[name])state[name]=Math.min(config.parameters[name].max,Math.max(config.parameters[name].min,Number(value)));notify();},reset(){Object.assign(state,config.initial||{a:1,b:0,c:-4,operator:">"});select.value=state.operator;notify();},getState:()=>({...state})};
 }
 
-function discriminant({ a, b, c }) {
-  return b ** 2 - 4 * a * c;
+function mountParameterIntersectionScene(context, config) {
+  const state=createState(config,{m:2,k:0}); const quadratic=(x)=>x*x; const line=(x)=>state.m*x+state.k; context.graph(quadratic); context.board?.create("functiongraph",[line,-6,6],{strokeColor:COLORS.secondary,strokeWidth:3,fixed:true,highlight:false}); const points=[context.point([0,0]),context.point([0,0])]; context.text(-5.6,5.2,()=>`D = ${format(state.m**2+4*state.k)}`,{fontSize:16,strokeColor:COLORS.secondary});function notify(){const values=quadraticLineIntersections({quadratic:{a:1,b:0,c:0},line:{m:state.m,k:state.k}});points.forEach((point,index)=>{const value=values[index];point?.moveTo([Number.isFinite(value)?value:0,Number.isFinite(value)?quadratic(value):0],0);point?.setAttribute({visible:Number.isFinite(value)});});context.board?.update();config.onStateChange?.({...state},`共有点：${values.length}個 ／ D = ${format(state.m**2+4*state.k)}`);}return{setParameter(name,value){if(config.parameters?.[name])state[name]=Math.min(config.parameters[name].max,Math.max(config.parameters[name].min,Number(value)));notify();},reset(){Object.assign(state,config.initial||{m:2,k:0});notify();},getState:()=>({...state})};
 }
 
-function rootsFor({ a, b, c }) {
-  if (Math.abs(a) < 0.000001) return [];
-  const value = discriminant({ a, b, c });
-  if (value < -0.000001) return [];
-  if (Math.abs(value) <= 0.000001) return [-b / (2 * a)];
-  const squareRoot = Math.sqrt(Math.max(0, value));
-  return [(-b - squareRoot) / (2 * a), (-b + squareRoot) / (2 * a)].filter(Number.isFinite);
-}
-
-function valueFor(mode, state, x) {
-  if (mode === "quadratic-basic") return state.a * x ** 2;
-  if (mode === "quadratic-vertex") return state.a * (x - state.p) ** 2 + state.q;
-  if (Math.abs(state.a) < 0.000001) return state.b * x + state.c;
-  return state.a * x ** 2 + state.b * x + state.c;
-}
-
-function summaryFor(mode, state) {
-  if (mode === "quadratic-basic") {
-    const base = `a = ${formatNumber(state.a)}　／　${equationForBasic(state.a)}`;
-    return state.a === 0 ? `${base}　／　二次関数ではありません。` : base;
-  }
-  if (mode === "quadratic-vertex") {
-    return `頂点 (${formatNumber(state.p)}, ${formatNumber(state.q)})　／　対称軸 x = ${formatNumber(state.p)}　／　${equationForVertex(state)}`;
-  }
-  if (Math.abs(state.a) < 0.000001) {
-    return `a = 0　／　${equationForDiscriminant(state)}　／　二次方程式ではありません。aを0以外にしてください。`;
-  }
-  const value = discriminant(state);
-  const roots = rootsFor(state);
-  return `D = ${formatNumber(value)}　／　交点 = ${roots.length}個　／　${equationForDiscriminant(state)}`;
-}
-
-function addText(board, x, y, getText, options = {}) {
-  return board.create("text", [x, y, getText], {
-    fixed: true,
-    highlight: false,
-    fontSize: 14,
-    strokeColor: GRAPH_COLORS.text,
-    useMathJax: false,
-    ...options
-  });
-}
-
-function createBoard(container, id) {
-  if (!window.JXG?.JSXGraph?.initBoard) return null;
-  const host = document.createElement("div");
-  host.id = id;
-  host.className = "jxgbox";
-  container.replaceChildren(host);
-  return window.JXG.JSXGraph.initBoard(id, {
-    boundingbox: BOARD_BOUNDS,
-    axis: true,
-    keepAspectRatio: false,
-    showCopyright: false,
-    showNavigation: false,
-    pan: { enabled: false },
-    zoom: { enabled: false },
-    axisX: { strokeColor: GRAPH_COLORS.helper, strokeWidth: 1.5 },
-    axisY: { strokeColor: GRAPH_COLORS.helper, strokeWidth: 1.5 },
-    grid: { strokeColor: "#e2e8f0", strokeWidth: 1 }
-  });
-}
-
-function mountFallback(container) {
-  const fallback = document.createElement("p");
-  fallback.className = "atlas-canvas-fallback";
-  fallback.textContent = "グラフライブラリを読み込めません。数値と式は下の操作欄に表示します。";
-  container.replaceChildren(fallback);
-}
-
-export function mountFunctionGraph(container, config) {
-  const mode = config.mode;
-  const initial = { ...config.initial };
-  const parameters = config.parameters || {};
-  const state = { ...initial };
-  const boardId = `atlas-function-graph-${boardSequence += 1}`;
-  let board = createBoard(container, boardId);
-  let rootPoints = [];
-
-  if (!board) mountFallback(container);
-
-  function setVisible(point, visible) {
-    point.setAttribute({ visible });
-  }
-
-  if (board) {
-    board.create("functiongraph", [(x) => valueFor(mode, state, x), -6, 6], {
-      strokeColor: GRAPH_COLORS.primary,
-      strokeWidth: 3,
-      fixed: true,
-      highlight: false
-    });
-
-    if (mode === "quadratic-basic") {
-      addText(board, -5.6, 5.2, () => `a = ${formatNumber(state.a)}`, { fontSize: 16, strokeColor: GRAPH_COLORS.primary });
-      addText(board, -5.6, 4.6, () => equationForBasic(state.a));
-      addText(board, -5.6, 4.0, () => state.a === 0 ? "a = 0 では二次関数ではありません。" : "", { fontSize: 12, strokeColor: GRAPH_COLORS.secondary });
-    }
-
-    if (mode === "quadratic-vertex") {
-      board.create("line", [[() => state.p, -6], [() => state.p, 6]], {
-        straightFirst: false,
-        straightLast: false,
-        strokeColor: GRAPH_COLORS.construction,
-        strokeWidth: 2,
-        dash: 2,
-        fixed: true,
-        highlight: false
-      });
-      board.create("point", [() => state.p, () => state.q], {
-        name: "V",
-        size: 5,
-        strokeColor: GRAPH_COLORS.text,
-        fillColor: GRAPH_COLORS.highlight,
-        fixed: true,
-        highlight: false
-      });
-      addText(board, -5.6, 5.2, () => `頂点 (${formatNumber(state.p)}, ${formatNumber(state.q)})`, { fontSize: 16, strokeColor: GRAPH_COLORS.primary });
-      addText(board, -5.6, 4.6, () => equationForVertex(state));
-      addText(board, -5.6, 4.0, () => `対称軸 x = ${formatNumber(state.p)}`, { fontSize: 12, strokeColor: GRAPH_COLORS.helper });
-    }
-
-    if (mode === "quadratic-discriminant") {
-      rootPoints = [0, 1].map(() => board.create("point", [0, 0], {
-        name: "",
-        size: 5,
-        strokeColor: GRAPH_COLORS.text,
-        fillColor: GRAPH_COLORS.secondary,
-        visible: false,
-        fixed: true,
-        highlight: false
-      }));
-      addText(board, -5.6, 5.2, () => Math.abs(state.a) < 0.000001 ? "判定対象外" : `D = ${formatNumber(discriminant(state))}`, { fontSize: 16, strokeColor: GRAPH_COLORS.secondary });
-      addText(board, -5.6, 4.6, () => equationForDiscriminant(state));
-      addText(board, -5.6, 4.0, () => {
-        if (Math.abs(state.a) < 0.000001) return "a = 0 では二次方程式ではありません。";
-        return `実数解：${rootsFor(state).length}個`;
-      }, { fontSize: 12, strokeColor: GRAPH_COLORS.helper });
-    }
-  }
-
-  function notify() {
-    config.onStateChange?.({ ...state }, summaryFor(mode, state));
-  }
-
-  function draw() {
-    if (board && mode === "quadratic-discriminant") {
-      const roots = rootsFor(state);
-      rootPoints.forEach((point, index) => {
-        const root = roots[index];
-        point.moveTo([Number.isFinite(root) ? root : 0, 0], 0);
-        setVisible(point, Number.isFinite(root));
-      });
-    }
-    board?.update();
-    notify();
-  }
-
-  function setParameter(name, value) {
-    const definition = parameters[name];
-    if (!definition) return;
-    const number = finite(value, initial[name]);
-    state[name] = Math.min(definition.max, Math.max(definition.min, number));
-    draw();
-  }
-
-  function reset() {
-    Object.assign(state, initial);
-    draw();
-  }
-
-  function destroy() {
-    if (board && window.JXG?.JSXGraph?.freeBoard) window.JXG.JSXGraph.freeBoard(board);
-    board = null;
-    rootPoints = [];
-    container.replaceChildren();
-  }
-
-  draw();
-  return { reset, destroy, setParameter, getState: () => ({ ...state }) };
-}
+const FUNCTION_GRAPH_MODES=Object.freeze({"quadratic-basic":mountQuadraticBasicScene,"quadratic-vertex":mountQuadraticVertexScene,"quadratic-discriminant":mountDiscriminantScene,"three-point-parabola":mountThreePointScene,"quadratic-inequality":mountQuadraticInequalityScene,"parameter-intersections":mountParameterIntersectionScene});
+export function mountFunctionGraph(container,config={}){const mount=FUNCTION_GRAPH_MODES[config.mode];if(!mount)throw new Error(`Unsupported function graph mode: ${config.mode||"(empty)"}`);const context=createContext(container);const scene=mount(context,config);return{reset:scene.reset,destroy:context.destroy,getState:scene.getState,setParameter:scene.setParameter};}

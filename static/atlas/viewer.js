@@ -1,4 +1,5 @@
-import { mountInteraction } from "./interactions/index.js?v=20260912-4b";
+import { mountInteraction } from "./interactions/index.js?v=20260912-5c";
+import { neighborsForContent } from "./curriculum.js?v=20260912-5c";
 
 function renderFormula(target, expression) {
   target.className = "atlas-formula-fallback";
@@ -71,7 +72,7 @@ function appendSource(section, source) {
   }
 }
 
-export function createViewer(root, { onBack, onRelated }) {
+export function createViewer(root, { onBack, onRelated, onNavigate = onRelated }) {
   let engine = null;
   let controls = new Map();
 
@@ -93,7 +94,8 @@ export function createViewer(root, { onBack, onRelated }) {
     const heading = document.createElement("div");
     const breadcrumb = document.createElement("p");
     breadcrumb.className = "atlas-breadcrumb";
-    breadcrumb.textContent = `${content.subjectLabel}　＞　${content.unitLabel}　＞　${content.title}`;
+    const position = neighborsForContent(contents, content.id);
+    breadcrumb.textContent = `${content.subjectLabel}　＞　${content.unitLabel}　＞　${position.index + 1} / ${position.total}`;
     const title = document.createElement("h1");
     title.id = "viewerTitle";
     title.textContent = content.title;
@@ -193,11 +195,23 @@ export function createViewer(root, { onBack, onRelated }) {
     });
     related.append(relatedTitle, relatedList);
 
+    const navigation = document.createElement("nav");
+    navigation.className = "atlas-learning-navigation";
+    navigation.setAttribute("aria-label", "教材間の移動");
+    [["previous", position.previous, "← 前の教材"], ["next", position.next, "次の教材 →"]].forEach(([direction, target, label]) => {
+      const button = document.createElement("button");
+      button.type = "button"; button.className = `atlas-learning-navigation-${direction}`; button.disabled = !target;
+      button.setAttribute("aria-label", target ? `${label}：${target.title}` : label);
+      button.textContent = label;
+      if (target) { const title = document.createElement("strong"); title.textContent = target.title; button.append(document.createElement("br"), title); button.addEventListener("click", () => onNavigate(target.id)); }
+      navigation.append(button);
+    });
+
     const source = document.createElement("footer");
     source.className = "atlas-source";
     appendSource(source, content.source);
 
-    viewer.append(header, formula, interactive, discovery, related, source);
+    viewer.append(header, formula, interactive, discovery, related, navigation, source);
     root.append(viewer);
 
     engine = mountInteraction(canvas, content.interaction, {
@@ -206,6 +220,7 @@ export function createViewer(root, { onBack, onRelated }) {
         syncControls(state);
       }
     });
+    if (!observation.textContent) observation.textContent = content.instructions || "操作欄を使って、値の変化とグラフの関係を観察します。";
     reset.addEventListener("click", () => engine.reset());
   }
 

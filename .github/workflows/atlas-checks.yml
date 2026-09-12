@@ -32,6 +32,10 @@ jobs:
           node scripts/check-number-line.js
           node scripts/check-sample-space.js
           node scripts/check-number-theory.js
+          node scripts/check-quadratic.js
+          node scripts/check-trigonometry.js
+          node scripts/check-curriculum.js
+          node scripts/check-related-content.js
           node scripts/check-hypothesis-test.js
       - name: Check JavaScript syntax
         shell: bash
@@ -63,4 +67,8 @@ jobs:
           node --check static/atlas/math/number-line.js
           node --check static/atlas/math/sample-space.js
           node --check static/atlas/math/number-theory.js
+          node --check static/atlas/interactions/function-graph.js
+          node --check static/atlas/curriculum.js
+          node --check static/atlas/math/quadratic.js
+          node --check static/atlas/math/trigonometry.js
           node --check static/atlas/math/hypothesis-test.js

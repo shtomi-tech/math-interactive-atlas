@@ -1,6 +1,6 @@
-import { renderCatalog } from "./catalog.js?v=20260912-4b";
-import { createViewer } from "./viewer.js?v=20260912-4b";
-import { goToCatalog, goToContent, watchRoute } from "./router.js?v=20260912-4b";
+import { renderCatalog } from "./catalog.js?v=20260912-5c";
+import { createViewer } from "./viewer.js?v=20260912-5c";
+import { goToCatalog, goToContent, replaceCatalogFilters, watchRoute } from "./router.js?v=20260912-5c";
 
 const dom = {
   status: document.querySelector("#atlasStatus"),
@@ -27,7 +27,8 @@ async function start() {
     const contents = await loadContents();
     const viewer = createViewer(dom.viewerRoot, {
       onBack: () => goToCatalog(),
-      onRelated: (id) => goToContent(id)
+      onRelated: (id) => goToContent(id),
+      onNavigate: (id) => goToContent(id)
     });
 
     watchRoute(contents, (route) => {
@@ -57,6 +58,9 @@ async function start() {
       renderCatalog(dom.catalogGrid, contents, {
         subject: route.subject,
         unit: route.unit,
+        type: route.type,
+        query: route.query,
+        onFilterChange: (filters) => replaceCatalogFilters(filters),
         onSelect: (id) => goToContent(id)
       });
     });

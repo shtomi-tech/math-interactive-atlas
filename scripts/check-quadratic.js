@@ -1,0 +1,11 @@
+import assert from "node:assert/strict";
+import { quadraticDiscriminant, quadraticInequalityIntervals, quadraticRoots, quadraticThroughPoints, quadraticVertex } from "../static/atlas/math/quadratic.js";
+assert.equal(quadraticDiscriminant({ a: 1, b: 0, c: -4 }), 16);
+assert.deepEqual(quadraticRoots({ a: 1, b: 0, c: -4 }), [-2, 2]);
+assert.deepEqual(quadraticVertex({ a: 1, b: -4, c: 3 }), { x: 2, y: -1 });
+assert.deepEqual(quadraticThroughPoints([{ x: -2, y: 3 }, { x: 0, y: -1 }, { x: 2, y: 3 }]), { a: 1, b: -0, c: -1 });
+assert.equal(quadraticThroughPoints([{ x: 0, y: 1 }, { x: 0, y: 2 }, { x: 1, y: 3 }]), null);
+assert.deepEqual(quadraticInequalityIntervals({ a: 1, b: 0, c: -4, operator: ">" }).map(({ from, to }) => [from, to]), [[-Infinity, -2], [2, Infinity]]);
+assert.deepEqual(quadraticInequalityIntervals({ a: 1, b: 0, c: 1, operator: "<" }), []);
+assert.deepEqual(quadraticInequalityIntervals({ a: -1, b: 0, c: 4, operator: ">" }).map(({ from, to }) => [from, to]), [[-2, 2]]);
+console.log("Quadratic math: PASS (discriminant, roots, vertex, points, intervals)");

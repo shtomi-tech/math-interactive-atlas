@@ -14,3 +14,11 @@ export function perfectSquareCoefficients(a) {
 export function factorPairExpansion(m, n) {
   return expandMonicProduct(m, n);
 }
+
+export function completeSquare({ b, c }) {
+  const linear = Number(b);
+  const constant = Number(c);
+  if (![linear, constant].every(Number.isFinite)) throw new TypeError("b and c must be finite numbers");
+  const h = linear / 2;
+  return { h, q: constant - h ** 2 };
+}
