@@ -1,5 +1,5 @@
-import { SUBJECT_ORDER, SUBJECT_UNIT_ORDER, subjectLabel, unitLabel } from "../atlas/curriculum.js?v=20260913-8a";
-import { practiceStatus } from "../atlas/storage.js?v=20260913-8a";
+import { SUBJECT_ORDER, SUBJECT_UNIT_ORDER, subjectLabel, unitLabel } from "../atlas/curriculum.js?v=20260913-8b";
+import { practiceStatus } from "../atlas/storage.js?v=20260913-8b";
 
 const STATUS_VALUES = ["mastered", "practicing", "review", "unattempted"];
 const STATUS_LABELS = { mastered: "習得", practicing: "練習中", review: "要復習", unattempted: "未挑戦" };
@@ -26,7 +26,7 @@ export function summarizeLearning(contents, problems, learningState = {}) {
   });
   const recentActivity = safeProblems.map((problem) => {
     const entry = stateEntry(learningState, problem.id);
-    return entry?.lastAttemptAt ? { problemId: problem.id, title: problem.title, lastAttemptAt: entry.lastAttemptAt, status: practiceStatus(entry), statusLabel: STATUS_LABELS[practiceStatus(entry)], subject: problem.subject, unit: problem.unit } : null;
+    return entry?.lastAttemptAt ? { problemId: problem.id, atlasContentId: problem.atlasContentId, title: problem.title, lastAttemptAt: entry.lastAttemptAt, status: practiceStatus(entry), statusLabel: STATUS_LABELS[practiceStatus(entry)], subject: problem.subject, unit: problem.unit } : null;
   }).filter(Boolean).sort((left, right) => String(right.lastAttemptAt).localeCompare(String(left.lastAttemptAt))).slice(0, 10);
   const global = {
     visitedContents: contentSummaries.filter((content) => content.visited).length,

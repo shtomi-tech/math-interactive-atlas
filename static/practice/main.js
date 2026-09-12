@@ -1,9 +1,9 @@
-import { renderPracticeCatalog } from "./catalog.js?v=20260913-8a";
-import { createProblemRunner } from "./runner.js?v=20260913-8a";
-import { buildExplicitSession, buildSession } from "./session.js?v=20260913-8a";
-import { goToCatalog, goToProblem, replaceCatalogFilters, watchRoute } from "./router.js?v=20260913-8a";
-import { loadLearningState, recordPracticeAttempt, saveLearningState } from "../atlas/storage.js?v=20260913-8a";
-import { validateProblemData } from "./validation.js?v=20260913-8a";
+import { renderPracticeCatalog } from "./catalog.js?v=20260913-8b";
+import { createProblemRunner } from "./runner.js?v=20260913-8b";
+import { buildExplicitSession, buildSession } from "./session.js?v=20260913-8b";
+import { goToCatalog, goToProblem, replaceCatalogFilters, watchRoute } from "./router.js?v=20260913-8b";
+import { loadLearningState, recordPracticeAttempt, saveLearningState } from "../atlas/storage.js?v=20260913-8b";
+import { validateProblemData } from "./validation.js?v=20260913-8b";
 
 const dom = {
   status: document.querySelector("#practiceStatus"),
@@ -27,7 +27,10 @@ async function start() {
     const runner = createProblemRunner(dom.runnerRoot, {
       onBack: (fromCatalog) => fromCatalog ? goToCatalog({ ...fromCatalog, replace: true }) : goToCatalog(),
       onResult: (problemId, correct) => persist(recordPracticeAttempt(learningState, problemId, { correct })),
-      onNext: (problemId, fromCatalog, ids = []) => goToProblem(problemId, { fromCatalog, ids })
+      onNext: (problemId, fromCatalog, ids = []) => {
+        const nextProblem = problems.find((item) => item.id === problemId);
+        goToProblem(problemId, { fromCatalog, ids, atlasContentId: nextProblem?.atlasContentId || "" });
+      }
     });
     let activeCatalogRoute = null;
     const catalogContext = () => ({
@@ -44,7 +47,10 @@ async function start() {
         ...route,
         state: learningState,
         onFilterChange: (filters) => { activeCatalogRoute = { ...activeCatalogRoute, ...filters }; replaceCatalogFilters(filters); },
-        onSelect: (problemId) => goToProblem(problemId, { fromCatalog: catalogContext() })
+        onSelect: (problemId) => {
+          const problem = problems.find((item) => item.id === problemId);
+          goToProblem(problemId, { fromCatalog: catalogContext(), atlasContentId: problem?.atlasContentId || "" });
+        }
       });
     };
     watchRoute(problems, (route) => {
@@ -58,9 +64,9 @@ async function start() {
         const session = explicitSession || buildSession(problems, route.fromCatalog || {}, learningState);
         const renderSession = explicitSession ? session : (session.problems.length ? session : { problems });
         if (problem && !renderSession.problems.some((item) => item.id === problem.id) && !explicitSession) {
-          runner.render(null, renderSession, learningState, { fromCatalog: route.fromCatalog, ids: explicitIds });
+          runner.render(null, renderSession, learningState, { fromCatalog: route.fromCatalog, ids: explicitIds, atlasContentId: route.atlasContentId });
         } else {
-          runner.render(problem, renderSession, learningState, { fromCatalog: route.fromCatalog, ids: explicitIds });
+          runner.render(problem, renderSession, learningState, { fromCatalog: route.fromCatalog, ids: explicitIds, atlasContentId: route.atlasContentId });
         }
         dom.runnerView.focus({ preventScroll: true });
         return;

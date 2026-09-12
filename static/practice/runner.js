@@ -1,7 +1,7 @@
-import { evaluateAnswer } from "./answer.js?v=20260913-8a";
-import { subjectLabel, unitLabel } from "../atlas/curriculum.js?v=20260913-8a";
-import { practiceStatus } from "../atlas/storage.js?v=20260913-8a";
-import { nextProblem, sessionPosition } from "./session.js?v=20260913-8a";
+import { evaluateAnswer } from "./answer.js?v=20260913-8b";
+import { subjectLabel, unitLabel } from "../atlas/curriculum.js?v=20260913-8b";
+import { practiceStatus } from "../atlas/storage.js?v=20260913-8b";
+import { nextProblem, sessionPosition } from "./session.js?v=20260913-8b";
 
 const STATUS_LABELS = { unattempted: "未挑戦", practicing: "練習中", review: "要復習", mastered: "習得" };
 
@@ -27,12 +27,13 @@ function makeButton(text, className, onClick) {
 }
 
 export function createProblemRunner(root, { onBack = () => {}, onResult = () => {}, onNext = () => {} } = {}) {
-  function render(problem, sessionOrProblems, initialState, { fromCatalog = null } = {}) {
+  function render(problem, sessionOrProblems, initialState, { fromCatalog = null, atlasContentId = null } = {}) {
     root.replaceChildren();
     const session = Array.isArray(sessionOrProblems) ? { problems: sessionOrProblems } : sessionOrProblems || { problems: [] };
     let state = initialState || {};
     const article = document.createElement("article");
     article.className = "practice-runner";
+    if (atlasContentId || problem?.atlasContentId) article.dataset.atlasContentId = atlasContentId || problem.atlasContentId;
     const top = document.createElement("div");
     top.className = "practice-runner-top";
     const back = makeButton("← Practice一覧へ戻る", "practice-runner-back", () => onBack(fromCatalog));

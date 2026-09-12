@@ -113,6 +113,16 @@ GitHub Actionsでも、同じ契約・数学ロジック検査と対象JavaScrip
 
 ローカル検証は `npm run check`、`npm test` で実行します。PlaywrightのChromiumが未導入の場合は `npx playwright install chromium` を先に実行してください。
 
+### Phase 8B learning loop gate
+
+- 公開PagesのAtlas、Practice、問題セット、問題プリント、学習レポートを実ブラウザで検証する
+- `content-data.json` から89教材を自動列挙し、全教材のmount・Reset・fallbackなし・console/page errorなしを回帰確認する
+- Atlas → Practice → Atlas → Practice → Progress → Atlas/Practice の復帰導線をE2Eで確認する
+- Pagesデプロイ後はHTMLの200確認に加え、JavaScript初期化、主要DOM、asset version、console errorなしを確認する
+- 数量は89教材、267問、11 Interaction Engineから変更しない
+
+Phase 8Bのローカル検証は `npm test` と `npx playwright test tests/e2e/all-atlas-content.spec.js tests/e2e/learning-loop.spec.js` で実行します。公開Pagesのブラウザ検証は `PLAYWRIGHT_BASE_URL=<Pages URL> npx playwright test tests/e2e/pages-smoke.spec.js` です。
+
 GitHub ActionsのAtlas checksはpush / pull requestで実行します。Pages公開は手動実行の [`.github/workflows/pages.yml`](./.github/workflows/pages.yml) から行い、Atlas、Practice、問題セット、問題プリント、学習レポートのHTML・CSS・JS・データを公開します。GitHub Pages deployment requires repository-side Pages configuration. PagesがRepository設定またはGitHubプランで有効化できない場合は、`Pages configuration required` として扱います。
 
 `zukan.html` / `static/zukan/` は旧プロトタイプです。新規実装の正本は `atlas.html` / `static/atlas/` です。Legacy prototype. Do not add new features here.

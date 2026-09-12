@@ -1,6 +1,6 @@
-import { mountInteraction } from "./interactions/index.js?v=20260913-8a";
-import { neighborsForContent, subjectLabel, unitLabel } from "./curriculum.js?v=20260913-8a";
-import { practiceStatus } from "./storage.js?v=20260913-8a";
+import { mountInteraction } from "./interactions/index.js?v=20260913-8b";
+import { neighborsForContent, subjectLabel, unitLabel } from "./curriculum.js?v=20260913-8b";
+import { practiceStatus } from "./storage.js?v=20260913-8b";
 
 const STATUS_LABELS = { unattempted: "未挑戦", practicing: "練習中", review: "要復習", mastered: "習得" };
 
@@ -114,7 +114,7 @@ export function createViewer(root, { onBack, onRelated, onNavigate = onRelated, 
     if (fromProblem) {
       const problemBack = document.createElement("a");
       problemBack.className = "atlas-problem-return";
-      problemBack.href = `./practice.html?problem=${encodeURIComponent(fromProblem)}`;
+      problemBack.href = `./practice.html?problem=${encodeURIComponent(fromProblem)}&atlasContentId=${encodeURIComponent(content.id)}`;
       problemBack.textContent = "← 問題に戻る";
       actions.append(problemBack);
     }
@@ -228,7 +228,7 @@ export function createViewer(root, { onBack, onRelated, onNavigate = onRelated, 
     practiceLead.textContent = "基礎から標準、発展へ。3問で確かめます。";
     const practiceList = document.createElement("ul");
     const difficultyLabels = ["基礎", "標準", "発展"];
-    linkedProblems.forEach((problem) => { const item = document.createElement("li"); const link = document.createElement("a"); link.href = `./practice.html?problem=${encodeURIComponent(problem.id)}`; const label = difficultyLabels[problem.difficulty - 1] || `難易度${problem.difficulty}`; const currentStatus = practiceStatus(learningState.practice?.[problem.id]); link.textContent = `${label}　${STATUS_LABELS[currentStatus] || currentStatus}`; item.append(link); practiceList.append(item); });
+    linkedProblems.forEach((problem) => { const item = document.createElement("li"); const link = document.createElement("a"); link.href = `./practice.html?problem=${encodeURIComponent(problem.id)}&atlasContentId=${encodeURIComponent(content.id)}`; const label = difficultyLabels[problem.difficulty - 1] || `難易度${problem.difficulty}`; const currentStatus = practiceStatus(learningState.practice?.[problem.id]); link.textContent = `${label}　${STATUS_LABELS[currentStatus] || currentStatus}`; item.append(link); practiceList.append(item); });
     const mastered = linkedProblems.filter((problem) => practiceStatus(learningState.practice?.[problem.id]) === "mastered").length;
     const practiceSummary = document.createElement("p");
     practiceSummary.className = "atlas-practice-summary";

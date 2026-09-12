@@ -1,7 +1,7 @@
-import { coinTestFacts } from "../math/hypothesis-test.js?v=20260913-8a";
-import { binomialDistribution, binomialProbability } from "../math/probability.js?v=20260913-8a";
-import { normalPdf, zTestMean } from "../math/statistical-inference.js?v=20260913-8a";
-import { sampleMean, sampleWithReplacement, simulateKnownSigmaConfidenceIntervals, simulateSampleMeans } from "../math/sampling.js?v=20260913-8a";
+import { coinTestFacts } from "../math/hypothesis-test.js?v=20260913-8b";
+import { binomialDistribution, binomialProbability } from "../math/probability.js?v=20260913-8b";
+import { normalPdf, zTestMean } from "../math/statistical-inference.js?v=20260913-8b";
+import { sampleMean, sampleWithReplacement, simulateKnownSigmaConfidenceIntervals, simulateSampleMeans } from "../math/sampling.js?v=20260913-8b";
 
 const NS = "http://www.w3.org/2000/svg";
 const clamp = (value, min, max) => Math.min(max, Math.max(min, Number(value)));
@@ -159,7 +159,7 @@ function mountNormalHypothesisTestScene(container, config = {}) {
   function render() { const result = zTestMean({ sampleMean: state.sampleMean, nullMean: 50, populationSd: 10, sampleSize: state.sampleSize, alternative: state.alternative }); meanControl.set(state.sampleMean); sizeControl.set(state.sampleSize); significanceControl.set(state.significance); select.value = state.alternative; const reject = result.pValue < state.significance; drawNormalTestChart(ui.chart, result); const tail = state.alternative === "greater" ? "右側領域" : state.alternative === "less" ? "左側領域" : "両側領域"; ui.result.innerHTML = `<p>H₀：μ=50 ／ z統計量=${result.z.toFixed(3)} ／ p値=${result.pValue.toFixed(4)} ／ α=${state.significance.toFixed(2)}</p><p>標準正規分布の${tail}をp値として表示 ／ 判定：${reject ? "H₀を棄却" : "H₀を棄却しない"}</p><p class="atlas-simulation-legend">「H₀が正しい確率」とは表現しません。p値はH₀のもとでの観測結果の珍しさです。</p>`; } function setParameter(name, value) { if (name === "sampleMean") state.sampleMean = clamp(value, 40, 60); if (name === "sampleSize") state.sampleSize = Math.round(clamp(value, 5, 100)); if (name === "significance") state.significance = clamp(value, .01, .1); if (name === "alternative" && ["two-sided", "greater", "less"].includes(value)) state.alternative = value; render(); } function reset() { Object.assign(state, initial); render(); } render(); return { reset, setParameter, getState: () => ({ ...state }), destroy() { container.replaceChildren(); } };
 }
 
-function mountHypothesisCoinScene(container) {
+function mountHypothesisCoinScene(container, config = {}) {
   const ui = createLayout(container, "コインで仮説検定を体験する", config);
   const initial = { n: 20, p: 0.5, observed: 15 };
   const state = { ...initial, trials: 0, extreme: 0 };

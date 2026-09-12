@@ -158,6 +158,22 @@ Phase 8Aでは、コンテンツ89件、Practice267問、Interaction Engine11種
 
 品質ゲートは、再帰的JavaScript構文検査、主要画面のPlaywright smoke / 回帰 / レスポンシブ / アクセシビリティ検査、GitHub Pages公開後の入口URL検査で構成する。ブラウザ検査はページエラーと `console.error` を失敗として扱い、320pxを含む主要幅で横スクロールを許可しない。
 
+### Learning Loop
+
+Phase 8Bでは、教材数を増やさずに公開版の学習往復を完成させる。
+
+```text
+Atlas
+↓ 概念を動かす
+Practice
+↓ 回答・記録
+Progress
+↓ 要復習教材を選ぶ
+Atlas / Practice
+```
+
+AtlasからPracticeへ渡すURLには対応する `atlasContentId` を保持する。不正解時は対応Atlasへ戻り、Atlasから同じ問題へ復帰できるようにする。Progressの教材行にはAtlasとPracticeの両方への明示的な導線を置き、localStorageの既存学習記録と安定IDを変更しない。公開Pagesの検証はHTTPステータスだけで完了とせず、JavaScript初期化、主要DOM、asset version、`console.error` と `pageerror` の不在まで確認する。
+
 ### Modeling
 
 数学と社会生活の教材は、現実を単純化してモデル化する過程と、モデルの限界を同じ画面で扱う。

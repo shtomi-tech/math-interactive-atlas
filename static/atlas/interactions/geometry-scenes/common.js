@@ -1,4 +1,4 @@
-import { angleBisectorFoot, angleDegrees, centroid, circumcenter, distance, excenterA, incenter, lawOfCosinesSide, lineCircleIntersections, orthocenter, pointOnCircle } from "../../math/geometry.js?v=20260913-8a";
+import { angleBisectorFoot, angleDegrees, centroid, circumcenter, distance, excenterA, incenter, lawOfCosinesSide, lineCircleIntersections, orthocenter, pointOnCircle } from "../../math/geometry.js?v=20260913-8b";
 export { angleBisectorFoot, angleDegrees, centroid, circumcenter, distance, excenterA, incenter, lawOfCosinesSide, lineCircleIntersections, orthocenter, pointOnCircle };
 export const COLORS = Object.freeze({ primary: "#2563eb", secondary: "#0f766e", highlight: "#d97706", helper: "#64748b", construction: "#94a3b8" });
 export const finite = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;

@@ -209,7 +209,25 @@ Phase 8Aは単なるバグ修正ではなく、数学I・A・II・B版 v1.0の�
 
 品質保証前に教材範囲をさらに広げない。
 
-## 15. 長期的な完成像
+## 15. Phase 8B: 公開版と学習ループの完成
+
+Phase 8Aで数学・操作・アクセシビリティの品質基盤を整えた後は、公開版での動作と学習の往復を完成させる。数量は引き続き次で固定する。
+
+```text
+89教材
+267問
+11 Engine
+```
+
+- 公開GitHub PagesのAtlas、Practice、Sets、Worksheet、Progressを実ブラウザで検証する
+- `content-data.json` を正本に89教材を自動列挙し、全教材のmount・Reset・console/page errorを回帰確認する
+- Atlasから対応するPracticeへ移動し、Practiceの不正解からAtlasへ戻り、同じ問題へ復帰できるようにする
+- Practiceの結果をProgressへ保存し、再読み込み後も復習対象からAtlas/Practiceへ戻れるようにする
+- 公開URLのasset version、主要DOM、JavaScript初期化をPages後段Smokeで確認する
+
+Phase 8Bでも新規教材、新規Practice ID、新規Engine、数学C・数学III、Classroom Assignmentは追加しない。範囲の拡張ではなく、既存教材を実運用できる学習システムとして閉じることを優先する。
+
+## 16. 長期的な完成像
 
 高校数学全体を、次の面が一つにつながる学習基盤にする。
 
@@ -240,4 +258,4 @@ Phase 8Aは単なるバグ修正ではなく、数学I・A・II・B版 v1.0の�
 - 現在の教材正本: [`static/atlas/content-data.json`](../static/atlas/content-data.json)
 - 現在の問題正本: [`static/practice/problem-data.json`](../static/practice/problem-data.json)
 - 設計正本: [`docs/atlas/DESIGN.md`](./atlas/DESIGN.md)
-- 次Phaseの詳細指示: Web ChatGPTで確認した「Phase 8A：Release Hardening & Quality Gate」
+- 次Phaseの詳細指示: Web ChatGPTで確認した「Phase 8B：公開版と学習ループの完成」

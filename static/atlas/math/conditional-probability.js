@@ -1,4 +1,4 @@
-import { REGION_BITS } from "./set-regions.js?v=20260913-8a";
+import { REGION_BITS } from "./set-regions.js?v=20260913-8b";
 
 export const CONDITIONAL_STEPS = Object.freeze({
   OVERVIEW: "overview",
