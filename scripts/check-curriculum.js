@@ -1,7 +1,10 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
-import { orderedContentIds } from "../static/atlas/curriculum.js";
+import { SUBJECT_META, UNIT_META, orderedContentIds, subjectLabel, unitLabel } from "../static/atlas/curriculum.js";
 const contents = JSON.parse(fs.readFileSync(new URL("../static/atlas/content-data.json", import.meta.url), "utf8"));
+const problems = JSON.parse(fs.readFileSync(new URL("../static/practice/problem-data.json", import.meta.url), "utf8"));
 const ids = contents.map((content) => content.id); const order = orderedContentIds();
 assert.equal(order.length, 40); assert.equal(new Set(order).size, order.length); assert.deepEqual([...ids].sort(), [...order].sort());
-console.log("Curriculum: PASS (40 contents, one order entry each)");
+contents.forEach((content) => { assert.equal(Boolean(SUBJECT_META[content.subject]), true); assert.equal(Boolean(UNIT_META[content.unit]), true); assert.equal(content.subjectLabel, subjectLabel(content.subject)); assert.equal(content.unitLabel, unitLabel(content.unit)); });
+problems.forEach((problem) => { assert.equal(Boolean(SUBJECT_META[problem.subject]), true, `${problem.id} subject`); assert.equal(Boolean(UNIT_META[problem.unit]), true, `${problem.id} unit`); });
+console.log("Curriculum: PASS (40 contents, labels and all Practice references known)");

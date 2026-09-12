@@ -35,6 +35,8 @@ jobs:
           test -f static/practice.css
           test -f static/practice/main.js
           test -f static/practice/problem-data.json
+          test -f static/practice/filter.js
+          test -f static/practice/session.js
       - name: Prepare static files
         run: |
           mkdir -p _site/static

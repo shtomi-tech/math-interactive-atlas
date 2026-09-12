@@ -1,5 +1,5 @@
 export const LEARNING_STATE_KEY = "math-interactive-atlas-state-v1";
-export const LEARNING_STATE_VERSION = 1;
+export const LEARNING_STATE_VERSION = 2;
 
 function emptyState() {
   return { version: LEARNING_STATE_VERSION, favorites: [], visited: {}, practice: {} };
@@ -16,6 +16,13 @@ function safeCount(value) {
 
 function safeTimestamp(value) {
   return typeof value === "string" && value ? value : undefined;
+}
+
+export function practiceStatus(entry) {
+  if (!entry || !entry.attempts) return "unattempted";
+  if (entry.lastResult === "incorrect") return "review";
+  if (entry.lastResult === "correct" && entry.correctStreak >= 2) return "mastered";
+  return "practicing";
 }
 
 export function normalizeState(raw) {
@@ -39,16 +46,23 @@ export function normalizeState(raw) {
     Object.entries(source.practice).forEach(([id, value]) => {
       const problemId = safeId(id);
       if (!problemId || !value || typeof value !== "object") return;
+      const safeAttempts = safeCount(value.attempts);
+      const correct = safeCount(value.correct);
+      const wrong = safeCount(value.wrong);
       const entry = {
-        attempts: safeCount(value.attempts),
-        correct: safeCount(value.correct),
-        wrong: safeCount(value.wrong)
+        attempts: Math.max(safeAttempts, correct + wrong),
+        correct: Math.min(correct, Math.max(safeAttempts, correct + wrong)),
+        wrong: Math.min(wrong, Math.max(safeAttempts, correct + wrong)),
+        correctStreak: safeCount(value.correctStreak)
       };
-      if (entry.correct > entry.attempts) entry.correct = entry.attempts;
-      if (entry.wrong > entry.attempts) entry.wrong = entry.attempts;
       if (value.lastResult === "correct" || value.lastResult === "incorrect") entry.lastResult = value.lastResult;
       const timestamp = safeTimestamp(value.lastAttemptAt);
       if (timestamp) entry.lastAttemptAt = timestamp;
+      const masteredAt = safeTimestamp(value.masteredAt);
+      if (masteredAt) entry.masteredAt = masteredAt;
+      if (source.version !== LEARNING_STATE_VERSION && entry.attempts > 0) entry.correctStreak = entry.lastResult === "correct" ? 1 : 0;
+      if (entry.lastResult !== "correct") entry.correctStreak = 0;
+      if (entry.correctStreak > entry.attempts) entry.correctStreak = entry.attempts;
       practice[problemId] = entry;
     });
   }
@@ -99,13 +113,18 @@ export function recordPracticeAttempt(state, problemId, { correct, now = new Dat
   const id = safeId(problemId);
   const next = normalizeState(state);
   if (!id) return next;
-  const current = next.practice[id] || { attempts: 0, correct: 0, wrong: 0 };
+  const current = next.practice[id] || { attempts: 0, correct: 0, wrong: 0, correctStreak: 0 };
+  const nextStreak = correct ? current.correctStreak + 1 : 0;
+  const nowValue = String(now);
   next.practice[id] = {
     attempts: current.attempts + 1,
     correct: current.correct + (correct ? 1 : 0),
     wrong: current.wrong + (correct ? 0 : 1),
+    correctStreak: nextStreak,
     lastResult: correct ? "correct" : "incorrect",
-    lastAttemptAt: String(now)
+    lastAttemptAt: nowValue,
+    ...(nextStreak >= 2 && !current.masteredAt ? { masteredAt: nowValue } : {}),
+    ...(current.masteredAt ? { masteredAt: current.masteredAt } : {})
   };
   return next;
 }

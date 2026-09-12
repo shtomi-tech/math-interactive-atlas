@@ -10,6 +10,16 @@ function coefficient(value, fallback = 0) {
   return Number.isFinite(Number(value)) ? Number(value) : fallback;
 }
 
+export function compareZero(value, operator) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return false;
+  if (operator === "<") return number < 0;
+  if (operator === "≤") return number <= 0;
+  if (operator === ">") return number > 0;
+  if (operator === "≥") return number >= 0;
+  throw new RangeError("unsupported quadratic inequality operator");
+}
+
 export function quadraticValue({ a = 0, b = 0, c = 0 }, x) {
   return coefficient(a) * Number(x) ** 2 + coefficient(b) * Number(x) + coefficient(c);
 }
@@ -77,14 +87,14 @@ export function quadraticInequalityIntervals({ a, b, c, operator }) {
   if (!["<", "≤", ">", "≥"].includes(operator)) throw new RangeError("unsupported quadratic inequality operator");
   const A = coefficient(a); const B = coefficient(b); const C = coefficient(c);
   if (Math.abs(A) <= EPSILON) {
-    if (Math.abs(B) <= EPSILON) return (operator === ">" || operator === "≥") === (C > 0 || (C === 0 && (operator === "≥" || operator === "≤"))) ? [{ from: -Infinity, to: Infinity, fromClosed: true, toClosed: true }] : [];
+    if (Math.abs(B) <= EPSILON) return compareZero(C, operator) ? [{ from: -Infinity, to: Infinity, fromClosed: false, toClosed: false }] : [];
     const boundary = -C / B; const positive = B > 0; const wantsPositive = operator === ">" || operator === "≥";
     const right = positive === wantsPositive; const closed = operator === "≥" || operator === "≤";
     return right ? [{ from: boundary, to: Infinity, fromClosed: closed, toClosed: false }] : [{ from: -Infinity, to: boundary, fromClosed: false, toClosed: closed }];
   }
   const roots = quadraticRoots({ a: A, b: B, c: C });
   const wantsPositive = operator === ">" || operator === "≥"; const closed = operator === "≥" || operator === "≤";
-  if (roots.length === 0) { const value = quadraticValue({ a: A, b: B, c: C }, 0); return ((value > 0) === wantsPositive || (value === 0 && closed)) ? [{ from: -Infinity, to: Infinity, fromClosed: false, toClosed: false }] : []; }
+  if (roots.length === 0) { const value = quadraticValue({ a: A, b: B, c: C }, 0); return compareZero(value, operator) ? [{ from: -Infinity, to: Infinity, fromClosed: false, toClosed: false }] : []; }
   if (roots.length === 1) return wantsPositive === (A > 0) ? [{ from: -Infinity, to: roots[0], fromClosed: false, toClosed: closed }, { from: roots[0], to: Infinity, fromClosed: closed, toClosed: false }] : (closed ? [{ from: roots[0], to: roots[0], fromClosed: true, toClosed: true }] : []);
   const [left, right] = roots; return wantsPositive === (A > 0) ? [{ from: -Infinity, to: left, fromClosed: false, toClosed: closed }, { from: right, to: Infinity, fromClosed: closed, toClosed: false }] : [{ from: left, to: right, fromClosed: closed, toClosed: closed }];
 }

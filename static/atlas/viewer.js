@@ -1,5 +1,8 @@
-import { mountInteraction } from "./interactions/index.js?v=20260912-6g";
-import { neighborsForContent } from "./curriculum.js?v=20260912-6g";
+import { mountInteraction } from "./interactions/index.js?v=20260912-5c";
+import { neighborsForContent, subjectLabel, unitLabel } from "./curriculum.js?v=20260912-5c";
+import { practiceStatus } from "./storage.js?v=20260912-5c";
+
+const STATUS_LABELS = { unattempted: "未挑戦", practicing: "練習中", review: "要復習", mastered: "習得" };
 
 function renderFormula(target, expression) {
   target.className = "atlas-formula-fallback";
@@ -83,7 +86,7 @@ export function createViewer(root, { onBack, onRelated, onNavigate = onRelated, 
     root.replaceChildren();
   }
 
-  function render(content, contents, { fromProblem = null, fromCatalog = null, practiceProblems = [], isFavorite = false } = {}) {
+  function render(content, contents, { fromProblem = null, fromCatalog = null, practiceProblems = [], learningState = {}, isFavorite = false } = {}) {
     destroy();
 
     const viewer = document.createElement("article");
@@ -95,7 +98,7 @@ export function createViewer(root, { onBack, onRelated, onNavigate = onRelated, 
     const breadcrumb = document.createElement("p");
     breadcrumb.className = "atlas-breadcrumb";
     const position = neighborsForContent(contents, content.id);
-    breadcrumb.textContent = `${content.subjectLabel}　＞　${content.unitLabel}　＞　${position.index + 1} / ${position.total}`;
+    breadcrumb.textContent = `${subjectLabel(content.subject)}　＞　${unitLabel(content.unit)}　＞　${position.index + 1} / ${position.total}`;
     const title = document.createElement("h1");
     title.id = "viewerTitle";
     title.textContent = content.title;
@@ -204,7 +207,7 @@ export function createViewer(root, { onBack, onRelated, onNavigate = onRelated, 
       button.type = "button";
       button.className = "atlas-related-button";
       const unit = document.createElement("small");
-      unit.textContent = `${item.subjectLabel}　＞　${item.unitLabel}`;
+      unit.textContent = `${subjectLabel(item.subject)}　＞　${unitLabel(item.unit)}`;
       const itemTitle = document.createElement("strong");
       itemTitle.textContent = item.title;
       button.append(unit, itemTitle);
@@ -213,17 +216,25 @@ export function createViewer(root, { onBack, onRelated, onNavigate = onRelated, 
     });
     related.append(relatedTitle, relatedList);
 
-    const linkedProblems = (Array.isArray(practiceProblems) ? practiceProblems : []).filter((problem) => problem.atlasContentId === content.id);
-    let practiceSection = null;
-    if (linkedProblems.length > 0) {
-      practiceSection = document.createElement("section");
-      practiceSection.className = "atlas-practice-links";
-      const practiceTitle = document.createElement("h2");
-      practiceTitle.textContent = "この概念を問題で使う";
-      const practiceList = document.createElement("ul");
-      linkedProblems.forEach((problem) => { const item = document.createElement("li"); const link = document.createElement("a"); link.href = `./practice.html?problem=${encodeURIComponent(problem.id)}`; link.textContent = problem.title; item.append(link); practiceList.append(item); });
-      practiceSection.append(practiceTitle, practiceList);
-    }
+    const linkedProblems = (Array.isArray(practiceProblems) ? practiceProblems : []).filter((problem) => problem.atlasContentId === content.id).sort((left, right) => left.difficulty - right.difficulty || left.id.localeCompare(right.id));
+    const practiceSection = document.createElement("section");
+    practiceSection.className = "atlas-practice-links";
+    const practiceTitle = document.createElement("h2");
+    practiceTitle.textContent = "この概念を問題で使う";
+    const practiceLead = document.createElement("p");
+    practiceLead.textContent = "基礎から標準、発展へ。3問で確かめます。";
+    const practiceList = document.createElement("ul");
+    const difficultyLabels = ["基礎", "標準", "発展"];
+    linkedProblems.forEach((problem) => { const item = document.createElement("li"); const link = document.createElement("a"); link.href = `./practice.html?problem=${encodeURIComponent(problem.id)}`; const label = difficultyLabels[problem.difficulty - 1] || `難易度${problem.difficulty}`; const currentStatus = practiceStatus(learningState.practice?.[problem.id]); link.textContent = `${label}　${STATUS_LABELS[currentStatus] || currentStatus}`; item.append(link); practiceList.append(item); });
+    const mastered = linkedProblems.filter((problem) => practiceStatus(learningState.practice?.[problem.id]) === "mastered").length;
+    const practiceSummary = document.createElement("p");
+    practiceSummary.className = "atlas-practice-summary";
+    practiceSummary.textContent = `習得 ${mastered} / ${linkedProblems.length}`;
+    const practiceAll = document.createElement("a");
+    practiceAll.className = "atlas-practice-all-link";
+    practiceAll.href = `./practice.html?content=${encodeURIComponent(content.id)}`;
+    practiceAll.textContent = "この概念を3問練習";
+    practiceSection.append(practiceTitle, practiceLead, practiceList, practiceSummary, practiceAll);
 
     const navigation = document.createElement("nav");
     navigation.className = "atlas-learning-navigation";

@@ -9,7 +9,7 @@
 - 目的: 「触る → 観察 → 気づく」の流れで、数学の関係を視覚的に理解する
 - 実装済み: 数学I・数学Aの7単元、40教材。二次関数・集合・場合の数・確率・データ分析・図形と計量・図形の性質・数と式・数学と人間の活動を扱う
 - 教材データ: [`static/atlas/content-data.json`](./static/atlas/content-data.json) を正本とするデータ駆動構成
-- Practice問題: [`static/practice/problem-data.json`](./static/practice/problem-data.json) に7単元21問を収録。図鑑とは独立した問題形式・採点処理を持つ
+- Practice問題: [`static/practice/problem-data.json`](./static/practice/problem-data.json) に7単元120問を収録。40教材をそれぞれ基礎・標準・発展の3問でカバーする
 - 学習ループ: 図鑑で観察し、Practiceで使い、間違えた問題から図鑑へ戻る。お気に入り・閲覧・問題結果はブラウザのlocalStorageにだけ保存する
 - Interaction Engine: `static/atlas/interactions/index.js` のRegistry経由で10エンジンを切り替える。AlgebraLab / NumberLineLab / AlgorithmLabを追加し、既存Engineの新modeもRegistryで再利用する
 - 設計書: [`docs/atlas/DESIGN.md`](./docs/atlas/DESIGN.md)
@@ -36,11 +36,13 @@ Shared: static/atlas/curriculum.js / static/atlas/storage.js / static/tokens.css
 
 ## Practice
 
-- [`practice.html`](./practice.html): 21問の問題一覧。科目・単元・難易度・間違えた問題で絞り込める
+- [`practice.html`](./practice.html): 120問の問題一覧。検索、科目・単元・難易度・習熟状態で絞り込める
 - [`practice.html?problem=quad-discriminant-01`](./practice.html?problem=quad-discriminant-01): 問題を開く
-- [`practice.html?mode=mistakes`](./practice.html?mode=mistakes): 要復習の問題だけを表示する
+- [`practice.html?status=review`](./practice.html?status=review): 要復習の問題だけを表示する。旧 `mode=mistakes` も互換対応する
+- [`practice.html?content=quadratic-discriminant`](./practice.html?content=quadratic-discriminant): 1教材の基礎→標準→発展セッション
+- `practice.html?unit=quadratic`、`?unit=quadratic&difficulty=1`、`?q=判別式`、`?status=mastered` で単元・難易度・検索語・習得状態を指定できる
 - 正解判定後は自動で次へ進まず、次の問題ボタンを明示的に押す。誤答時は該当する図鑑教材へ戻れる
-- 学習状態は `math-interactive-atlas-state-v1` としてこのブラウザ内に保存し、ログインやバックエンドは使用しない
+- 学習状態は `math-interactive-atlas-state-v1` の同じlocalStorage領域でv1からv2へ互換移行し、このブラウザ内だけに保存する。習熟状態は未挑戦・練習中・要復習・習得の4段階で、2回連続正解を習得の条件とする
 
 ## Checks
 
@@ -67,6 +69,8 @@ node scripts/check-practice-data.js
 node scripts/check-practice-answer.js
 node scripts/check-practice-links.js
 node scripts/check-learning-state.js
+node scripts/check-practice-coverage.js
+node scripts/check-practice-session.js
 ```
 
 GitHub Actionsでも、同じ契約・数学ロジック検査と対象JavaScriptの構文検査を実行します。

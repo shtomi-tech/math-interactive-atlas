@@ -40,6 +40,8 @@ jobs:
           node scripts/check-practice-data.js
           node scripts/check-practice-answer.js
           node scripts/check-practice-links.js
+          node scripts/check-practice-coverage.js
+          node scripts/check-practice-session.js
           node scripts/check-learning-state.js
       - name: Check JavaScript syntax
         shell: bash
@@ -83,3 +85,5 @@ jobs:
           node --check static/practice/runner.js
           node --check static/practice/answer.js
           node --check static/practice/validation.js
+          node --check static/practice/filter.js
+          node --check static/practice/session.js

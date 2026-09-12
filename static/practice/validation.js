@@ -10,6 +10,7 @@ export function validateProblem(problem, contentById = new Map()) {
   if (!nonEmpty(problem.id)) errors.push("problem id must be non-empty");
   if (!ALLOWED_TYPES.has(problem.type)) errors.push(`${problem.id || "(unknown)"} has unsupported type`);
   if (!nonEmpty(problem.title) || !nonEmpty(problem.prompt) || !nonEmpty(problem.explanation)) errors.push(`${problem.id || "(unknown)"} title/prompt/explanation must be non-empty`);
+  ["formula", "explanationFormula"].forEach((field) => { if (field in problem && typeof problem[field] !== "string") errors.push(`${problem.id} ${field} must be a string`); });
   if (!Number.isInteger(problem.difficulty) || problem.difficulty < 1 || problem.difficulty > 3) errors.push(`${problem.id || "(unknown)"} difficulty must be 1-3`);
   const content = contentById.get(problem.atlasContentId);
   if (!content) errors.push(`${problem.id || "(unknown)"} atlasContentId does not exist: ${problem.atlasContentId}`);

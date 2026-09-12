@@ -1,7 +1,7 @@
-import { renderCatalog } from "./catalog.js?v=20260912-6g";
-import { createViewer } from "./viewer.js?v=20260912-6g";
-import { goToCatalog, goToContent, replaceCatalogFilters, watchRoute } from "./router.js?v=20260912-6g";
-import { loadLearningState, recordVisit, saveLearningState, toggleFavorite } from "./storage.js?v=20260912-6g";
+import { renderCatalog } from "./catalog.js?v=20260912-5c";
+import { createViewer } from "./viewer.js?v=20260912-5c";
+import { goToCatalog, goToContent, replaceCatalogFilters, watchRoute } from "./router.js?v=20260912-5c";
+import { loadLearningState, recordVisit, saveLearningState, toggleFavorite } from "./storage.js?v=20260912-5c";
 
 const dom = {
   status: document.querySelector("#atlasStatus"),
@@ -60,6 +60,7 @@ async function start() {
         progress: route.progress,
         query: route.query,
         state: learningState,
+        practiceProblems,
         onFilterChange: (filters) => { activeCatalogRoute = { ...activeCatalogRoute, ...filters }; replaceCatalogFilters(filters); },
         onToggleFavorite: (id) => { persist(toggleFavorite(learningState, id)); renderCatalogView(activeCatalogRoute); },
         onSelect: (id) => goToContent(id, { fromCatalog: catalogContext() })
@@ -82,7 +83,7 @@ async function start() {
         dom.catalogView.hidden = true;
         dom.viewerView.hidden = false;
         persist(recordVisit(learningState, content.id));
-        viewer.render(content, contents, { fromProblem: route.fromProblem, fromCatalog: route.fromCatalog, practiceProblems, isFavorite: learningState.favorites.includes(content.id) });
+        viewer.render(content, contents, { fromProblem: route.fromProblem, fromCatalog: route.fromCatalog, practiceProblems, learningState, isFavorite: learningState.favorites.includes(content.id) });
         dom.viewerView.focus({ preventScroll: true });
         return;
       }

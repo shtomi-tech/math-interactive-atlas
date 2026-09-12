@@ -204,6 +204,7 @@ h3 { font-size: 1.25rem; line-height: 1.45; }
 .atlas-card-favorite { display: grid; place-items: center; width: 44px; min-height: 44px; padding: 0; border-color: transparent; background: transparent; color: var(--atlas-math-highlight); font-size: 1.35rem; }
 .atlas-card-favorite:hover { border-color: var(--atlas-accent); background: var(--atlas-selected); }
 .atlas-visited-badge { padding: 2px 8px; border-radius: 999px; background: var(--atlas-subtle); color: var(--atlas-muted); font-size: .75rem; }
+.atlas-practice-progress { color: var(--atlas-muted); font-size: .72rem; }
 .atlas-catalog-filters { display:grid; grid-template-columns:minmax(200px,2fr) repeat(4,minmax(110px,1fr)) auto; gap:10px; align-items:center; margin:20px 0 12px; }
 .atlas-catalog-filters input, .atlas-catalog-filters select { width:100%; min-height:44px; padding:8px 10px; border:1px solid var(--atlas-border-strong); border-radius:8px; background:var(--atlas-canvas); color:var(--atlas-text); }
 .atlas-catalog-filters button { min-height:44px; padding:8px 12px; }
@@ -742,7 +743,10 @@ h3 { font-size: 1.25rem; line-height: 1.45; }
 .atlas-favorite-button { min-height: 44px; padding: 8px 12px; }
 .atlas-practice-links { margin-top: 24px; padding: 20px; border: 1px solid var(--atlas-border); border-radius: 12px; background: var(--atlas-canvas); }
 .atlas-practice-links h2 { margin: 0; }
+.atlas-practice-links p { margin: 8px 0 0; color: var(--atlas-muted); }
 .atlas-practice-links ul { display: grid; gap: 8px; margin: 14px 0 0; padding-left: 1.25rem; }
+.atlas-practice-links .atlas-practice-summary { color: var(--atlas-text); font-weight: 700; }
+.atlas-practice-all-link { display: inline-flex; align-items: center; min-height: 44px; margin-top: 14px; padding: 8px 12px; border: 1px solid var(--atlas-accent); border-radius: 8px; text-decoration: none; }
 .atlas-related-button small { color: var(--atlas-muted); }
 .atlas-related-button strong { margin-top: 2px; }
 

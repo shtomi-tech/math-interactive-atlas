@@ -1,5 +1,28 @@
 export const SUBJECT_ORDER = Object.freeze(["math1", "mathA"]);
 
+export const SUBJECT_META = Object.freeze({
+  math1: Object.freeze({ label: "数学I" }),
+  mathA: Object.freeze({ label: "数学A" })
+});
+
+export const UNIT_META = Object.freeze({
+  algebra: Object.freeze({ label: "数と式" }),
+  trigonometry: Object.freeze({ label: "図形と計量" }),
+  quadratic: Object.freeze({ label: "二次関数" }),
+  statistics: Object.freeze({ label: "データの分析" }),
+  probability: Object.freeze({ label: "場合の数と確率" }),
+  "geometry-a": Object.freeze({ label: "図形の性質" }),
+  "human-activity": Object.freeze({ label: "数学と人間の活動" })
+});
+
+export function subjectLabel(id) {
+  return SUBJECT_META[id]?.label || id;
+}
+
+export function unitLabel(id) {
+  return UNIT_META[id]?.label || id;
+}
+
 export const SUBJECT_UNIT_ORDER = Object.freeze({
   math1: Object.freeze(["algebra", "trigonometry", "quadratic", "statistics"]),
   mathA: Object.freeze(["probability", "geometry-a", "human-activity"])
