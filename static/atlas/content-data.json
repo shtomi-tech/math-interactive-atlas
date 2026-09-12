@@ -23,7 +23,8 @@
       "Aの外側をすべて選ぶと、Aを使ってどう表せるだろう？"
     ],
     "related": [
-      "necessary-sufficient"
+      "necessary-sufficient",
+      "event-regions"
     ],
     "source": {
       "usage": "original",
@@ -53,6 +54,38 @@
       "PがQの内側にすべて入っているとき、p⇒qとq⇒pのどちらが成り立つだろう？",
       "pがqの十分条件なら、qはpにとって何条件になるだろう？",
       "PとQが同じ集合になったとき、pとqの関係はどう変わるだろう？"
+    ],
+    "related": [
+      "set-regions"
+    ],
+    "source": {
+      "usage": "original",
+      "library": "SVG / Vanilla JavaScript",
+      "license": "Original implementation"
+    }
+  },
+  {
+    "id": "event-regions",
+    "subject": "mathA",
+    "subjectLabel": "数学A",
+    "unit": "probability",
+    "unitLabel": "場合の数と確率",
+    "title": "余事象・和事象を塗る",
+    "shortDescription": "事象A・Bの領域を切り替えて、余事象や和事象を視覚的に確認します。",
+    "instructions": "見たい事象を選び、標本空間のどの部分がその事象に対応するか観察します。",
+    "formula": "A^c\\quad /\\quad A\\cup B\\quad /\\quad A\\cap B",
+    "interactionType": "select",
+    "interaction": {
+      "engine": "regionSelector",
+      "mode": "event-regions",
+      "initial": {
+        "event": "union"
+      }
+    },
+    "discoveryPoints": [
+      "Aの余事象Aᶜは、標本空間のどの部分になるだろう？",
+      "A∪BとA∩Bでは、塗られる範囲はどう違うだろう？",
+      "AとBのどちらにも入らない部分は、どんな式で表せるだろう？"
     ],
     "related": [
       "set-regions"

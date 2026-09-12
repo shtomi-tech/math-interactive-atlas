@@ -339,6 +339,8 @@ h3 { font-size: 1.25rem; line-height: 1.45; }
   opacity: .9;
 }
 
+.atlas-event-selector .atlas-region-shape { cursor: default; }
+
 .atlas-region-boundaries circle {
   fill: none;
   stroke: var(--atlas-math-primary);
@@ -462,6 +464,13 @@ h3 { font-size: 1.25rem; line-height: 1.45; }
   background: rgba(255, 255, 255, .9);
   color: var(--atlas-muted);
   font-size: .8125rem;
+}
+
+.atlas-event-description {
+  margin: 4px 0 0;
+  color: var(--atlas-text);
+  font-size: .9375rem;
+  text-align: center;
 }
 
 .atlas-relation-option:not(.is-active) { display: none; }

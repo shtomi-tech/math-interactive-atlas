@@ -9,7 +9,12 @@ const INTERACTION_LABELS = {
   build: "BUILD"
 };
 
+const SUBJECT_ORDER = Object.freeze(["math1", "mathA"]);
 const UNIT_ORDER = Object.freeze(["algebra", "trigonometry", "quadratic", "statistics"]);
+const SUBJECT_UNIT_ORDER = Object.freeze({
+  math1: Object.freeze(["algebra", "trigonometry", "quadratic", "statistics"]),
+  mathA: Object.freeze(["probability", "geometry-a", "human-activity"])
+});
 const CONTENT_ORDER = Object.freeze({
   algebra: Object.freeze([
     "set-regions",
@@ -24,6 +29,9 @@ const CONTENT_ORDER = Object.freeze({
   trigonometry: Object.freeze([
     "unit-circle",
     "triangle-area-sine"
+  ]),
+  probability: Object.freeze([
+    "event-regions"
   ])
 });
 
@@ -53,9 +61,9 @@ function createCard(content, onSelect) {
   return card;
 }
 
-export function renderCatalog(root, contents, { subject = "math1", unit = null, onSelect }) {
+export function renderCatalog(root, contents, { subject = null, unit = null, onSelect }) {
   root.replaceChildren();
-  const visible = contents.filter((content) => content.subject === subject && (!unit || content.unit === unit));
+  const visible = contents.filter((content) => (!subject || content.subject === subject) && (!unit || content.unit === unit));
 
   if (visible.length === 0) {
     const empty = document.createElement("p");
@@ -65,30 +73,35 @@ export function renderCatalog(root, contents, { subject = "math1", unit = null, 
     return;
   }
 
-  const subjectHeading = document.createElement("h2");
-  subjectHeading.className = "atlas-catalog-subject";
-  subjectHeading.textContent = visible[0].subjectLabel;
-  root.append(subjectHeading);
+  const subjects = [...SUBJECT_ORDER, ...visible.map((content) => content.subject).filter((value, index, values) => !SUBJECT_ORDER.includes(value) && values.indexOf(value) === index)];
+  subjects.filter((subjectId) => visible.some((content) => content.subject === subjectId)).forEach((subjectId) => {
+    const subjectContents = visible.filter((content) => content.subject === subjectId);
+    const subjectHeading = document.createElement("h2");
+    subjectHeading.className = "atlas-catalog-subject";
+    subjectHeading.textContent = subjectContents[0].subjectLabel;
+    root.append(subjectHeading);
 
-  const units = [...UNIT_ORDER, ...visible.map((content) => content.unit).filter((value, index, values) => !UNIT_ORDER.includes(value) && values.indexOf(value) === index)];
-  units.filter((unitId) => visible.some((content) => content.unit === unitId)).forEach((unitId) => {
-    const order = CONTENT_ORDER[unitId] || [];
-    const items = visible
-      .filter((content) => content.unit === unitId)
-      .sort((left, right) => {
-        const leftIndex = order.indexOf(left.id);
-        const rightIndex = order.indexOf(right.id);
-        return (leftIndex < 0 ? Number.MAX_SAFE_INTEGER : leftIndex) - (rightIndex < 0 ? Number.MAX_SAFE_INTEGER : rightIndex);
-      });
-    const unitSection = document.createElement("section");
-    unitSection.className = "atlas-catalog-unit";
-    const unitTitle = document.createElement("h3");
-    unitTitle.className = "atlas-catalog-unit-title";
-    unitTitle.textContent = items[0].unitLabel;
-    const grid = document.createElement("div");
-    grid.className = "atlas-catalog-unit-grid";
-    items.forEach((content) => grid.append(createCard(content, onSelect)));
-    unitSection.append(unitTitle, grid);
-    root.append(unitSection);
+    const unitOrder = SUBJECT_UNIT_ORDER[subjectId] || UNIT_ORDER;
+    const units = [...unitOrder, ...subjectContents.map((content) => content.unit).filter((value, index, values) => !unitOrder.includes(value) && values.indexOf(value) === index)];
+    units.filter((unitId) => subjectContents.some((content) => content.unit === unitId)).forEach((unitId) => {
+      const order = CONTENT_ORDER[unitId] || [];
+      const items = subjectContents
+        .filter((content) => content.unit === unitId)
+        .sort((left, right) => {
+          const leftIndex = order.indexOf(left.id);
+          const rightIndex = order.indexOf(right.id);
+          return (leftIndex < 0 ? Number.MAX_SAFE_INTEGER : leftIndex) - (rightIndex < 0 ? Number.MAX_SAFE_INTEGER : rightIndex);
+        });
+      const unitSection = document.createElement("section");
+      unitSection.className = "atlas-catalog-unit";
+      const unitTitle = document.createElement("h3");
+      unitTitle.className = "atlas-catalog-unit-title";
+      unitTitle.textContent = items[0].unitLabel;
+      const grid = document.createElement("div");
+      grid.className = "atlas-catalog-unit-grid";
+      items.forEach((content) => grid.append(createCard(content, onSelect)));
+      unitSection.append(unitTitle, grid);
+      root.append(unitSection);
+    });
   });
 }

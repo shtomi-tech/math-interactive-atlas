@@ -22,6 +22,7 @@ jobs:
           node scripts/check-atlas-contract.js
           node scripts/check-set-regions.js
           node scripts/check-set-relations.js
+          node scripts/check-event-regions.js
       - name: Check JavaScript syntax
         shell: bash
         run: |
@@ -36,3 +37,4 @@ jobs:
           node --check static/atlas/interactions/region-selector.js
           node --check static/atlas/math/set-regions.js
           node --check static/atlas/math/set-relations.js
+          node --check static/atlas/math/event-regions.js

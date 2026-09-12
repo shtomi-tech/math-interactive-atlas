@@ -14,7 +14,8 @@ const RELATION_FACTS = Object.freeze({
     implicationText: "p ⇒ q",
     implicationLatex: "p\\Rightarrow q",
     sufficientText: "pはqの十分条件",
-    necessaryText: "qはpの必要条件"
+    necessaryText: "qはpの必要条件",
+    conditionStatements: ["pはqの十分条件", "qはpの必要条件"]
   }),
   [SET_RELATIONS.Q_SUBSET_P]: Object.freeze({
     pImpliesQ: false,
@@ -24,7 +25,8 @@ const RELATION_FACTS = Object.freeze({
     implicationText: "q ⇒ p",
     implicationLatex: "q\\Rightarrow p",
     sufficientText: "qはpの十分条件",
-    necessaryText: "pはqの必要条件"
+    necessaryText: "pはqの必要条件",
+    conditionStatements: ["qはpの十分条件", "pはqの必要条件"]
   }),
   [SET_RELATIONS.EQUAL]: Object.freeze({
     pImpliesQ: true,
@@ -34,7 +36,8 @@ const RELATION_FACTS = Object.freeze({
     implicationText: "p ⇔ q",
     implicationLatex: "p\\Leftrightarrow q",
     sufficientText: "pはqの必要十分条件",
-    necessaryText: "qはpの必要十分条件"
+    necessaryText: "qはpの必要十分条件",
+    conditionStatements: ["pはqの必要十分条件", "qはpの必要十分条件"]
   }),
   [SET_RELATIONS.NEITHER]: Object.freeze({
     pImpliesQ: false,
@@ -44,7 +47,13 @@ const RELATION_FACTS = Object.freeze({
     implicationText: "p ⇒ q も q ⇒ p も一般には成り立たない",
     implicationLatex: "p\\nRightarrow q\\quad /\\quad q\\nRightarrow p",
     sufficientText: "pはqの十分条件ではない",
-    necessaryText: "qはpの必要条件ではない"
+    necessaryText: "qはpの必要条件ではない",
+    conditionStatements: [
+      "pはqの十分条件ではない",
+      "qはpの必要条件ではない",
+      "qはpの十分条件ではない",
+      "pはqの必要条件ではない"
+    ]
   })
 });
 

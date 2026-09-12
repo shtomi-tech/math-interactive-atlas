@@ -11,7 +11,7 @@ export function parseRoute(contents, location = window.location) {
 
   return {
     view: "catalog",
-    subject: params.get("subject") || "math1",
+    subject: params.get("subject") || null,
     unit: params.get("unit") || null,
     invalidContent: false
   };

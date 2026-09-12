@@ -1,7 +1,7 @@
-import { mountFunctionGraph } from "./function-graph.js";
-import { mountGeometryBoard } from "./geometry-board.js";
-import { mountRangeGraph } from "./range-graph.js";
-import { mountRegionSelector } from "./region-selector.js";
+import { mountFunctionGraph } from "./function-graph.js?v=20260912-2f1";
+import { mountGeometryBoard } from "./geometry-board.js?v=20260912-2f1";
+import { mountRangeGraph } from "./range-graph.js?v=20260912-2f1";
+import { mountRegionSelector } from "./region-selector.js?v=20260912-2f1";
 
 const ENGINES = Object.freeze({
   functionGraph: mountFunctionGraph,

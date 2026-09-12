@@ -4,8 +4,9 @@ import {
   latexForMask,
   normalizeMask,
   toggleRegion
-} from "../math/set-regions.js";
-import { SET_RELATIONS, relationFacts } from "../math/set-relations.js";
+} from "../math/set-regions.js?v=20260912-2f1";
+import { EVENT_TYPES, eventFacts } from "../math/event-regions.js?v=20260912-2f1";
+import { SET_RELATIONS, relationFacts } from "../math/set-relations.js?v=20260912-2f1";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 let selectorSequence = 0;
@@ -22,6 +23,17 @@ const RELATION_OPTIONS = Object.freeze([
   { value: SET_RELATIONS.Q_SUBSET_P, label: "Q ⊆ P" },
   { value: SET_RELATIONS.EQUAL, label: "P = Q" },
   { value: SET_RELATIONS.NEITHER, label: "どちらでもない" }
+]);
+
+const EVENT_OPTIONS = Object.freeze([
+  { value: EVENT_TYPES.A, label: "A" },
+  { value: EVENT_TYPES.B, label: "B" },
+  { value: EVENT_TYPES.A_COMPLEMENT, label: "Aᶜ" },
+  { value: EVENT_TYPES.B_COMPLEMENT, label: "Bᶜ" },
+  { value: EVENT_TYPES.INTERSECTION, label: "A ∩ B" },
+  { value: EVENT_TYPES.UNION, label: "A ∪ B" },
+  { value: EVENT_TYPES.UNION_COMPLEMENT, label: "(A ∪ B)ᶜ" },
+  { value: EVENT_TYPES.INTERSECTION_COMPLEMENT, label: "(A ∩ B)ᶜ" }
 ]);
 
 function svgElement(name, attributes = {}) {
@@ -152,9 +164,11 @@ function createSetRegionsSvg(container, instanceId, onRegionToggle) {
 
   REGION_DEFINITIONS.forEach(({ bit, key }) => {
     const element = { outside, "a-only": aOnly, intersection, "b-only": bOnly }[key];
-    const listener = () => onRegionToggle(bit);
-    element.addEventListener("pointerup", listener);
-    cleanup.push(() => element.removeEventListener("pointerup", listener));
+    if (onRegionToggle) {
+      const listener = () => onRegionToggle(bit);
+      element.addEventListener("pointerup", listener);
+      cleanup.push(() => element.removeEventListener("pointerup", listener));
+    }
     regionElements.set(bit, element);
   });
   svg.append(outside, aOnly, bOnly, intersection);
@@ -254,7 +268,7 @@ function mountSetRegionsScene(container, config = {}) {
   };
 }
 
-function createRelationSvg(container, onRelationSelect) {
+function createRelationSvg(container) {
   const svg = svgElement("svg", {
     class: "atlas-region-svg atlas-relation-svg",
     viewBox: "0 0 500 320",
@@ -285,10 +299,7 @@ function createRelationSvg(container, onRelationSelect) {
   RELATION_OPTIONS.forEach(({ value, label }) => {
     const group = svgElement("g", {
       class: "atlas-relation-option",
-      "data-relation": value,
-      role: "button",
-      tabindex: 0,
-      "aria-label": `${label}の図を選択`
+      "data-relation": value
     });
     const shapeData = options[value];
     const shapeEntries = value === SET_RELATIONS.P_SUBSET_Q
@@ -318,19 +329,6 @@ function createRelationSvg(container, onRelationSelect) {
       labels.children[1].textContent = "Q";
     }
     group.append(labels);
-    const listener = () => onRelationSelect(value);
-    const keyListener = (event) => {
-      if (event.key === "Enter" || event.key === " ") {
-        event.preventDefault();
-        onRelationSelect(value);
-      }
-    };
-    group.addEventListener("pointerup", listener);
-    group.addEventListener("keydown", keyListener);
-    cleanup.push(() => {
-      group.removeEventListener("pointerup", listener);
-      group.removeEventListener("keydown", keyListener);
-    });
     relationGroups.set(value, group);
     svg.append(group);
   });
@@ -366,16 +364,13 @@ function mountNecessarySufficientScene(container, config = {}) {
   implicationField.append(implicationFieldLabel, implicationFormula);
   const conditionField = document.createElement("div");
   conditionField.className = "atlas-relation-condition-fields";
-  const sufficient = document.createElement("p");
-  const necessary = document.createElement("p");
-  conditionField.append(sufficient, necessary);
   formulaFields.append(relationField, implicationField, conditionField);
   const summary = document.createElement("p");
   summary.className = "atlas-region-summary";
   result.append(formulaFields, summary);
 
   const buttons = new Map();
-  const svgParts = createRelationSvg(diagram, setRelation);
+  const svgParts = createRelationSvg(diagram);
   const cleanup = [...svgParts.cleanup];
   const { relationGroups } = svgParts;
 
@@ -410,9 +405,14 @@ function mountNecessarySufficientScene(container, config = {}) {
     });
     renderLatex(relationFormula, facts.relationLatex, facts.relationText);
     renderLatex(implicationFormula, facts.implicationLatex, facts.implicationText);
-    sufficient.textContent = `十分条件：${facts.sufficientText}`;
-    necessary.textContent = `必要条件：${facts.necessaryText}`;
-    summary.textContent = `${facts.relationText} ／ ${facts.implicationText} ／ ${facts.sufficientText} ／ ${facts.necessaryText}`;
+    const conditionStatements = facts.conditionStatements || [facts.sufficientText, facts.necessaryText];
+    conditionField.replaceChildren();
+    conditionStatements.forEach((statement) => {
+      const condition = document.createElement("p");
+      condition.textContent = statement;
+      conditionField.append(condition);
+    });
+    summary.textContent = `${facts.relationText} ／ ${facts.implicationText} ／ ${conditionStatements.join(" ／ ")}`;
     config.onStateChange?.({ relation }, summary.textContent);
   }
 
@@ -439,9 +439,90 @@ function mountNecessarySufficientScene(container, config = {}) {
   };
 }
 
+function mountEventRegionsScene(container, config = {}) {
+  const eventValues = new Set(Object.values(EVENT_TYPES));
+  const initialEvent = eventValues.has(config.initial?.event) ? config.initial.event : EVENT_TYPES.UNION;
+  let event = initialEvent;
+  let destroyed = false;
+  const instanceId = `atlas-event-selector-${selectorSequence += 1}`;
+  const { controls, result, diagram } = createRegionLayout(container, {
+    controlsLabel: "見たい事象の選択",
+    resultLabel: "選択中の事象",
+    rootClass: "atlas-event-selector"
+  });
+  const expression = document.createElement("div");
+  expression.className = "atlas-region-expression atlas-event-expression";
+  const description = document.createElement("p");
+  description.className = "atlas-event-description";
+  const summary = document.createElement("p");
+  summary.className = "atlas-region-summary";
+  result.append(expression, description, summary);
+
+  const svgParts = createSetRegionsSvg(diagram, instanceId);
+  const cleanup = [...svgParts.cleanup];
+  const { regionElements } = svgParts;
+  const buttons = new Map();
+
+  EVENT_OPTIONS.forEach(({ value, label }) => {
+    const { button, cleanup: removeListener } = createToggleButton({
+      label,
+      pressed: false,
+      ariaLabel: `${label}を選択`,
+      onActivate: () => setEvent(value)
+    });
+    button.dataset.event = value;
+    controls.append(button);
+    buttons.set(value, button);
+    cleanup.push(removeListener);
+  });
+
+  function setEvent(nextEvent) {
+    if (destroyed || !eventValues.has(nextEvent)) return;
+    event = nextEvent;
+    const facts = eventFacts(event);
+    REGION_DEFINITIONS.forEach(({ bit }) => {
+      regionElements.get(bit)?.classList.toggle("is-selected", Boolean(facts.mask & bit));
+    });
+    buttons.forEach((button, value) => {
+      const active = value === event;
+      const label = EVENT_OPTIONS.find((option) => option.value === value)?.label || value;
+      button.setAttribute("aria-pressed", String(active));
+      button.textContent = active ? `✓ ${label}` : label;
+      button.classList.toggle("is-selected", active);
+    });
+    renderLatex(expression, facts.latex, facts.text);
+    description.textContent = facts.description;
+    summary.textContent = `${facts.text}：${facts.description}`;
+    config.onStateChange?.({ event }, summary.textContent);
+  }
+
+  function reset() {
+    setEvent(initialEvent);
+  }
+
+  function destroy() {
+    if (destroyed) return;
+    destroyed = true;
+    cleanupScene(container, cleanup);
+  }
+
+  function setParameter(name, value) {
+    if (name === "event") setEvent(value);
+  }
+
+  setEvent(initialEvent);
+  return {
+    reset,
+    destroy,
+    getState: () => ({ event }),
+    setParameter
+  };
+}
+
 const REGION_MODES = Object.freeze({
   "set-regions": mountSetRegionsScene,
-  "necessary-sufficient": mountNecessarySufficientScene
+  "necessary-sufficient": mountNecessarySufficientScene,
+  "event-regions": mountEventRegionsScene
 });
 
 export function mountRegionSelector(container, config = {}) {
