@@ -11,8 +11,8 @@ test("canonical library renders all mapped statuses and evidence", async ({ page
   await page.goto(appPath("interactions.html"));
   const canonicalCount = await page.locator(".library-card").count();
   expect(canonicalCount).toBeGreaterThanOrEqual(8);
-  await expect(page.locator(".library-runtime-status.is-implemented")).toHaveCount(3);
-  await expect(page.locator(".library-runtime-status.is-planned")).toHaveCount(canonicalCount - 3);
+  await expect(page.locator(".library-runtime-status.is-implemented")).toHaveCount(4);
+  await expect(page.locator(".library-runtime-status.is-planned")).toHaveCount(canonicalCount - 4);
   await expect(page.locator(".library-runtime-status.is-blocked-evidence")).toHaveCount(0);
   await expect(page.locator(".library-card").nth(0)).toContainText("phetsims/graphing-quadratics");
   await expect(page.locator(".library-card").nth(0)).toContainText("MIT");
@@ -92,9 +92,55 @@ test("MATH-INT-003 keeps the curve probe on the function and supports keyboard i
   await expectNoBrowserErrors(errors);
 });
 
+test("MATH-INT-009 keeps the measurement point constrained and supports pointer, keyboard and reset", async ({ page }) => {
+  const errors = collectBrowserErrors(page);
+  await openInteraction(page, "MATH-INT-009");
+  await expect(page.locator(".library-demo")).toBeVisible();
+  await expect(page.locator(".library-source-item")).toHaveCount(2);
+  await expect(page.locator(".library-source-item").first()).toContainText("inspired-by");
+  const state = page.locator(".library-demo-state");
+  const initial = JSON.parse(await state.getAttribute("data-state"));
+  expect(initial.theta).toBe(30);
+  expect(initial.radius).toBeCloseTo(1, 10);
+  expect(initial.squareSum).toBeCloseTo(1, 10);
+  const summary = page.locator(".atlas-geometry-summary");
+  await expect(summary).toContainText("θ=");
+  await expect(summary).toContainText("cosθ=");
+  await expect(summary).toContainText("sinθ=");
+  await expect(summary).toContainText("x²+y²=");
+
+  const keyboard = page.getByRole("button", { name: "制約付き測定点P。矢印キーで円周上を移動" });
+  await expect(keyboard).toHaveAttribute("aria-label", "制約付き測定点P。矢印キーで円周上を移動");
+  await keyboard.focus();
+  await page.keyboard.press("ArrowRight");
+  const afterKeyboard = JSON.parse(await state.getAttribute("data-state"));
+  expect(afterKeyboard.theta).toBe(initial.theta + 1);
+  expect(afterKeyboard.radius).toBeCloseTo(1, 10);
+  expect(afterKeyboard.squareSum).toBeCloseTo(1, 10);
+
+  await keyboard.scrollIntoViewIfNeeded();
+  const box = await keyboard.boundingBox();
+  expect(box).not.toBeNull();
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(box.x + box.width / 2 + 35, box.y + box.height / 2 - 12, { steps: 10 });
+  await page.mouse.up();
+  const afterPointer = JSON.parse(await state.getAttribute("data-state"));
+  expect(afterPointer.theta).not.toBe(afterKeyboard.theta);
+  expect(afterPointer.radius).toBeCloseTo(1, 10);
+  expect(afterPointer.squareSum).toBeCloseTo(1, 10);
+
+  await page.getByRole("button", { name: "MATH-INT-009を初期状態に戻す" }).click();
+  const afterReset = JSON.parse(await state.getAttribute("data-state"));
+  expect(afterReset.theta).toBe(30);
+  expect(afterReset.radius).toBeCloseTo(1, 10);
+  expect(afterReset.squareSum).toBeCloseTo(1, 10);
+  await expectNoBrowserErrors(errors);
+});
+
 test("planned Canonical interactions do not mount demos", async ({ page }) => {
   const errors = collectBrowserErrors(page);
-  for (const id of ["MATH-INT-004", "MATH-INT-005", "MATH-INT-006", "MATH-INT-007", "MATH-INT-008", "MATH-INT-009", "MATH-INT-010"]) {
+  for (const id of ["MATH-INT-004", "MATH-INT-005", "MATH-INT-006", "MATH-INT-007", "MATH-INT-008", "MATH-INT-010"]) {
     await openInteraction(page, id);
     await expect(page.locator(".library-demo")).toHaveCount(0);
     await expect(page.locator(".library-source-item")).toHaveCount(["MATH-INT-007", "MATH-INT-008", "MATH-INT-009", "MATH-INT-010"].includes(id) ? 2 : 1);

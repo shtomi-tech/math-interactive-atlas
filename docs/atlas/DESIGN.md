@@ -218,6 +218,10 @@ R6の研究データはRuntimeの正本と分離する。`research/gap-behavior-
 
 R7では、Research Candidate、Active Canonical、Runtime Implementedを別状態として保持する。`research/canonical-promotion-plan.json` はShortlist全件のpromote / hold判断、`research/canonical-promotion-evidence.json` は昇格対象の独立Repository Evidence、`research/r7-coverage-delta.json` はCandidate単位のCoverage遷移を正本とする。昇格Canonicalは `data/interactions.json` と `data/interaction-runtime-map.json` に追加するが、Runtime状態は必ず `planned` とし、実装専用metadataを持たせない。Evidenceは固定SHA・License・source path・観察挙動を備え、外部コードは `behavioral-reference-only` のclean-room境界で参照する。R6のResearch Indexは過去時点のsnapshotとして保持し、R7判断の生成Indexは `dist/ai/canonical-promotion-decisions.json` へ分離する。
 
+### Phase R8: Runtime Pilot boundary
+
+R8では `MATH-INT-009` のみを `planned` から `implemented` へ進め、既存の `geometryBoard` EngineとRegistryを再利用する。専用mode `canonical-constrained-measure` は、単位円上の測定点P、pointer / keyboard、Reset、aria-live summaryを提供し、Pure Math層の `x = cos θ`、`y = sin θ`、`x² + y² = 1` をUI計算と分離する。`MATH-INT-010` は `planned` のまま残す。新Engine、Legacy移行、Practice、Coverage再分類、外部コードのcopy / portは行わない。
+
 候補のPriorityはPrimary Gap影響、対象Subject / Unit数、既存Engine適合、Evidenceの順で比較する。Shortlistは3〜5件、Primary Gapはgapだけ、Secondary Opportunityはpartialだけとし、同じPrimary Gapを複数Shortlistへ割り当てない。R6では操作状態の設計と証拠の不足を明示し、教材の見た目やコードの移植を先行させない。
 
 ### AI Retrieval Foundation

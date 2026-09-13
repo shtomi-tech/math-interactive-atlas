@@ -1,5 +1,5 @@
-import { SUBJECT_ORDER, SUBJECT_UNIT_ORDER, orderedContents, subjectLabel, unitLabel } from "./curriculum.js?v=20260913-r4";
-import { practiceStatus } from "./storage.js?v=20260913-r4";
+import { SUBJECT_ORDER, SUBJECT_UNIT_ORDER, orderedContents, subjectLabel, unitLabel } from "./curriculum.js?v=20260913-r8";
+import { practiceStatus } from "./storage.js?v=20260913-r8";
 
 const INTERACTION_LABELS = { slider: "SLIDER", drag: "DRAG", geometry: "GEOMETRY", select: "SELECT", cards: "CARDS", data: "DATA", simulation: "SIMULATION", build: "BUILD" };
 const PROGRESS_OPTIONS = [["all", "すべて"], ["unvisited", "未閲覧"], ["visited", "閲覧済み"], ["favorites", "お気に入り"]];

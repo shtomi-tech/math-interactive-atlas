@@ -1,5 +1,5 @@
-import { renderCatalog, renderSummary } from "./catalog.js?v=20260913-r4";
-import { createViewer } from "./viewer.js?v=20260913-r4";
+import { renderCatalog, renderSummary } from "./catalog.js?v=20260913-r8";
+import { createViewer } from "./viewer.js?v=20260913-r8";
 
 const dom = {
   status: document.querySelector("#libraryStatus"),

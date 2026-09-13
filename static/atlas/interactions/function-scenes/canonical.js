@@ -1,5 +1,5 @@
-import { clampProbeX, moveVertex, normalizeCoefficient, quadraticExpression, quadraticY } from "../../math/canonical-quadratic.js?v=20260913-r4";
-import { COLORS, createState, format } from "./common.js?v=20260913-r4";
+import { clampProbeX, moveVertex, normalizeCoefficient, quadraticExpression, quadraticY } from "../../math/canonical-quadratic.js?v=20260913-r8";
+import { COLORS, createState, format } from "./common.js?v=20260913-r8";
 
 function stateSummary(state) {
   return `${quadraticExpression(state)} ／ 頂点 (${format(state.h)}, ${format(state.k)})`;

@@ -1,4 +1,4 @@
-import { confidenceIntervalKnownSigma } from "./statistical-inference.js?v=20260913-r4";
+import { confidenceIntervalKnownSigma } from "./statistical-inference.js?v=20260913-r8";
 
 function validPopulation(population) { return Array.isArray(population) && population.length > 0; }
 function randomIndex(rng) { const value = typeof rng === "function" ? Number(rng()) : Math.random(); return Math.min(0.999999999, Math.max(0, Number.isFinite(value) ? value : 0)); }

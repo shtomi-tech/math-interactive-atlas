@@ -19,6 +19,7 @@ const requiredFiles = [
   "static/atlas/interactions/geometry-board.js",
   "static/atlas/interactions/geometry-scenes/common.js",
   "static/atlas/interactions/geometry-scenes/index.js",
+  "static/atlas/interactions/geometry-scenes/canonical.js",
   "static/atlas/interactions/geometry-scenes/triangle.js",
   "static/atlas/interactions/geometry-scenes/circle.js",
   "static/atlas/interactions/geometry-scenes/trigonometry.js",
@@ -56,6 +57,7 @@ const requiredFiles = [
   "static/atlas/math/number-theory.js",
   "static/atlas/math/quadratic.js",
   "static/atlas/math/canonical-quadratic.js",
+  "static/atlas/math/canonical-geometry.js",
   "static/atlas/math/trigonometry.js",
   "static/atlas/math/exponential-logarithm.js",
   "static/atlas/math/calculus.js",
@@ -157,6 +159,8 @@ const requiredFiles = [
   "scripts/report-r7-promotion.js",
   "scripts/build-canonical-promotion-index.js",
   "scripts/check-r7-scope.js",
+  "scripts/check-r8-runtime-pilot.js",
+  "scripts/check-r8-scope.js",
   "tests/e2e/all-atlas-content.spec.js",
   "tests/e2e/learning-loop.spec.js",
   "tests/e2e/pages-smoke.spec.js",
@@ -249,6 +253,8 @@ const statisticalInferenceSource = read("static/atlas/math/statistical-inference
 const samplingSource = read("static/atlas/math/sampling.js");
 const modelingSource = read("static/atlas/math/modeling.js");
 const geometryScenesSource = ["common.js", "index.js", "triangle.js", "circle.js", "trigonometry.js", "coordinate.js"].map((file) => read(`static/atlas/interactions/geometry-scenes/${file}`)).join("\n");
+const canonicalGeometrySource = read("static/atlas/math/canonical-geometry.js");
+const canonicalSceneSource = read("static/atlas/interactions/geometry-scenes/canonical.js");
 const storageSource = read("static/atlas/storage.js");
 const practiceMainSource = read("static/practice/main.js");
 const practiceRouterSource = read("static/practice/router.js");
@@ -631,6 +637,8 @@ requireCondition(reportAuditSource.includes("Repository Audit Summary") && repor
 requireCondition(samplingSource.includes("sampleStandardNormal") && samplingSource.includes("sampleNormal") && samplingSource.includes("sampleMeanFromNormalPopulation") && samplingSource.includes("simulateKnownSigmaConfidenceIntervals"), "Phase 8A normal sampling helpers are missing");
 requireCondition(simulationLabSource.includes("drawNormalTestChart") && simulationLabSource.includes("標準正規分布") && simulationLabSource.includes("100区間を作る"), "Phase 8A statistical simulation UI is incomplete");
 requireCondition(geometryScenesSource.includes("判定する点P") && geometryScenesSource.includes("円周上の点P") && geometryScenesSource.includes("aria-pressed"), "Phase 8A geometry direct manipulation is incomplete");
+requireCondition(canonicalGeometrySource.includes("normalizeDegrees") && canonicalGeometrySource.includes("angleFromPoint") && canonicalGeometrySource.includes("measureUnitCircle"), "Phase R8 canonical geometry math is incomplete");
+requireCondition(canonicalSceneSource.includes("canonical-constrained-measure") && canonicalSceneSource.includes("制約付き測定点P"), "Phase R8 canonical geometry scene is incomplete");
 requireCondition(algebraLabSource.includes("formatBinomial") && algebraLabSource.includes("role: \"img\"") && algebraLabSource.includes("aria-label"), "Phase 8A algebra accessibility helpers are missing");
 requireCondition(routerSource.includes('subject: params.get("subject") || null'), "catalog route must show all subjects when subject is omitted");
 requireCondition(workflowSource.includes("node-version: 22"), "GitHub Actions must use Node.js 22");
@@ -641,6 +649,7 @@ requireCondition(workflowSource.includes("node scripts/check-r4-scope.js") && wo
 requireCondition(workflowSource.includes("node scripts/check-r5-scope.js") && workflowSource.includes("node scripts/check-evidence-readiness.js") && workflowSource.includes("node scripts/check-candidate-canonical-map.js") && workflowSource.includes("node scripts/report-candidate-canonical-coverage.js") && workflowSource.includes("node scripts/build-candidate-canonical-index.js --check"), "Phase R5 evidence and coverage checks are missing from GitHub Actions");
 requireCondition(workflowSource.includes("node scripts/check-gap-behavior-analysis.js") && workflowSource.includes("node scripts/check-canonical-interaction-candidates.js") && workflowSource.includes("node scripts/check-canonical-candidate-repository-leads.js") && workflowSource.includes("node scripts/report-r6-research-priorities.js") && workflowSource.includes("node scripts/build-canonical-research-index.js --check") && workflowSource.includes("node scripts/check-r6-scope.js"), "Phase R6 research checks are missing from GitHub Actions");
 requireCondition(workflowSource.includes("node scripts/check-canonical-promotion-plan.js") && workflowSource.includes("node scripts/check-canonical-promotion-evidence.js") && workflowSource.includes("node scripts/check-r7-coverage-delta.js") && workflowSource.includes("node scripts/report-r7-promotion.js") && workflowSource.includes("node scripts/build-canonical-promotion-index.js --check") && workflowSource.includes("node scripts/check-r7-scope.js"), "Phase R7 promotion checks are missing from GitHub Actions");
+requireCondition(workflowSource.includes("node scripts/check-r8-runtime-pilot.js") && workflowSource.includes("node scripts/check-r8-scope.js"), "Phase R8 runtime checks are missing from GitHub Actions");
 requireCondition(workflowSource.includes("node scripts/check-exponential-logarithm.js") && workflowSource.includes("node scripts/check-calculus.js") && workflowSource.includes("node scripts/check-sequences.js") && workflowSource.includes("node scripts/check-algebra2.js") && workflowSource.includes("node scripts/check-coordinate-geometry.js") && workflowSource.includes("node scripts/check-statistical-inference.js") && workflowSource.includes("node scripts/check-modeling.js"), "Phase 7B math checks are missing from GitHub Actions");
 requireCondition(workflowSource.includes("node scripts/check-js-syntax.js"), "Phase 7B syntax checks are missing from GitHub Actions");
 requireCondition(workflowSource.includes("browser-smoke:") && workflowSource.includes("npx playwright install --with-deps chromium") && workflowSource.includes("npm test"), "Browser smoke checks are missing from GitHub Actions");

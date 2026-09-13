@@ -1,5 +1,5 @@
-import { createContext } from "./function-scenes/common.js?v=20260913-r4";
-import { FUNCTION_GRAPH_SCENES } from "./function-scenes/index.js?v=20260913-r4";
+import { createContext } from "./function-scenes/common.js?v=20260913-r8";
+import { FUNCTION_GRAPH_SCENES } from "./function-scenes/index.js?v=20260913-r8";
 
 export const FUNCTION_GRAPH_MODES = Object.freeze(Object.keys(FUNCTION_GRAPH_SCENES));
 

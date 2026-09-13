@@ -728,66 +728,6 @@ Interactive Math Material
 
 という仕組みを成立させる。
 
-## Phase R3: Canonical Repository-derived Interaction Library
-
-R3では、既存の89教材を新しい出典へ遡及帰属させず、実在する公開GitHub Repositoryの実装を固定SHAで確認して、研究用の正規Interaction Libraryを別に作る。
-
-正本は次の役割に分ける。
-
-```text
-research/repository-audit.json
-    ↓ 既存89候補の歴史的な監査キュー
-
-research/external-repositories.json
-    ↓ R3で新たに確認したRepository・Feature・License・証拠
-
-data/interactions.json
-    ↓ MATH-INT-###形式の正規Interaction metadata
-
-dist/ai/interactions.json
-    ↓ 上記2つから生成するAI検索用Index
-```
-
-R3の最低条件は、8件以上のCanonical Interaction、3つ以上の外部Repository、4つ以上のInteraction Categoryである。各Interactionは `contentId` に依存せず、`inspired-by` のFeature証拠と、学習者の操作・変化・フィードバック・再利用条件を持つ。R3では実行時の教材・Engine・Practiceへ追加しない。Runtime状態はR4で `data/interaction-runtime-map.json` に分離する。
-
-外部Repositoryの正当性は、公開GitHubの正確なowner/repository URL、40文字の固定commit SHA、SHAに結びついたLicense URL、確認日、実際のFeature PathとBehavior Summaryで検証する。`main` / `master` の可変URL、架空の証拠、コードのコピー・移植・`adapted-from` はCanonical Libraryへ登録しない。
-
-R3完了時も、Atlas 89教材、Practice 0問、Interaction Engine 11種、数学I・A・II・Bという実行時スコープは維持する。Runtime Demoの選定と実装は、R3のレビュー後に別のPhaseで行う。
-
-## Phase R4: Canonical Interaction Runtime Pilot
-
-R4ではCanonical Interactionを既存Engineへ接続する最小Pilotを実施する。`MATH-INT-001〜003`だけを `functionGraph` 上へclean-roomで再実装し、`MATH-INT-004〜006`は `planned`、`MATH-INT-007〜008`は `blocked-evidence` として、8件すべてを `data/interaction-runtime-map.json` にExactly Onceで記録する。Canonical定義は `data/interactions.json`、実装状態はRuntime map、AI検索用出力は3つの正本から生成する。新規Canonical Interaction、Practice、Engine、Legacy Candidateとの自動mappingはR4では追加しない。
-
-## Phase R5: Evidence Completion and Legacy-to-Canonical Coverage Map
-
-R5ではRuntime実装を増やさない。`MATH-INT-007` と `MATH-INT-008`について、実際のInteraction本体まで追跡できる固定SHA付きFeature Evidenceを追加し、Runtime statusを `blocked-evidence` から `planned` へ更新する。`phetsims/area-model-common`（GPL-3.0）と `phetsims/fractions-common`（MIT）のコードはコピー・移植せず、Research Metadataだけを記録する。
-
-同時に、`data/candidate-canonical-map.json`で既存89 Legacy CandidateをExactly Once分類する。数学単元の一致ではなくInteraction Behaviorを基準に、`covered` / `partial` / `gap`、matchの`direct` / `partial` / `supporting`、確信度、推奨アクションを記録し、`dist/ai/candidate-canonical-coverage.json`へ生成する。候補監査 `0 / 89 / 0`、Canonical 8、Runtime Engine 11、Practice 0は維持する。
-
-R5の完了条件は、External Repository 6、Feature 10、Runtime `implemented 3 / planned 5 / blocked-evidence 0`、89件のCoverage分類、Evidence Readiness、Coverage集計、既存Runtimeと89教材の回帰がすべて機械検証できることである。Coverage gapから新しいInteractionを追加する判断はR6へ送る。
-
-## Phase R6: Gap Behavior Research and Canonical Candidate Prioritization
-
-R6では、R5の `gap 56` をすぐにRuntimeや新規教材へ昇格させず、学習者の操作、操作対象、状態変化、フィードバック、制約からBehavior Signatureへ整理する。Signatureは重複・漏れなくBehavior Clusterへまとめ、既存11 Engineへの適合仮説と分割リスクを記録する。
-
-研究用候補は `research/canonical-interaction-candidates.json`、外部Repositoryの調査先は `research/canonical-candidate-repository-leads.json` に分離する。候補IDは `CAN-CAND-###` とし、`MATH-INT-###` を新規発行しない。候補は `research-only` とし、R6では教材・Runtime・Engine・Practice・既存Repository Registryを変更しない。外部コードはコピー・移植せず、Repositoryの挙動参照だけを固定SHA・License・Feature Path付きで記録する。
-
-R6の生成物 [`dist/ai/canonical-research-priorities.json`](../dist/ai/canonical-research-priorities.json) は、56件のgapだけを母数とするSubject / Unit / Cluster集計、候補ごとのPrimary Gap影響、Partialの二次機会、Engine適合、Evidence、優先度、Repository Evidenceを保持する。`covered` と `partial` はPrimary Gapへ混入させず、Shortlistは3〜5件、Evidenceと優先度の根拠を明示する。
-
-R6完了時も、Atlas 89教材、Practice 0問、Canonical 8件、External Repository 6件 / Feature 10件、Runtime `implemented 3 / planned 5 / blocked-evidence 0`、Coverage `covered 9 / partial 24 / gap 56`、Interaction Engine 11種を固定する。次のR7では、R6の候補・証拠・優先度をレビューし、必要な候補だけを `MATH-INT-009` 以降へ昇格する。
-
-## Phase R7: Canonical Promotion and Evidence Formalization
-
-R7では、R6 Research Candidateを無条件にActive Canonicalへ移さず、Evidence FormalizationとPromotion Gateを通過した少数だけを昇格する。R6のResearch snapshot（候補、Lead、Research Index）は過去時点の判断材料として保持し、R7で追加したEvidenceは別Registryへ記録する。
-
-R7開始baselineはR6 commit `e3f20563c9ff7d5251337659ec37ea8d2d76bfc9`、Legacy 89、監査 `0 / 89 / 0`、Canonical 8、External Repository 6 / Feature 10、Practice 0、Engine 11、Runtime `implemented 3 / planned 5 / blocked-evidence 0`、Coverage `covered 9 / partial 24 / gap 56` である。Shortlistは `CAN-CAND-001`〜`004` の4件で、Behavior coherence、split risk、Engine fit、独立した公開Repository 2件以上、固定SHA・LICENSE・source path・観察挙動を各Candidateの昇格条件とする。
-
-今回の昇格結果は `CAN-CAND-001 → MATH-INT-009`、`CAN-CAND-002 → MATH-INT-010` の2件である。`CAN-CAND-003` と `CAN-CAND-004` はEvidence不足と分割リスクのためHoldとする。新CanonicalはRuntime `planned` とし、Runtime実装・新Engine・新Scene・新教材・Practice変更はR7では行わない。新IDは選抜順に009から連番発行し、Hold CandidateのIDは予約しない。
-
-R7の正本は `research/canonical-promotion-plan.json`、`research/canonical-promotion-evidence.json`、`research/r7-coverage-delta.json` で、生成物は `dist/ai/canonical-promotion-decisions.json`、`dist/ai/interactions.json`、`dist/ai/candidate-canonical-coverage.json` である。Coverageは候補ごとに再評価し、今回は `covered 18 / partial 24 / gap 47`、9件の個別遷移を記録する。`covered` の回帰、Evidenceの捏造、外部コードのコピー・移植、`adapted-from`、Runtimeへの早期昇格を禁止する。
-
-R7完了後に `promotionCount >= 1`、全Evidence Gate、Canonical・Runtime map・Coverageの整合、既存回帰、GitHub Actionsのchecks / browser-smokeがそろえば、次のR8で昇格済みCanonicalから1件だけRuntime Pilot対象を選ぶ。R7でPromotion Gateを満たせない場合は `promotionCount = 0` とし、R8へ進まずResearchを継続する。
-
 ## 最重要ルール
 
 > **外部公開Repositoryで確認できないInteractionを、独自に作成してAtlasへ追加してはいけない。**

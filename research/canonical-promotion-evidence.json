@@ -22,8 +22,8 @@
             "https://github.com/phetsims/graphing-quadratics/blob/709b383759e887b6e2edb040bfbb987dc3632e05/js/common/view/PointToolNode.ts"
           ],
           "observedBehavior": [
-            "A graph vertex is manipulated on a constrained quadratic model.",
-            "The vertex coordinates and derived graph representation stay synchronized."
+            "A coordinate probe is dragged within graph bounds and snaps to a nearby quadratic curve.",
+            "The probe position and coordinate readout stay synchronized, and keyboard movement is also provided."
           ],
           "relation": "inspired-by",
           "implementationBoundary": "behavioral-reference-only",

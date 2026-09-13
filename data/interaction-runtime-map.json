@@ -52,7 +52,10 @@
     },
     {
       "interactionId": "MATH-INT-009",
-      "status": "planned",
+      "status": "implemented",
+      "engine": "geometryBoard",
+      "mode": "canonical-constrained-measure",
+      "implementationStyle": "clean-room-reimplementation",
       "sourceFeatureIds": ["REPO-001-F003", "REPO-007-F001"]
     },
     {

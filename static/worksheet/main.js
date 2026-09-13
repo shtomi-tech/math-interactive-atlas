@@ -1,5 +1,5 @@
-import { subjectLabel, unitLabel } from "../atlas/curriculum.js?v=20260913-r4";
-import { buildWorksheetModel, problemAnswerText } from "./model.js?v=20260913-r4";
+import { subjectLabel, unitLabel } from "../atlas/curriculum.js?v=20260913-r8";
+import { buildWorksheetModel, problemAnswerText } from "./model.js?v=20260913-r8";
 
 const params = new URLSearchParams(window.location.search);
 const dom = { status: document.querySelector("#worksheetStatus"), root: document.querySelector("#worksheetRoot"), title: document.querySelector("#worksheetTitle") };

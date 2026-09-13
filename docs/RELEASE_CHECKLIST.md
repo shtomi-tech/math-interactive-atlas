@@ -106,6 +106,19 @@ Pagesの公開検証はローカル検証とは別に扱う。Repositoryの公�
 - [ ] R7 ScopeでCanonical 10 / Repository 9 / Feature 13 / Runtime `3 implemented / 7 planned / 0 blocked` / Coverage `18 / 24 / 47` を確認する
 - [ ] R4/R5/R6 checker、既存数学検査、`npm run check`、`npm test`、GitHub Actions checks / browser-smokeが成功する
 
+## R8 gates
+
+- [ ] R7 EvidenceのMATH-INT-009 PhET observedBehaviorをcoordinate probeの表現へ補正する
+- [ ] `MATH-INT-009` だけを `planned → implemented` とし、`MATH-INT-010` は `planned` のまま保持する
+- [ ] Runtime `4 implemented / 6 planned / 0 blocked`、Canonical 10、Repository 9、Feature 13、Engine 11を確認する
+- [ ] `MATH-INT-009` は既存 `geometryBoard` / `canonical-constrained-measure` / `clean-room-reimplementation` を使用する
+- [ ] Pure Mathの角度正規化、単位円半径、`x² + y² = 1`、`x = cosθ`、`y = sinθ`を検証する
+- [ ] 009のpointer、keyboard、Reset、aria-label、aria-live、focus-visible、44px target、色に依存しないテキスト表示を確認する
+- [ ] 1440 / 768 / 375 / 320pxでoverflow、board、touch target、Reset、summaryを確認する
+- [ ] Legacy 89、Practice 0、Coverage `18 / 24 / 47`、Candidate Map、外部Repository metadataを変更しない
+- [ ] `check-r8-runtime-pilot.js`、`check-r8-scope.js`、generated index、既存R3〜R7 checker、`npm test`が成功する
+- [ ] GitHub Actionsの `checks` と `browser-smoke` がsuccessになる
+
 ## Forbidden in R4
 
 - 新規Practice問題、Atlas教材、Interaction Engine

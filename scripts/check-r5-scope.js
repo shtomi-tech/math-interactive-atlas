@@ -33,7 +33,7 @@ requireCondition(Array.isArray(library?.interactions) && library.interactions.le
 requireCondition(Array.isArray(external?.repositories) && external.repositories.length >= 6, "R5 scope requires the six retained external repositories");
 requireCondition(features.length >= 10, "R5 scope requires the ten retained external features");
 requireCondition(runtime?.version === 1 && mappings.length === library?.interactions?.length, "R5 scope requires one runtime mapping per canonical interaction");
-requireCondition(count("implemented") === 3 && count("planned") === mappings.length - 3 && count("blocked-evidence") === 0, "R5 scope requires runtime 3 implemented / remaining planned / 0 blocked-evidence");
+requireCondition(count("implemented") >= 3 && count("implemented") <= 4 && count("planned") === mappings.length - count("implemented") && count("blocked-evidence") === 0, "R5 scope requires the retained pilots plus at most one later pilot / remaining planned / 0 blocked-evidence");
 requireCondition(Array.isArray(coverage?.candidates) && coverage.candidates.length === 89, "R5 scope requires 89 candidate-canonical records");
 requireCondition(retainedRepositoryIds.every((id) => repositoryIds.includes(id)), "R5 repositories must retain the fixed six-repository set");
 requireCondition(!JSON.stringify({ library, external, coverage }).includes("adapted-from"), "R5 metadata must not use adapted-from");

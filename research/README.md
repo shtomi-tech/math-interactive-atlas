@@ -43,3 +43,7 @@ R6では、R5のCoverage `gap 56` だけを調査対象にします。 [`gap-beh
 R7では、R6のShortlistを `research/canonical-promotion-plan.json` で全件Decision化し、昇格したCandidateの追加Evidenceだけを `research/canonical-promotion-evidence.json` に記録します。昇格には独立した公開GitHub Repository 2件以上、固定40文字SHA、SHA上のLICENSEとsource path、観察挙動、`inspired-by`、`behavioral-reference-only`、clean-room境界が必要です。Evidence URLは `/blob/<sha>/` に固定し、外部コードはコピー・移植しません。
 
 R7で正式化したRepositoryとFeatureは [`external-repositories.json`](./external-repositories.json) へ既存schemaで追加し、Canonicalは `data/interactions.json`、Runtime状態は `data/interaction-runtime-map.json` へ分離します。新Canonicalは `planned` のままで、R7ではRuntime実装を行いません。`r7-coverage-delta.json` はCandidate単位の遷移を記録し、Cluster全体の自動mappingを禁止します。R6生成IndexはR6 snapshotとして保持し、R7昇格Indexは [`../dist/ai/canonical-promotion-decisions.json`](../dist/ai/canonical-promotion-decisions.json) に分離します。
+
+## Phase R8: Runtime Pilot
+
+R8では、R7で昇格した `MATH-INT-009` のみを既存 `geometryBoard` 上の `canonical-constrained-measure` modeへ実装します。EvidenceのPhET observedBehaviorはcoordinate probeのsource pathに合わせて補正し、`MATH-INT-010` は `planned` のまま残します。外部Repositoryは引き続き `behavioral-reference-only`、実装はclean-roomです。Coverage、Candidate Map、Legacy、Practice、外部Evidenceの帰属は変更しません。

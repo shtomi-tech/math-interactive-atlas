@@ -25,9 +25,10 @@ const retainedIds = ["MATH-INT-001", "MATH-INT-002", "MATH-INT-003", "MATH-INT-0
 requireCondition(Array.isArray(library?.interactions) && library.interactions.length >= 8, "R4 scope requires the eight retained canonical interactions");
 requireCondition(retainedIds.every((id) => library.interactions.some((interaction) => interaction.id === id)), "R4 scope requires MATH-INT-001..008 to be retained");
 requireCondition(runtime?.version === 1 && mappings.length === library?.interactions?.length, "R4 scope requires one runtime mapping per canonical interaction");
-requireCondition(count("implemented") === 3, "R4 invariants require exactly 3 implemented pilot mappings");
+requireCondition(count("implemented") >= 3 && count("implemented") <= 4, "R4 invariants require the three retained pilots and at most one later pilot");
 requireCondition(mappings.filter((mapping) => mapping.interactionId.startsWith("MATH-INT-001") || mapping.interactionId.startsWith("MATH-INT-002") || mapping.interactionId.startsWith("MATH-INT-003")).every((mapping) => mapping.status === "implemented" && mapping.engine === "functionGraph"), "R4 invariants require the 001-003 functionGraph pilots");
 requireCondition(mappings.filter((mapping) => ["MATH-INT-004", "MATH-INT-005", "MATH-INT-006"].includes(mapping.interactionId)).every((mapping) => mapping.status === "planned"), "R4 invariants require 004-006 to remain planned");
+requireCondition(mappings.filter((mapping) => mapping.interactionId === "MATH-INT-009").every((mapping) => ["planned", "implemented"].includes(mapping.status)), "R4 invariants require MATH-INT-009 to remain planned or be the single later pilot");
 requireCondition(!JSON.stringify(library).includes("adapted-from"), "R4 canonical metadata must not use adapted-from");
 requireCondition(registry.includes("functionGraph") && ["rangeGraph", "geometryBoard", "regionSelector", "combinatoricsViewer", "dataLab", "simulationLab", "algebraLab", "numberLineLab", "algorithmLab", "sequenceLab"].every((engine) => registry.includes(engine)), "R4 scope requires the existing 11-engine registry");
 

@@ -57,8 +57,11 @@ requireCondition(activeIndex?.interactions?.length === interactions.length && ac
 requireCondition(repositories.length === 6 + newRepositoryNames.size, "R7 repository count must equal six baseline repositories plus actual new formalized repositories");
 requireCondition(features.length === 10 + formalizedNewFeatureIds.size, "R7 feature count must equal ten baseline features plus actual new formalized features");
 requireCondition(runtime?.version === 1 && mappings.length === interactions.length, "R7 runtime map must contain one mapping per Canonical");
-requireCondition((runtimeCounts.implemented || 0) === 3 && (runtimeCounts.planned || 0) === 5 + promoted.length && (runtimeCounts["blocked-evidence"] || 0) === 0, "R7 runtime must be 3 implemented / 5 plus promotions planned / 0 blocked");
-requireCondition(mappings.filter((mapping) => promotedIds.has(mapping.interactionId)).every((mapping) => mapping.status === "planned" && !mapping.engine && !mapping.mode && !mapping.implementationStyle), "R7 promoted Canonicals must remain planned without runtime-only metadata");
+const laterPilot = mappings.find((mapping) => mapping.interactionId === "MATH-INT-009");
+const laterPilotImplemented = laterPilot?.status === "implemented";
+requireCondition((runtimeCounts.implemented || 0) === (laterPilotImplemented ? 4 : 3) && (runtimeCounts.planned || 0) === 5 + promoted.length - (laterPilotImplemented ? 1 : 0) && (runtimeCounts["blocked-evidence"] || 0) === 0, "R7 runtime must retain 3 pilots and allow only the R8 009 pilot");
+requireCondition(mappings.filter((mapping) => promotedIds.has(mapping.interactionId)).every((mapping) => mapping.interactionId === "MATH-INT-009" ? ["planned", "implemented"].includes(mapping.status) : mapping.status === "planned"), "R7 promoted Canonicals must remain planned except the selected R8 009 pilot");
+requireCondition(!mappings.some((mapping) => mapping.interactionId !== "MATH-INT-009" && mapping.interactionId.startsWith("MATH-INT-00") && mapping.status === "implemented" && !["MATH-INT-001", "MATH-INT-002", "MATH-INT-003"].includes(mapping.interactionId)), "R7 boundary allows only MATH-INT-009 as a later pilot");
 requireCondition([...promotedIds].every((id) => canonicalIds.includes(id) && /^MATH-INT-(009|010|011)$/.test(id)), "R7 promoted IDs must be MATH-INT-009..011");
 requireCondition(promoted.map((decision) => decision.promotedInteractionId).every((id, index) => id === `MATH-INT-${String(9 + index).padStart(3, "0")}`), "R7 promoted IDs must be contiguous");
 requireCondition((coverage?.candidates || []).length === 89 && new Set((coverage?.candidates || []).map((record) => record.candidateId)).size === 89, "R7 Candidate Map must contain 89 unique records");

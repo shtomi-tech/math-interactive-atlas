@@ -175,6 +175,12 @@ R7では、R6のShortlist 4件を全件昇格させず、独立した公開GitHu
 
 R7の正本は [`research/canonical-promotion-plan.json`](./research/canonical-promotion-plan.json)、[`research/canonical-promotion-evidence.json`](./research/canonical-promotion-evidence.json)、[`research/r7-coverage-delta.json`](./research/r7-coverage-delta.json) である。R6のResearch snapshotは書き換えず、Active Registryと生成Indexだけを昇格結果に合わせる。外部コードはコピー・移植せず、Evidenceは `behavioral-reference-only` として扱う。現在のCoverageは `covered 18 / partial 24 / gap 47` で、9件の個別遷移を記録している。
 
+### Phase R8: Promoted Canonical Runtime Pilot
+
+R8では、R7で昇格した `MATH-INT-009` だけを既存 `geometryBoard` の `canonical-constrained-measure` modeへ実装する。単位円上の測定点Pをpointer / keyboardで動かし、座標・sin・cos・`x²+y²`をPure Mathの結果として表示する。`MATH-INT-010` は `planned` のまま残し、Legacy 89、Practice 0、Coverage `18 / 24 / 47`、Engine 11は変更しない。
+
+R8のRuntime状態は `4 implemented / 6 planned / 0 blocked` を目標とする。Canonical LibraryはEngine-neutralなRegistry経由でmountし、320pxを含むResponsive、Accessibility、Reset、Math invariant、既存回帰を確認する。外部Repository由来のコードはコピー・移植せず、clean-roomで再実装する。
+
 ## URLパラメータ
 
 ```text

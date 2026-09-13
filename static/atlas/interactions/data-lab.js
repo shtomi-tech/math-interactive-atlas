@@ -5,9 +5,9 @@ import {
   quartiles,
   standardDeviation,
   variance
-} from "../math/statistics.js?v=20260913-r4";
-import { distributionStandardDeviation, distributionVariance, expectedValue, normalCdf, normalPdf, standardize } from "../math/statistical-inference.js?v=20260913-r4";
-import { leastSquaresLinear, quadraticModel, residuals, rmse } from "../math/modeling.js?v=20260913-r4";
+} from "../math/statistics.js?v=20260913-r8";
+import { distributionStandardDeviation, distributionVariance, expectedValue, normalCdf, normalPdf, standardize } from "../math/statistical-inference.js?v=20260913-r8";
+import { leastSquaresLinear, quadraticModel, residuals, rmse } from "../math/modeling.js?v=20260913-r8";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 const COLORS = Object.freeze({

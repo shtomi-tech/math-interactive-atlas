@@ -17,7 +17,7 @@ const mappings = Array.isArray(runtime?.mappings) ? runtime.mappings : [];
 const featureRepository = new Map((external?.repositories || []).flatMap((repository) => (repository.features || []).map((feature) => [feature.id, repository.repository])));
 const ids = interactions.map((interaction) => interaction.id);
 const mappingIds = mappings.map((mapping) => mapping.interactionId);
-const implementedIds = new Set(["MATH-INT-001", "MATH-INT-002", "MATH-INT-003"]);
+const implementedIds = new Set(["MATH-INT-001", "MATH-INT-002", "MATH-INT-003", "MATH-INT-009"]);
 const engines = new Set(["functionGraph", "rangeGraph", "geometryBoard", "regionSelector", "combinatoricsViewer", "dataLab", "simulationLab", "algebraLab", "numberLineLab", "algorithmLab", "sequenceLab"]);
 
 requireCondition(runtime?.version === 1, "runtime mapping version must be 1");
@@ -33,7 +33,9 @@ mappings.forEach((mapping) => {
     requireCondition(engines.has(mapping.engine), `${mapping.interactionId} must use an existing Engine`);
     requireCondition(typeof mapping.mode === "string" && mapping.mode.trim() !== "", `${mapping.interactionId} needs a runtime mode`);
     requireCondition(mapping.implementationStyle === "clean-room-reimplementation", `${mapping.interactionId} must be a clean-room reimplementation`);
-    requireCondition(mapping.sourceFeatureIds.every((featureId) => featureRepository.get(featureId) === "phetsims/graphing-quadratics"), `${mapping.interactionId} pilot source must be REPO-001`);
+    const isR4Pilot = ["MATH-INT-001", "MATH-INT-002", "MATH-INT-003"].includes(mapping.interactionId);
+    const expectedSources = mapping.interactionId === "MATH-INT-009" ? ["REPO-001-F003", "REPO-007-F001"] : null;
+    requireCondition(isR4Pilot ? mapping.sourceFeatureIds.every((featureId) => featureRepository.get(featureId) === "phetsims/graphing-quadratics") : JSON.stringify(mapping.sourceFeatureIds) === JSON.stringify(expectedSources), `${mapping.interactionId} pilot source features are invalid`);
   } else {
     requireCondition(!mapping.engine && !mapping.mode && !mapping.implementationStyle, `${mapping.interactionId} planned mapping must not mount a runtime demo or carry implementation-only metadata`);
   }

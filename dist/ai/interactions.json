@@ -587,7 +587,9 @@
       "reusability": "high",
       "reusePolicy": "reimplement",
       "runtime": {
-        "status": "planned"
+        "status": "implemented",
+        "engine": "geometryBoard",
+        "mode": "canonical-constrained-measure"
       },
       "sources": [
         {

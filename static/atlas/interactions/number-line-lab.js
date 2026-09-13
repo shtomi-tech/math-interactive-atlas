@@ -1,5 +1,5 @@
-import { absoluteDistance, inequalityFacts, sqrtBounds } from "../math/number-line.js?v=20260913-r4";
-import { exponentialValue } from "../math/exponential-logarithm.js?v=20260913-r4";
+import { absoluteDistance, inequalityFacts, sqrtBounds } from "../math/number-line.js?v=20260913-r8";
+import { exponentialValue } from "../math/exponential-logarithm.js?v=20260913-r8";
 
 const NS = "http://www.w3.org/2000/svg";
 const svgElement = (name, attrs = {}) => { const node = document.createElementNS(NS, name); Object.entries(attrs).forEach(([key, value]) => node.setAttribute(key, String(value))); return node; };

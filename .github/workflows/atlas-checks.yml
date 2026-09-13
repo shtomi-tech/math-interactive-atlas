@@ -48,6 +48,8 @@ jobs:
           node scripts/report-r7-promotion.js
           node scripts/build-canonical-promotion-index.js --check
           node scripts/check-r7-scope.js
+          node scripts/check-r8-runtime-pilot.js
+          node scripts/check-r8-scope.js
           node scripts/check-set-regions.js
           node scripts/check-set-relations.js
           node scripts/check-event-regions.js

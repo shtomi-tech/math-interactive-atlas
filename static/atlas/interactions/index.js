@@ -1,14 +1,14 @@
-import { mountFunctionGraph } from "./function-graph.js?v=20260913-r4";
-import { mountGeometryBoard } from "./geometry-board.js?v=20260913-r4";
-import { mountRangeGraph } from "./range-graph.js?v=20260913-r4";
-import { mountRegionSelector } from "./region-selector.js?v=20260913-r4";
-import { mountCombinatoricsViewer } from "./combinatorics-viewer.js?v=20260913-r4";
-import { mountDataLab } from "./data-lab.js?v=20260913-r4";
-import { mountSimulationLab } from "./simulation-lab.js?v=20260913-r4";
-import { mountAlgebraLab } from "./algebra-lab.js?v=20260913-r4";
-import { mountNumberLineLab } from "./number-line-lab.js?v=20260913-r4";
-import { mountAlgorithmLab } from "./algorithm-lab.js?v=20260913-r4";
-import { mountSequenceLab } from "./sequence-lab.js?v=20260913-r4";
+import { mountFunctionGraph } from "./function-graph.js?v=20260913-r8";
+import { mountGeometryBoard } from "./geometry-board.js?v=20260913-r8";
+import { mountRangeGraph } from "./range-graph.js?v=20260913-r8";
+import { mountRegionSelector } from "./region-selector.js?v=20260913-r8";
+import { mountCombinatoricsViewer } from "./combinatorics-viewer.js?v=20260913-r8";
+import { mountDataLab } from "./data-lab.js?v=20260913-r8";
+import { mountSimulationLab } from "./simulation-lab.js?v=20260913-r8";
+import { mountAlgebraLab } from "./algebra-lab.js?v=20260913-r8";
+import { mountNumberLineLab } from "./number-line-lab.js?v=20260913-r8";
+import { mountAlgorithmLab } from "./algorithm-lab.js?v=20260913-r8";
+import { mountSequenceLab } from "./sequence-lab.js?v=20260913-r8";
 
 const ENGINES = Object.freeze({
   functionGraph: mountFunctionGraph,

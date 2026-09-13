@@ -14,6 +14,7 @@ for (const viewport of [
     for (const url of [
       appPath("atlas.html"),
       appPath("interactions.html"),
+      appPath("interactions.html?interaction=MATH-INT-009"),
       appPath("atlas.html?content=confidence-interval"),
       appPath("atlas.html?content=inequality-region-2d"),
       appPath("atlas.html?content=function-and-derivative"),
@@ -25,6 +26,9 @@ for (const viewport of [
       await page.goto(url);
       await expectNoHorizontalOverflow(page);
     }
+    await page.goto(appPath("interactions.html?interaction=MATH-INT-009"));
+    await expect(page.locator(".library-demo")).toBeVisible();
+    await expectNoHorizontalOverflow(page);
     await expectNoBrowserErrors(errors);
     await context.close();
   });

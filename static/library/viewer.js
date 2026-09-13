@@ -1,5 +1,12 @@
-import { mountFunctionGraph } from "../atlas/interactions/function-graph.js?v=20260913-r4";
-import { statusLabel } from "./catalog.js?v=20260913-r4";
+import { mountInteraction } from "../atlas/interactions/index.js?v=20260913-r8";
+import { statusLabel } from "./catalog.js?v=20260913-r8";
+
+const RUNTIME_INSTRUCTIONS = Object.freeze({
+  "MATH-INT-001": "頂点をドラッグするか、ボタンを選択して矢印キーで移動します。",
+  "MATH-INT-002": "係数aをスライダーまたはキーボードで変え、グラフの変化を比べます。",
+  "MATH-INT-003": "曲線上の点をドラッグするか、ボタンを選択して左右キーで移動します。",
+  "MATH-INT-009": "点Pをドラッグするか、点Pを選択して矢印キーで円周上を移動し、座標・sin・cosと保たれる関係を比べます。"
+});
 
 function textElement(tag, className, text) {
   const element = document.createElement(tag);
@@ -46,10 +53,14 @@ function sourcePanel(interaction, features) {
 }
 
 function runtimeConfig(mapping, onStateChange) {
-  const common = { mode: mapping.mode, initial: { a: 1, h: 0, k: 0 }, onStateChange };
-  if (mapping.mode === "canonical-vertex-drag") return common;
-  if (mapping.mode === "canonical-coefficient-slider") return { ...common, parameters: { a: { label: "係数 a", min: -3, max: 3, step: 0.1 } } };
-  return { mode: mapping.mode, initial: { a: 1, h: 0, k: 0, probeX: 1, probeY: 1 }, onStateChange };
+  const functionGraph = { mode: mapping.mode, initial: { a: 1, h: 0, k: 0 }, onStateChange };
+  const configs = {
+    "canonical-vertex-drag": functionGraph,
+    "canonical-coefficient-slider": { ...functionGraph, parameters: { a: { label: "係数 a", min: -3, max: 3, step: 0.1 } } },
+    "canonical-curve-probe": { ...functionGraph, initial: { a: 1, h: 0, k: 0, probeX: 1, probeY: 1 } },
+    "canonical-constrained-measure": { mode: mapping.mode, initial: { theta: 30 }, boundingbox: [-2.2, 2.0, 2.2, -2.0], onStateChange }
+  };
+  return configs[mapping.mode] || { mode: mapping.mode, onStateChange };
 }
 
 export function createViewer(root, { interactions, mappings, features, onBack }) {
@@ -105,7 +116,7 @@ export function createViewer(root, { interactions, mappings, features, onBack })
       const demo = document.createElement("section");
       demo.className = "library-demo";
       demo.dataset.runtimeStatus = mapping.status;
-      demo.append(textElement("h2", "", "Runnable Demo"), textElement("p", "library-demo-instructions", interaction.id === "MATH-INT-001" ? "頂点をドラッグするか、ボタンを選択して矢印キーで移動します。" : interaction.id === "MATH-INT-002" ? "係数aをスライダーまたはキーボードで変え、グラフの変化を比べます。" : "曲線上の点をドラッグするか、ボタンを選択して左右キーで移動します。"));
+      demo.append(textElement("h2", "", "Runnable Demo"), textElement("p", "library-demo-instructions", RUNTIME_INSTRUCTIONS[interaction.id] || "インタラクションを操作して変化を観察します。"));
       const canvas = document.createElement("div");
       canvas.className = "library-demo-canvas";
       const state = document.createElement("p");
@@ -122,7 +133,7 @@ export function createViewer(root, { interactions, mappings, features, onBack })
       footer.append(statusText, reset);
       demo.append(canvas, state, footer);
       details.append(demo);
-      engine = mountFunctionGraph(canvas, runtimeConfig(mapping, (nextState, summary) => { state.dataset.state = JSON.stringify(nextState); state.textContent = summary; }));
+      engine = mountInteraction(canvas, mapping, runtimeConfig(mapping, (nextState, summary) => { state.dataset.state = JSON.stringify(nextState); state.textContent = summary; }));
       reset.addEventListener("click", () => engine.reset());
     } else {
       const unavailable = textElement("p", "library-unavailable", mapping.status === "planned" ? "Runtime implementation is not yet available." : "Evidence review required before runtime implementation.");
