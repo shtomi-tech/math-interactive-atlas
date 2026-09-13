@@ -17,7 +17,7 @@ export function normalizeProblemSet(value, validProblemIds = null) {
   (Array.isArray(source.problemIds) ? source.problemIds : []).forEach((value) => {
     const id = idValue(value);
     if (!id || seen.has(id) || problemIds.length >= MAX_SET_PROBLEMS) return;
-    if (valid && !valid.has(id)) { problemIds.push(id); seen.add(id); return; }
+    if (valid && !valid.has(id)) return;
     problemIds.push(id);
     seen.add(id);
   });

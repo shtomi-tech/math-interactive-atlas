@@ -1,6 +1,6 @@
 # 数学インタラクティブ図鑑
 
-高校数学の概念を、値を動かしながら観察する静的な学習ページです。既存の [`math-practice`](../math-practice/) 演習・ミニ試験アプリとは別の場所で動作します。
+外部Repository由来の数学Interactionを、実際に操作できる形で収集・整理する静的な図鑑です。既存の [`math-practice`](../math-practice/) 演習・ミニ試験アプリとは別の場所で動作します。
 
 ## 数学インタラクティブ図鑑
 
@@ -8,14 +8,17 @@
 - Practice: [`practice.html`](./practice.html)
 - 問題セット: [`sets.html`](./sets.html)
 - 学習レポート: [`progress.html`](./progress.html)
-- 目的: 「触る → 観察 → 気づく」の流れで、数学の関係を視覚的に理解する
-- 実装済み: 数学I・数学A・数学Ⅱ・数学Bの15単元、89教材。数学Ⅱは指数・対数、三角関数、微分・積分、いろいろな式、図形と方程式、数学Bは数列、統計的な推測、数学と社会生活まで扱う
+- 目的: 外部Repository由来のInteractive Featureを調査・監査し、「触る → 観察 → 気づく」の流れで整理する
+- 基本単位: 数学単元ではなくInteraction。数学ContentとInteractionを分離し、Component / Engineとして再利用する
+- Atlas候補: 数学I・数学A・数学Ⅱ・数学Bの15単元、89教材。数学Ⅱは指数・対数、三角関数、微分・積分、いろいろな式、図形と方程式、数学Bは数列、統計的な推測、数学と社会生活まで扱う。正式採用はExternal Repository Audit後に決める
 - 教材データ: [`static/atlas/content-data.json`](./static/atlas/content-data.json) を正本とするデータ駆動構成
-- Practice問題: [`static/practice/problem-data.json`](./static/practice/problem-data.json) に15単元267問を収録。89教材をそれぞれ基礎・標準・発展の3問でカバーする
-- 学習ループ: 図鑑で観察し、Practiceで使い、間違えた問題から図鑑へ戻る。お気に入り・閲覧・問題結果はブラウザのlocalStorageにだけ保存する
-- Classroom Pack: 問題を最大30問のセットへまとめ、教師指定順のPractice、問題プリント、解答付きプリントへつなげる。セットと学習記録はこの端末のlocalStorageにだけ保存する
+- Practice問題: [`static/practice/problem-data.json`](./static/practice/problem-data.json) は現在0問。外部Repository Audit後に、必要な理解確認問題を再整備する
+- 学習ループ: 監査済みのAtlasで観察し、将来Practiceで確認する。現在はAtlasの閲覧・お気に入りを維持し、古いPractice履歴は表示しない
+- Classroom Pack: 問題セット、Worksheet、Progressの基盤は維持するが、現在は選択できるPractice問題がないため各画面がEmpty Stateを表示する
 - 学習レポート: 教材の閲覧数、問題の習熟状態、単元ごとの状況、最近の学習を表示し、学習記録をJSONでバックアップ・置換復元する
 - Interaction Engine: `static/atlas/interactions/index.js` のRegistry経由で11エンジンを切り替える。連続量はFunctionGraph / GeometryBoard / RangeGraph、離散量はSequenceLabで表示する
+- 監査Registry: [`research/repository-audit.json`](./research/repository-audit.json) に外部Repositoryとの関係を記録する。許可するrelationは `inspired-by` / `adapted-from` のみ
+- AI向けMetadata: [`static/atlas/interaction-metadata.json`](./static/atlas/interaction-metadata.json) は学習者の認知活動からInteractionを検索するための拡張領域として管理する
 - 設計書: [`docs/atlas/DESIGN.md`](./docs/atlas/DESIGN.md)
 - プロジェクトゴール: [`docs/PROJECT_GOAL.md`](./docs/PROJECT_GOAL.md)
 
@@ -47,11 +50,13 @@ Atlas: static/atlas/content-data.json
 Practice: static/practice/problem-data.json
 Shared: static/atlas/curriculum.js / static/atlas/storage.js / static/tokens.css
 Classroom Pack: static/sets/ / static/worksheet/ / static/progress/
+Repository Audit: research/repository-audit.json
+Interaction Metadata: static/atlas/interaction-metadata.json
 ```
 
 ## Practice
 
-- [`practice.html`](./practice.html): 267問の問題一覧。検索、科目・単元・難易度・習熟状態で絞り込める
+- [`practice.html`](./practice.html): 現在0問のPractice一覧。空状態を表示し、監査後の問題再整備に備える
 - [`practice.html?problem=quad-discriminant-01`](./practice.html?problem=quad-discriminant-01): 問題を開く
 - [`practice.html?status=review`](./practice.html?status=review): 要復習の問題だけを表示する。旧 `mode=mistakes` も互換対応する
 - [`practice.html?content=quadratic-discriminant`](./practice.html?content=quadratic-discriminant): 1教材の基礎→標準→発展セッション
@@ -66,6 +71,8 @@ Classroom Pack: static/sets/ / static/worksheet/ / static/progress/
 
 ```text
 node scripts/check-atlas-contract.js
+node scripts/check-repository-audit.js
+node scripts/check-interaction-metadata.js
 node scripts/check-set-regions.js
 node scripts/check-set-relations.js
 node scripts/check-event-regions.js
@@ -103,36 +110,19 @@ node scripts/check-asset-version.js
 
 GitHub Actionsでも、同じ契約・数学ロジック検査と対象JavaScriptの構文検査を実行します。
 
-### Phase 8A quality gate
+### Phase R0: Practice curation reset
 
-- コンテンツ89件、Practice267問、Interaction Engine11種を凍結し、既存IDを維持する
-- 正規母集団からの標本平均・信頼区間と、標準正規曲線による仮説検定を検証する
-- 座標教材はモード切替、点Pのドラッグ、キーボード操作、状態説明を持つ
-- `npm test` はAtlas / Practice / Classroom Pack / Progressのsmoke、回帰、レスポンシブ、アクセシビリティを確認する
-- 対象画面は1440 / 768 / 375 / 320pxで横スクロールを出さない。公開後はPagesのHTML入口をcurlで確認する
+現在の到達点は `Atlas候補 89 / Practice 0 / Interaction Engine 11 / Subjects 4` です。既存のオリジナルPractice問題は正本から削除し、Practice・Problem Set・Worksheet・Progressの仕組みと安定IDは残しています。0問でも各画面が明示的なEmpty Stateを表示し、AtlasはPractice sectionを表示しません。
 
-ローカル検証は `npm run check`、`npm test` で実行します。PlaywrightのChromiumが未導入の場合は `npx playwright install chromium` を先に実行してください。
+このリポジトリの中心ゴールは、外部の公開Repositoryに存在するInteractive Featureを調査・選定・監査し、Atlasへ追跡可能な形で収録することです。正式採用に使えるrelationは `inspired-by` と `adapted-from` だけで、`original` は使用しません。監査記録は [`research/repository-audit.json`](./research/repository-audit.json) に保存し、未確認の候補へ参照元を後付けしません。
 
-### Phase 8B learning loop gate
+### Phase R1: Repository-derived Interaction Foundation
 
-- 公開PagesのAtlas、Practice、問題セット、問題プリント、学習レポートを実ブラウザで検証する
-- `content-data.json` から89教材を自動列挙し、全教材のmount・Reset・fallbackなし・console/page errorなしを回帰確認する
-- Atlas → Practice → Atlas → Practice → Progress → Atlas/Practice の復帰導線をE2Eで確認する
-- Pagesデプロイ後はHTMLの200確認に加え、JavaScript初期化、主要DOM、asset version、console errorなしを確認する
-- 数量は89教材、267問、11 Interaction Engineから変更しない
+次は89候補教材をInteraction単位で1件ずつ確認し、Repository URL、Interactive Feature、relation、License、aspect、evidenceを記録します。候補IDと監査RegistryのID集合は完全一致させます。R1完了までは候補数を正式採用数とみなしません。詳細なゴールと受入条件は [`docs/PROJECT_GOAL.md`](./docs/PROJECT_GOAL.md)、UI契約は [`docs/atlas/DESIGN.md`](./docs/atlas/DESIGN.md)、R0チェック項目は [`docs/RELEASE_CHECKLIST.md`](./docs/RELEASE_CHECKLIST.md) を参照してください。
 
-Phase 8Bのローカル検証は `npm test` と `npx playwright test tests/e2e/all-atlas-content.spec.js tests/e2e/learning-loop.spec.js` で実行します。公開Pagesのブラウザ検証は `PLAYWRIGHT_BASE_URL=<Pages URL> npx playwright test tests/e2e/pages-smoke.spec.js` です。
+新しいInteractionは、`Repository Search → Feature確認 → License確認 → inspired-by / adapted-from判定 → Atlas登録` の順でのみ追加します。未確認のInteraction、架空のRepository URL、後付けの出典、`original` relationは許可しません。将来は `Learning Requirements → Interaction検索 → Example再利用 → 不足Data生成 → Validator → Lesson構成` をAIで実行できる状態へ進めます。
 
-### Phase 8C v1.0 release certification
-
-- 89教材を1教材1テストへ分割し、個別結果・traceを保持する。E2E URLはlocalhostとGitHub Pagesのリポジトリサブパスで共通利用する
-- Pages workflowは`EXPECTED_ASSET_VERSION`を使って公開asset versionを厳密に照合し、全89教材、4科目の学習ループ、320px / 375pxのresponsiveを公開URLで実行する
-- 数学I・A・II・Bの数量は89教材、267問、11 Interaction Engineから変更しない。新規教材・問題・Engine・数学C/III・Classroom Assignmentは追加しない
-- ローカル検証は `npm test`、`npm run check`、`node scripts/check-atlas-contract.js`、`node scripts/check-asset-version.js`、`git diff --check` とする。再利用可能な受入項目は [`docs/RELEASE_CHECKLIST.md`](./docs/RELEASE_CHECKLIST.md) にまとめる
-
-Phase 8Cの実装後はRelease candidateとし、GitHub Pages workflowの手動実行でActions・公開Pagesの最終成功を確認してからv1.0 Releasedと判定します。
-
-GitHub ActionsのAtlas checksはpush / pull requestで実行します。Pages公開は手動実行の [`.github/workflows/pages.yml`](./.github/workflows/pages.yml) から行い、Atlas、Practice、問題セット、問題プリント、学習レポートのHTML・CSS・JS・データを公開します。GitHub Pages deployment requires repository-side Pages configuration. PagesがRepository設定またはGitHubプランで有効化できない場合は、`Pages configuration required` として扱います。
+ローカル検証は `npm run check`、`npm test`、`git diff --check` で実行します。GitHub ActionsのAtlas checksはpush / pull requestで実行します。GitHub PagesはRepository設定またはGitHubプランの制約により利用できない場合があるため、公開検証はローカル検証と分けて扱います。
 
 `zukan.html` / `static/zukan/` は旧プロトタイプです。新規実装の正本は `atlas.html` / `static/atlas/` です。Legacy prototype. Do not add new features here.
 

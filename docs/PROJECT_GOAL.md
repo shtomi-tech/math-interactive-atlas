@@ -1,282 +1,733 @@
-# 数学インタラクティブ図鑑 — Project Goal
+# 数学インタラクティブ図鑑プロジェクト
 
-更新日: 2026-09-13
+## 1. プロジェクトの目的
 
-## 1. 最終ゴール
+高校数学学習に役立つインタラクティブなUI・機能・教材表現を、外部の公開Repositoryから収集・調査・整理し、実際に操作して確認できる
 
-高校数学の重要概念を、次の流れで学べるインタラクティブな数学学習環境を作る。
+# 「数学インタラクティブ図鑑」
+
+を構築する。
+
+この図鑑は、単なるGitHub Repositoryのリンク集ではない。
+
+最終的な目的は、
 
 ```text
-SEE → MOVE → NOTICE → BUILD → USE
-見る → 動かす → 気づく → 組み立てる → 使う
+優れた数学Interactionを外部Repositoryから研究する
+        ↓
+学習機能として整理する
+        ↓
+再利用可能なComponent / Engineとして統合する
+        ↓
+AIが検索しやすいMetadataとして蓄積する
+        ↓
+ユーザーが提供する数学解説・教材と組み合わせる
+        ↓
+AIがインタラクティブ数学教材を生成する
 ```
 
-公式を読むだけでなく、公式が成立する理由を自分で動かして発見できる教材を目指す。
+という教材制作基盤を作ることである。
 
-短いProject Statementは次のとおり。
+---
 
-> 高校数学の公式や概念を、暗記する前に「触って理解」でき、その理解を問題演習・教材作成・学習記録まで一貫してつなげられる、インタラクティブな数学学習基盤を作る。
+## 2. 最終ゴール
 
-標語:
-
-> 触って分かる高校数学。
-
-## 2. Atlasの役割
-
-Atlasは問題を解かせる場所だけではなく、数学概念の実験室として設計する。
-
-- 数学的対象を視覚化する
-- パラメータを動かして変化を見る
-- 不変な関係を発見する
-- 数式と図を対応させる
-- 公式を暗記する前に意味を理解する
-
-1教材では1つの数学的関係を主役にする。情報を詰め込みすぎず、例えば「二次関数 → 頂点」「判別式 → 共有点の個数」「信頼区間 → 区間を何度も作ったときの意味」のように焦点を絞る。
-
-## 3. Practiceの役割
-
-Atlasで理解した関係を、Practiceで実際に使えるか確認する。
+最終的には数学教材を、
 
 ```text
-Atlas       概念を理解する
-    ↓
-Practice    自分で使えるか確認する
+教材
+=
+数学コンテンツ
++
+Interaction
 ```
 
-各Atlas教材に、基礎・標準・発展の3問を対応させる。現在の正本上は、89教材 × 3問 = 267問である。重要なのは問題数そのものではなく、Atlasで発見した数学的関係がPracticeで使える対応を成立させること。
+として構築できる状態を目指す。
 
-## 4. 学習ループ
+それぞれの責務を明確に分ける。
 
 ```text
-図鑑を見る
+数学コンテンツ
+        ↓
+ユーザーが提供する
+解説・参考書・授業プリント・PDF等
+
+Interaction
+        ↓
+数学インタラクティブ図鑑
+```
+
+AIがこの2つを組み合わせる。
+
+最終フロー：
+
+```text
+ユーザーが数学教材・解説を渡す
+        ↓
+AIが数学内容と学習目標を抽出
+        ↓
+Learning Requirementsへ変換
+        ↓
+Math Interaction Atlasを検索
+        ↓
+適切なInteractionを選択
+        ↓
+既存Problem / Exampleを検索
+        ↓
+不足データだけ生成
+        ↓
+Validatorで確認
+        ↓
+Lessonを構成
+        ↓
+インタラクティブ数学教材完成
+```
+
+---
+
+## 3. 「何を教えるか」と「どう学ばせるか」を分離する
+
+### 数学コンテンツ
+
+数学的内容は、教材作成時にユーザーが提供する資料を基準とする。
+
+例：
+
+* 教科書
+* 参考書
+* 授業プリント
+* PDF
+* Markdown
+* 問題集
+* ユーザー独自の解説
+
+ここから、
+
+```text
+定義
+公式
+定理
+考え方
+例題
+注意点
+学習順序
+```
+
+を取得する。
+
+### Interaction
+
+Math Interaction Atlasは、
+
+```text
+何を動かすか
+何を選択するか
+何を変化させるか
+何を比較するか
+何を可視化するか
+何に気づかせるか
+```
+
+を提供する。
+
+つまり、
+
+```text
+Math Reference
 ↓
-動かして理解する
+何を教えるか
+
+Interaction Atlas
 ↓
-問題を解く
-↓
-正解 → 次へ
-不正解 → 関連Atlasへ戻る
-↓
-再び問題を解く
-↓
-Progressへ記録
+どう学ばせるか
 ```
 
-目指す循環は、理解 → 演習 → 間違い → 再理解 → 定着である。
+という関係にする。
 
-## 5. 授業・教材作成での役割
+---
 
-生徒用アプリだけでなく、授業で使える教材基盤にする。
+## 4. Interaction Atlasは数学辞典ではない
+
+Atlasの主目的は、
 
 ```text
-Atlas
+数学知識そのものを保存すること
+```
+
+ではない。
+
+主目的は、
+
+```text
+数学概念を
+どのような学習操作へ変換できるか
+```
+
+を蓄積することである。
+
+例えば、
+
+```text
+y = ax²
+```
+
+という数学内容そのものをAtlasの中心データにはしない。
+
+代わりに、
+
+```text
+係数をSliderで変化させる
+
+頂点をDragする
+
+2つのグラフをCompareする
+
+図形を動かして不変量を見る
+
+標本をSimulateする
+```
+
+といったInteractionを蓄積する。
+
+---
+
+## 5. Atlasの基本単位
+
+AtlasはRepository単位でも数学単元単位でもなく、
+
+# Interaction単位
+
+で管理する。
+
+悪い例：
+
+```text
+JSXGraph
+Seeing Theory
+GeoGebra
+Mathigon
+```
+
+良い例：
+
+```text
+MATH-INT-001 Parameter Graph Explorer
+MATH-INT-002 Draggable Geometry Point
+MATH-INT-003 Region Selector
+MATH-INT-004 Distribution Simulator
+MATH-INT-005 Sequence Visualizer
+```
+
+外部Repositoryは各Interactionの、
+
+```text
+参考元
+UI参考
+実装参考
+コード流用元
+```
+
+として紐づける。
+
+---
+
+## 6. 外部Repository由来を必須とする
+
+Math Interaction Atlasへ登録するInteractionには、
+
+**必ず確認済みの外部公開Repositoryを紐づける。**
+
+許可する関係は、
+
+```text
+inspired-by
+adapted-from
+```
+
+の2種類だけとする。
+
+### inspired-by
+
+外部Repositoryに実在するInteractionを研究し、
+
+* UI
+* 操作方法
+* 可視化方法
+* 学習フロー
+* Feedback
+* Interaction pattern
+
+を参考にAtlas用として再実装したもの。
+
+### adapted-from
+
+外部Repositoryのコードや実装構造を実際に移植・改変したもの。
+
+必ず、
+
+```text
+Repository
+URL
+Commit / Tag
+Source Path
+License
+Attribution
+```
+
+を記録する。
+
+---
+
+## 7. Original Interactionは禁止
+
+以下は禁止する。
+
+```text
+外部Repositoryを確認せず
+Interactionを独自に考案する
+
+ChatGPTが新しいInteractionを
+ゼロから提案してそのまま実装する
+
+完成後に似たRepositoryを探して
+出典として後付けする
+```
+
+新しいInteractionが必要になった場合は、
+
+```text
+既存Atlasを検索
 ↓
-問題を選ぶ
+該当なし
 ↓
-Problem Setを作る
+外部Repositoryを検索
 ↓
-Practiceとして使う / Worksheetとして印刷する
+Interactionを発見
+↓
+調査
+↓
+inspired-by / adapted-from
+↓
+Atlasへ登録
 ```
 
-現在の学習面は次の5つである。
+という順序を必須とする。
 
-- Atlas: 概念理解
-- Practice: 演習
-- Problem Set: 教師による問題選択
-- Worksheet: 印刷教材
-- Progress: 学習状況
+---
 
-## 6. 現在の到達点
+## 8. Interaction Metadata
 
-Phase 7B終了時点の基準値:
-
-| 項目 | 現在値 |
-| --- | ---: |
-| Subjects | 数学I / 数学A / 数学II / 数学B |
-| Atlas教材 | 89 |
-| Practice問題 | 267 |
-| Interaction Engine | 11 |
-| Learning surfaces | Atlas / Practice / Problem Set / Worksheet / Progress |
-
-数学I・Aだけの実験的プロトタイプから、高校数学I・A・II・Bを横断する学習システムへ移行した段階である。
-
-## 7. Interaction Engineの原則
-
-89教材を89個の独立アプリとして作らない。
+各Interactionには最低限、
 
 ```text
-少数のInteraction Engine
-        +
-多数のContent Config / Scene
+id
+title
+category
+description
+
+learningGoal
+learnerAction
+changingElement
+feedbackType
+
+capabilities
+learningPatterns
+bestFor
+notBestFor
+
+implementationDifficulty
+reusability
+
+repository
+relation
+license
+reusePolicy
 ```
 
-現在は11 Engineで89教材を再利用している。今後も「教材数の増加 ≠ Engine数の増加」を原則とし、同じ数学的操作はできるだけ同じEngineで表現する。
+を持たせる。
 
-## 8. UIの原則
-
-基本思想は「数学を見せる。UIは消える。」である。
-
-- Light UI
-- White Canvas
-- Simple Controls
-- Large Touch Targets
-- Minimal Decoration
-
-ゲーム的なXP・報酬・過剰なアニメーションを中心にしない。数学を主役にし、UIは理解を妨げない範囲に抑える。
-
-## 9. AccessibilityとMobile
-
-Dragだけに依存せず、同じ数学状態へ複数の経路で到達できるようにする。
-
-- Pointer / Touch
-- Keyboard
-- Slider / Select / Button
-- 色以外の状態表現
-- 数値のテキスト表示
-- 44px以上の主要操作領域
-- `aria-label` / `aria-live`
-- `:focus-visible`
-- `prefers-reduced-motion`
-
-基準viewportは1440px、1024px、768px、375px、320px。特に320pxを最低ラインとし、ページ全体の横スクロールは原則発生させない。
-
-## 10. 数学的正確性
-
-見た目の面白さより数学的な正しさを優先する。特に確率・統計・シミュレーション・仮説検定・微積分では、説明しているモデルと内部計算モデルを一致させる。「それらしく動く」実装は採用しない。
-
-## 11. Pure Math Layer
-
-数学計算はDOM・SVG・JSXGraph・UIから可能な限り分離する。
+特にAI検索では、
 
 ```text
-Pure Math
-    ↓
-Interaction Engine
-    ↓
-UI
+数学単元名
 ```
 
-これにより、数学的正しさ・UI・教材内容を独立して検証できる状態を維持する。
-
-## 12. Quality Gate
-
-教材を追加できただけではPhase完了としない。最低限、次を満たすことを完了条件とする。
-
-- 数学的正確性
-- Pure Logic tests
-- Contract tests
-- Practice tests
-- Browser tests
-- Mobile
-- Accessibility
-- Regression
-
-## 13. 品質保証基準: Phase 8A
-
-Phase 7Bで範囲を広げた後、「広げるフェーズ」から「固めるフェーズ」へ移るための基準をPhase 8Aで定めた。
-
-Phase 8Aでは次の数量を固定する。
+だけではなく、
 
 ```text
-89教材
-267問
-11 Engine
+グラフの変化に気づかせたい
+
+図形の不変量を発見させたい
+
+複数ケースを比較させたい
+
+確率分布を試行で理解させたい
+
+式と図を対応させたい
 ```
 
-新規教材・新規Practice ID・新規Engine・数学Cは追加しない。代わりに、次を品質保証する。
+のような**学習者に行わせたい認知活動**から検索できるようにする。
 
-- 信頼区間の標本平均シミュレーションを正しい正規モデルへ修正
-- z検定を標準正規分布で表示
-- 不等式領域と円周上の点を実際に操作可能にする
-- AlgebraLabの負号表示とSVGアクセシビリティを改善
-- Practiceの難易度2/3の内容品質を監査・改善
-- 320px / 375pxでの表示と操作を確認
-- Browser E2E回帰テストを導入
-- GitHub Actionsで動的構文検査とブラウザ検査を実行
-- GitHub Pages公開後のSmoke Testを行う
+---
 
-Phase 8Aは単なるバグ修正ではなく、数学I・A・II・B版 v1.0の品質保証Phaseと位置づける。
+## 9. Interaction Category
 
-## 14. Phase 8A完了後の拡張判断
-
-品質基盤が完成した後、次の拡張方向を判断する。
-
-- 数学Cへ拡張
-- 数学IIIへ拡張
-- Practice問題の質・量を拡張
-- 教師向け教材作成機能を強化
-- 学習履歴・弱点分析を強化
-
-品質保証前に教材範囲をさらに広げない。
-
-## 15. Phase 8B: 公開版と学習ループの完成
-
-Phase 8Aで数学・操作・アクセシビリティの品質基盤を整えた後は、公開版での動作と学習の往復を完成させる。数量は引き続き次で固定する。
+数学版では、例えば次のカテゴリで整理する。
 
 ```text
-89教材
-267問
-11 Engine
+Build
+Move
+Select
+Transform
+Visualize
+Compare
+Simulate
+Generate
+Measure
+Construct
 ```
 
-- 公開GitHub PagesのAtlas、Practice、Sets、Worksheet、Progressを実ブラウザで検証する
-- `content-data.json` を正本に89教材を自動列挙し、全教材のmount・Reset・console/page errorを回帰確認する
-- Atlasから対応するPracticeへ移動し、Practiceの不正解からAtlasへ戻り、同じ問題へ復帰できるようにする
-- Practiceの結果をProgressへ保存し、再読み込み後も復習対象からAtlas/Practiceへ戻れるようにする
-- 公開URLのasset version、主要DOM、JavaScript初期化をPages後段Smokeで確認する
-
-Phase 8Bでも新規教材、新規Practice ID、新規Engine、数学C・数学III、Classroom Assignmentは追加しない。範囲の拡張ではなく、既存教材を実運用できる学習システムとして閉じることを優先する。
-
-## 16. Phase 8C: 数学I・A・II・B版 v1.0 Release Certification
-
-Phase 8Bで実装した学習ループを、GitHub Actionsと公開GitHub Pagesで最終受入できる状態へ固める。Phase 8Cは新機能追加Phaseではなく、次の数量を維持したまま公開品質を証明するリリースゲートである。
+カテゴリそのものより、
 
 ```text
-Atlas: 89
-Practice: 267
-Interaction Engine: 11
-Subjects: 数学I / 数学A / 数学II / 数学B
+何を触るか
+何が変わるか
+何に気づくか
 ```
 
-P0では、全89教材を独立Playwrightテストへ分割し、1教材の失敗で他教材の結果を失わないようにする。E2EのURLはlocalhostとGitHub Pagesのリポジトリサブパスで共通利用し、Pages workflowから厳密な`EXPECTED_ASSET_VERSION`を渡す。公開Pagesでは主要画面、全89教材、Atlas → Practice → Progress、console/page error、fallback、Reset、responsiveを実ブラウザで検証する。
+を重要視する。
 
-P1では数学I・A・II・Bから既存問題を1ケースずつ使い、single-choiceとnumericの両回答形式を含む学習ループを回帰する。320px / 375pxではAtlas、Practice、Sets、Progressと代表教材の横スクロールなしを確認する。
+---
 
-P2では [`docs/RELEASE_CHECKLIST.md`](RELEASE_CHECKLIST.md) を公開品質の再利用可能なチェックリストとして維持する。
+## 10. Reusable Component
 
-現時点の実装状態は、ローカルのPhase 8C回帰を通過したRelease candidateである。公開Pagesの実デプロイとGitHub Actionsの最終成功は、Pages workflowの手動実行後に確認する。完了後の表示は `数学I・A・II・B版 v1.0 / Status: Released / Quality Gate Passed` とする。
+Interactionは可能な限り再利用可能にする。
 
-Phase 8Cでも新規教材、新規Practice ID、新規Engine、数学C・数学III、Classroom Assignment、既存Progressデータを破壊するschema変更は追加しない。
-
-## 17. 長期的な完成像
-
-高校数学全体を、次の面が一つにつながる学習基盤にする。
+例えば、
 
 ```text
-高校数学
-   │
-   ├─ Atlas
-   │    └─ 概念理解
-   │
-   ├─ Practice
-   │    └─ 演習
-   │
-   ├─ Problem Set
-   │    └─ 教師による問題選択
-   │
-   ├─ Worksheet
-   │    └─ 印刷教材
-   │
-   └─ Progress
-        └─ 学習状況
+FunctionGraph
 ```
 
-生徒が「分からない」と感じたとき、Atlasへ戻り、動かして理解し、Practiceでできるようになる体験を作る。
+というComponentが、
 
-## 参照元
+```text
+二次関数
+指数関数
+対数関数
+三角関数
+微分
+モデル化
+```
 
-- Phase 7B実装基準: `1e4f0b7939978b8951fac3983e01377075f543c6`
-- 現在の教材正本: [`static/atlas/content-data.json`](../static/atlas/content-data.json)
-- 現在の問題正本: [`static/practice/problem-data.json`](../static/practice/problem-data.json)
-- 設計正本: [`docs/atlas/DESIGN.md`](./atlas/DESIGN.md)
-- 次Phaseの詳細指示: Web ChatGPTで確認した「Phase 8C：v1.0 Release Certification」
+で再利用できるようにする。
+
+問題や数学内容をComponent内部へハードコードしない。
+
+```text
+Component
++
+Content Data
+=
+Interactive Demo
+```
+
+とする。
+
+---
+
+## 11. Problem Data
+
+ProblemはInteractionと分離する。
+
+```text
+Interaction
+= どう操作するか
+
+Problem Data
+= そのInteractionへ何を渡すか
+```
+
+とする。
+
+既存Problemは単なる問題集ではなく、
+
+> Interactionの使い方をAIへ示すfew-shot example
+
+として扱う。
+
+ただし現在のオリジナル267問はいったん削除し、今後必要になったProblem Dataを改めて整備する。
+
+---
+
+## 12. AI Retrieval
+
+将来的にはAIが、
+
+```text
+Learning Requirement
+↓
+Interaction検索
+↓
+既存Example検索
+↓
+再利用可能ならReuse
+↓
+不足データだけGenerate
+```
+
+できる状態を作る。
+
+基本思想は、
+
+```text
+Search
+↓
+Reuse
+↓
+Adapt
+↓
+Generate
+```
+
+である。
+
+---
+
+## 13. Repository Research
+
+今後のInteraction追加では、ImplementationよりResearchを先に行う。
+
+```text
+Repository Search
+↓
+Interactive Feature発見
+↓
+実際のDemo / Code確認
+↓
+教育的価値を分析
+↓
+License確認
+↓
+inspired-by / adapted-from 判定
+↓
+Atlas登録
+↓
+Demo統合
+```
+
+これを標準フローとする。
+
+---
+
+## 14. 現在の89教材
+
+現在の89教材は、
+
+```text
+完成済み正式Atlas
+```
+
+とは扱わない。
+
+新しいProject Goalでは、
+
+# 89 Interaction Candidates
+
+として扱う。
+
+すべてについて外部Repository Auditを行う。
+
+```text
+89候補
+↓
+Repository調査
+↓
+verified
+   → 正式Interaction
+
+適切なRepositoryなし
+   → 削除
+```
+
+とする。
+
+---
+
+## 15. AI向けCanonical Data
+
+最終的には、
+
+```text
+Interaction Canonical Data
+↓
+AI Retrieval Index
+```
+
+を生成する。
+
+例えば、
+
+```text
+research/repository-audit.json
+data/interactions.json
+
+        ↓ build
+
+dist/ai/interactions.json
+dist/ai/catalog.json
+```
+
+とする。
+
+同じMetadataを複数ファイルへ手作業で重複管理しない。
+
+---
+
+## 16. Demo
+
+Atlasは説明だけのCatalogにしない。
+
+可能なInteractionには、
+
+# 実際に操作可能なDemo
+
+を持たせる。
+
+人間だけではなくAIも、
+
+```text
+このInteractionで何ができるか
+```
+
+を判断できる構造にする。
+
+---
+
+## 17. 開発優先順位
+
+```text
+1. 外部Repository上のInteractionの質
+2. 学習効果
+3. 再利用性
+4. AI検索性
+5. 数学教材への適用範囲
+6. 操作の分かりやすさ
+7. Accessibility
+8. 実装の単純さ
+9. 見た目
+```
+
+教材数を増やすこと自体を目的にしない。
+
+---
+
+## 18. 完成状態
+
+### 第1完成状態
+
+```text
+高校数学に利用できる
+外部Repository由来のInteractionを
+体系的に一覧できる。
+```
+
+### 第2完成状態
+
+```text
+主要Interactionを
+実際に操作できるDemoがある。
+```
+
+### 第3完成状態
+
+```text
+Interactionと数学Content Dataが分離され、
+同じInteractionを複数単元へ再利用できる。
+```
+
+### 第4完成状態
+
+```text
+AIが学習目的から
+Interactionを検索できる。
+```
+
+### 第5完成状態
+
+```text
+ユーザー提供の数学資料から
+Learning Requirementsを抽出できる。
+```
+
+### 最終完成状態
+
+ユーザーが数学解説を提供すると、
+
+```text
+Math Referenceを読む
+↓
+Learning Requirementsを抽出
+↓
+AtlasからInteraction検索
+↓
+既存Exampleを検索
+↓
+不足Dataだけ生成
+↓
+Validator
+↓
+Lesson構成
+↓
+インタラクティブ数学教材完成
+```
+
+までAIが実行できる。
+
+---
+
+# 最終的なプロジェクトの価値
+
+このプロジェクトの価値は、
+
+```text
+数学教材を89個作ること
+```
+
+ではない。
+
+また、
+
+```text
+インタラクティブDemoを大量に自作すること
+```
+
+でもない。
+
+本当に作りたいものは、
+
+# 数学知識とInteractionを分離し、
+
+# 世界中の公開Repositoryに存在する優れたInteractionを蓄積し、
+
+# AIがそれらを選択・再利用して数学教材を生成できる基盤
+
+である。
+
+最終的には、
+
+```text
+Math Knowledge
+        ×
+Repository-derived Interaction Library
+        ×
+AI
+        =
+Interactive Math Material
+```
+
+という仕組みを成立させる。
+
+## 最重要ルール
+
+> **外部公開Repositoryで確認できないInteractionを、独自に作成してAtlasへ追加してはいけない。**

@@ -15,6 +15,7 @@ for (const content of contents) {
     const errors = collectBrowserErrors(page);
     await page.goto(appPath(`atlas.html?content=${encodeURIComponent(content.id)}`));
     await expect(page.locator("#viewerTitle")).toHaveText(content.title, { timeout: contentRenderTimeout });
+    await expect(page.locator(".atlas-audit-status")).toHaveText("Pending Repository Audit");
     await expect(page.locator(".atlas-interactive-frame")).toBeVisible();
     await expect(page.locator(".atlas-canvas-fallback"), `fallback for ${content.id}`).toHaveCount(0);
     const reset = page.getByRole("button", { name: "↺ 初期状態に戻す" });

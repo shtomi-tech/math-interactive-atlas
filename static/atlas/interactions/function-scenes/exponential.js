@@ -1,5 +1,5 @@
-import { exponentialValue, logarithmValue } from "../../math/exponential-logarithm.js?v=20260913-8c";
-import { COLORS, clampParameter, createState, format } from "./common.js?v=20260913-8c";
+import { exponentialValue, logarithmValue } from "../../math/exponential-logarithm.js?v=20260913-r1";
+import { COLORS, clampParameter, createState, format } from "./common.js?v=20260913-r1";
 
 function validNumber(value) { return Number.isFinite(Number(value)); }
 

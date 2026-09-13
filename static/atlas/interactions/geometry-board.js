@@ -1,5 +1,5 @@
-import { GEOMETRY_SCENES } from "./geometry-scenes/index.js?v=20260913-8c";
-import { mountWithContext } from "./geometry-scenes/common.js?v=20260913-8c";
+import { GEOMETRY_SCENES } from "./geometry-scenes/index.js?v=20260913-r1";
+import { mountWithContext } from "./geometry-scenes/common.js?v=20260913-r1";
 
 export const GEOMETRY_MODES = Object.freeze(Object.keys(GEOMETRY_SCENES));
 

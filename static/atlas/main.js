@@ -1,7 +1,7 @@
-import { renderCatalog } from "./catalog.js?v=20260913-8c";
-import { createViewer } from "./viewer.js?v=20260913-8c";
-import { goToCatalog, goToContent, replaceCatalogFilters, watchRoute } from "./router.js?v=20260913-8c";
-import { loadLearningState, recordVisit, saveLearningState, toggleFavorite } from "./storage.js?v=20260913-8c";
+import { renderCatalog } from "./catalog.js?v=20260913-r1";
+import { createViewer } from "./viewer.js?v=20260913-r1";
+import { goToCatalog, goToContent, replaceCatalogFilters, watchRoute } from "./router.js?v=20260913-r1";
+import { loadLearningState, recordVisit, saveLearningState, toggleFavorite } from "./storage.js?v=20260913-r1";
 
 const dom = {
   status: document.querySelector("#atlasStatus"),
@@ -38,10 +38,22 @@ async function loadPracticeProblems() {
   }
 }
 
+async function loadRepositoryAudit() {
+  try {
+    const response = await fetch("./research/repository-audit.json", { cache: "no-store" });
+    if (!response.ok) return new Map();
+    const audit = await response.json();
+    return new Map((Array.isArray(audit?.contents) ? audit.contents : []).map((record) => [record.contentId, record]));
+  } catch {
+    return new Map();
+  }
+}
+
 async function start() {
   try {
     const contents = await loadContents();
     const practiceProblems = await loadPracticeProblems();
+    const repositoryAudits = await loadRepositoryAudit();
     const persist = (nextState) => { learningState = nextState; saveLearningState(storage, learningState); return learningState; };
     const catalogContext = () => ({ subject: activeCatalogRoute?.subject || "", unit: activeCatalogRoute?.unit || "", type: activeCatalogRoute?.type || "", progress: activeCatalogRoute?.progress || "", query: activeCatalogRoute?.query || "" });
     const viewer = createViewer(dom.viewerRoot, {
@@ -61,6 +73,7 @@ async function start() {
         query: route.query,
         state: learningState,
         practiceProblems,
+        repositoryAudits,
         onFilterChange: (filters) => { activeCatalogRoute = { ...activeCatalogRoute, ...filters }; replaceCatalogFilters(filters); },
         onToggleFavorite: (id) => { persist(toggleFavorite(learningState, id)); renderCatalogView(activeCatalogRoute); },
         onSelect: (id) => goToContent(id, { fromCatalog: catalogContext() })
@@ -83,7 +96,7 @@ async function start() {
         dom.catalogView.hidden = true;
         dom.viewerView.hidden = false;
         persist(recordVisit(learningState, content.id));
-        viewer.render(content, contents, { fromProblem: route.fromProblem, fromCatalog: route.fromCatalog, practiceProblems, learningState, isFavorite: learningState.favorites.includes(content.id) });
+        viewer.render(content, contents, { fromProblem: route.fromProblem, fromCatalog: route.fromCatalog, practiceProblems, repositoryAudits, learningState, isFavorite: learningState.favorites.includes(content.id) });
         dom.viewerView.focus({ preventScroll: true });
         return;
       }

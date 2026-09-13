@@ -1,7 +1,7 @@
 # 高校数学インタラクティブ図鑑 Design Contract
 
 Version: 1.0
-Scope: `atlas.html`、`practice.html`、`static/atlas/`、`static/practice/` の学習UI。数学I・A・Ⅱ・Bの89教材を対象とする。
+Scope: `atlas.html`、`practice.html`、`static/atlas/`、`static/practice/` の学習UI。数学I・A・Ⅱ・Bの89候補教材を対象とし、正式採用はExternal Repository Audit後に決める。
 
 ## 原則
 
@@ -45,13 +45,29 @@ Good Design = Invisible UI + Visible Mathematics + Meaningful Interaction
 6. Controls と現在値
 7. 発見ポイント
 8. 関連する概念
-9. Source / License
+9. Repository Audit status
+10. Source / License
 
-カタログは `SUBJECT_ORDER` とSubjectごとの単元順で科目・単元見出しを安定させる。科目未指定時は利用可能な全科目、`subject` 指定時はその科目だけを表示する。カードには、タイトル、一言説明、Interaction Typeだけを表示する。数学I・数学A・数学Ⅱ・数学Bを表示し、未実装の将来単元は空の見出しを保つ。
+カタログは `SUBJECT_ORDER` とSubjectごとの単元順で科目・単元見出しを安定させる。科目未指定時は利用可能な全科目、`subject` 指定時はその科目だけを表示する。カードには、タイトル、一言説明、Interaction Type、外部Repository監査状態を表示する。数学I・数学A・数学Ⅱ・数学Bを表示し、未実装の将来単元は空の見出しを保つ。
+
+### Interaction Unit
+
+Atlasの基本単位はRepositoryや数学単元ではなくInteractionとする。例えば、Parameter Graph Explorer、Draggable Geometry Point、Region Selector、Distribution Simulatorのように、「何を動かし、何が変わり、何に気づくか」を一つの再利用可能な単位として扱う。数学Contentは `content-data.json`、Interactionの共通実装はEngine、外部Repositoryの由来は `research/repository-audit.json` に分離する。
+
+### Interaction Metadata
+
+AIが数学単元名だけでなく、学習者に行わせたい認知活動から検索できるよう、`static/atlas/interaction-metadata.json` に次の拡張フィールドを持たせる。R1ではRegistryとValidatorを先に用意し、内容の完全な記述は監査後に行う。
+
+```text
+capabilities / learningPatterns / learnerActions / changes
+feedbackCapabilities / bestFor / notBestFor / supports
+```
+
+同じMetadataを複数の正本へ手作業で重複させない。Repository、relation、Licenseは監査Registryを正本とする。
 
 ### Catalog Discovery
 
-89教材を一覧から探せるよう、検索語、科目、単元、Interaction Typeのフィルタをカタログに置く。結果件数と空状態を表示し、条件は `q`、`subject`、`unit`、`type` のURLパラメータへ同期する。検索は日本語・英語のタイトル、説明、単元名、タグ相当の本文を対象にする。
+89候補教材を一覧から探せるよう、検索語、科目、単元、Interaction Typeのフィルタをカタログに置く。結果件数と空状態を表示し、条件は `q`、`subject`、`unit`、`type` のURLパラメータへ同期する。検索は日本語・英語のタイトル、説明、単元名、タグ相当の本文を対象にする。
 
 ### Learning Navigation
 
@@ -59,14 +75,13 @@ Viewerのパンくずには同一科目内の位置を表示し、教材末尾�
 
 ### Learning Loop
 
-学習の導線は `SEE → MOVE → NOTICE → USE → REVIEW` とする。
+External Repository Auditが完了するまで、Practiceは準備状態とする。将来の導線は `SEE → MOVE → NOTICE → USE → REVIEW` とするが、Practice問題が0件の間はPractice、Problem Set、Worksheetが明示的な空状態を表示し、ViewerはPractice sectionを生成しない。
 
-- `SEE`: Atlasのカタログから教材を選び、動かして観察する
-- `MOVE`: Viewerの「この概念を問題で使う」からPracticeへ移る
+- `SEE`: Atlasの候補教材を選び、動かして観察する
+- `MOVE`: 対応する検証済み教材だけをPracticeへつなぐ
 - `NOTICE`: 図鑑では正誤や点数を出さず、発見ポイントと変化を確認する
-- `USE`: Practiceで単一選択または数値問題に答える。自動で次へ進まず、明示的なボタンで移動する
-- `REVIEW`: 誤答時は該当教材へのリンクを表示し、Atlasには「問題に戻る」導線を表示する
-- Practiceは各教材を基礎 → 標準 → 発展の3段階で構成する。1回の正解だけで「習得」と表示せず、2回連続正解を習得の条件とする。最後に間違えた問題は「要復習」として明確に残す
+- `USE`: 監査済みの理解確認問題で学ぶ
+- `REVIEW`: 将来の誤答時は該当教材へ戻す。ProgressはAtlasの閲覧・お気に入りを維持し、現在存在しない問題履歴を表示しない
 
 ## Classroom Use
 
@@ -80,7 +95,7 @@ Problem Set
 Worksheet / Web Practice
 ```
 
-問題セットは、問題一覧から最大30問を教師指定の順番で選び、タイトルと説明を付けて保存する。セットはブラウザのlocalStorageへ保存し、Practice・問題プリント・解答付きプリントの3つへ同じID列を渡す。Practiceの明示IDセッションはカリキュラム順へ並べ替えず、セットの順番をそのまま表示する。共有リンクとJSONはログインやサーバー保存を使わず、問題IDと教材上の文章だけを扱う。
+問題セットは、問題が存在する段階では一覧から最大30問を教師指定の順番で選び、タイトルと説明を付けて保存する。現在のPractice問題は0件のため、Problem SetとWorksheetは選択可能な問題がないことを明示し、古い保存IDは無視してページを壊さない。セットはブラウザのlocalStorageへ保存し、共有リンクとJSONはログインやサーバー保存を使わず、問題IDと教材上の文章だけを扱う。
 
 問題プリントはA4の紙面を正本とし、画面上の操作部は印刷時に隠す。問題ごとの途中式を書く余白と `break-inside: avoid` を確保し、解答付き版では問題の後に解答・解説を続ける。学習レポートは閲覧教材、問題の現在状態、単元別集計、最近の活動を示す。記録のJSON復元は結合せず、現在の記録をバックアップしたうえで明示確認して置き換える。
 
@@ -94,7 +109,7 @@ Worksheet / Web Practice
 
 `static/atlas/interactions/index.js` のInteraction Engine Registryを入口とする。ViewerはRegistryだけを呼び、`interaction.engine` に応じて11種類のEngineをmountする。すべてのEngineは `reset()`、`destroy()`、`getState()` を返し、パラメータ型Engineは `setParameter()` も返す。
 
-Phase 7B完了時点でInteraction Engineは11種類、教材は89種類とする。新教材は既存Engineへのmode追加を第一候補とし、連続的な変化はFunctionGraph / GeometryBoard / RangeGraph、数列のような離散的な変化はSequenceLabへ寄せる。FunctionGraphとGeometryBoardのScene実装は共通ContextとRegistryから分離し、教材固有の描画分岐を入口へ戻さない。
+現時点ではInteraction Engineは11種類、Atlas候補教材は89種類である。External Repository Auditで正式採用を確認するまでは、新しいInteractive Featureを追加しない。将来の実装でも、連続的な変化はFunctionGraph / GeometryBoard / RangeGraph、数列のような離散的な変化はSequenceLabへ寄せる。FunctionGraphとGeometryBoardのScene実装は共通ContextとRegistryから分離し、教材固有の描画分岐を入口へ戻さない。
 
 `static/atlas/interactions/function-graph.js` は軸、グリッド、関数グラフ、点、補助線、動的ラベル、パラメータ更新、Reset、Destroyを提供する。`range-graph.js` はこれを使って関数全体、定義域内の強調曲線、左右端の44pxドラッグハンドル、最大・最小候補を表示する。
 
@@ -154,29 +169,34 @@ SimulationLabはモードRegistryで教材を分ける。理論分布と実験�
 
 標本平均のばらつき、信頼区間、仮説検定は数値と前提を併記する。「帰無仮説が正しい確率」のような誤解を招く表現は使わず、観測結果が仮定した分布のもとでどれほど極端かを示す。`statistical-inference.js` と `sampling.js` はDOMや乱数表示に依存しない純粋計算を担当する。
 
-Phase 8Aでは、コンテンツ89件、Practice267問、Interaction Engine11種を品質ゲートとして凍結する。新しい教材・問題・Engineは追加せず、既存IDと学習記録の互換性を保つ。正規母集団の標本平均は `X̄ ~ N(μ, σ/√n)` とし、Box–Muller法と注入可能な乱数源を使う。信頼区間は1本の確率ではなく、同じ方法を繰り返した長期的な被覆率として説明する。仮説検定は標準正規曲線と適切な片側・両側の裾を描き、z値・p値・有意水準をテキストでも示す。
+### External Repository Audit
 
-品質ゲートは、再帰的JavaScript構文検査、主要画面のPlaywright smoke / 回帰 / レスポンシブ / アクセシビリティ検査、GitHub Pages公開後の入口URL検査で構成する。ブラウザ検査はページエラーと `console.error` を失敗として扱い、320pxを含む主要幅で横スクロールを許可しない。
+正式採用するInteractive Featureは、確認済みの外部公開Repositoryに由来しなければならない。関係は `inspired-by` または `adapted-from` の2種類だけとし、`original` は採用しない。監査記録は実行時payloadと分離した `research/repository-audit.json` に置く。89候補には1件ずつ `pending` / `verified` / `needs-review` を付け、R1では全件を `pending` としてIDだけ確定する。未確認の候補へ後付けの参照元を作らない。`adapted-from` はLicense、`ref`、`paths`を必須とする。
 
-### Learning Loop
+CatalogとViewerでは監査状態を控えめなBadgeで表示する。`verified` の場合だけRepository、Relation、LicenseをDetailsへ表示し、`pending` と `needs-review` は正式採用済みと誤認させない。
 
-Phase 8Bでは、教材数を増やさずに公開版の学習往復を完成させる。
+### Phase R0: Practice curation reset
+
+現在の状態は次のとおりである。
 
 ```text
-Atlas
-↓ 概念を動かす
-Practice
-↓ 回答・記録
-Progress
-↓ 要復習教材を選ぶ
-Atlas / Practice
+Atlas候補: 89
+Practice: 0
+Interaction Engine: 11
+Subjects: 数学I / 数学A / 数学II / 数学B
 ```
 
-AtlasからPracticeへ渡すURLには対応する `atlasContentId` を保持する。不正解時は対応Atlasへ戻り、Atlasから同じ問題へ復帰できるようにする。Progressの教材行にはAtlasとPracticeの両方への明示的な導線を置き、localStorageの既存学習記録と安定IDを変更しない。公開Pagesの検証はHTTPステータスだけで完了とせず、JavaScript初期化、主要DOM、asset version、`console.error` と `pageerror` の不在まで確認する。
+R0では既存のオリジナルPractice問題を正本から削除し、Practice / Problem Set / Worksheet / Progressの基盤と保存形式は維持する。空状態では、Practiceは登録なし、Problem Setは選択不可、Worksheetは追加不可、Progressは問題0問を表示する。Atlasの閲覧・お気に入りと安定IDは維持し、古いPractice履歴はUI集計から除外する。
 
-### Release Certification
+R0の品質ゲートは、再帰的JavaScript構文検査、静的契約検査、主要画面のPlaywright smoke / 89候補教材回帰 / レスポンシブ / アクセシビリティ検査、`git diff --check`で構成する。GitHub Pages設定が利用できない場合、公開検証は未確認として扱い、ローカル検証の成功と混同しない。
 
-Phase 8Cは数学I・A・II・B版 v1.0の公開品質ゲートであり、機能拡張ではない。教材89、Practice267問、Interaction Engine11種を固定し、E2Eは教材ごとの独立テストとしてlocalhostとGitHub Pagesのリポジトリサブパスで共通利用する。Pages workflowはsourceの`static/asset-version.txt`を`EXPECTED_ASSET_VERSION`として公開版と厳密比較し、pages-smoke、89教材回帰、4科目学習ループ、responsiveを実行する。公開成功を確認するまではRelease candidateとし、成功後にだけ `Status: Released / Quality Gate Passed` と表示する。新規教材・新規Practice ID・新規Engine・数学C/III・Classroom Assignmentはこのゲートへ持ち込まない。
+### Phase R1: Repository-derived Interaction Foundation
+
+R1では89候補教材をInteraction単位で管理し、監査Registryのschema・ID一致・relation・License条件をCheckerで固定する。現段階では全件を `pending` とし、外部Repositoryを架空に割り当てない。次のR2で外部Repository、Interactive Feature、relation、License、evidenceを1件ずつ確認する。`auditStatus = verified` かつ有効なreferenceを持つものだけを正式Atlas教材とし、根拠を確認できない候補は非公開化または削除を検討する。
+
+### AI Retrieval Foundation
+
+将来的な教材生成は `Math Reference → Learning Requirements → Interaction検索 → Example再利用 → 不足Data生成 → Validator → Lesson構成` の順で行う。Atlasは数学知識そのものを置き換えず、「どう学ばせるか」を検索可能なInteraction Libraryとして提供する。
 
 ### Modeling
 

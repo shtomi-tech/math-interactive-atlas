@@ -35,6 +35,7 @@ jobs:
           test -f static/atlas.css
           test -f static/atlas/main.js
           test -f static/atlas/content-data.json
+          test -f static/atlas/interaction-metadata.json
           test -f static/atlas/interactions/sequence-lab.js
           test -f static/atlas/math/exponential-logarithm.js
           test -f static/atlas/math/calculus.js
@@ -50,6 +51,7 @@ jobs:
           test -f static/practice/main.js
           test -f static/practice/problem-data.json
           test -f static/asset-version.txt
+          test -f research/repository-audit.json
           test -f static/practice/filter.js
           test -f static/practice/session.js
           test -f static/sets.css
@@ -71,6 +73,7 @@ jobs:
           cp static/tokens.css static/atlas.css static/practice.css _site/static/
           cp static/sets.css static/worksheet.css static/progress.css _site/static/
           cp static/asset-version.txt _site/static/
+          cp -R research _site/research
           cp -R static/atlas _site/static/atlas
           cp -R static/practice _site/static/practice
           cp -R static/sets _site/static/sets

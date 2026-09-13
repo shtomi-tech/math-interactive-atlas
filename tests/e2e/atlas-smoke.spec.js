@@ -18,21 +18,21 @@ test("atlas catalog and representative learning surfaces load", async ({ page })
 test("practice, classroom pack, worksheet, and progress routes load", async ({ page }) => {
   const errors = collectBrowserErrors(page);
   await page.goto(appPath("practice.html"));
-  await expect(page.locator(".practice-problem-card")).toHaveCount(267);
-  await expect(page.locator(".practice-catalog-summary")).toContainText("全267問");
-  await page.locator(".practice-problem-card").first().getByRole("button", { name: /を開く$/ }).click();
-  await expect(page.locator(".practice-runner")).toBeVisible();
-  await expect(page.locator(".practice-submit")).toBeVisible();
+  await expect(page.locator(".practice-problem-card")).toHaveCount(0);
+  await expect(page.locator(".practice-catalog-summary")).toContainText("全0問");
+  await expect(page.locator(".practice-empty-state")).toContainText("現在、Practice問題は登録されていません。");
 
   await page.goto(appPath("sets.html"));
-  await expect(page.locator(".set-bank-card")).toHaveCount(267);
-  await page.locator(".set-bank-card").first().getByRole("button", { name: /問題セットに追加/ }).click();
-  await expect(page.locator("#selectedProblems .selected-problem-item")).toHaveCount(1);
+  await expect(page.locator(".set-bank-card")).toHaveCount(0);
+  await expect(page.locator("#problemBank .sets-empty")).toHaveText("現在、選択できる問題はありません。");
+  await expect(page.locator("#selectedProblems .selected-problem-item")).toHaveCount(0);
 
   await page.goto(appPath("worksheet.html"));
   await expect(page.locator("#worksheetTitle")).toBeVisible();
+  await expect(page.locator(".worksheet-empty-state")).toHaveText("プリントに追加できる問題がありません。");
   await page.goto(appPath("progress.html"));
   await expect(page.locator("#progressSummary")).toBeVisible();
   await expect(page.locator("#progressSummary")).toContainText("教材 0 / 89");
+  await expect(page.locator("#progressSummary")).toContainText("問題 0問");
   await expectNoBrowserErrors(errors);
 });

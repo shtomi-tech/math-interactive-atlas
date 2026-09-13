@@ -8,5 +8,6 @@ assert.deepEqual(set.problemIds, ["a", "b"]);
 assert.deepEqual(moveProblem(set, 1, "up").problemIds, ["b", "a"]);
 assert.deepEqual(removeProblem(set, "a").problemIds, ["b"]);
 assert.deepEqual(normalizeProblemSet({ id: "x", problemIds: ["a", "a", "b"], title: " x " }).problemIds, ["a", "b"]);
+assert.deepEqual(normalizeProblemSet({ problemIds: ["a", "missing", "a"] }, new Set(["a"])).problemIds, ["a"]);
 assert.equal(normalizeProblemSet({ problemIds: Array.from({ length: 40 }, (_, index) => `p${index}`) }).problemIds.length, 30);
 console.log("Problem set model: PASS (create, metadata, add, dedupe, move, remove, normalize, max)");

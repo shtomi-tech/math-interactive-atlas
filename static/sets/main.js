@@ -1,8 +1,8 @@
-import { SUBJECT_ORDER, SUBJECT_UNIT_ORDER, subjectLabel, unitLabel } from "../atlas/curriculum.js?v=20260913-8c";
-import { filterProblems, orderProblems } from "../practice/filter.js?v=20260913-8c";
-import { addProblem, createProblemSet, moveProblem, removeProblem, updateSetMetadata } from "./model.js?v=20260913-8c";
-import { deleteProblemSet, duplicateProblemSet, loadProblemSets, upsertProblemSet } from "./storage.js?v=20260913-8c";
-import { copyText, exportProblemSet, parseProblemSetImport, problemSetUrls } from "./io.js?v=20260913-8c";
+import { SUBJECT_ORDER, SUBJECT_UNIT_ORDER, subjectLabel, unitLabel } from "../atlas/curriculum.js?v=20260913-r1";
+import { filterProblems, orderProblems } from "../practice/filter.js?v=20260913-r1";
+import { addProblem, createProblemSet, moveProblem, removeProblem, updateSetMetadata } from "./model.js?v=20260913-r1";
+import { deleteProblemSet, duplicateProblemSet, loadProblemSets, upsertProblemSet } from "./storage.js?v=20260913-r1";
+import { copyText, exportProblemSet, parseProblemSetImport, problemSetUrls } from "./io.js?v=20260913-r1";
 
 const dom = {
   status: document.querySelector("#setsStatus"),
@@ -72,7 +72,7 @@ function renderBank() {
   dom.bank.replaceChildren();
   const summary = document.createElement("p"); summary.className = "sets-bank-summary"; summary.textContent = `${filtered.length}問を表示中`;
   dom.bank.append(summary);
-  if (!filtered.length) { const empty = document.createElement("p"); empty.className = "sets-empty"; empty.textContent = "この条件の問題はありません。"; dom.bank.append(empty); return; }
+  if (!filtered.length) { const empty = document.createElement("p"); empty.className = "sets-empty"; empty.textContent = problems.length ? "この条件の問題はありません。" : "現在、選択できる問題はありません。"; dom.bank.append(empty); return; }
   filtered.forEach((problem) => {
     const card = document.createElement("article"); card.className = "set-bank-card";
     const heading = document.createElement("h3"); heading.textContent = problem.title;
@@ -108,8 +108,9 @@ async function importFile(file) {
   if (!file) return;
   const parsed = parseProblemSetImport(await file.text());
   if (!parsed.ok) { showStatus(parsed.error); return; }
-  const unknown = parsed.set.problemIds.filter((id) => !problems.some((problem) => problem.id === id));
-  currentSet = createProblemSet({ title: parsed.set.title, instructions: parsed.set.instructions }); currentSet = { ...currentSet, problemIds: parsed.set.problemIds };
+  const availableIds = new Set(problems.map((problem) => problem.id));
+  const unknown = parsed.set.problemIds.filter((id) => !availableIds.has(id));
+  currentSet = createProblemSet({ title: parsed.set.title, instructions: parsed.set.instructions }); currentSet = { ...currentSet, problemIds: parsed.set.problemIds.filter((id) => availableIds.has(id)) };
   dom.title.value = currentSet.title; dom.instructions.value = currentSet.instructions; renderSelected(); renderBank(); showStatus(unknown.length ? "このセットには現在利用できない問題があります。" : "問題セットJSONを読み込みました。保存する場合は保存ボタンを押してください。");
 }
 

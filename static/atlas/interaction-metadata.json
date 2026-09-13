@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "schema": {
+    "provenanceSource": "research/repository-audit.json",
+    "fieldTypes": {
+      "id": "string",
+      "title": "string",
+      "category": "string",
+      "description": "string",
+      "learningGoal": "string",
+      "capabilities": "string[]",
+      "learningPatterns": "string[]",
+      "learnerActions": "string[]",
+      "changes": "string[]",
+      "feedbackCapabilities": "string[]",
+      "bestFor": "string[]",
+      "notBestFor": "string[]",
+      "supports": "string[]",
+      "implementationDifficulty": "string",
+      "reusability": "string",
+      "reusePolicy": "string"
+    }
+  },
+  "interactions": []
+}

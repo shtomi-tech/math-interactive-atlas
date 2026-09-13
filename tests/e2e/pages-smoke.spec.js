@@ -20,6 +20,16 @@ test("deployed learning surfaces initialize and load their versioned assets", as
     expect(response?.ok(), `${route} did not return a successful response`).toBeTruthy();
     await expect(page.locator(selector)).toBeVisible();
   }
+  await page.goto(appPath("atlas.html"));
+  await expect(page.locator(".atlas-audit-status").first()).toHaveText("Pending Repository Audit");
+  await page.goto(appPath("practice.html"));
+  await expect(page.locator(".practice-empty-state")).toContainText("現在、Practice問題は登録されていません。");
+  await page.goto(appPath("sets.html"));
+  await expect(page.locator("#problemBank .sets-empty")).toHaveText("現在、選択できる問題はありません。");
+  await page.goto(appPath("worksheet.html"));
+  await expect(page.locator(".worksheet-empty-state")).toHaveText("プリントに追加できる問題がありません。");
+  await page.goto(appPath("progress.html"));
+  await expect(page.locator(".progress-summary-lead")).toContainText("問題 0問");
   const assetVersion = await page.evaluate(async () => (await fetch("./static/asset-version.txt")).text());
   expect(assetVersion.trim()).toBe(expectedAssetVersion);
   await expectNoBrowserErrors(errors);

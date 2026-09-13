@@ -1,6 +1,6 @@
-import { mountInteraction } from "./interactions/index.js?v=20260913-8c";
-import { neighborsForContent, subjectLabel, unitLabel } from "./curriculum.js?v=20260913-8c";
-import { practiceStatus } from "./storage.js?v=20260913-8c";
+import { mountInteraction } from "./interactions/index.js?v=20260913-r1";
+import { neighborsForContent, subjectLabel, unitLabel } from "./curriculum.js?v=20260913-r1";
+import { practiceStatus } from "./storage.js?v=20260913-r1";
 
 const STATUS_LABELS = { unattempted: "未挑戦", practicing: "練習中", review: "要復習", mastered: "習得" };
 
@@ -55,24 +55,46 @@ function appendSource(section, source) {
   const heading = document.createElement("h2");
   heading.textContent = "Source";
   const implementation = document.createElement("p");
-  implementation.textContent = `Interaction implementation: ${source.usage === "original" ? "Original" : source.usage}`;
+  implementation.textContent = `Interaction implementation: ${source.usage === "candidate" ? "Candidate; provenance pending" : source.usage}`;
   const library = document.createElement("p");
   library.textContent = `Rendering library: ${source.library || "none"}`;
   section.append(heading, implementation, library);
 
-  if (source.license) {
+  if (source.license && source.license !== "UNVERIFIED") {
     const license = document.createElement("p");
     license.textContent = `License: ${source.license}`;
     section.append(license);
   }
-  if (source.repository) {
+}
+
+function auditFor(repositoryAudits, contentId) { return repositoryAudits instanceof Map ? repositoryAudits.get(contentId) : repositoryAudits?.find?.((record) => record.contentId === contentId); }
+function auditLabel(status) { return status === "verified" ? "Verified" : status === "needs-review" ? "Needs Review" : "Pending Repository Audit"; }
+function appendAuditStatus(section, audit) {
+  const record = audit || { auditStatus: "pending", references: [] };
+  const status = document.createElement("p");
+  status.className = `atlas-audit-status is-${record.auditStatus || "pending"}`;
+  status.textContent = auditLabel(record.auditStatus);
+  status.title = "外部Repositoryの監査状態";
+  section.append(status);
+  if (record.auditStatus !== "verified" || !Array.isArray(record.references)) return;
+  const details = document.createElement("div");
+  details.className = "atlas-audit-details";
+  record.references.forEach((reference) => {
+    const item = document.createElement("div");
+    const repository = document.createElement("p");
+    repository.textContent = "Repository: ";
     const link = document.createElement("a");
-    link.href = source.repository;
+    link.href = reference.url;
     link.target = "_blank";
     link.rel = "noopener noreferrer";
-    link.textContent = "Repository";
-    section.append(link);
-  }
+    link.textContent = reference.repository;
+    repository.append(link);
+    const relation = document.createElement("p"); relation.textContent = `Relation: ${reference.relation}`;
+    const license = document.createElement("p"); license.textContent = `License: ${reference.license}`;
+    item.append(repository, relation, license);
+    details.append(item);
+  });
+  section.append(details);
 }
 
 export function createViewer(root, { onBack, onRelated, onNavigate = onRelated, onToggleFavorite = () => {} }) {
@@ -89,7 +111,7 @@ export function createViewer(root, { onBack, onRelated, onNavigate = onRelated, 
     root.replaceChildren();
   }
 
-  function render(content, contents, { fromProblem = null, fromCatalog = null, practiceProblems = [], learningState = {}, isFavorite = false } = {}) {
+  function render(content, contents, { fromProblem = null, fromCatalog = null, practiceProblems = [], repositoryAudits = new Map(), learningState = {}, isFavorite = false } = {}) {
     destroy();
 
     const viewer = document.createElement("article");
@@ -109,6 +131,7 @@ export function createViewer(root, { onBack, onRelated, onNavigate = onRelated, 
     description.className = "atlas-viewer-description";
     description.textContent = content.shortDescription;
     heading.append(breadcrumb, title, description);
+    appendAuditStatus(heading, auditFor(repositoryAudits, content.id));
     const actions = document.createElement("div");
     actions.className = "atlas-viewer-actions";
     if (fromProblem) {
@@ -220,24 +243,27 @@ export function createViewer(root, { onBack, onRelated, onNavigate = onRelated, 
     related.append(relatedTitle, relatedList);
 
     const linkedProblems = (Array.isArray(practiceProblems) ? practiceProblems : []).filter((problem) => problem.atlasContentId === content.id).sort((left, right) => left.difficulty - right.difficulty || left.id.localeCompare(right.id));
-    const practiceSection = document.createElement("section");
-    practiceSection.className = "atlas-practice-links";
-    const practiceTitle = document.createElement("h2");
-    practiceTitle.textContent = "この概念を問題で使う";
-    const practiceLead = document.createElement("p");
-    practiceLead.textContent = "基礎から標準、発展へ。3問で確かめます。";
-    const practiceList = document.createElement("ul");
-    const difficultyLabels = ["基礎", "標準", "発展"];
-    linkedProblems.forEach((problem) => { const item = document.createElement("li"); const link = document.createElement("a"); link.href = `./practice.html?problem=${encodeURIComponent(problem.id)}&atlasContentId=${encodeURIComponent(content.id)}`; const label = difficultyLabels[problem.difficulty - 1] || `難易度${problem.difficulty}`; const currentStatus = practiceStatus(learningState.practice?.[problem.id]); link.textContent = `${label}　${STATUS_LABELS[currentStatus] || currentStatus}`; item.append(link); practiceList.append(item); });
-    const mastered = linkedProblems.filter((problem) => practiceStatus(learningState.practice?.[problem.id]) === "mastered").length;
-    const practiceSummary = document.createElement("p");
-    practiceSummary.className = "atlas-practice-summary";
-    practiceSummary.textContent = `習得 ${mastered} / ${linkedProblems.length}`;
-    const practiceAll = document.createElement("a");
-    practiceAll.className = "atlas-practice-all-link";
-    practiceAll.href = `./practice.html?content=${encodeURIComponent(content.id)}`;
-    practiceAll.textContent = "この概念を3問練習";
-    practiceSection.append(practiceTitle, practiceLead, practiceList, practiceSummary, practiceAll);
+    let practiceSection = null;
+    if (linkedProblems.length) {
+      practiceSection = document.createElement("section");
+      practiceSection.className = "atlas-practice-links";
+      const practiceTitle = document.createElement("h2");
+      practiceTitle.textContent = "この概念を問題で使う";
+      const practiceLead = document.createElement("p");
+      practiceLead.textContent = "問題で確かめます。";
+      const practiceList = document.createElement("ul");
+      const difficultyLabels = ["基礎", "標準", "発展"];
+      linkedProblems.forEach((problem) => { const item = document.createElement("li"); const link = document.createElement("a"); link.href = `./practice.html?problem=${encodeURIComponent(problem.id)}&atlasContentId=${encodeURIComponent(content.id)}`; const label = difficultyLabels[problem.difficulty - 1] || `難易度${problem.difficulty}`; const currentStatus = practiceStatus(learningState.practice?.[problem.id]); link.textContent = `${label}　${STATUS_LABELS[currentStatus] || currentStatus}`; item.append(link); practiceList.append(item); });
+      const mastered = linkedProblems.filter((problem) => practiceStatus(learningState.practice?.[problem.id]) === "mastered").length;
+      const practiceSummary = document.createElement("p");
+      practiceSummary.className = "atlas-practice-summary";
+      practiceSummary.textContent = `習得 ${mastered} / ${linkedProblems.length}`;
+      const practiceAll = document.createElement("a");
+      practiceAll.className = "atlas-practice-all-link";
+      practiceAll.href = `./practice.html?content=${encodeURIComponent(content.id)}`;
+      practiceAll.textContent = "この概念を練習";
+      practiceSection.append(practiceTitle, practiceLead, practiceList, practiceSummary, practiceAll);
+    }
 
     const navigation = document.createElement("nav");
     navigation.className = "atlas-learning-navigation";

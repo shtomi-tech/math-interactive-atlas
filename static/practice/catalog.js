@@ -1,5 +1,5 @@
-import { SUBJECT_ORDER, SUBJECT_UNIT_ORDER, subjectLabel, unitLabel } from "../atlas/curriculum.js?v=20260913-8c";
-import { STATUS_OPTIONS, filterProblems, orderProblems, statusForProblem, summarizeProblems } from "./filter.js?v=20260913-8c";
+import { SUBJECT_ORDER, SUBJECT_UNIT_ORDER, subjectLabel, unitLabel } from "../atlas/curriculum.js?v=20260913-r1";
+import { STATUS_OPTIONS, filterProblems, orderProblems, statusForProblem, summarizeProblems } from "./filter.js?v=20260913-r1";
 
 const STATUS_CLASSES = { unattempted: "is-unattempted", practicing: "is-practicing", review: "is-review", mastered: "is-mastered" };
 
@@ -110,6 +110,17 @@ export function renderPracticeCatalog(root, problems, {
     const counts = summarizeProblems(problems, state);
     summary.textContent = `全${problems.length}問　未挑戦 ${counts.unattempted}　練習中 ${counts.practicing}　要復習 ${counts.review}　習得 ${counts.mastered}　表示中 ${visible.length}問`;
     results.replaceChildren();
+    if (!problems.length) {
+      const empty = document.createElement("div");
+      empty.className = "practice-empty-state";
+      const message = document.createElement("p");
+      message.textContent = "現在、Practice問題は登録されていません。";
+      const note = document.createElement("p");
+      note.textContent = "外部Repository由来のインタラクティブ教材の監査後、必要な問題を改めて整備します。";
+      empty.append(message, note);
+      results.append(empty);
+      return;
+    }
     if (!visible.length) {
       const empty = document.createElement("p");
       empty.className = "practice-empty-state";

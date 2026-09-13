@@ -1,5 +1,5 @@
-import { subjectLabel, unitLabel } from "../atlas/curriculum.js?v=20260913-8c";
-import { buildWorksheetModel, problemAnswerText } from "./model.js?v=20260913-8c";
+import { subjectLabel, unitLabel } from "../atlas/curriculum.js?v=20260913-r1";
+import { buildWorksheetModel, problemAnswerText } from "./model.js?v=20260913-r1";
 
 const params = new URLSearchParams(window.location.search);
 const dom = { status: document.querySelector("#worksheetStatus"), root: document.querySelector("#worksheetRoot"), title: document.querySelector("#worksheetTitle") };
@@ -32,7 +32,14 @@ function renderProblem(problem, index, answers) {
 Promise.all([readJson("./static/practice/problem-data.json")]).then(([problems]) => {
   const model = buildWorksheetModel(problems, params.get("ids"));
   if (model.unknownIds.length) dom.status.textContent = "一部の問題を読み込めませんでした";
-  if (!model.problems.length) { dom.status.textContent = "指定された問題セットを読み込めませんでした。"; return; }
+  if (!model.problems.length) {
+    dom.status.textContent = problems.length ? "指定された問題セットを読み込めませんでした。" : "プリントに追加できる問題がありません。";
+    const empty = document.createElement("p");
+    empty.className = "worksheet-empty-state";
+    empty.textContent = problems.length ? "指定された問題セットを読み込めませんでした。" : "プリントに追加できる問題がありません。";
+    dom.root.replaceChildren(empty);
+    return;
+  }
   const title = params.get("title") || "数学問題プリント"; dom.title.textContent = title;
   const list = document.createElement("section"); list.className = "worksheet-problems";
   model.problems.forEach((problem, index) => list.append(renderProblem(problem, index + 1, false)));
