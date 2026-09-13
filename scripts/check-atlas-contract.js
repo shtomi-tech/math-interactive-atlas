@@ -68,6 +68,7 @@ const requiredFiles = [
   "static/atlas/storage.js",
   "data/interactions.json",
   "data/interaction-runtime-map.json",
+  "data/candidate-canonical-map.json",
   "research/external-repositories.json",
   "interactions.html",
   "static/library.css",
@@ -139,6 +140,11 @@ const requiredFiles = [
   "scripts/check-r4-scope.js",
   "scripts/check-interaction-runtime-map.js",
   "scripts/check-canonical-runtime-math.js",
+  "scripts/check-r5-scope.js",
+  "scripts/check-evidence-readiness.js",
+  "scripts/check-candidate-canonical-map.js",
+  "scripts/report-candidate-canonical-coverage.js",
+  "scripts/build-candidate-canonical-index.js",
   "tests/e2e/all-atlas-content.spec.js",
   "tests/e2e/learning-loop.spec.js",
   "tests/e2e/pages-smoke.spec.js",
@@ -150,6 +156,7 @@ const requiredFiles = [
   "research/README.md",
   "research/repository-audit.json",
   "dist/ai/interactions.json",
+  "dist/ai/candidate-canonical-coverage.json",
   ".github/workflows/atlas-checks.yml",
   ".github/workflows/pages.yml"
 ];
@@ -611,6 +618,7 @@ requireCondition(workflowSource.includes("node scripts/check-atlas-contract.js")
 requireCondition(workflowSource.includes("node scripts/check-js-syntax.js"), "GitHub Actions syntax checks are incomplete");
 requireCondition(workflowSource.includes("node scripts/check-r3-scope.js") && workflowSource.includes("node scripts/check-external-repositories.js") && workflowSource.includes("node scripts/check-interaction-library.js") && workflowSource.includes("node scripts/build-interaction-index.js --check") && workflowSource.includes("node scripts/check-interaction-index.js") && workflowSource.includes("node scripts/report-interaction-library.js"), "Phase R3 research checks are missing from GitHub Actions");
 requireCondition(workflowSource.includes("node scripts/check-r4-scope.js") && workflowSource.includes("node scripts/check-interaction-runtime-map.js") && workflowSource.includes("node scripts/check-canonical-runtime-math.js"), "Phase R4 runtime checks are missing from GitHub Actions");
+requireCondition(workflowSource.includes("node scripts/check-r5-scope.js") && workflowSource.includes("node scripts/check-evidence-readiness.js") && workflowSource.includes("node scripts/check-candidate-canonical-map.js") && workflowSource.includes("node scripts/report-candidate-canonical-coverage.js") && workflowSource.includes("node scripts/build-candidate-canonical-index.js --check"), "Phase R5 evidence and coverage checks are missing from GitHub Actions");
 requireCondition(workflowSource.includes("node scripts/check-exponential-logarithm.js") && workflowSource.includes("node scripts/check-calculus.js") && workflowSource.includes("node scripts/check-sequences.js") && workflowSource.includes("node scripts/check-algebra2.js") && workflowSource.includes("node scripts/check-coordinate-geometry.js") && workflowSource.includes("node scripts/check-statistical-inference.js") && workflowSource.includes("node scripts/check-modeling.js"), "Phase 7B math checks are missing from GitHub Actions");
 requireCondition(workflowSource.includes("node scripts/check-js-syntax.js"), "Phase 7B syntax checks are missing from GitHub Actions");
 requireCondition(workflowSource.includes("browser-smoke:") && workflowSource.includes("npx playwright install --with-deps chromium") && workflowSource.includes("npm test"), "Browser smoke checks are missing from GitHub Actions");

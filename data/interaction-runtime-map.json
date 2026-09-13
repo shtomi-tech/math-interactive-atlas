@@ -42,13 +42,13 @@
     },
     {
       "interactionId": "MATH-INT-007",
-      "status": "blocked-evidence",
-      "sourceFeatureIds": ["REPO-003-F001"]
+      "status": "planned",
+      "sourceFeatureIds": ["REPO-003-F001", "REPO-005-F001"]
     },
     {
       "interactionId": "MATH-INT-008",
-      "status": "blocked-evidence",
-      "sourceFeatureIds": ["REPO-004-F001"]
+      "status": "planned",
+      "sourceFeatureIds": ["REPO-004-F001", "REPO-006-F001"]
     }
   ]
 }

@@ -22,12 +22,12 @@ requireCondition(Array.isArray(practice) && practice.length === 0, "R4 scope req
 requireCondition(audit?.version === 1 && audit?.contents?.length === 89, "R4 scope requires 89 audit records");
 requireCondition((auditCounts.verified || 0) === 0 && auditCounts["needs-review"] === 89 && (auditCounts.pending || 0) === 0, "R4 scope requires audit 0 / 89 / 0");
 requireCondition(Array.isArray(library?.interactions) && library.interactions.length === 8, "R4 scope requires 8 canonical interactions");
-requireCondition(Array.isArray(external?.repositories) && external.repositories.length === 4, "R4 scope requires 4 external repositories");
-requireCondition(external.repositories.flatMap((repository) => repository.features || []).length === 8, "R4 scope requires 8 external features");
 requireCondition(runtime?.version === 1 && mappings.length === 8, "R4 scope requires 8 runtime mappings");
-requireCondition(count("implemented") === 3 && count("planned") === 3 && count("blocked-evidence") === 2, "R4 scope requires implemented 3 / planned 3 / blocked-evidence 2");
+requireCondition(count("implemented") === 3, "R4 invariants require exactly 3 implemented pilot mappings");
+requireCondition(mappings.filter((mapping) => mapping.interactionId.startsWith("MATH-INT-001") || mapping.interactionId.startsWith("MATH-INT-002") || mapping.interactionId.startsWith("MATH-INT-003")).every((mapping) => mapping.status === "implemented" && mapping.engine === "functionGraph"), "R4 invariants require the 001-003 functionGraph pilots");
+requireCondition(mappings.filter((mapping) => ["MATH-INT-004", "MATH-INT-005", "MATH-INT-006"].includes(mapping.interactionId)).every((mapping) => mapping.status === "planned"), "R4 invariants require 004-006 to remain planned");
 requireCondition(!JSON.stringify(library).includes("adapted-from"), "R4 canonical metadata must not use adapted-from");
 requireCondition(registry.includes("functionGraph") && ["rangeGraph", "geometryBoard", "regionSelector", "combinatoricsViewer", "dataLab", "simulationLab", "algebraLab", "numberLineLab", "algorithmLab", "sequenceLab"].every((engine) => registry.includes(engine)), "R4 scope requires the existing 11-engine registry");
 
 if (errors.length) { console.error("R4 scope: FAILED"); errors.forEach((error) => console.error(`- ${error}`)); process.exitCode = 1; }
-else console.log("R4 scope: PASS (89 Legacy Candidates; audit 0 / 89 / 0; 8 Canonical; 4 repositories; 8 features; Practice 0; Engines 11; runtime 3 / 3 / 2)");
+else console.log("R4 invariants: PASS (89 Legacy Candidates; audit 0 / 89 / 0; 8 Canonical; 3 pilot runtimes; Practice 0; Engines 11)");

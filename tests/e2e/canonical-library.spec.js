@@ -11,8 +11,8 @@ test("canonical library renders all mapped statuses and evidence", async ({ page
   await page.goto(appPath("interactions.html"));
   await expect(page.locator(".library-card")).toHaveCount(8);
   await expect(page.locator(".library-runtime-status.is-implemented")).toHaveCount(3);
-  await expect(page.locator(".library-runtime-status.is-planned")).toHaveCount(3);
-  await expect(page.locator(".library-runtime-status.is-blocked-evidence")).toHaveCount(2);
+  await expect(page.locator(".library-runtime-status.is-planned")).toHaveCount(5);
+  await expect(page.locator(".library-runtime-status.is-blocked-evidence")).toHaveCount(0);
   await expect(page.locator(".library-card").nth(0)).toContainText("phetsims/graphing-quadratics");
   await expect(page.locator(".library-card").nth(0)).toContainText("MIT");
   await expectNoBrowserErrors(errors);
@@ -96,7 +96,8 @@ test("planned and evidence-review interactions do not mount demos", async ({ pag
   for (const id of ["MATH-INT-004", "MATH-INT-005", "MATH-INT-006", "MATH-INT-007", "MATH-INT-008"]) {
     await openInteraction(page, id);
     await expect(page.locator(".library-demo")).toHaveCount(0);
-    await expect(page.locator(".library-source-item")).toHaveCount(1);
+    await expect(page.locator(".library-source-item")).toHaveCount(["MATH-INT-007", "MATH-INT-008"].includes(id) ? 2 : 1);
+    await expect(page.locator(".library-unavailable")).toHaveText("Runtime implementation is not yet available.");
   }
   await expectNoBrowserErrors(errors);
 });

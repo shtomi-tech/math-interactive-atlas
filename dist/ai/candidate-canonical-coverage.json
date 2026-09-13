@@ -1,0 +1,1070 @@
+{
+  "version": 1,
+  "candidates": [
+    {
+      "candidateId": "set-regions",
+      "subject": "math1",
+      "unit": "algebra",
+      "title": "集合を塗って式を作る",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "necessary-sufficient",
+      "subject": "math1",
+      "unit": "algebra",
+      "title": "必要条件・十分条件を集合で見る",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "event-regions",
+      "subject": "mathA",
+      "unit": "probability",
+      "title": "余事象・和事象を塗る",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "conditional-probability",
+      "subject": "mathA",
+      "unit": "probability",
+      "title": "条件付き確率で世界を絞る",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "counting-tree",
+      "subject": "mathA",
+      "unit": "probability",
+      "title": "数え上げの樹形図",
+      "coverageStatus": "partial",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-006",
+          "interactionTitle": "スロットを入れ替えて順番を比べる",
+          "relation": "partial",
+          "confidence": "low",
+          "rationale": "樹形図は選択順序を枝として並べて比較するが、関数スロットの入れ替えそのものは表現しない。"
+        }
+      ],
+      "recommendedAction": "retain-legacy"
+    },
+    {
+      "candidateId": "permutations-all",
+      "subject": "mathA",
+      "unit": "probability",
+      "title": "順列を全部並べる",
+      "coverageStatus": "covered",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-006",
+          "interactionTitle": "スロットを入れ替えて順番を比べる",
+          "relation": "direct",
+          "confidence": "high",
+          "rationale": "部品の並びを変え、順序の違う配置を一覧で比較することが教材の主役である。"
+        }
+      ],
+      "recommendedAction": "canonicalize-later"
+    },
+    {
+      "candidateId": "combinations-order",
+      "subject": "mathA",
+      "unit": "probability",
+      "title": "組合せは順序を無視する",
+      "coverageStatus": "covered",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-006",
+          "interactionTitle": "スロットを入れ替えて順番を比べる",
+          "relation": "direct",
+          "confidence": "high",
+          "rationale": "同じ部品の順序を入れ替え、順序を区別する表示とまとめる表示を比較する。"
+        }
+      ],
+      "recommendedAction": "canonicalize-later"
+    },
+    {
+      "candidateId": "mean-median-outlier",
+      "subject": "math1",
+      "unit": "statistics",
+      "title": "平均と中央値を壊してみる",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "variance-distance",
+      "subject": "math1",
+      "unit": "statistics",
+      "title": "分散を距離として見る",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "boxplot-drag",
+      "subject": "math1",
+      "unit": "statistics",
+      "title": "箱ひげ図を動かす",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "correlation-builder",
+      "subject": "math1",
+      "unit": "statistics",
+      "title": "相関係数を作る",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "hypothesis-test-coin",
+      "subject": "math1",
+      "unit": "statistics",
+      "title": "仮説検定をシミュレーション",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "quadratic-basic",
+      "subject": "math1",
+      "unit": "quadratic",
+      "title": "y = ax² を動かす",
+      "coverageStatus": "covered",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-002",
+          "interactionTitle": "係数スライダーでグラフの形を比べる",
+          "relation": "direct",
+          "confidence": "high",
+          "rationale": "係数aをスライダーで変え、放物線の向きと開き方を即時に比べることが教材の中心である。"
+        }
+      ],
+      "recommendedAction": "canonicalize-later"
+    },
+    {
+      "candidateId": "quadratic-vertex",
+      "subject": "math1",
+      "unit": "quadratic",
+      "title": "頂点を動かす",
+      "coverageStatus": "covered",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-001",
+          "interactionTitle": "頂点をドラッグして放物線を動かす",
+          "relation": "direct",
+          "confidence": "high",
+          "rationale": "放物線の頂点の位置を操作し、頂点とグラフの対応を観察することが教材の中心である。"
+        }
+      ],
+      "recommendedAction": "canonicalize-later"
+    },
+    {
+      "candidateId": "quadratic-discriminant",
+      "subject": "math1",
+      "unit": "quadratic",
+      "title": "判別式と交点数",
+      "coverageStatus": "partial",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-002",
+          "interactionTitle": "係数スライダーでグラフの形を比べる",
+          "relation": "partial",
+          "confidence": "medium",
+          "rationale": "係数スライダーで二次関数と交点数を変化させるが、主眼は判別式であり係数の形比較だけではない。"
+        }
+      ],
+      "recommendedAction": "retain-legacy"
+    },
+    {
+      "candidateId": "quadratic-range",
+      "subject": "math1",
+      "unit": "quadratic",
+      "title": "最大・最小と定義域",
+      "coverageStatus": "partial",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-003",
+          "interactionTitle": "曲線上の点を測る",
+          "relation": "partial",
+          "confidence": "low",
+          "rationale": "定義域の端点を動かして曲線上の値を読み取る部分は対応するが、主眼は最大値・最小値の判定である。"
+        }
+      ],
+      "recommendedAction": "retain-legacy"
+    },
+    {
+      "candidateId": "unit-circle",
+      "subject": "math1",
+      "unit": "trigonometry",
+      "title": "単位円でsin・cosを見る",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "triangle-area-sine",
+      "subject": "math1",
+      "unit": "trigonometry",
+      "title": "三角形の面積とsin",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "independent-trials",
+      "subject": "mathA",
+      "unit": "probability",
+      "title": "独立試行を大量実験する",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "sine-law-circumcircle",
+      "subject": "math1",
+      "unit": "trigonometry",
+      "title": "正弦定理と外接円",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "cosine-law",
+      "subject": "math1",
+      "unit": "trigonometry",
+      "title": "余弦定理を変形で見る",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "triangle-centers",
+      "subject": "mathA",
+      "unit": "geometry-a",
+      "title": "三角形の五心を追いかける",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "angle-bisector-ratio",
+      "subject": "mathA",
+      "unit": "geometry-a",
+      "title": "角の二等分線と辺の比",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "inscribed-angle",
+      "subject": "mathA",
+      "unit": "geometry-a",
+      "title": "円周角を動かす",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "power-of-point",
+      "subject": "mathA",
+      "unit": "geometry-a",
+      "title": "方べきの定理を動かす",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "expansion-area",
+      "subject": "math1",
+      "unit": "algebra",
+      "title": "展開を面積で見る",
+      "coverageStatus": "covered",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-007",
+          "interactionTitle": "面積モデルの課題を選んで組み立てる",
+          "relation": "direct",
+          "confidence": "high",
+          "rationale": "長方形を複数の面積部品に分け、各部品と展開後の項を対応させることが教材の主役である。"
+        }
+      ],
+      "recommendedAction": "canonicalize-later"
+    },
+    {
+      "candidateId": "factorization-reverse",
+      "subject": "math1",
+      "unit": "algebra",
+      "title": "因数分解を逆再生する",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "perfect-square-build",
+      "subject": "math1",
+      "unit": "algebra",
+      "title": "平方公式の形を作る",
+      "coverageStatus": "partial",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-007",
+          "interactionTitle": "面積モデルの課題を選んで組み立てる",
+          "relation": "partial",
+          "confidence": "low",
+          "rationale": "式を部品から段階的に組み立てる操作は対応するが、面積モデルの課題ワークスペースではない。"
+        }
+      ],
+      "recommendedAction": "retain-legacy"
+    },
+    {
+      "candidateId": "sqrt-numberline",
+      "subject": "math1",
+      "unit": "algebra",
+      "title": "平方根を数直線で探す",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "absolute-distance",
+      "subject": "math1",
+      "unit": "algebra",
+      "title": "絶対値は距離",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "inequality-numberline",
+      "subject": "math1",
+      "unit": "algebra",
+      "title": "不等式と数直線",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "circular-permutations",
+      "subject": "mathA",
+      "unit": "probability",
+      "title": "円順列を回してみる",
+      "coverageStatus": "covered",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-006",
+          "interactionTitle": "スロットを入れ替えて順番を比べる",
+          "relation": "direct",
+          "confidence": "high",
+          "rationale": "円上の配置を回転させ、部品の順序と同じ配置のまとまりを操作して比較する。"
+        }
+      ],
+      "recommendedAction": "canonicalize-later"
+    },
+    {
+      "candidateId": "sample-space-grid",
+      "subject": "mathA",
+      "unit": "probability",
+      "title": "確率を標本空間で見る",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "euclidean-algorithm",
+      "subject": "mathA",
+      "unit": "human-activity",
+      "title": "ユークリッド互除法を動かす",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "completing-square",
+      "subject": "math1",
+      "unit": "quadratic",
+      "title": "平方完成をアニメーションする",
+      "coverageStatus": "partial",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-007",
+          "interactionTitle": "面積モデルの課題を選んで組み立てる",
+          "relation": "partial",
+          "confidence": "low",
+          "rationale": "平方完成の部品を段階的に組み立てるが、面積モデルの入力・判定・進行までは扱わない。"
+        }
+      ],
+      "recommendedAction": "retain-legacy"
+    },
+    {
+      "candidateId": "three-point-parabola",
+      "subject": "math1",
+      "unit": "quadratic",
+      "title": "3点から放物線を作る",
+      "coverageStatus": "partial",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-003",
+          "interactionTitle": "曲線上の点を測る",
+          "relation": "partial",
+          "confidence": "medium",
+          "rationale": "図上の点を動かして曲線と座標を同期させるが、単一の測定プローブを曲線上で読む教材ではない。"
+        }
+      ],
+      "recommendedAction": "retain-legacy"
+    },
+    {
+      "candidateId": "quadratic-inequality",
+      "subject": "math1",
+      "unit": "quadratic",
+      "title": "二次不等式を塗る",
+      "coverageStatus": "partial",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-002",
+          "interactionTitle": "係数スライダーでグラフの形を比べる",
+          "relation": "partial",
+          "confidence": "medium",
+          "rationale": "係数変更に伴うグラフの変化を観察できるが、主眼は解の範囲と不等号の境界である。"
+        }
+      ],
+      "recommendedAction": "retain-legacy"
+    },
+    {
+      "candidateId": "parameter-intersections",
+      "subject": "math1",
+      "unit": "quadratic",
+      "title": "パラメータと共有点",
+      "coverageStatus": "partial",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-002",
+          "interactionTitle": "係数スライダーでグラフの形を比べる",
+          "relation": "partial",
+          "confidence": "medium",
+          "rationale": "パラメータスライダーとグラフの即時更新は対応するが、変える対象は放物線の係数ではなく共有点を決める直線である。"
+        }
+      ],
+      "recommendedAction": "retain-legacy"
+    },
+    {
+      "candidateId": "right-triangle-trig",
+      "subject": "math1",
+      "unit": "trigonometry",
+      "title": "直角三角形と三角比",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "trig-relations",
+      "subject": "math1",
+      "unit": "trigonometry",
+      "title": "三角比の相互関係",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "exponent-extension",
+      "subject": "math2",
+      "unit": "exponential-logarithm",
+      "title": "指数を実数へ広げる",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "exponential-base",
+      "subject": "math2",
+      "unit": "exponential-logarithm",
+      "title": "指数関数の底を動かす",
+      "coverageStatus": "partial",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-002",
+          "interactionTitle": "係数スライダーでグラフの形を比べる",
+          "relation": "partial",
+          "confidence": "medium",
+          "rationale": "底をスライダーで変え、関数グラフの形を比べるが、二次関数の係数操作ではない。"
+        }
+      ],
+      "recommendedAction": "retain-legacy"
+    },
+    {
+      "candidateId": "log-inverse",
+      "subject": "math2",
+      "unit": "exponential-logarithm",
+      "title": "logは指数の逆",
+      "coverageStatus": "covered",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-003",
+          "interactionTitle": "曲線上の点を測る",
+          "relation": "direct",
+          "confidence": "high",
+          "rationale": "指数関数上の点を動かして座標を読み、対応する逆関数側の点を曲線上で確認する。"
+        }
+      ],
+      "recommendedAction": "canonicalize-later"
+    },
+    {
+      "candidateId": "logarithm-base",
+      "subject": "math2",
+      "unit": "exponential-logarithm",
+      "title": "対数関数の底を動かす",
+      "coverageStatus": "partial",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-002",
+          "interactionTitle": "係数スライダーでグラフの形を比べる",
+          "relation": "partial",
+          "confidence": "medium",
+          "rationale": "底のスライダーとグラフの即時変化は対応するが、二次関数の係数を比べるInteractionではない。"
+        }
+      ],
+      "recommendedAction": "retain-legacy"
+    },
+    {
+      "candidateId": "exponential-equation",
+      "subject": "math2",
+      "unit": "exponential-logarithm",
+      "title": "指数・対数方程式をグラフで解く",
+      "coverageStatus": "partial",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-002",
+          "interactionTitle": "係数スライダーでグラフの形を比べる",
+          "relation": "partial",
+          "confidence": "low",
+          "rationale": "パラメータを変えて複数グラフの関係を観察する部分は対応するが、主眼は方程式の解である。"
+        }
+      ],
+      "recommendedAction": "retain-legacy"
+    },
+    {
+      "candidateId": "radian-measure",
+      "subject": "math2",
+      "unit": "trigonometric-functions",
+      "title": "弧度法を円で見る",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "trig-function-graphs",
+      "subject": "math2",
+      "unit": "trigonometric-functions",
+      "title": "sin・cos・tanのグラフ",
+      "coverageStatus": "partial",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-002",
+          "interactionTitle": "係数スライダーでグラフの形を比べる",
+          "relation": "partial",
+          "confidence": "low",
+          "rationale": "グラフを選択して形を比較するが、連続係数スライダーで一つのモデルを変える操作ではない。"
+        }
+      ],
+      "recommendedAction": "retain-legacy"
+    },
+    {
+      "candidateId": "trig-transform",
+      "subject": "math2",
+      "unit": "trigonometric-functions",
+      "title": "振幅・周期・位相を動かす",
+      "coverageStatus": "partial",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-002",
+          "interactionTitle": "係数スライダーでグラフの形を比べる",
+          "relation": "partial",
+          "confidence": "medium",
+          "rationale": "振幅・周期・位相のスライダーとグラフの変化を比べるが、二次関数の係数操作ではない。"
+        }
+      ],
+      "recommendedAction": "retain-legacy"
+    },
+    {
+      "candidateId": "trig-addition-formula",
+      "subject": "math2",
+      "unit": "trigonometric-functions",
+      "title": "加法定理を図で見る",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "double-angle",
+      "subject": "math2",
+      "unit": "trigonometric-functions",
+      "title": "2倍角を動かす",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "secant-to-tangent",
+      "subject": "math2",
+      "unit": "calculus-2",
+      "title": "割線から接線へ",
+      "coverageStatus": "partial",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-003",
+          "interactionTitle": "曲線上の点を測る",
+          "relation": "partial",
+          "confidence": "medium",
+          "rationale": "点を動かし曲線上の局所的な値を観察するが、主役は割線の極限と接線である。"
+        }
+      ],
+      "recommendedAction": "retain-legacy"
+    },
+    {
+      "candidateId": "derivative-at-point",
+      "subject": "math2",
+      "unit": "calculus-2",
+      "title": "微分係数を動かす",
+      "coverageStatus": "covered",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-003",
+          "interactionTitle": "曲線上の点を測る",
+          "relation": "direct",
+          "confidence": "high",
+          "rationale": "関数曲線上の点aを動かし、その座標と接線の変化をリアルタイムに読むことが教材の主役である。"
+        }
+      ],
+      "recommendedAction": "canonicalize-later"
+    },
+    {
+      "candidateId": "function-and-derivative",
+      "subject": "math2",
+      "unit": "calculus-2",
+      "title": "導関数と元の関数",
+      "coverageStatus": "covered",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-003",
+          "interactionTitle": "曲線上の点を測る",
+          "relation": "direct",
+          "confidence": "high",
+          "rationale": "元の関数上の点を動かし、点の位置と対応する導関数の値を同期して読む。"
+        }
+      ],
+      "recommendedAction": "canonicalize-later"
+    },
+    {
+      "candidateId": "cubic-extrema",
+      "subject": "math2",
+      "unit": "calculus-2",
+      "title": "三次関数の増減・極値",
+      "coverageStatus": "partial",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-003",
+          "interactionTitle": "曲線上の点を測る",
+          "relation": "partial",
+          "confidence": "low",
+          "rationale": "関数グラフ上の重要点の位置を観察する部分は対応するが、主眼は増減と極値である。"
+        }
+      ],
+      "recommendedAction": "retain-legacy"
+    },
+    {
+      "candidateId": "indefinite-integral",
+      "subject": "math2",
+      "unit": "calculus-2",
+      "title": "不定積分と定数C",
+      "coverageStatus": "partial",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-002",
+          "interactionTitle": "係数スライダーでグラフの形を比べる",
+          "relation": "partial",
+          "confidence": "low",
+          "rationale": "定数をスライダーで変えてグラフと式を比べるが、二次関数の係数変化を観察する教材ではない。"
+        }
+      ],
+      "recommendedAction": "retain-legacy"
+    },
+    {
+      "candidateId": "definite-integral-signed-area",
+      "subject": "math2",
+      "unit": "calculus-2",
+      "title": "定積分と符号付き面積",
+      "coverageStatus": "partial",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-003",
+          "interactionTitle": "曲線上の点を測る",
+          "relation": "partial",
+          "confidence": "low",
+          "rationale": "区間端点を動かして曲線上の値を読む部分は対応するが、主眼は符号付き面積である。"
+        }
+      ],
+      "recommendedAction": "retain-legacy"
+    },
+    {
+      "candidateId": "arithmetic-sequence",
+      "subject": "mathB",
+      "unit": "sequences",
+      "title": "等差数列を並べる",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "geometric-sequence",
+      "subject": "mathB",
+      "unit": "sequences",
+      "title": "等比数列を拡大縮小で見る",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "sequence-partial-sum",
+      "subject": "mathB",
+      "unit": "sequences",
+      "title": "数列の和を積み上げる",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "recurrence-iteration",
+      "subject": "mathB",
+      "unit": "sequences",
+      "title": "漸化式を反復する",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "cubic-expansion",
+      "subject": "math2",
+      "unit": "expressions-2",
+      "title": "三次の展開を組み立てる",
+      "coverageStatus": "partial",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-007",
+          "interactionTitle": "面積モデルの課題を選んで組み立てる",
+          "relation": "partial",
+          "confidence": "low",
+          "rationale": "式を部品から組み立てる操作は共通するが、面積モデルの視覚的課題と入力判定は含まれない。"
+        }
+      ],
+      "recommendedAction": "retain-legacy"
+    },
+    {
+      "candidateId": "polynomial-division",
+      "subject": "math2",
+      "unit": "expressions-2",
+      "title": "多項式の除法",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "rational-expression-domain",
+      "subject": "math2",
+      "unit": "expressions-2",
+      "title": "分数式の約分と定義域",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "complex-arithmetic",
+      "subject": "math2",
+      "unit": "expressions-2",
+      "title": "複素数の計算",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "roots-coefficients",
+      "subject": "math2",
+      "unit": "expressions-2",
+      "title": "解と係数の関係",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "factor-theorem",
+      "subject": "math2",
+      "unit": "expressions-2",
+      "title": "因数定理と高次方程式",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "identity-coefficients",
+      "subject": "math2",
+      "unit": "expressions-2",
+      "title": "恒等式を係数で確かめる",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "section-formula",
+      "subject": "math2",
+      "unit": "geometry-equations",
+      "title": "内分点・外分点を動かす",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "line-equation",
+      "subject": "math2",
+      "unit": "geometry-equations",
+      "title": "2点から直線を作る",
+      "coverageStatus": "partial",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-003",
+          "interactionTitle": "曲線上の点を測る",
+          "relation": "partial",
+          "confidence": "low",
+          "rationale": "二点と直線の位置を動かして座標を読むが、曲線上の測定プローブではない。"
+        }
+      ],
+      "recommendedAction": "retain-legacy"
+    },
+    {
+      "candidateId": "line-relations",
+      "subject": "math2",
+      "unit": "geometry-equations",
+      "title": "平行・垂直と点から直線までの距離",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "circle-equation",
+      "subject": "math2",
+      "unit": "geometry-equations",
+      "title": "円の方程式",
+      "coverageStatus": "partial",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-003",
+          "interactionTitle": "曲線上の点を測る",
+          "relation": "partial",
+          "confidence": "medium",
+          "rationale": "円周上の点Pを動かして座標を読む部分は曲線プローブに対応するが、主眼は円の方程式である。"
+        }
+      ],
+      "recommendedAction": "retain-legacy"
+    },
+    {
+      "candidateId": "circle-line-intersections",
+      "subject": "math2",
+      "unit": "geometry-equations",
+      "title": "円と直線の共有点",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "locus-distance-ratio",
+      "subject": "math2",
+      "unit": "geometry-equations",
+      "title": "軌跡を追いかける",
+      "coverageStatus": "partial",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-003",
+          "interactionTitle": "曲線上の点を測る",
+          "relation": "partial",
+          "confidence": "low",
+          "rationale": "軌跡上の点を追う観察は対応するが、固定された関数曲線上の座標測定とは異なる。"
+        }
+      ],
+      "recommendedAction": "retain-legacy"
+    },
+    {
+      "candidateId": "inequality-region-2d",
+      "subject": "math2",
+      "unit": "geometry-equations",
+      "title": "不等式の表す領域",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "sigma-notation",
+      "subject": "mathB",
+      "unit": "sequences",
+      "title": "Σ記号を展開する",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "difference-sequence",
+      "subject": "mathB",
+      "unit": "sequences",
+      "title": "階差数列を見る",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "mathematical-induction",
+      "subject": "mathB",
+      "unit": "sequences",
+      "title": "数学的帰納法をBUILDする",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "population-sample",
+      "subject": "mathB",
+      "unit": "statistical-inference",
+      "title": "母集団と標本",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "random-variable-distribution",
+      "subject": "mathB",
+      "unit": "statistical-inference",
+      "title": "確率変数と確率分布",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "distribution-mean-variance",
+      "subject": "mathB",
+      "unit": "statistical-inference",
+      "title": "確率分布の平均と分散",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "binomial-distribution-b",
+      "subject": "mathB",
+      "unit": "statistical-inference",
+      "title": "二項分布の形を動かす",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "normal-distribution",
+      "subject": "mathB",
+      "unit": "statistical-inference",
+      "title": "正規分布を動かす",
+      "coverageStatus": "partial",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-002",
+          "interactionTitle": "係数スライダーでグラフの形を比べる",
+          "relation": "partial",
+          "confidence": "medium",
+          "rationale": "平均と標準偏差のスライダーで曲線の形を比べるが、二次関数の係数操作ではない。"
+        }
+      ],
+      "recommendedAction": "retain-legacy"
+    },
+    {
+      "candidateId": "standard-normalization",
+      "subject": "mathB",
+      "unit": "statistical-inference",
+      "title": "標準化して重ねる",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "sampling-distribution-mean",
+      "subject": "mathB",
+      "unit": "statistical-inference",
+      "title": "標本平均の分布",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "confidence-interval",
+      "subject": "mathB",
+      "unit": "statistical-inference",
+      "title": "信頼区間を何度も作る",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "normal-hypothesis-test",
+      "subject": "mathB",
+      "unit": "statistical-inference",
+      "title": "正規分布で仮説検定",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "modeling-cycle",
+      "subject": "mathB",
+      "unit": "math-social-life",
+      "title": "現実を数学モデルにする",
+      "coverageStatus": "gap",
+      "matches": [],
+      "recommendedAction": "research-new-interaction"
+    },
+    {
+      "candidateId": "model-comparison",
+      "subject": "mathB",
+      "unit": "math-social-life",
+      "title": "モデルを比較する",
+      "coverageStatus": "partial",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-002",
+          "interactionTitle": "係数スライダーでグラフの形を比べる",
+          "relation": "partial",
+          "confidence": "low",
+          "rationale": "モデルを切り替えて曲線と誤差を比べるが、係数を連続操作するInteractionではない。"
+        }
+      ],
+      "recommendedAction": "retain-legacy"
+    },
+    {
+      "candidateId": "decision-sensitivity",
+      "subject": "mathB",
+      "unit": "math-social-life",
+      "title": "条件を変えて意思決定する",
+      "coverageStatus": "partial",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-002",
+          "interactionTitle": "係数スライダーでグラフの形を比べる",
+          "relation": "partial",
+          "confidence": "medium",
+          "rationale": "利用量スライダーとグラフの即時更新を比べるが、主眼は料金モデルの損益分岐点である。"
+        }
+      ],
+      "recommendedAction": "retain-legacy"
+    }
+  ]
+}

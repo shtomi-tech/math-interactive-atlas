@@ -55,6 +55,7 @@ repositories.forEach((repository, repositoryIndex) => {
   requireCondition(repository.license && typeof repository.license === "object" && !Array.isArray(repository.license), `${repository.repository} license is required`);
   if (!repository.license || typeof repository.license !== "object" || Array.isArray(repository.license)) return;
   requireCondition(typeof repository.license.expression === "string" && repository.license.expression.trim() !== "", `${repository.repository} license expression is required`);
+  requireCondition(!["UNKNOWN", "UNVERIFIED"].includes(repository.license.expression), `${repository.repository} license expression must be verified`);
   requireCondition(typeof repository.license.reviewed === "boolean", `${repository.repository} license reviewed must be boolean`);
   requireCondition(repository.license.reviewed === true, `${repository.repository} license must be reviewed`);
   requireCondition(typeof repository.license.reviewedAt === "string" && repository.license.reviewedAt.trim() !== "", `${repository.repository} license reviewedAt is required`);
@@ -73,6 +74,7 @@ repositories.forEach((repository, repositoryIndex) => {
     requireCondition(Array.isArray(feature.evidenceUrls) && feature.evidenceUrls.length >= 1, `${feature.id} evidenceUrls must contain at least one URL`);
     (Array.isArray(feature.evidenceUrls) ? feature.evidenceUrls : []).forEach((evidenceUrl, evidenceIndex) => {
       requireCondition(fixedBlobUrl(repository.repository, repository.ref, evidenceUrl), `${feature.id} evidence URL ${evidenceIndex} must use the fixed ref`);
+      requireCondition(!/\/blob\/(main|master)\//.test(evidenceUrl), `${feature.id} evidence URL ${evidenceIndex} must not use a branch ref`);
       const pathPart = typeof evidenceUrl === "string" ? evidenceUrl.split(`/blob/${repository.ref}/`)[1] : "";
       requireCondition((feature.paths || []).includes(pathPart), `${feature.id} evidence URL ${evidenceIndex} must point to a listed feature path`);
     });

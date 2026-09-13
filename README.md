@@ -18,7 +18,7 @@
 - 学習レポート: 教材の閲覧数、問題の習熟状態、単元ごとの状況、最近の学習を表示し、学習記録をJSONでバックアップ・置換復元する
 - Interaction Engine: `static/atlas/interactions/index.js` のRegistry経由で11エンジンを切り替える。連続量はFunctionGraph / GeometryBoard / RangeGraph、離散量はSequenceLabで表示する
 - 監査Registry: [`research/repository-audit.json`](./research/repository-audit.json) に外部Repositoryとの関係を記録する。許可するrelationは `inspired-by` / `adapted-from` のみ
-- Canonical Interaction Library: [`data/interactions.json`](./data/interactions.json) にCanonical Interaction 8件、[`research/external-repositories.json`](./research/external-repositories.json) に外部Repository 4件・Feature 8件を保存する。実行時の状態は [`data/interaction-runtime-map.json`](./data/interaction-runtime-map.json) で分離し、[`dist/ai/interactions.json`](./dist/ai/interactions.json) は3つの正本から生成する
+- Canonical Interaction Library: [`data/interactions.json`](./data/interactions.json) にCanonical Interaction 8件、[`research/external-repositories.json`](./research/external-repositories.json) に外部Repository 6件・Feature 10件を保存する。実行時の状態は [`data/interaction-runtime-map.json`](./data/interaction-runtime-map.json) で分離し、[`dist/ai/interactions.json`](./dist/ai/interactions.json) は3つの正本から生成する。89候補とのCoverageは [`data/candidate-canonical-map.json`](./data/candidate-canonical-map.json) から [`dist/ai/candidate-canonical-coverage.json`](./dist/ai/candidate-canonical-coverage.json) へ別生成する
 - 設計書: [`docs/atlas/DESIGN.md`](./docs/atlas/DESIGN.md)
 - プロジェクトゴール: [`docs/PROJECT_GOAL.md`](./docs/PROJECT_GOAL.md)
 
@@ -54,7 +54,8 @@ Repository Audit: research/repository-audit.json
 Canonical Interaction Metadata: data/interactions.json
 Canonical Interactions: data/interactions.json
 External Repositories: research/external-repositories.json
-Generated AI Index: dist/ai/interactions.json
+Candidate Canonical Map: data/candidate-canonical-map.json
+Generated AI Index: dist/ai/interactions.json / dist/ai/candidate-canonical-coverage.json
 ```
 
 ## Practice
@@ -117,6 +118,11 @@ node scripts/check-interaction-runtime-map.js
 node scripts/check-r4-scope.js
 node scripts/check-interaction-index.js
 node scripts/report-interaction-library.js
+node scripts/check-r5-scope.js
+node scripts/check-evidence-readiness.js
+node scripts/check-candidate-canonical-map.js
+node scripts/report-candidate-canonical-coverage.js
+node scripts/build-candidate-canonical-index.js --check
 ```
 
 GitHub Actionsでも、同じ契約・数学ロジック検査と対象JavaScriptの構文検査を実行します。
@@ -142,6 +148,10 @@ R2では89候補について、Git履歴・既存ドキュメント・過去のS
 ### Phase R3: Canonical Interaction Library
 
 R3の到達点は `Canonical Interaction 8 / External Repository 4 / Feature 8 / Category 6 / Runtime implemented 0` でした。R4では `MATH-INT-001〜003` を既存 `functionGraph` Engineへclean-room再実装し、`data/interaction-runtime-map.json` をRuntime状態の正本にします。既存の `Atlas 89 / Practice 0 / Interaction Engine 11 / audit needs-review 89` は変更しません。
+
+### Phase R5: Evidence Completion and Coverage Map
+
+R5では `MATH-INT-001〜003`のRuntimeを変更せず、007/008のEvidenceを固定SHA付きで補完します。外部Repositoryは6件、Featureは10件、Runtimeは `implemented 3 / planned 5 / blocked-evidence 0` とします。`data/candidate-canonical-map.json`で89候補をInteraction Behaviorに基づき `covered` / `partial` / `gap`へ分類し、Coverage gapと各Canonical Interactionの再利用数をR6のResearch優先順位へ引き渡します。R5では新規Canonical Interaction、Runtime、Engine、Practice、Legacy Candidateの監査status変更を行いません。
 
 ## URLパラメータ
 

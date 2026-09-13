@@ -23,3 +23,9 @@ Interactionの正本は [`../data/interactions.json`](../data/interactions.json)
 ## Phase R4: Canonical Runtime Pilot
 
 `data/interaction-runtime-map.json` は8件のCanonical InteractionをExactly Onceで記録します。001〜003は既存 `functionGraph` のclean-room Runtime、004〜006は `planned`、007〜008は `blocked-evidence` です。R4では新しいInteraction、Repository、Feature、Practice、Engineを追加しません。
+
+## Phase R5: Evidence Completion and Coverage
+
+R5では新しいRuntimeを追加せず、`phetsims/area-model-common` と `phetsims/fractions-common` の固定SHA付きFeature EvidenceをそれぞれREPO-005-F001 / REPO-006-F001として記録します。007/008は、既存Repositoryと新規共通Repositoryの二つのEvidenceがそろった場合だけRuntime statusを `planned` に変更します。外部コードはコピー・移植せず、relationは `inspired-by`、`adapted-from` は0件を維持します。
+
+`data/candidate-canonical-map.json` は既存89候補の歴史的監査とは別のCoverage分析です。全候補をExactly Once、`covered` / `partial` / `gap`と根拠付きmatchへ分類し、`scripts/check-candidate-canonical-map.js` と `scripts/report-candidate-canonical-coverage.js` で検証・集計します。`dist/ai/candidate-canonical-coverage.json` は `scripts/build-candidate-canonical-index.js` から生成し、既存Interaction Indexとは分離します。

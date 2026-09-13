@@ -20,7 +20,7 @@ const mappingIds = mappings.map((mapping) => mapping.interactionId);
 const expectedStatuses = new Map([
   ["MATH-INT-001", "implemented"], ["MATH-INT-002", "implemented"], ["MATH-INT-003", "implemented"],
   ["MATH-INT-004", "planned"], ["MATH-INT-005", "planned"], ["MATH-INT-006", "planned"],
-  ["MATH-INT-007", "blocked-evidence"], ["MATH-INT-008", "blocked-evidence"]
+  ["MATH-INT-007", "planned"], ["MATH-INT-008", "planned"]
 ]);
 const engines = new Set(["functionGraph", "rangeGraph", "geometryBoard", "regionSelector", "combinatoricsViewer", "dataLab", "simulationLab", "algebraLab", "numberLineLab", "algorithmLab", "sequenceLab"]);
 
@@ -44,4 +44,7 @@ mappings.forEach((mapping) => {
 });
 
 if (errors.length) { console.error("Interaction runtime map: FAILED"); errors.forEach((error) => console.error(`- ${error}`)); process.exitCode = 1; }
-else console.log("Interaction runtime map: PASS (8 mappings; implemented 3; planned 3; blocked-evidence 2; existing engines only)");
+else {
+  const counts = mappings.reduce((result, mapping) => { result[mapping.status] = (result[mapping.status] || 0) + 1; return result; }, {});
+  console.log(`Interaction runtime map: PASS (8 mappings; implemented ${counts.implemented || 0}; planned ${counts.planned || 0}; blocked-evidence ${counts["blocked-evidence"] || 0}; existing engines only)`);
+}

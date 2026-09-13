@@ -117,41 +117,47 @@
     },
     {
       "id": "MATH-INT-007",
-      "title": "面積モデルをレベルごとに組み立てる",
+      "title": "面積モデルの課題を選んで組み立てる",
       "category": "Select",
-      "description": "段階的な面積モデルの課題を選び、視覚的なレベル構成の違いを観察するInteraction。",
-      "learningGoal": "式の構造を図形の分割とレベルごとの課題として捉える。",
-      "learnerActions": ["面積モデルのレベルを選ぶ", "レベルごとの図と課題を比べる"],
-      "changes": ["選択されたゲームレベル", "レベル固有の視覚的な課題"],
-      "feedbackCapabilities": ["レベル別の図像", "段階的な課題選択", "ゲーム画面の状態"],
-      "capabilities": ["level-selection", "visual-prompt", "progressive-challenge"],
-      "learningPatterns": ["scaffold", "compare-representations", "build-from-parts"],
-      "bestFor": ["展開の面積モデル", "式の構造化", "段階的な練習"],
-      "notBestFor": ["外部由来を確認しない教材の正式実装", "長い証明の記述"],
-      "supports": ["level-control", "visual-assets", "game-flow"],
+      "description": "面積モデルのレベルを選び、課題のワークスペースで因数や合計を入力して、式の構造を図形の分割として確かめるInteraction。",
+      "learningGoal": "面積モデルの部品と入力結果を対応させ、式の構造を段階的な課題として理解する。",
+      "learnerActions": ["面積モデルのレベルを選ぶ", "課題の因数と合計を入力する", "答えを確認し、必要ならやり直す"],
+      "changes": ["選択されたゲームレベルと課題", "面積モデルの入力・判定・進行状態"],
+      "feedbackCapabilities": ["レベル別の視覚的課題", "check / try again / next / show answerの応答", "resetによる初期状態への復帰"],
+      "capabilities": ["level-selection", "interactive-area-model", "validated-input", "progressive-challenge"],
+      "learningPatterns": ["scaffold", "construct-and-check", "compare-representations", "build-from-parts"],
+      "bestFor": ["展開の面積モデル", "式の構造化", "入力と図形の対応", "段階的な練習"],
+      "notBestFor": ["外部由来を確認しない教材の正式実装", "長い証明の記述", "自由な図形作図"],
+      "supports": ["level-control", "challenge-workspace", "input-feedback", "retry-and-reset"],
       "implementationDifficulty": "medium",
       "reusability": "medium",
       "reusePolicy": "reimplement",
-      "sources": [{"featureId": "REPO-003-F001", "relation": "inspired-by", "aspect": "six-level visual game-screen configuration", "evidence": "GameScreen passes six level image properties to VariablesGameScreen, and AreaModelAlgebraQueryParameters defines the six game levels shown by the screen."}]
+      "sources": [
+        {"featureId": "REPO-003-F001", "relation": "inspired-by", "aspect": "levelled area-model game entry and progression", "evidence": "The area-model algebra game screen exposes a six-level visual challenge sequence and the query-parameter schema selects the available levels."},
+        {"featureId": "REPO-005-F001", "relation": "inspired-by", "aspect": "interactive area-model challenge workspace", "evidence": "The shared game screen, model, and view paths expose level selection, challenge transition, factor/total input, checking, retry, next, answer, and reset behavior."}
+      ]
     },
     {
       "id": "MATH-INT-008",
-      "title": "分数を構成するラボへ移る",
+      "title": "分数の部品をドラッグして構成する",
       "category": "Build",
-      "description": "導入画面から構成ラボへ移り、分数を組み立てて考えるための学習コンテキストを選ぶInteraction。",
-      "learningGoal": "分数を完成した答えだけでなく、構成して確かめる対象として扱う。",
-      "learnerActions": ["導入画面とラボ画面を切り替える", "構成ラボを開く"],
-      "changes": ["現在の学習画面", "構成モデルとビューの組み合わせ"],
-      "feedbackCapabilities": ["画面名とナビゲーション", "構成ワークスペース", "導入とラボの役割分担"],
-      "capabilities": ["screen-navigation", "construction-context", "model-view-pair"],
-      "learningPatterns": ["introduce-then-build", "context-switch", "construct-and-inspect"],
-      "bestFor": ["分数の構成", "導入から操作への移行", "表現を組み立てる学習"],
-      "notBestFor": ["分数計算の自動採点", "外部ソースのコード移植"],
-      "supports": ["screen-selection", "construction-lab", "visual-context"],
+      "description": "導入画面から分数構成ワークスペースへ移り、形と数の部品を作ってドラッグし、グループとして組み立てるInteraction。",
+      "learningGoal": "分数を完成した答えだけでなく、部品の生成・移動・グループ化によって構成して確かめる対象として扱う。",
+      "learnerActions": ["分数の形部品・数部品を作る", "部品をドラッグして配置する", "部品をグループ化し、構成をリセットする"],
+      "changes": ["構成ワークスペースに現れる部品とグループ", "部品のモデル上の位置と配置状態"],
+      "feedbackCapabilities": ["導入と構成ラボの画面表示", "作成した部品と位置の即時反映", "ドラッグ・グループ化・resetの状態反映"],
+      "capabilities": ["screen-navigation", "piece-creation", "drag-and-drop", "model-view-sync", "construction-context"],
+      "learningPatterns": ["introduce-then-build", "construct-and-inspect", "direct-manipulation", "reversible-arrangement"],
+      "bestFor": ["分数の構成", "部品と全体の対応", "表現を組み立てる学習", "配置変化の観察"],
+      "notBestFor": ["分数計算の自動採点", "外部ソースのコード移植", "長い証明の記述"],
+      "supports": ["screen-selection", "construction-lab", "piece-feedback", "resettable-model"],
       "implementationDifficulty": "low",
       "reusability": "medium",
       "reusePolicy": "reimplement",
-      "sources": [{"featureId": "REPO-004-F001", "relation": "inspired-by", "aspect": "separate introduction and construction-lab screens", "evidence": "LabScreen mounts BuildingLabModel with BuildingLabScreenView, while IntroScreen mounts IntroModel with IntroScreenView."}]
+      "sources": [
+        {"featureId": "REPO-004-F001", "relation": "inspired-by", "aspect": "separate introduction and construction-lab screens", "evidence": "The intro and lab screen paths distinguish the introductory visual context from the construction-lab context backed by a building model and screen view."},
+        {"featureId": "REPO-006-F001", "relation": "inspired-by", "aspect": "draggable fraction construction pieces", "evidence": "The building-lab model and view paths connect shape/number panels to piece creation, model position updates, drag listeners, grouping, and reset behavior."}
+      ]
     }
   ]
 }

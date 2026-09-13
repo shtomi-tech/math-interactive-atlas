@@ -31,6 +31,11 @@ jobs:
           node scripts/check-r4-scope.js
           node scripts/check-interaction-runtime-map.js
           node scripts/check-canonical-runtime-math.js
+          node scripts/check-r5-scope.js
+          node scripts/check-evidence-readiness.js
+          node scripts/check-candidate-canonical-map.js
+          node scripts/report-candidate-canonical-coverage.js
+          node scripts/build-candidate-canonical-index.js --check
           node scripts/check-set-regions.js
           node scripts/check-set-relations.js
           node scripts/check-event-regions.js

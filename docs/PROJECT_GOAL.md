@@ -758,6 +758,14 @@ R3完了時も、Atlas 89教材、Practice 0問、Interaction Engine 11種、数
 
 R4ではCanonical Interactionを既存Engineへ接続する最小Pilotを実施する。`MATH-INT-001〜003`だけを `functionGraph` 上へclean-roomで再実装し、`MATH-INT-004〜006`は `planned`、`MATH-INT-007〜008`は `blocked-evidence` として、8件すべてを `data/interaction-runtime-map.json` にExactly Onceで記録する。Canonical定義は `data/interactions.json`、実装状態はRuntime map、AI検索用出力は3つの正本から生成する。新規Canonical Interaction、Practice、Engine、Legacy Candidateとの自動mappingはR4では追加しない。
 
+## Phase R5: Evidence Completion and Legacy-to-Canonical Coverage Map
+
+R5ではRuntime実装を増やさない。`MATH-INT-007` と `MATH-INT-008`について、実際のInteraction本体まで追跡できる固定SHA付きFeature Evidenceを追加し、Runtime statusを `blocked-evidence` から `planned` へ更新する。`phetsims/area-model-common`（GPL-3.0）と `phetsims/fractions-common`（MIT）のコードはコピー・移植せず、Research Metadataだけを記録する。
+
+同時に、`data/candidate-canonical-map.json`で既存89 Legacy CandidateをExactly Once分類する。数学単元の一致ではなくInteraction Behaviorを基準に、`covered` / `partial` / `gap`、matchの`direct` / `partial` / `supporting`、確信度、推奨アクションを記録し、`dist/ai/candidate-canonical-coverage.json`へ生成する。候補監査 `0 / 89 / 0`、Canonical 8、Runtime Engine 11、Practice 0は維持する。
+
+R5の完了条件は、External Repository 6、Feature 10、Runtime `implemented 3 / planned 5 / blocked-evidence 0`、89件のCoverage分類、Evidence Readiness、Coverage集計、既存Runtimeと89教材の回帰がすべて機械検証できることである。Coverage gapから新しいInteractionを追加する判断はR6へ送る。
+
 ## 最重要ルール
 
 > **外部公開Repositoryで確認できないInteractionを、独自に作成してAtlasへ追加してはいけない。**

@@ -1,6 +1,6 @@
-# Math Interactive Atlas R4 Checklist
+# Math Interactive Atlas R5 Checklist
 
-Phase R4では、R3の89候補監査とCanonical Interaction Libraryを維持したまま、001〜003を既存 `functionGraph` Engineへclean-roomでRuntime化する。根拠がない候補は `needs-review` として残し、`verified` と偽装しない。
+Phase R5では、R4のRuntime Pilotと89候補監査を維持したまま、007/008のEvidenceを補完し、89候補とCanonical InteractionのCoverageを分類する。Runtime実装は増やさず、根拠がない候補は `needs-review` として残し、`verified` と偽装しない。
 
 ## Current scope
 
@@ -11,7 +11,7 @@ Phase R4では、R3の89候補監査とCanonical Interaction Libraryを維持し
 - [ ] `research/repository-audit.json` は89候補を保持し、`verified 0 / needs-review 89 / pending 0` である
 - [ ] 監査Registryは候補監査キューであり、Interaction metadataの正規ID Registryとは分離されている
 - [ ] Contentの描画情報は `rendering.library`、Repository由来情報は監査Registryだけにある
-- [ ] Canonical Interaction 8件以上、外部Repository 3件以上、Category 4種以上
+- [ ] Canonical Interaction 8件、外部Repository 6件、Feature 10件、Category 4種以上
 - [ ] R3の正本は `data/interactions.json` と `research/external-repositories.json`で、`dist/ai/interactions.json`は生成物である
 - [ ] Canonical Interactionは `contentId` に依存せず、Runtime状態を別のmappingで管理する
 
@@ -72,6 +72,16 @@ Pagesの公開検証はローカル検証とは別に扱う。Repositoryの公�
 - [ ] `interactions.html` が8件を表示し、001〜003だけDemoをmountする
 - [ ] `data/interactions.json`にRuntime状態を重複保持しない
 - [ ] 旧 `static/atlas/interaction-metadata.json`をCanonical Sourceとして参照しない
+
+## R5 gates
+
+- [ ] Runtime mapping 8件、implemented 3件、planned 5件、blocked-evidence 0件
+- [ ] REPO-005 / REPO-006の固定SHA、License、Feature Evidenceを確認する
+- [ ] `MATH-INT-007` / `MATH-INT-008`が二つのRepository Featureを参照する
+- [ ] `data/candidate-canonical-map.json`が89候補をExactly Onceで分類する
+- [ ] `covered` / `partial` / `gap`の機械的整合性とrationaleを検査する
+- [ ] `dist/ai/candidate-canonical-coverage.json`をBuild Scriptから生成する
+- [ ] Coverage gapを新規Canonical InteractionやRuntimeへ自動昇格させない
 
 ## Forbidden in R4
 

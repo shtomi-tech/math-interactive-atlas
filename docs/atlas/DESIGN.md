@@ -206,6 +206,12 @@ R3ではRuntimeを凍結する。既存89教材、11 Engine、Practice 0問、�
 
 R4ではCanonical InteractionとRuntime実装状態を分離し、`MATH-INT-001〜003`だけを既存の `functionGraph` Engine上へclean-roomで再実装する。`MATH-INT-004〜006`は `planned`、`MATH-INT-007〜008`は `blocked-evidence` とし、8件すべてを `data/interaction-runtime-map.json` に一度ずつ登録する。新規Engine、Practice、Canonical Interaction、Legacy Candidateとのmappingは追加しない。
 
+### Phase R5: Evidence and Coverage
+
+R5では `data/interaction-runtime-map.json` の001〜003の実装を変更せず、007/008の固定SHA付き外部Feature Evidenceだけを補完する。`data/interactions.json` の007/008はEvidenceに沿って二つのRepository Featureを参照し、Runtime状態は `planned` とする。GPL-3.0を含む外部コードはAtlasへコピー・移植しない。
+
+既存89候補とCanonical Interactionの関係は `data/candidate-canonical-map.json` で分離して管理する。これはCandidate AuditではなくCoverage分析であり、候補IDをExactly Once、`covered` / `partial` / `gap`と根拠付きmatchで記録する。生成済みの `dist/ai/candidate-canonical-coverage.json` は専用Build Scriptからのみ作成し、既存の3-source Interaction Indexとは混ぜない。
+
 ### AI Retrieval Foundation
 
 将来的な教材生成は `Math Reference → Learning Requirements → Interaction検索 → Example再利用 → 不足Data生成 → Validator → Lesson構成` の順で行う。Atlasは数学知識そのものを置き換えず、「どう学ばせるか」を検索可能なInteraction Libraryとして提供する。

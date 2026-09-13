@@ -278,6 +278,100 @@
           "reviewedAt": "2026-09-13"
         }
       ]
+    },
+    {
+      "id": "REPO-005",
+      "repository": "phetsims/area-model-common",
+      "url": "https://github.com/phetsims/area-model-common",
+      "ref": "008821614c76deefef7f5cc87f40f8eb007f320f",
+      "license": {
+        "expression": "GPL-3.0",
+        "url": "https://github.com/phetsims/area-model-common/blob/008821614c76deefef7f5cc87f40f8eb007f320f/LICENSE",
+        "reviewed": true,
+        "reviewedAt": "2026-09-13"
+      },
+      "features": [
+        {
+          "id": "REPO-005-F001",
+          "title": "Interactive area-model challenge workspace",
+          "paths": [
+            "js/screens/VariablesGameScreen.js",
+            "js/game/view/GameAreaScreenView.js",
+            "js/game/model/VariablesGameAreaModel.js",
+            "js/game/view/GameAreaDisplayNode.js"
+          ],
+          "evidenceUrls": [
+            "https://github.com/phetsims/area-model-common/blob/008821614c76deefef7f5cc87f40f8eb007f320f/js/screens/VariablesGameScreen.js",
+            "https://github.com/phetsims/area-model-common/blob/008821614c76deefef7f5cc87f40f8eb007f320f/js/game/view/GameAreaScreenView.js",
+            "https://github.com/phetsims/area-model-common/blob/008821614c76deefef7f5cc87f40f8eb007f320f/js/game/model/VariablesGameAreaModel.js",
+            "https://github.com/phetsims/area-model-common/blob/008821614c76deefef7f5cc87f40f8eb007f320f/js/game/view/GameAreaDisplayNode.js"
+          ],
+          "demoUrl": null,
+          "behaviorSummary": "The shared game screen selects a level and transitions into an interactive area-model challenge. The model and view expose the workspace where factor and total inputs are checked, with retry, next, answer, and reset feedback tied to the current challenge state.",
+          "learnerActions": [
+            "Select a level and enter its challenge",
+            "Edit factor and total inputs",
+            "Check, try again, continue, show the answer, or reset the challenge"
+          ],
+          "changes": [
+            "The selected level and active challenge change",
+            "The area-model input and challenge state update"
+          ],
+          "feedback": [
+            "The workspace displays the current visual challenge",
+            "Check, retry, next, answer, and reset controls respond to the model state"
+          ],
+          "reviewedAt": "2026-09-13"
+        }
+      ]
+    },
+    {
+      "id": "REPO-006",
+      "repository": "phetsims/fractions-common",
+      "url": "https://github.com/phetsims/fractions-common",
+      "ref": "0ef02769ab934e1af7c1e39b3d9232be39b4c081",
+      "license": {
+        "expression": "MIT",
+        "url": "https://github.com/phetsims/fractions-common/blob/0ef02769ab934e1af7c1e39b3d9232be39b4c081/LICENSE",
+        "reviewed": true,
+        "reviewedAt": "2026-09-13"
+      },
+      "features": [
+        {
+          "id": "REPO-006-F001",
+          "title": "Draggable fraction construction lab",
+          "paths": [
+            "js/lab/model/BuildingLabModel.js",
+            "js/lab/view/BuildingLabScreenView.js",
+            "js/lab/view/BuildingLabLayerNode.js",
+            "js/lab/view/LabShapePanel.js",
+            "js/lab/view/LabNumberPanel.js"
+          ],
+          "evidenceUrls": [
+            "https://github.com/phetsims/fractions-common/blob/0ef02769ab934e1af7c1e39b3d9232be39b4c081/js/lab/model/BuildingLabModel.js",
+            "https://github.com/phetsims/fractions-common/blob/0ef02769ab934e1af7c1e39b3d9232be39b4c081/js/lab/view/BuildingLabScreenView.js",
+            "https://github.com/phetsims/fractions-common/blob/0ef02769ab934e1af7c1e39b3d9232be39b4c081/js/lab/view/BuildingLabLayerNode.js",
+            "https://github.com/phetsims/fractions-common/blob/0ef02769ab934e1af7c1e39b3d9232be39b4c081/js/lab/view/LabShapePanel.js",
+            "https://github.com/phetsims/fractions-common/blob/0ef02769ab934e1af7c1e39b3d9232be39b4c081/js/lab/view/LabNumberPanel.js"
+          ],
+          "demoUrl": null,
+          "behaviorSummary": "The building-lab model and screen connect shape and number panels to fraction pieces in a construction workspace. Panel actions create pieces, position updates keep them in the model, and drag listeners allow pieces to be manipulated and grouped before a reset.",
+          "learnerActions": [
+            "Create a shape piece or number piece from a panel",
+            "Drag pieces and form groups in the construction workspace",
+            "Reset the constructed fraction arrangement"
+          ],
+          "changes": [
+            "New fraction pieces and groups are added to the model",
+            "Piece positions update as they are moved"
+          ],
+          "feedback": [
+            "The workspace shows each created piece and its position",
+            "Drag and grouping state is reflected in the construction view"
+          ],
+          "reviewedAt": "2026-09-13"
+        }
+      ]
     }
   ]
 }
