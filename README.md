@@ -55,7 +55,7 @@ Canonical Interaction Metadata: data/interactions.json
 Canonical Interactions: data/interactions.json
 External Repositories: research/external-repositories.json
 Candidate Canonical Map: data/candidate-canonical-map.json
-Generated AI Index: dist/ai/interactions.json / dist/ai/candidate-canonical-coverage.json
+Generated AI Index: dist/ai/interactions.json / dist/ai/candidate-canonical-coverage.json / dist/ai/canonical-research-priorities.json
 ```
 
 ## Practice
@@ -123,6 +123,12 @@ node scripts/check-evidence-readiness.js
 node scripts/check-candidate-canonical-map.js
 node scripts/report-candidate-canonical-coverage.js
 node scripts/build-candidate-canonical-index.js --check
+node scripts/check-gap-behavior-analysis.js
+node scripts/check-canonical-interaction-candidates.js
+node scripts/check-canonical-candidate-repository-leads.js
+node scripts/report-r6-research-priorities.js
+node scripts/build-canonical-research-index.js --check
+node scripts/check-r6-scope.js
 ```
 
 GitHub Actionsでも、同じ契約・数学ロジック検査と対象JavaScriptの構文検査を実行します。
@@ -152,6 +158,10 @@ R3の到達点は `Canonical Interaction 8 / External Repository 4 / Feature 8 /
 ### Phase R5: Evidence Completion and Coverage Map
 
 R5では `MATH-INT-001〜003`のRuntimeを変更せず、007/008のEvidenceを固定SHA付きで補完します。外部Repositoryは6件、Featureは10件、Runtimeは `implemented 3 / planned 5 / blocked-evidence 0` とします。`data/candidate-canonical-map.json`で89候補をInteraction Behaviorに基づき `covered` / `partial` / `gap`へ分類し、Coverage gapと各Canonical Interactionの再利用数をR6のResearch優先順位へ引き渡します。R5では新規Canonical Interaction、Runtime、Engine、Practice、Legacy Candidateの監査status変更を行いません。
+
+### Phase R6: Gap Behavior Research and Candidate Priorities
+
+R6では、Coverage gap 56件をBehavior Signatureと8つの研究Clusterへ整理し、8件の `CAN-CAND-###` 候補と4件のShortlistを作成します。外部Repositoryは既存の稼働Registryへ追加せず、固定SHA付きResearch Leadとしてだけ記録します。生成されたResearch Indexはgap-onlyのSubject / Unit集計、候補のPrimary Gap影響、Partial二次機会、Engine適合、Evidence、Priorityを示します。稼働中のCanonical 8件、Runtime、Engine、Practice、89教材は変更しません。
 
 ## URLパラメータ
 

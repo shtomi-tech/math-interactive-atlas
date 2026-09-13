@@ -1,0 +1,72 @@
+{
+  "version": 1,
+  "baseline": {
+    "commit": "a129d96b2ede407a0a389631ae8c178b64e980f3"
+  },
+  "leads": [
+    {
+      "leadId": "LEAD-001",
+      "proposalId": "CAN-CAND-001",
+      "repository": {"owner": "phetsims", "name": "graphing-quadratics", "rootUrl": "https://github.com/phetsims/graphing-quadratics"},
+      "visibility": "public",
+      "ref": "709b383759e887b6e2edb040bfbb987dc3632e05",
+      "license": {"expression": "MIT", "url": "https://github.com/phetsims/graphing-quadratics/blob/709b383759e887b6e2edb040bfbb987dc3632e05/LICENSE", "reviewed": true, "reviewedAt": "2026-09-13"},
+      "featurePaths": ["js/vertexform/model/VertexFormModel.ts", "js/vertexform/view/VertexFormGraphNode.ts"],
+      "evidenceUrls": ["https://github.com/phetsims/graphing-quadratics/blob/709b383759e887b6e2edb040bfbb987dc3632e05/js/vertexform/model/VertexFormModel.ts", "https://github.com/phetsims/graphing-quadratics/blob/709b383759e887b6e2edb040bfbb987dc3632e05/js/vertexform/view/VertexFormGraphNode.ts"],
+      "verification": {"repositoryPublic": true, "commitExists": true, "sourcePathsExist": true, "licenseFileExists": true},
+      "observedBehavior": "係数a・h・kを範囲付きPropertyとして操作し、導出した二次曲線とグラフ表示を同期する。制約付き数値操作と派生状態の即時更新が、図形測定候補の状態設計を考える参照になる。",
+      "relationCandidate": "inspired-by",
+      "qualification": "qualified",
+      "implementationBoundary": "behavioral-reference-only",
+      "notes": "固定commit、公開リポジトリ、LICENSE、モデルとグラフ表示のsource pathをGitHub上で確認済み。実装やコード移植は行わない。"
+    },
+    {
+      "leadId": "LEAD-002",
+      "proposalId": "CAN-CAND-002",
+      "repository": {"owner": "phetsims", "name": "plinko-probability", "rootUrl": "https://github.com/phetsims/plinko-probability"},
+      "visibility": "public",
+      "ref": "cd0d20a973262507b6106d42077006d964f50d90",
+      "license": {"expression": "GPL-3.0", "url": "https://github.com/phetsims/plinko-probability/blob/cd0d20a973262507b6106d42077006d964f50d90/LICENSE", "reviewed": true, "reviewedAt": "2026-09-13"},
+      "featurePaths": ["js/lab/model/LabModel.js", "js/lab/view/LabScreenView.js", "js/lab/view/StatisticsAccordionBox.js"],
+      "evidenceUrls": ["https://github.com/phetsims/plinko-probability/blob/cd0d20a973262507b6106d42077006d964f50d90/js/lab/model/LabModel.js", "https://github.com/phetsims/plinko-probability/blob/cd0d20a973262507b6106d42077006d964f50d90/js/lab/view/LabScreenView.js", "https://github.com/phetsims/plinko-probability/blob/cd0d20a973262507b6106d42077006d964f50d90/js/lab/view/StatisticsAccordionBox.js"],
+      "verification": {"repositoryPublic": true, "commitExists": true, "sourcePathsExist": true, "licenseFileExists": true},
+      "observedBehavior": "反復するボール試行をモデルで蓄積し、ビンの度数・二項分布の理論値・平均・標準偏差をLab画面と統計表示へ反映する。反復結果と理論値を同時に扱うsimulation設計の参照になる。",
+      "relationCandidate": "inspired-by",
+      "qualification": "qualified",
+      "implementationBoundary": "behavioral-reference-only",
+      "notes": "GPL-3.0は研究上の挙動参照に限定する。固定commit、LICENSE、モデル・画面・統計表示のsource pathをGitHub上で確認済みで、コードは取り込まない。"
+    },
+    {
+      "leadId": "LEAD-003",
+      "proposalId": "CAN-CAND-003",
+      "repository": {"owner": "phetsims", "name": "area-model-algebra", "rootUrl": "https://github.com/phetsims/area-model-algebra"},
+      "visibility": "public",
+      "ref": "8d5250d30bf1ad952b21ee48a9f1b52749044a0b",
+      "license": {"expression": "GPL-3.0", "url": "https://github.com/phetsims/area-model-algebra/blob/8d5250d30bf1ad952b21ee48a9f1b52749044a0b/LICENSE", "reviewed": true, "reviewedAt": "2026-09-13"},
+      "featurePaths": ["js/game/GameScreen.js", "js/areaModelAlgebra.js"],
+      "evidenceUrls": ["https://github.com/phetsims/area-model-algebra/blob/8d5250d30bf1ad952b21ee48a9f1b52749044a0b/js/game/GameScreen.js", "https://github.com/phetsims/area-model-algebra/blob/8d5250d30bf1ad952b21ee48a9f1b52749044a0b/js/areaModelAlgebra.js"],
+      "verification": {"repositoryPublic": true, "commitExists": true, "sourcePathsExist": true, "licenseFileExists": true},
+      "observedBehavior": "代数のゲーム画面を共通VariablesGameScreenへ接続し、レベルごとの課題と面積モデルの構成を画面フローへ組み込む。記号部品・段階的課題・判定を分離する設計の参照になる。",
+      "relationCandidate": "inspired-by",
+      "qualification": "qualified",
+      "implementationBoundary": "behavioral-reference-only",
+      "notes": "GPL-3.0は研究上の挙動参照に限定する。固定commit、LICENSE、ゲーム画面とエントリポイントのsource pathをGitHub上で確認済みで、共通実装の移植は行わない。"
+    },
+    {
+      "leadId": "LEAD-004",
+      "proposalId": "CAN-CAND-004",
+      "repository": {"owner": "ncg777", "name": "integer-recurrence-explorer", "rootUrl": "https://github.com/ncg777/integer-recurrence-explorer"},
+      "visibility": "public",
+      "ref": "1b18c8c75770a88518e39805c8fb673f140c896e",
+      "license": {"expression": "MIT", "url": "https://github.com/ncg777/integer-recurrence-explorer/blob/1b18c8c75770a88518e39805c8fb673f140c896e/LICENSE", "reviewed": true, "reviewedAt": "2026-09-13"},
+      "featurePaths": ["src/app/components/sequence-viewer/sequence-viewer.component.ts", "src/app/services/recurrence.service.ts"],
+      "evidenceUrls": ["https://github.com/ncg777/integer-recurrence-explorer/blob/1b18c8c75770a88518e39805c8fb673f140c896e/src/app/components/sequence-viewer/sequence-viewer.component.ts", "https://github.com/ncg777/integer-recurrence-explorer/blob/1b18c8c75770a88518e39805c8fb673f140c896e/src/app/services/recurrence.service.ts"],
+      "verification": {"repositoryPublic": true, "commitExists": true, "sourcePathsExist": true, "licenseFileExists": true},
+      "observedBehavior": "初期条件と漸化規則から次項を反復生成し、sequence Observableへ結果を流す。表示コンポーネントと生成サービスを分けた離散状態更新の参照になる。",
+      "relationCandidate": "inspired-by",
+      "qualification": "qualified",
+      "implementationBoundary": "behavioral-reference-only",
+      "notes": "固定commit、公開リポジトリ、MIT LICENSE、sequence viewerとrecurrence serviceのsource pathをGitHub上で確認済み。コードや依存関係は取り込まない。"
+    }
+  ]
+}

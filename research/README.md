@@ -29,3 +29,11 @@ Interactionの正本は [`../data/interactions.json`](../data/interactions.json)
 R5では新しいRuntimeを追加せず、`phetsims/area-model-common` と `phetsims/fractions-common` の固定SHA付きFeature EvidenceをそれぞれREPO-005-F001 / REPO-006-F001として記録します。007/008は、既存Repositoryと新規共通Repositoryの二つのEvidenceがそろった場合だけRuntime statusを `planned` に変更します。外部コードはコピー・移植せず、relationは `inspired-by`、`adapted-from` は0件を維持します。
 
 `data/candidate-canonical-map.json` は既存89候補の歴史的監査とは別のCoverage分析です。全候補をExactly Once、`covered` / `partial` / `gap`と根拠付きmatchへ分類し、`scripts/check-candidate-canonical-map.js` と `scripts/report-candidate-canonical-coverage.js` で検証・集計します。`dist/ai/candidate-canonical-coverage.json` は `scripts/build-candidate-canonical-index.js` から生成し、既存Interaction Indexとは分離します。
+
+## Phase R6: Gap behavior research
+
+R6では、R5のCoverage `gap 56` だけを調査対象にします。 [`gap-behavior-analysis.json`](./gap-behavior-analysis.json) は各gapの学習者操作、操作対象、状態変化、フィードバック、制約、gap理由、既存Engine適合仮説をBehavior Clusterへ整理します。Covered 9件とPartial 24件はPrimary Gapへ混ぜません。
+
+[`canonical-interaction-candidates.json`](./canonical-interaction-candidates.json) は `CAN-CAND-###` 形式の研究候補です。Shortlistは3〜5件に制限し、候補は `research-only` のまま、`MATH-INT-###`、Runtime、教材、Practiceへ自動昇格させません。Priorityの根拠、Primary Gap、Secondary Partial、Engine適合、Evidence状態を候補ごとに記録します。
+
+[`canonical-candidate-repository-leads.json`](./canonical-candidate-repository-leads.json) は候補の挙動を考えるためのResearch Leadです。Qualified leadは公開Repository、固定40文字SHA、SHA付きsource path、LICENSE、License確認日、観察した挙動を持ちます。GPL / AGPLを含む場合も `behavioral-reference-only` に限定し、コードのコピー・移植や `adapted-from` は行いません。R6の生成Indexは [`../dist/ai/canonical-research-priorities.json`](../dist/ai/canonical-research-priorities.json) です。

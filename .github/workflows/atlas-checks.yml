@@ -36,6 +36,12 @@ jobs:
           node scripts/check-candidate-canonical-map.js
           node scripts/report-candidate-canonical-coverage.js
           node scripts/build-candidate-canonical-index.js --check
+          node scripts/check-gap-behavior-analysis.js
+          node scripts/check-canonical-interaction-candidates.js
+          node scripts/check-canonical-candidate-repository-leads.js
+          node scripts/report-r6-research-priorities.js
+          node scripts/build-canonical-research-index.js --check
+          node scripts/check-r6-scope.js
           node scripts/check-set-regions.js
           node scripts/check-set-relations.js
           node scripts/check-event-regions.js

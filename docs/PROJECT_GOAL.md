@@ -766,6 +766,16 @@ R5ではRuntime実装を増やさない。`MATH-INT-007` と `MATH-INT-008`に�
 
 R5の完了条件は、External Repository 6、Feature 10、Runtime `implemented 3 / planned 5 / blocked-evidence 0`、89件のCoverage分類、Evidence Readiness、Coverage集計、既存Runtimeと89教材の回帰がすべて機械検証できることである。Coverage gapから新しいInteractionを追加する判断はR6へ送る。
 
+## Phase R6: Gap Behavior Research and Canonical Candidate Prioritization
+
+R6では、R5の `gap 56` をすぐにRuntimeや新規教材へ昇格させず、学習者の操作、操作対象、状態変化、フィードバック、制約からBehavior Signatureへ整理する。Signatureは重複・漏れなくBehavior Clusterへまとめ、既存11 Engineへの適合仮説と分割リスクを記録する。
+
+研究用候補は `research/canonical-interaction-candidates.json`、外部Repositoryの調査先は `research/canonical-candidate-repository-leads.json` に分離する。候補IDは `CAN-CAND-###` とし、`MATH-INT-###` を新規発行しない。候補は `research-only` とし、R6では教材・Runtime・Engine・Practice・既存Repository Registryを変更しない。外部コードはコピー・移植せず、Repositoryの挙動参照だけを固定SHA・License・Feature Path付きで記録する。
+
+R6の生成物 [`dist/ai/canonical-research-priorities.json`](../dist/ai/canonical-research-priorities.json) は、56件のgapだけを母数とするSubject / Unit / Cluster集計、候補ごとのPrimary Gap影響、Partialの二次機会、Engine適合、Evidence、優先度、Repository Evidenceを保持する。`covered` と `partial` はPrimary Gapへ混入させず、Shortlistは3〜5件、Evidenceと優先度の根拠を明示する。
+
+R6完了時も、Atlas 89教材、Practice 0問、Canonical 8件、External Repository 6件 / Feature 10件、Runtime `implemented 3 / planned 5 / blocked-evidence 0`、Coverage `covered 9 / partial 24 / gap 56`、Interaction Engine 11種を固定する。次のR7では、R6の候補・証拠・優先度をレビューし、必要な候補だけを `MATH-INT-009` 以降へ昇格する。
+
 ## 最重要ルール
 
 > **外部公開Repositoryで確認できないInteractionを、独自に作成してAtlasへ追加してはいけない。**

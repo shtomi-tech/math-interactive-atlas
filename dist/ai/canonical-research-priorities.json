@@ -1,0 +1,1113 @@
+{
+  "version": 1,
+  "baseline": {
+    "commit": "a129d96b2ede407a0a389631ae8c178b64e980f3",
+    "coverage": {
+      "covered": 9,
+      "partial": 24,
+      "gap": 56
+    }
+  },
+  "gapSummary": {
+    "total": 56,
+    "bySubject": {
+      "math1 (数学I)": 17,
+      "mathA (数学A)": 9,
+      "math2 (数学Ⅱ)": 14,
+      "mathB (数学B)": 16
+    },
+    "byUnit": {
+      "math1/algebra (数と式)": 6,
+      "mathA/probability (場合の数と確率)": 4,
+      "math1/statistics (データの分析)": 5,
+      "math1/trigonometry (図形と計量)": 6,
+      "mathA/geometry-a (図形の性質)": 4,
+      "mathA/human-activity (数学と人間の活動)": 1,
+      "math2/exponential-logarithm (指数関数・対数関数)": 1,
+      "math2/trigonometric-functions (三角関数)": 3,
+      "mathB/sequences (数列)": 7,
+      "math2/expressions-2 (いろいろな式)": 6,
+      "math2/geometry-equations (図形と方程式)": 4,
+      "mathB/statistical-inference (統計的な推測)": 8,
+      "mathB/math-social-life (数学と社会生活)": 1
+    },
+    "byBehaviorCluster": {
+      "GAP-CL-005": 7,
+      "GAP-CL-006": 4,
+      "GAP-CL-002": 10,
+      "GAP-CL-001": 16,
+      "GAP-CL-003": 8,
+      "GAP-CL-007": 3,
+      "GAP-CL-004": 7,
+      "GAP-CL-008": 1
+    }
+  },
+  "clusters": [
+    {
+      "id": "GAP-CL-001",
+      "title": "Geometry / constrained measurement",
+      "memberCandidateIds": [
+        "unit-circle",
+        "triangle-area-sine",
+        "sine-law-circumcircle",
+        "cosine-law",
+        "triangle-centers",
+        "angle-bisector-ratio",
+        "inscribed-angle",
+        "power-of-point",
+        "right-triangle-trig",
+        "trig-relations",
+        "radian-measure",
+        "trig-addition-formula",
+        "double-angle",
+        "section-formula",
+        "line-relations",
+        "circle-line-intersections"
+      ],
+      "behaviorInvariant": "図形上の対象を直接操作し、幾何制約を保ったまま長さ・角度・比または式を観察する。",
+      "splitRisk": "medium",
+      "notes": "三角比、円、座標幾何を一括採用せず、制約と測定対象の違いは次段階で分割検討する。"
+    },
+    {
+      "id": "GAP-CL-002",
+      "title": "Distribution / sampling / inference",
+      "memberCandidateIds": [
+        "hypothesis-test-coin",
+        "independent-trials",
+        "population-sample",
+        "random-variable-distribution",
+        "distribution-mean-variance",
+        "binomial-distribution-b",
+        "standard-normalization",
+        "sampling-distribution-mean",
+        "confidence-interval",
+        "normal-hypothesis-test"
+      ],
+      "behaviorInvariant": "確率または標本を操作・反復し、分布・統計量・推測結果を即時に比較する。",
+      "splitRisk": "high",
+      "notes": "データ分布の操作、乱数simulation、検定判定は挙動が異なるため、P0候補化前に分割する可能性が高い。"
+    },
+    {
+      "id": "GAP-CL-003",
+      "title": "Symbolic / algorithmic transformation",
+      "memberCandidateIds": [
+        "factorization-reverse",
+        "euclidean-algorithm",
+        "polynomial-division",
+        "rational-expression-domain",
+        "complex-arithmetic",
+        "roots-coefficients",
+        "factor-theorem",
+        "identity-coefficients"
+      ],
+      "behaviorInvariant": "記号・数値の部品またはアルゴリズムの状態を段階的に変換し、中間結果と条件を観察する。",
+      "splitRisk": "high",
+      "notes": "記号変形と逐次アルゴリズムは別Interactionになる可能性があり、同じAlgebraLab適合性だけで統合しない。"
+    },
+    {
+      "id": "GAP-CL-004",
+      "title": "Sequence / iteration",
+      "memberCandidateIds": [
+        "arithmetic-sequence",
+        "geometric-sequence",
+        "sequence-partial-sum",
+        "recurrence-iteration",
+        "sigma-notation",
+        "difference-sequence",
+        "mathematical-induction"
+      ],
+      "behaviorInvariant": "離散的な項または証明段階を順序に沿って生成・比較し、前段階からの変化を観察する。",
+      "splitRisk": "high",
+      "notes": "数列生成と証明構成は対象が異なるため、Behavior coherenceを再確認する。"
+    },
+    {
+      "id": "GAP-CL-005",
+      "title": "Region / partition / selection",
+      "memberCandidateIds": [
+        "set-regions",
+        "necessary-sufficient",
+        "event-regions",
+        "conditional-probability",
+        "sample-space-grid",
+        "inequality-numberline",
+        "inequality-region-2d"
+      ],
+      "behaviorInvariant": "領域またはセルを選択・塗り分けし、条件・包含・確率・判定結果を可視化する。",
+      "splitRisk": "high",
+      "notes": "集合・確率・1次元数直線・2次元不等式は同じ選択語でも対象状態が異なる。"
+    },
+    {
+      "id": "GAP-CL-006",
+      "title": "Data summary manipulation",
+      "memberCandidateIds": [
+        "mean-median-outlier",
+        "variance-distance",
+        "boxplot-drag",
+        "correlation-builder"
+      ],
+      "behaviorInvariant": "データ点または分布の要約を操作し、代表値・ばらつき・関係の変化を観察する。",
+      "splitRisk": "medium",
+      "notes": "データ点の直接操作と統計量のパラメータ操作を分ける可能性がある。"
+    },
+    {
+      "id": "GAP-CL-007",
+      "title": "Number-line relation / transformation",
+      "memberCandidateIds": [
+        "sqrt-numberline",
+        "absolute-distance",
+        "exponent-extension"
+      ],
+      "behaviorInvariant": "数直線上の位置を操作し、数値・距離・変換後の値との対応を観察する。",
+      "splitRisk": "medium",
+      "notes": "位置と距離の測定、入力から関数値への変換を同じ候補へまとめるか再評価する。"
+    },
+    {
+      "id": "GAP-CL-008",
+      "title": "Modeling workflow",
+      "memberCandidateIds": [
+        "modeling-cycle"
+      ],
+      "behaviorInvariant": "現実の状況を仮定・変数・モデル・計算・評価の順に変換し、各段階の意味を確認する。",
+      "splitRisk": "high",
+      "notes": "単独候補のため、R6ではClusterのまま保持しR7への昇格を急がない。"
+    }
+  ],
+  "candidates": [
+    {
+      "proposalId": "CAN-CAND-001",
+      "sourceClusterIds": [
+        "GAP-CL-001"
+      ],
+      "title": "Geometry constraint and measurement workspace",
+      "categoryCandidate": "Measure",
+      "behaviorDefinition": "図形上の点・線・角を制約付きで動かし、複数の長さ・角度・比・式を同じ状態から比較する。",
+      "learnerActions": [
+        "点・頂点・角をドラッグする",
+        "測定モードを切り替える",
+        "補助線や式を表示する"
+      ],
+      "changes": [
+        "制約を保った図形状態",
+        "測定値と関係式",
+        "補助線・交点・ラベル"
+      ],
+      "feedbackCapabilities": [
+        "図形の即時再描画",
+        "数値・式の同期表示",
+        "成立条件の表示"
+      ],
+      "capabilities": [
+        "制約付き点移動",
+        "距離・角度・比の測定",
+        "複数の幾何表現の比較"
+      ],
+      "engineFit": {
+        "level": "high",
+        "engines": [
+          "geometryBoard"
+        ],
+        "rationale": "既存GeometryBoardの点・線・角・制約計算を拡張し、測定対象を教材ごとに差し替える余地がある。"
+      },
+      "evidenceStatus": "verified-one-source",
+      "qualifiedLeadCount": 1,
+      "researchPriority": "P1",
+      "promotionStatus": "research-only",
+      "priorityRationale": "16件の最大gapを一つの図形操作契約で調査でき、既存Engineへの適合度も高い。分割リスクは高いため、候補の昇格前に測定対象ごとの最小状態を比較する。",
+      "shortlisted": true,
+      "searchQueries": [
+        "GitHub interactive geometry constrained points angles measurement",
+        "GitHub educational geometry draggable diagram"
+      ],
+      "primaryGapImpact": {
+        "count": 16,
+        "candidateIds": [
+          "unit-circle",
+          "triangle-area-sine",
+          "sine-law-circumcircle",
+          "cosine-law",
+          "triangle-centers",
+          "angle-bisector-ratio",
+          "inscribed-angle",
+          "power-of-point",
+          "right-triangle-trig",
+          "trig-relations",
+          "radian-measure",
+          "trig-addition-formula",
+          "double-angle",
+          "section-formula",
+          "line-relations",
+          "circle-line-intersections"
+        ],
+        "subjects": [
+          "math1 (数学I)",
+          "math2 (数学Ⅱ)",
+          "mathA (数学A)"
+        ],
+        "units": [
+          "math1/trigonometry (図形と計量)",
+          "math2/geometry-equations (図形と方程式)",
+          "math2/trigonometric-functions (三角関数)",
+          "mathA/geometry-a (図形の性質)"
+        ]
+      },
+      "secondaryPartialOpportunityIds": [
+        "quadratic-discriminant",
+        "three-point-parabola",
+        "parameter-intersections",
+        "line-equation",
+        "circle-equation",
+        "locus-distance-ratio",
+        "quadratic-inequality"
+      ],
+      "repositoryEvidence": [
+        {
+          "leadId": "LEAD-001",
+          "repository": {
+            "owner": "phetsims",
+            "name": "graphing-quadratics",
+            "rootUrl": "https://github.com/phetsims/graphing-quadratics"
+          },
+          "ref": "709b383759e887b6e2edb040bfbb987dc3632e05",
+          "qualification": "qualified",
+          "license": {
+            "expression": "MIT",
+            "url": "https://github.com/phetsims/graphing-quadratics/blob/709b383759e887b6e2edb040bfbb987dc3632e05/LICENSE",
+            "reviewed": true,
+            "reviewedAt": "2026-09-13"
+          },
+          "featurePaths": [
+            "js/vertexform/model/VertexFormModel.ts",
+            "js/vertexform/view/VertexFormGraphNode.ts"
+          ],
+          "evidenceUrls": [
+            "https://github.com/phetsims/graphing-quadratics/blob/709b383759e887b6e2edb040bfbb987dc3632e05/js/vertexform/model/VertexFormModel.ts",
+            "https://github.com/phetsims/graphing-quadratics/blob/709b383759e887b6e2edb040bfbb987dc3632e05/js/vertexform/view/VertexFormGraphNode.ts"
+          ],
+          "observedBehavior": "係数a・h・kを範囲付きPropertyとして操作し、導出した二次曲線とグラフ表示を同期する。制約付き数値操作と派生状態の即時更新が、図形測定候補の状態設計を考える参照になる。",
+          "implementationBoundary": "behavioral-reference-only"
+        }
+      ]
+    },
+    {
+      "proposalId": "CAN-CAND-002",
+      "sourceClusterIds": [
+        "GAP-CL-002"
+      ],
+      "title": "Distribution and sampling simulation workspace",
+      "categoryCandidate": "Simulate",
+      "behaviorDefinition": "確率分布や母集団から試行・標本抽出を反復し、理論値、分布、統計量、推測結果を同じ画面で比較する。",
+      "learnerActions": [
+        "試行・抽出を実行する",
+        "分布パラメータを変える",
+        "理論値と実験値を比較する"
+      ],
+      "changes": [
+        "試行結果と標本",
+        "分布・統計量",
+        "p値・区間・判定"
+      ],
+      "feedbackCapabilities": [
+        "反復結果の蓄積",
+        "理論分布との重ね合わせ",
+        "推測結果と不確かさの表示"
+      ],
+      "capabilities": [
+        "再現可能な乱数seed",
+        "分布と統計量の同期",
+        "標本・推定・検定の段階表示"
+      ],
+      "engineFit": {
+        "level": "high",
+        "engines": [
+          "simulationLab",
+          "dataLab"
+        ],
+        "rationale": "SimulationLabの反復実験とDataLabの分布・統計量表示を組み合わせる候補である。"
+      },
+      "evidenceStatus": "verified-one-source",
+      "qualifiedLeadCount": 1,
+      "researchPriority": "P1",
+      "promotionStatus": "research-only",
+      "priorityRationale": "10件の確率・統計gapを扱い、実験と理論の差を観察できる。検定・推定・分布構成は分割して評価する必要がある。",
+      "shortlisted": true,
+      "searchQueries": [
+        "GitHub probability distribution simulation histogram educational",
+        "GitHub sampling distribution interactive simulation"
+      ],
+      "primaryGapImpact": {
+        "count": 10,
+        "candidateIds": [
+          "hypothesis-test-coin",
+          "independent-trials",
+          "population-sample",
+          "random-variable-distribution",
+          "distribution-mean-variance",
+          "binomial-distribution-b",
+          "standard-normalization",
+          "sampling-distribution-mean",
+          "confidence-interval",
+          "normal-hypothesis-test"
+        ],
+        "subjects": [
+          "math1 (数学I)",
+          "mathA (数学A)",
+          "mathB (数学B)"
+        ],
+        "units": [
+          "math1/statistics (データの分析)",
+          "mathA/probability (場合の数と確率)",
+          "mathB/statistical-inference (統計的な推測)"
+        ]
+      },
+      "secondaryPartialOpportunityIds": [],
+      "repositoryEvidence": [
+        {
+          "leadId": "LEAD-002",
+          "repository": {
+            "owner": "phetsims",
+            "name": "plinko-probability",
+            "rootUrl": "https://github.com/phetsims/plinko-probability"
+          },
+          "ref": "cd0d20a973262507b6106d42077006d964f50d90",
+          "qualification": "qualified",
+          "license": {
+            "expression": "GPL-3.0",
+            "url": "https://github.com/phetsims/plinko-probability/blob/cd0d20a973262507b6106d42077006d964f50d90/LICENSE",
+            "reviewed": true,
+            "reviewedAt": "2026-09-13"
+          },
+          "featurePaths": [
+            "js/lab/model/LabModel.js",
+            "js/lab/view/LabScreenView.js",
+            "js/lab/view/StatisticsAccordionBox.js"
+          ],
+          "evidenceUrls": [
+            "https://github.com/phetsims/plinko-probability/blob/cd0d20a973262507b6106d42077006d964f50d90/js/lab/model/LabModel.js",
+            "https://github.com/phetsims/plinko-probability/blob/cd0d20a973262507b6106d42077006d964f50d90/js/lab/view/LabScreenView.js",
+            "https://github.com/phetsims/plinko-probability/blob/cd0d20a973262507b6106d42077006d964f50d90/js/lab/view/StatisticsAccordionBox.js"
+          ],
+          "observedBehavior": "反復するボール試行をモデルで蓄積し、ビンの度数・二項分布の理論値・平均・標準偏差をLab画面と統計表示へ反映する。反復結果と理論値を同時に扱うsimulation設計の参照になる。",
+          "implementationBoundary": "behavioral-reference-only"
+        }
+      ]
+    },
+    {
+      "proposalId": "CAN-CAND-003",
+      "sourceClusterIds": [
+        "GAP-CL-003"
+      ],
+      "title": "Symbolic transformation and algorithm workspace",
+      "categoryCandidate": "Transform",
+      "behaviorDefinition": "式の部品またはアルゴリズムの状態を一段ずつ変換し、中間結果・条件・停止状態を追跡する。",
+      "learnerActions": [
+        "部品を組み替える",
+        "変形ステップを進める",
+        "候補値や条件を選ぶ"
+      ],
+      "changes": [
+        "式の各項",
+        "商・余り・係数",
+        "定義域・成立判定"
+      ],
+      "feedbackCapabilities": [
+        "変形前後の対応表示",
+        "中間状態の強調",
+        "条件違反や停止状態の表示"
+      ],
+      "capabilities": [
+        "記号部品の操作",
+        "可逆でない手順の段階表示",
+        "計算結果と根拠の対応"
+      ],
+      "engineFit": {
+        "level": "high",
+        "engines": [
+          "algebraLab",
+          "algorithmLab"
+        ],
+        "rationale": "AlgebraLabの記号部品操作とAlgorithmLabの逐次状態を、教材ごとに切り替える候補である。"
+      },
+      "evidenceStatus": "verified-one-source",
+      "qualifiedLeadCount": 1,
+      "researchPriority": "P1",
+      "promotionStatus": "research-only",
+      "priorityRationale": "8件の式変形・アルゴリズムgapを中間状態の可視化で横断できるが、記号変形と互除法の共通状態契約は別途検証する。",
+      "shortlisted": true,
+      "searchQueries": [
+        "GitHub interactive algebra expression transformation steps",
+        "GitHub polynomial algebra visualizer educational"
+      ],
+      "primaryGapImpact": {
+        "count": 8,
+        "candidateIds": [
+          "factorization-reverse",
+          "euclidean-algorithm",
+          "polynomial-division",
+          "rational-expression-domain",
+          "complex-arithmetic",
+          "roots-coefficients",
+          "factor-theorem",
+          "identity-coefficients"
+        ],
+        "subjects": [
+          "math1 (数学I)",
+          "math2 (数学Ⅱ)",
+          "mathA (数学A)"
+        ],
+        "units": [
+          "math1/algebra (数と式)",
+          "math2/expressions-2 (いろいろな式)",
+          "mathA/human-activity (数学と人間の活動)"
+        ]
+      },
+      "secondaryPartialOpportunityIds": [
+        "completing-square",
+        "cubic-expansion",
+        "indefinite-integral"
+      ],
+      "repositoryEvidence": [
+        {
+          "leadId": "LEAD-003",
+          "repository": {
+            "owner": "phetsims",
+            "name": "area-model-algebra",
+            "rootUrl": "https://github.com/phetsims/area-model-algebra"
+          },
+          "ref": "8d5250d30bf1ad952b21ee48a9f1b52749044a0b",
+          "qualification": "qualified",
+          "license": {
+            "expression": "GPL-3.0",
+            "url": "https://github.com/phetsims/area-model-algebra/blob/8d5250d30bf1ad952b21ee48a9f1b52749044a0b/LICENSE",
+            "reviewed": true,
+            "reviewedAt": "2026-09-13"
+          },
+          "featurePaths": [
+            "js/game/GameScreen.js",
+            "js/areaModelAlgebra.js"
+          ],
+          "evidenceUrls": [
+            "https://github.com/phetsims/area-model-algebra/blob/8d5250d30bf1ad952b21ee48a9f1b52749044a0b/js/game/GameScreen.js",
+            "https://github.com/phetsims/area-model-algebra/blob/8d5250d30bf1ad952b21ee48a9f1b52749044a0b/js/areaModelAlgebra.js"
+          ],
+          "observedBehavior": "代数のゲーム画面を共通VariablesGameScreenへ接続し、レベルごとの課題と面積モデルの構成を画面フローへ組み込む。記号部品・段階的課題・判定を分離する設計の参照になる。",
+          "implementationBoundary": "behavioral-reference-only"
+        }
+      ]
+    },
+    {
+      "proposalId": "CAN-CAND-004",
+      "sourceClusterIds": [
+        "GAP-CL-004"
+      ],
+      "title": "Sequence generation and iteration workspace",
+      "categoryCandidate": "Animate",
+      "behaviorDefinition": "数列または漸化式の次状態を順に生成し、項・差・倍率・部分和を前の状態と比較する。",
+      "learnerActions": [
+        "次の項を生成する",
+        "初期値・規則を変える",
+        "項列や部分和を展開する"
+      ],
+      "changes": [
+        "項の列",
+        "差・倍率",
+        "部分和・証明段階"
+      ],
+      "feedbackCapabilities": [
+        "一段ずつの状態表示",
+        "項同士の対応表示",
+        "規則性の強調"
+      ],
+      "capabilities": [
+        "反復生成",
+        "離散グラフと表の同期",
+        "停止・範囲・初期条件の管理"
+      ],
+      "engineFit": {
+        "level": "high",
+        "engines": [
+          "sequenceLab",
+          "algorithmLab"
+        ],
+        "rationale": "SequenceLabの項列表示とAlgorithmLabの一段ずつの進行を組み合わせる候補である。"
+      },
+      "evidenceStatus": "verified-one-source",
+      "qualifiedLeadCount": 1,
+      "researchPriority": "P1",
+      "promotionStatus": "research-only",
+      "priorityRationale": "7件の離散的なgapを順序付き状態として扱える。数列生成と帰納法の証明段階は同一候補のまま昇格させず、挙動を分けて検証する。",
+      "shortlisted": true,
+      "searchQueries": [
+        "GitHub interactive recurrence sequence explorer",
+        "GitHub educational arithmetic geometric sequence visualizer"
+      ],
+      "primaryGapImpact": {
+        "count": 7,
+        "candidateIds": [
+          "arithmetic-sequence",
+          "geometric-sequence",
+          "sequence-partial-sum",
+          "recurrence-iteration",
+          "sigma-notation",
+          "difference-sequence",
+          "mathematical-induction"
+        ],
+        "subjects": [
+          "mathB (数学B)"
+        ],
+        "units": [
+          "mathB/sequences (数列)"
+        ]
+      },
+      "secondaryPartialOpportunityIds": [],
+      "repositoryEvidence": [
+        {
+          "leadId": "LEAD-004",
+          "repository": {
+            "owner": "ncg777",
+            "name": "integer-recurrence-explorer",
+            "rootUrl": "https://github.com/ncg777/integer-recurrence-explorer"
+          },
+          "ref": "1b18c8c75770a88518e39805c8fb673f140c896e",
+          "qualification": "qualified",
+          "license": {
+            "expression": "MIT",
+            "url": "https://github.com/ncg777/integer-recurrence-explorer/blob/1b18c8c75770a88518e39805c8fb673f140c896e/LICENSE",
+            "reviewed": true,
+            "reviewedAt": "2026-09-13"
+          },
+          "featurePaths": [
+            "src/app/components/sequence-viewer/sequence-viewer.component.ts",
+            "src/app/services/recurrence.service.ts"
+          ],
+          "evidenceUrls": [
+            "https://github.com/ncg777/integer-recurrence-explorer/blob/1b18c8c75770a88518e39805c8fb673f140c896e/src/app/components/sequence-viewer/sequence-viewer.component.ts",
+            "https://github.com/ncg777/integer-recurrence-explorer/blob/1b18c8c75770a88518e39805c8fb673f140c896e/src/app/services/recurrence.service.ts"
+          ],
+          "observedBehavior": "初期条件と漸化規則から次項を反復生成し、sequence Observableへ結果を流す。表示コンポーネントと生成サービスを分けた離散状態更新の参照になる。",
+          "implementationBoundary": "behavioral-reference-only"
+        }
+      ]
+    },
+    {
+      "proposalId": "CAN-CAND-005",
+      "sourceClusterIds": [
+        "GAP-CL-005"
+      ],
+      "title": "Region partition and condition selector",
+      "categoryCandidate": "Select",
+      "behaviorDefinition": "領域・セル・数直線の区間を選択または塗り分けし、条件式・包含関係・確率・判定を更新する。",
+      "learnerActions": [
+        "領域やセルを選ぶ",
+        "条件を切り替える",
+        "境界の開閉を変える"
+      ],
+      "changes": [
+        "選択マスク",
+        "条件式",
+        "個数・確率・判定"
+      ],
+      "feedbackCapabilities": [
+        "塗り分け",
+        "式と結果の同期",
+        "境界・包含関係の強調"
+      ],
+      "capabilities": [
+        "1次元・2次元領域",
+        "集合・事象・不等式のモード",
+        "選択状態のキーボード操作"
+      ],
+      "engineFit": {
+        "level": "high",
+        "engines": [
+          "regionSelector",
+          "numberLineLab",
+          "geometryBoard"
+        ],
+        "rationale": "RegionSelectorを中心に、数直線と2次元境界の表現をモードとして研究できる。"
+      },
+      "evidenceStatus": "blocked",
+      "qualifiedLeadCount": 0,
+      "researchPriority": "P2",
+      "promotionStatus": "research-only",
+      "priorityRationale": "7件のgapは多いが、集合・確率・数直線・平面不等式の状態が異なるため、R6では研究候補として保持し、先行4候補の結果後に分割する。",
+      "shortlisted": false,
+      "searchQueries": [],
+      "primaryGapImpact": {
+        "count": 7,
+        "candidateIds": [
+          "set-regions",
+          "necessary-sufficient",
+          "event-regions",
+          "conditional-probability",
+          "sample-space-grid",
+          "inequality-numberline",
+          "inequality-region-2d"
+        ],
+        "subjects": [
+          "math1 (数学I)",
+          "math2 (数学Ⅱ)",
+          "mathA (数学A)"
+        ],
+        "units": [
+          "math1/algebra (数と式)",
+          "math2/geometry-equations (図形と方程式)",
+          "mathA/probability (場合の数と確率)"
+        ]
+      },
+      "secondaryPartialOpportunityIds": [],
+      "repositoryEvidence": []
+    },
+    {
+      "proposalId": "CAN-CAND-006",
+      "sourceClusterIds": [
+        "GAP-CL-006"
+      ],
+      "title": "Data summary manipulation workspace",
+      "categoryCandidate": "Compare",
+      "behaviorDefinition": "データ点や五数要約を操作し、代表値・ばらつき・相関・回帰の変化を比較する。",
+      "learnerActions": [
+        "点を追加・移動する",
+        "要約値を変える",
+        "統計量を選ぶ"
+      ],
+      "changes": [
+        "データ点群",
+        "代表値・分散",
+        "相関・回帰"
+      ],
+      "feedbackCapabilities": [
+        "散布図・箱ひげ図の更新",
+        "統計量の同期",
+        "外れ値や影響の強調"
+      ],
+      "capabilities": [
+        "データ点編集",
+        "要約統計の比較",
+        "複数図表の同期"
+      ],
+      "engineFit": {
+        "level": "high",
+        "engines": [
+          "dataLab"
+        ],
+        "rationale": "既存DataLabの入力・集計・図表更新を、代表値と関係の教材へ再利用できる。"
+      },
+      "evidenceStatus": "blocked",
+      "qualifiedLeadCount": 0,
+      "researchPriority": "P2",
+      "promotionStatus": "research-only",
+      "priorityRationale": "4件のgapに対して実装範囲は明確だが、外部挙動の一次確認を先行4候補と比較してから優先順位を確定する。",
+      "shortlisted": false,
+      "searchQueries": [],
+      "primaryGapImpact": {
+        "count": 4,
+        "candidateIds": [
+          "mean-median-outlier",
+          "variance-distance",
+          "boxplot-drag",
+          "correlation-builder"
+        ],
+        "subjects": [
+          "math1 (数学I)"
+        ],
+        "units": [
+          "math1/statistics (データの分析)"
+        ]
+      },
+      "secondaryPartialOpportunityIds": [],
+      "repositoryEvidence": []
+    },
+    {
+      "proposalId": "CAN-CAND-007",
+      "sourceClusterIds": [
+        "GAP-CL-007"
+      ],
+      "title": "Number-line relation and transformation workspace",
+      "categoryCandidate": "Move",
+      "behaviorDefinition": "数直線上の位置を動かし、距離・平方根・指数値など入力と変換後の対応を観察する。",
+      "learnerActions": [
+        "点や値を動かす",
+        "距離・変換を選ぶ",
+        "基準値を変える"
+      ],
+      "changes": [
+        "位置",
+        "距離",
+        "変換後の数値"
+      ],
+      "feedbackCapabilities": [
+        "区間・距離の表示",
+        "変換式と数値の同期",
+        "基準値との比較"
+      ],
+      "capabilities": [
+        "開閉端点",
+        "距離測定",
+        "入力値と関数値の対応"
+      ],
+      "engineFit": {
+        "level": "high",
+        "engines": [
+          "numberLineLab"
+        ],
+        "rationale": "NumberLineLabが位置・端点・距離の直接表現をすでに持つ。指数変換は追加研究が必要である。"
+      },
+      "evidenceStatus": "blocked",
+      "qualifiedLeadCount": 0,
+      "researchPriority": "P2",
+      "promotionStatus": "research-only",
+      "priorityRationale": "3件のgapは既存Engineへ近いが、距離と変換を同じ操作契約にまとめる妥当性を先に検証する。",
+      "shortlisted": false,
+      "searchQueries": [],
+      "primaryGapImpact": {
+        "count": 3,
+        "candidateIds": [
+          "sqrt-numberline",
+          "absolute-distance",
+          "exponent-extension"
+        ],
+        "subjects": [
+          "math1 (数学I)",
+          "math2 (数学Ⅱ)"
+        ],
+        "units": [
+          "math1/algebra (数と式)",
+          "math2/exponential-logarithm (指数関数・対数関数)"
+        ]
+      },
+      "secondaryPartialOpportunityIds": [],
+      "repositoryEvidence": []
+    },
+    {
+      "proposalId": "CAN-CAND-008",
+      "sourceClusterIds": [
+        "GAP-CL-008"
+      ],
+      "title": "Modeling workflow navigator",
+      "categoryCandidate": "Transform",
+      "behaviorDefinition": "現実の状況を仮定・変数・式・計算・評価の段階へ変換し、工程間の根拠を確認する。",
+      "learnerActions": [
+        "工程を順に進める",
+        "仮定と変数を編集する",
+        "評価へ戻る"
+      ],
+      "changes": [
+        "現在工程",
+        "モデルと計算",
+        "評価・修正"
+      ],
+      "feedbackCapabilities": [
+        "工程の可視化",
+        "入力とモデルの対応",
+        "評価結果のフィードバック"
+      ],
+      "capabilities": [
+        "段階的workflow",
+        "仮定の記録",
+        "モデル評価の差分表示"
+      ],
+      "engineFit": {
+        "level": "medium",
+        "engines": [
+          "dataLab",
+          "algorithmLab"
+        ],
+        "rationale": "DataLabのデータ・モデル表示とAlgorithmLabの段階進行を組み合わせる研究候補である。"
+      },
+      "evidenceStatus": "blocked",
+      "qualifiedLeadCount": 0,
+      "researchPriority": "P2",
+      "promotionStatus": "research-only",
+      "priorityRationale": "単独gapであり独自性は高いが、既存Engineの再利用境界がまだ定まらないためR6では昇格しない。",
+      "shortlisted": false,
+      "searchQueries": [],
+      "primaryGapImpact": {
+        "count": 1,
+        "candidateIds": [
+          "modeling-cycle"
+        ],
+        "subjects": [
+          "mathB (数学B)"
+        ],
+        "units": [
+          "mathB/math-social-life (数学と社会生活)"
+        ]
+      },
+      "secondaryPartialOpportunityIds": [],
+      "repositoryEvidence": []
+    }
+  ],
+  "primaryGapImpact": [
+    {
+      "proposalId": "CAN-CAND-001",
+      "count": 16,
+      "candidateIds": [
+        "unit-circle",
+        "triangle-area-sine",
+        "sine-law-circumcircle",
+        "cosine-law",
+        "triangle-centers",
+        "angle-bisector-ratio",
+        "inscribed-angle",
+        "power-of-point",
+        "right-triangle-trig",
+        "trig-relations",
+        "radian-measure",
+        "trig-addition-formula",
+        "double-angle",
+        "section-formula",
+        "line-relations",
+        "circle-line-intersections"
+      ]
+    },
+    {
+      "proposalId": "CAN-CAND-002",
+      "count": 10,
+      "candidateIds": [
+        "hypothesis-test-coin",
+        "independent-trials",
+        "population-sample",
+        "random-variable-distribution",
+        "distribution-mean-variance",
+        "binomial-distribution-b",
+        "standard-normalization",
+        "sampling-distribution-mean",
+        "confidence-interval",
+        "normal-hypothesis-test"
+      ]
+    },
+    {
+      "proposalId": "CAN-CAND-003",
+      "count": 8,
+      "candidateIds": [
+        "factorization-reverse",
+        "euclidean-algorithm",
+        "polynomial-division",
+        "rational-expression-domain",
+        "complex-arithmetic",
+        "roots-coefficients",
+        "factor-theorem",
+        "identity-coefficients"
+      ]
+    },
+    {
+      "proposalId": "CAN-CAND-004",
+      "count": 7,
+      "candidateIds": [
+        "arithmetic-sequence",
+        "geometric-sequence",
+        "sequence-partial-sum",
+        "recurrence-iteration",
+        "sigma-notation",
+        "difference-sequence",
+        "mathematical-induction"
+      ]
+    },
+    {
+      "proposalId": "CAN-CAND-005",
+      "count": 7,
+      "candidateIds": [
+        "set-regions",
+        "necessary-sufficient",
+        "event-regions",
+        "conditional-probability",
+        "sample-space-grid",
+        "inequality-numberline",
+        "inequality-region-2d"
+      ]
+    },
+    {
+      "proposalId": "CAN-CAND-006",
+      "count": 4,
+      "candidateIds": [
+        "mean-median-outlier",
+        "variance-distance",
+        "boxplot-drag",
+        "correlation-builder"
+      ]
+    },
+    {
+      "proposalId": "CAN-CAND-007",
+      "count": 3,
+      "candidateIds": [
+        "sqrt-numberline",
+        "absolute-distance",
+        "exponent-extension"
+      ]
+    },
+    {
+      "proposalId": "CAN-CAND-008",
+      "count": 1,
+      "candidateIds": [
+        "modeling-cycle"
+      ]
+    }
+  ],
+  "secondaryOpportunities": {
+    "total": 24,
+    "candidateIds": [
+      "circle-equation",
+      "completing-square",
+      "counting-tree",
+      "cubic-expansion",
+      "cubic-extrema",
+      "decision-sensitivity",
+      "definite-integral-signed-area",
+      "exponential-base",
+      "exponential-equation",
+      "indefinite-integral",
+      "line-equation",
+      "locus-distance-ratio",
+      "logarithm-base",
+      "model-comparison",
+      "normal-distribution",
+      "parameter-intersections",
+      "perfect-square-build",
+      "quadratic-discriminant",
+      "quadratic-inequality",
+      "quadratic-range",
+      "secant-to-tangent",
+      "three-point-parabola",
+      "trig-function-graphs",
+      "trig-transform"
+    ],
+    "byProposal": [
+      {
+        "proposalId": "CAN-CAND-001",
+        "candidateIds": [
+          "quadratic-discriminant",
+          "three-point-parabola",
+          "parameter-intersections",
+          "line-equation",
+          "circle-equation",
+          "locus-distance-ratio",
+          "quadratic-inequality"
+        ]
+      },
+      {
+        "proposalId": "CAN-CAND-003",
+        "candidateIds": [
+          "completing-square",
+          "cubic-expansion",
+          "indefinite-integral"
+        ]
+      }
+    ]
+  },
+  "engineFit": {
+    "geometryBoard": {
+      "high": 14,
+      "medium": 3,
+      "low": 0,
+      "none": 0
+    },
+    "regionSelector": {
+      "high": 4,
+      "medium": 1,
+      "low": 0,
+      "none": 0
+    },
+    "numberLineLab": {
+      "high": 3,
+      "medium": 1,
+      "low": 0,
+      "none": 0
+    },
+    "simulationLab": {
+      "high": 6,
+      "medium": 0,
+      "low": 0,
+      "none": 0
+    },
+    "dataLab": {
+      "high": 7,
+      "medium": 2,
+      "low": 0,
+      "none": 0
+    },
+    "algebraLab": {
+      "high": 7,
+      "medium": 1,
+      "low": 0,
+      "none": 0
+    },
+    "algorithmLab": {
+      "high": 1,
+      "medium": 0,
+      "low": 0,
+      "none": 0
+    },
+    "sequenceLab": {
+      "high": 6,
+      "medium": 0,
+      "low": 0,
+      "none": 0
+    }
+  },
+  "repositoryEvidence": {
+    "totalLeads": 4,
+    "qualifiedLeads": 4,
+    "byProposal": [
+      {
+        "proposalId": "CAN-CAND-001",
+        "leadIds": [
+          "LEAD-001"
+        ]
+      },
+      {
+        "proposalId": "CAN-CAND-002",
+        "leadIds": [
+          "LEAD-002"
+        ]
+      },
+      {
+        "proposalId": "CAN-CAND-003",
+        "leadIds": [
+          "LEAD-003"
+        ]
+      },
+      {
+        "proposalId": "CAN-CAND-004",
+        "leadIds": [
+          "LEAD-004"
+        ]
+      },
+      {
+        "proposalId": "CAN-CAND-005",
+        "leadIds": []
+      },
+      {
+        "proposalId": "CAN-CAND-006",
+        "leadIds": []
+      },
+      {
+        "proposalId": "CAN-CAND-007",
+        "leadIds": []
+      },
+      {
+        "proposalId": "CAN-CAND-008",
+        "leadIds": []
+      }
+    ]
+  },
+  "promotionReadiness": {
+    "activeCanonicalPromotion": false,
+    "activeCanonicalIds": [
+      "MATH-INT-001",
+      "MATH-INT-002",
+      "MATH-INT-003",
+      "MATH-INT-004",
+      "MATH-INT-005",
+      "MATH-INT-006",
+      "MATH-INT-007",
+      "MATH-INT-008"
+    ],
+    "shortlistProposalIds": [
+      "CAN-CAND-001",
+      "CAN-CAND-002",
+      "CAN-CAND-003",
+      "CAN-CAND-004"
+    ],
+    "researchOnlyProposalCount": 8
+  }
+}

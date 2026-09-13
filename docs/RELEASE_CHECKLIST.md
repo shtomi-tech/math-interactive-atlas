@@ -83,6 +83,17 @@ Pagesの公開検証はローカル検証とは別に扱う。Repositoryの公�
 - [ ] `dist/ai/candidate-canonical-coverage.json`をBuild Scriptから生成する
 - [ ] Coverage gapを新規Canonical InteractionやRuntimeへ自動昇格させない
 
+## R6 gates
+
+- [ ] R5の固定状態（Legacy 89 / audit 0-89-0 / Canonical 8 / repositories 6 / features 10 / Practice 0 / Engines 11 / runtime 3-5-0）を維持する
+- [ ] `research/gap-behavior-analysis.json` がR5の56 gapをExactly OnceでSignature / Cluster化する
+- [ ] `research/canonical-interaction-candidates.json` がPrimary gapだけを候補へ割り当て、Shortlistを3〜5件にする
+- [ ] `secondaryPartialOpportunityIds` がPartial 24件だけを参照し、Coveredを含めない
+- [ ] Repository Leadが固定SHA、公開状態、License、source path、観察挙動を持ち、`adapted-from`を使わない
+- [ ] `dist/ai/canonical-research-priorities.json` をBuild Scriptから生成し、`--check`でstaleを拒否する
+- [ ] R6候補を `data/interactions.json`、Runtime map、`dist/ai/interactions.json`、教材、Practiceへ追加しない
+- [ ] R6の6チェッカー、既存検査、`npm test`、GitHub Actions checks / browser-smokeが成功する
+
 ## Forbidden in R4
 
 - 新規Practice問題、Atlas教材、Interaction Engine

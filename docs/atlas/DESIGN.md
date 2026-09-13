@@ -212,6 +212,12 @@ R5では `data/interaction-runtime-map.json` の001〜003の実装を変更せ�
 
 既存89候補とCanonical Interactionの関係は `data/candidate-canonical-map.json` で分離して管理する。これはCandidate AuditではなくCoverage分析であり、候補IDをExactly Once、`covered` / `partial` / `gap`と根拠付きmatchで記録する。生成済みの `dist/ai/candidate-canonical-coverage.json` は専用Build Scriptからのみ作成し、既存の3-source Interaction Indexとは混ぜない。
 
+### Phase R6: Gap research and candidate prioritization
+
+R6の研究データはRuntimeの正本と分離する。`research/gap-behavior-analysis.json` はR5の56 gapをExactly OnceでBehavior SignatureとClusterへ整理し、`research/canonical-interaction-candidates.json` は昇格前の研究候補、`research/canonical-candidate-repository-leads.json` は固定SHAで確認した挙動参照先を保持する。これらは `MATH-INT-###`、`content-data.json`、Runtime map、外部Repositoryの稼働Registryへ追加しない。
+
+候補のPriorityはPrimary Gap影響、対象Subject / Unit数、既存Engine適合、Evidenceの順で比較する。Shortlistは3〜5件、Primary Gapはgapだけ、Secondary Opportunityはpartialだけとし、同じPrimary Gapを複数Shortlistへ割り当てない。R6では操作状態の設計と証拠の不足を明示し、教材の見た目やコードの移植を先行させない。
+
 ### AI Retrieval Foundation
 
 将来的な教材生成は `Math Reference → Learning Requirements → Interaction検索 → Example再利用 → 不足Data生成 → Validator → Lesson構成` の順で行う。Atlasは数学知識そのものを置き換えず、「どう学ばせるか」を検索可能なInteraction Libraryとして提供する。
