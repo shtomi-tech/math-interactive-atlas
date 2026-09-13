@@ -1,4 +1,4 @@
-import { expressionForMask, latexForMask } from "./set-regions.js?v=20260913-r1";
+import { expressionForMask, latexForMask } from "./set-regions.js?v=20260913-r2";
 
 export const EVENT_TYPES = Object.freeze({
   A: "a",

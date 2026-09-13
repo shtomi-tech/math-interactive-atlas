@@ -20,8 +20,16 @@ test("deployed learning surfaces initialize and load their versioned assets", as
     expect(response?.ok(), `${route} did not return a successful response`).toBeTruthy();
     await expect(page.locator(selector)).toBeVisible();
   }
+  const auditResponsePromise = page.waitForResponse((response) => new URL(response.url()).pathname.endsWith("/research/repository-audit.json"));
   await page.goto(appPath("atlas.html"));
-  await expect(page.locator(".atlas-audit-status").first()).toHaveText("Pending Repository Audit");
+  const auditResponse = await auditResponsePromise;
+  expect(auditResponse.status()).toBe(200);
+  expect(auditResponse.ok()).toBeTruthy();
+  const audit = await auditResponse.json();
+  expect(audit.version).toBe(1);
+  expect(audit.contents).toHaveLength(89);
+  expect(audit.contents.every((record) => ["verified", "needs-review"].includes(record.auditStatus))).toBeTruthy();
+  await expect(page.locator(".atlas-audit-status").first()).toHaveText("Needs Review");
   await page.goto(appPath("practice.html"));
   await expect(page.locator(".practice-empty-state")).toContainText("現在、Practice問題は登録されていません。");
   await page.goto(appPath("sets.html"));
@@ -32,5 +40,17 @@ test("deployed learning surfaces initialize and load their versioned assets", as
   await expect(page.locator(".progress-summary-lead")).toContainText("問題 0問");
   const assetVersion = await page.evaluate(async () => (await fetch("./static/asset-version.txt")).text());
   expect(assetVersion.trim()).toBe(expectedAssetVersion);
+  await expectNoBrowserErrors(errors);
+});
+
+test("Atlas distinguishes an unavailable repository audit", async ({ page }) => {
+  const errors = collectBrowserErrors(page);
+  await page.route("**/research/repository-audit.json", (route) => route.fulfill({
+    status: 200,
+    contentType: "application/json",
+    body: "not-json"
+  }));
+  await page.goto(appPath("atlas.html"));
+  await expect(page.locator(".atlas-audit-status").first()).toHaveText("Repository Audit unavailable");
   await expectNoBrowserErrors(errors);
 });

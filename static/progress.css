@@ -1,4 +1,4 @@
-@import url("./tokens.css?v=20260913-r1");
+@import url("./tokens.css?v=20260913-r2");
 :root { --progress-ink: #262621; --progress-muted: #77736a; --progress-line: #d9d1c2; --progress-paper: #f8f4eb; --progress-accent: #4f6d63; }
 .progress-content-practice-empty { color: var(--progress-muted); }
 * { box-sizing: border-box; } body { margin: 0; background: var(--progress-paper); color: var(--progress-ink); font-family: "Noto Sans JP", "Yu Gothic", sans-serif; line-height: 1.65; } button, a { font: inherit; } button, .progress-primary-link { min-height: 44px; border: 1px solid var(--progress-line); border-radius: 7px; background: #fffdf8; padding: .55rem .8rem; cursor: pointer; text-decoration: none; } a { color: inherit; } button:hover, button:focus-visible, .progress-primary-link:hover { border-color: var(--progress-accent); }

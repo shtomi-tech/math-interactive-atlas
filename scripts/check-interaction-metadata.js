@@ -20,7 +20,6 @@ function requireCondition(condition, message) {
 
 const contents = readJson("static/atlas/content-data.json");
 const metadata = readJson("static/atlas/interaction-metadata.json");
-const contentIds = new Set(Array.isArray(contents) ? contents.map((content) => content.id) : []);
 const records = Array.isArray(metadata?.interactions) ? metadata.interactions : [];
 const arrayFields = ["capabilities", "learningPatterns", "learnerActions", "changes", "feedbackCapabilities", "bestFor", "notBestFor", "supports"];
 const scalarFields = ["id", "title", "category", "description", "learningGoal", "implementationDifficulty", "reusability", "reusePolicy"];
@@ -33,18 +32,18 @@ requireCondition(metadata?.schema?.fieldTypes && schemaFields.every((field) => t
 requireCondition(Array.isArray(metadata?.interactions), "interaction metadata interactions must be an array");
 
 const ids = new Set();
+const requireCompleteRecord = records.length > 0;
 records.forEach((record, index) => {
   requireCondition(record && typeof record === "object" && !Array.isArray(record), `metadata record ${index} must be an object`);
   if (!record || typeof record !== "object" || Array.isArray(record)) return;
   requireCondition(typeof record.id === "string" && record.id.trim() !== "", `metadata record ${index} id is required`);
   requireCondition(!ids.has(record.id), `duplicate interaction metadata id: ${record.id}`);
   ids.add(record.id);
-  requireCondition(contentIds.has(record.id), `metadata id does not exist in content data: ${record.id}`);
   scalarFields.forEach((field) => {
-    if (field in record) requireCondition(["string", "number"].includes(typeof record[field]), `${record.id} ${field} must be a string or number`);
+    if (requireCompleteRecord || field in record) requireCondition(["string", "number"].includes(typeof record[field]) && String(record[field]).trim() !== "", `${record.id} ${field} must be a non-empty string or number`);
   });
   arrayFields.forEach((field) => {
-    if (field in record) requireCondition(Array.isArray(record[field]) && record[field].every((value) => typeof value === "string"), `${record.id} ${field} must be an array of strings`);
+    if (requireCompleteRecord || field in record) requireCondition(Array.isArray(record[field]) && record[field].every((value) => typeof value === "string"), `${record.id} ${field} must be an array of strings`);
   });
 });
 

@@ -1,7 +1,7 @@
-import { coinTestFacts } from "../math/hypothesis-test.js?v=20260913-r1";
-import { binomialDistribution, binomialProbability } from "../math/probability.js?v=20260913-r1";
-import { normalPdf, zTestMean } from "../math/statistical-inference.js?v=20260913-r1";
-import { sampleMean, sampleWithReplacement, simulateKnownSigmaConfidenceIntervals, simulateSampleMeans } from "../math/sampling.js?v=20260913-r1";
+import { coinTestFacts } from "../math/hypothesis-test.js?v=20260913-r2";
+import { binomialDistribution, binomialProbability } from "../math/probability.js?v=20260913-r2";
+import { normalPdf, zTestMean } from "../math/statistical-inference.js?v=20260913-r2";
+import { sampleMean, sampleWithReplacement, simulateKnownSigmaConfidenceIntervals, simulateSampleMeans } from "../math/sampling.js?v=20260913-r2";
 
 const NS = "http://www.w3.org/2000/svg";
 const clamp = (value, min, max) => Math.min(max, Math.max(min, Number(value)));

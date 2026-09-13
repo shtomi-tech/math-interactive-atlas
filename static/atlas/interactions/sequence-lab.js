@@ -1,4 +1,4 @@
-import { arithmeticSum, arithmeticTerms, differenceSequence, geometricSum, geometricTerms, partialSums, generateRecurrence, sigmaSum } from "../math/sequences.js?v=20260913-r1";
+import { arithmeticSum, arithmeticTerms, differenceSequence, geometricSum, geometricTerms, partialSums, generateRecurrence, sigmaSum } from "../math/sequences.js?v=20260913-r2";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 const svgElement = (name, attrs = {}) => { const node = document.createElementNS(SVG_NS, name); Object.entries(attrs).forEach(([key, value]) => node.setAttribute(key, String(value))); return node; };

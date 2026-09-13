@@ -1,4 +1,4 @@
-@import url("./tokens.css?v=20260913-r1");
+@import url("./tokens.css?v=20260913-r2");
 :root { --worksheet-ink: #25251f; --worksheet-muted: #77736b; --worksheet-line: #cfc6b7; --worksheet-paper: #f8f4eb; }
 .worksheet-empty-state { margin: 2rem 0; padding: 1rem; border: 1px solid var(--worksheet-line); background: #fffdf8; color: var(--worksheet-muted); }
 * { box-sizing: border-box; } body { margin: 0; background: #e9e2d6; color: var(--worksheet-ink); font-family: "Noto Sans JP", "Yu Gothic", sans-serif; line-height: 1.65; } button, a { font: inherit; } a { color: inherit; } button { min-height: 44px; padding: .5rem .8rem; border: 1px solid var(--worksheet-line); background: #fffdf8; border-radius: 6px; }

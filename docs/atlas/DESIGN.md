@@ -46,7 +46,7 @@ Good Design = Invisible UI + Visible Mathematics + Meaningful Interaction
 7. 発見ポイント
 8. 関連する概念
 9. Repository Audit status
-10. Source / License
+10. Rendering information
 
 カタログは `SUBJECT_ORDER` とSubjectごとの単元順で科目・単元見出しを安定させる。科目未指定時は利用可能な全科目、`subject` 指定時はその科目だけを表示する。カードには、タイトル、一言説明、Interaction Type、外部Repository監査状態を表示する。数学I・数学A・数学Ⅱ・数学Bを表示し、未実装の将来単元は空の見出しを保つ。
 
@@ -56,7 +56,7 @@ Atlasの基本単位はRepositoryや数学単元ではなくInteractionとする
 
 ### Interaction Metadata
 
-AIが数学単元名だけでなく、学習者に行わせたい認知活動から検索できるよう、`static/atlas/interaction-metadata.json` に次の拡張フィールドを持たせる。R1ではRegistryとValidatorを先に用意し、内容の完全な記述は監査後に行う。
+AIが数学単元名だけでなく、学習者に行わせたい認知活動から検索できるよう、`static/atlas/interaction-metadata.json` に次の拡張フィールドを持たせる。R2ではRegistryとValidatorを用意し、Interaction metadataのIDはContent IDから独立させる。将来の正規IDは `MATH-INT-*` 形式を使える。
 
 ```text
 capabilities / learningPatterns / learnerActions / changes
@@ -171,9 +171,9 @@ SimulationLabはモードRegistryで教材を分ける。理論分布と実験�
 
 ### External Repository Audit
 
-正式採用するInteractive Featureは、確認済みの外部公開Repositoryに由来しなければならない。関係は `inspired-by` または `adapted-from` の2種類だけとし、`original` は採用しない。監査記録は実行時payloadと分離した `research/repository-audit.json` に置く。89候補には1件ずつ `pending` / `verified` / `needs-review` を付け、R1では全件を `pending` としてIDだけ確定する。未確認の候補へ後付けの参照元を作らない。`adapted-from` はLicense、`ref`、`paths`を必須とする。
+正式採用するInteractive Featureは、確認済みの外部公開Repositoryに由来しなければならない。関係は `inspired-by` または `adapted-from` の2種類だけとし、`original` は採用しない。監査記録は実行時payloadと分離した `research/repository-audit.json` に置く。89候補には1件ずつ `pending` / `verified` / `needs-review` を付ける。このRegistryは候補の監査作業キューであり、Interactionの正規ID Registryではない。未確認の候補へ後付けの参照元を作らない。R2では全件を確認し、現在は `verified: 0 / needs-review: 89 / pending: 0` とする。`adapted-from` はLicense、固定40文字コミットSHA、`paths`を必須とする。
 
-CatalogとViewerでは監査状態を控えめなBadgeで表示する。`verified` の場合だけRepository、Relation、LicenseをDetailsへ表示し、`pending` と `needs-review` は正式採用済みと誤認させない。
+CatalogとViewerでは監査状態を控えめなBadgeで表示する。`verified` の場合だけRepository、Relation、LicenseをDetailsへ表示し、`pending` と `needs-review` は正式採用済みと誤認させない。監査JSONをHTTPエラー、JSONエラー、または不正なversion・payloadで読み込めない場合は、`Repository Audit unavailable` を表示し、`pending` として扱わない。
 
 ### Phase R0: Practice curation reset
 
@@ -190,9 +190,9 @@ R0では既存のオリジナルPractice問題を正本から削除し、Practic
 
 R0の品質ゲートは、再帰的JavaScript構文検査、静的契約検査、主要画面のPlaywright smoke / 89候補教材回帰 / レスポンシブ / アクセシビリティ検査、`git diff --check`で構成する。GitHub Pages設定が利用できない場合、公開検証は未確認として扱い、ローカル検証の成功と混同しない。
 
-### Phase R1: Repository-derived Interaction Foundation
+### Phase R2: Repository audit completion and provenance hardening
 
-R1では89候補教材をInteraction単位で管理し、監査Registryのschema・ID一致・relation・License条件をCheckerで固定する。現段階では全件を `pending` とし、外部Repositoryを架空に割り当てない。次のR2で外部Repository、Interactive Feature、relation、License、evidenceを1件ずつ確認する。`auditStatus = verified` かつ有効なreferenceを持つものだけを正式Atlas教材とし、根拠を確認できない候補は非公開化または削除を検討する。
+R2では89候補教材をInteraction単位の監査作業キューとして管理し、schema・relation・License条件をCheckerで固定する。候補固有の歴史的な外部Repository由来は確認できなかったため、全件を `needs-review` とし、参照元を捏造しない。`auditStatus = verified` かつ有効なReferenceを持つものだけを正式な外部由来教材として扱う。監査RegistryのIDはInteraction metadataの正規IDとは別管理とする。
 
 ### AI Retrieval Foundation
 
@@ -238,7 +238,7 @@ Discovery Pointは結論ではなく観察の問いにする。利用者が値�
 
 ## 数式と出典
 
-数式はKaTeXで描画し、失敗時はJSONのプレーンテキストを残す。JSXGraphとKaTeXのCDN URLは必ず固定バージョンを使う。JSXGraphはMITまたはLGPL-3.0-or-laterのデュアルライセンスであるため、各コンテンツのSourceに利用バージョンとライセンスを表示する。
+数式はKaTeXで描画し、失敗時はJSONのプレーンテキストを残す。JSXGraphとKaTeXのCDN URLは必ず固定バージョンを使う。描画ライブラリは `content-data.json` の `rendering.library` に表示する。Repository、relation、License、evidenceは `research/repository-audit.json` だけを正本とし、描画ライブラリの利用情報を候補固有の外部Repository由来として扱わない。
 
 ## Responsive / Accessibility
 

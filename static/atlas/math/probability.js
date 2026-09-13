@@ -1,4 +1,4 @@
-import { combinationCount } from "./combinatorics.js?v=20260913-r1";
+import { combinationCount } from "./combinatorics.js?v=20260913-r2";
 
 function probabilityValue(p) {
   const value = Number(p);

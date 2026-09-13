@@ -1,8 +1,8 @@
-import { SUBJECT_ORDER, SUBJECT_UNIT_ORDER, subjectLabel, unitLabel } from "../atlas/curriculum.js?v=20260913-r1";
-import { filterProblems, orderProblems } from "../practice/filter.js?v=20260913-r1";
-import { addProblem, createProblemSet, moveProblem, removeProblem, updateSetMetadata } from "./model.js?v=20260913-r1";
-import { deleteProblemSet, duplicateProblemSet, loadProblemSets, upsertProblemSet } from "./storage.js?v=20260913-r1";
-import { copyText, exportProblemSet, parseProblemSetImport, problemSetUrls } from "./io.js?v=20260913-r1";
+import { SUBJECT_ORDER, SUBJECT_UNIT_ORDER, subjectLabel, unitLabel } from "../atlas/curriculum.js?v=20260913-r2";
+import { filterProblems, orderProblems } from "../practice/filter.js?v=20260913-r2";
+import { addProblem, createProblemSet, moveProblem, removeProblem, updateSetMetadata } from "./model.js?v=20260913-r2";
+import { deleteProblemSet, duplicateProblemSet, loadProblemSets, upsertProblemSet } from "./storage.js?v=20260913-r2";
+import { copyText, exportProblemSet, parseProblemSetImport, problemSetUrls } from "./io.js?v=20260913-r2";
 
 const dom = {
   status: document.querySelector("#setsStatus"),

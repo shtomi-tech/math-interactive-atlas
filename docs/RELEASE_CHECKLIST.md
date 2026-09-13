@@ -1,6 +1,6 @@
-# Math Interactive Atlas R1 Checklist
+# Math Interactive Atlas R2 Checklist
 
-Phase R1では、既存のオリジナルPractice問題を外し、外部Repository監査とAI検索用Interaction metadataへ移るための基盤を確認する。候補教材の正式採用と公開Releaseは、Phase R2の監査完了後に判定する。
+Phase R2では、89候補の外部Repository監査を完了し、由来の正本・失敗時表示・Checker・集計・E2Eを確認する。根拠がない候補は `needs-review` として残し、`verified` と偽装しない。
 
 ## Current scope
 
@@ -8,7 +8,9 @@ Phase R1では、既存のオリジナルPractice問題を外し、外部Reposit
 - [ ] Practice 0問
 - [ ] Interaction Engine 11種
 - [ ] 数学I / 数学A / 数学II / 数学Bのみ
-- [ ] `research/repository-audit.json` は89候補を全件 `pending` で保持する
+- [ ] `research/repository-audit.json` は89候補を保持し、`verified 0 / needs-review 89 / pending 0` である
+- [ ] 監査Registryは候補監査キューであり、Interaction metadataの正規ID Registryとは分離されている
+- [ ] Contentの描画情報は `rendering.library`、Repository由来情報は監査Registryだけにある
 
 ## Data and static gates
 
@@ -17,6 +19,8 @@ Phase R1では、既存のオリジナルPractice問題を外し、外部Reposit
 - [ ] `npm run check`
 - [ ] `npm test`
 - [ ] `node scripts/check-atlas-contract.js`
+- [ ] `node scripts/check-repository-audit.js --require-complete`
+- [ ] `node scripts/report-repository-audit.js`
 - [ ] Practice data / links / coverage / quality checkerが0件を許可
 - [ ] Practice session checkerが空データと合成fixtureの両方を確認
 - [ ] Problem Setが削除済みIDを無視する
@@ -38,24 +42,29 @@ Phase R1では、既存のオリジナルPractice問題を外し、外部Reposit
 
 ## Provenance preparation
 
-- [ ] `research/README.md` が監査方針を説明している
-- [ ] R0で外部Repositoryを未確認のまま割り当てていない
+- [ ] `research/README.md` がR2監査方針と実績を説明している
+- [ ] Git履歴・既存ドキュメント・過去Source記録を先に確認した
+- [ ] 根拠のないRepository、架空のURL/SHA/Path、R2で新規発見したRepositoryの遡及帰属を登録していない
 - [ ] 監査のrelationは `inspired-by` / `adapted-from` の2種類だけにする
+- [ ] `verified` は正確なGitHub URL、owner/repository一致、40文字SHA、Path、aspect、evidence、License、License URL、License確認日を記録する
 - [ ] `adapted-from` はLicense、`ref`、`paths`、Attribution要件を記録する
-- [ ] 参照元の後付け、削除問題のRepository内バックアップ、仮Referenceを作成していない
+- [ ] `needs-review` は理由を記録する
 
 ## Public Pages note
 
 Pagesの公開検証はローカル検証とは別に扱う。Repositoryの公開設定またはGitHubプランでPagesを有効化できない場合は、公開ゲートを未確認として記録し、成功とは宣言しない。
 
-## Forbidden in R0
+## Forbidden in R2
 
 - 新規Practice問題、Atlas教材、Interaction Engine
 - 削除したPractice問題の別JSON・legacy・disabled保存
-- 外部Repository未確認のInteractive Feature
+- 外部Repository未確認のInteractive Featureを `verified` として登録すること
+- Content dataへRepository provenanceを重複保存すること
+- 監査JSONの読み込み失敗を `pending` として表示すること
+- 新規発見Repositoryを過去実装の由来として遡及帰属すること
 - 数学C、数学III、Classroom Assignment
 - 既存Progress保存形式や安定IDを破壊する変更
 
-## Next gate: R2
+## Next gate: post-R2 review
 
-89候補教材を1件ずつ監査し、Repository、Interactive Feature、relation、License、aspect、evidenceを `research/repository-audit.json` に固定する。`auditStatus: verified` と有効なReferenceがそろったものだけを正式Atlas教材として扱う。
+Web ChatGPTによるR2レビュー後、指摘された次の実装指示だけを対象に進める。現行受入条件は、Practice 0問、Interaction Engine 11種、既存89教材の実装維持、監査 `pending 0`、`npm run check`、全テスト、GitHub Actionsのchecks/browser-smoke成功である。

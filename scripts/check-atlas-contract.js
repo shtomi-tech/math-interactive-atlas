@@ -121,6 +121,7 @@ const requiredFiles = [
   "scripts/check-learning-state.js",
   "scripts/check-repository-audit.js",
   "scripts/check-interaction-metadata.js",
+  "scripts/report-repository-audit.js",
   "tests/e2e/all-atlas-content.spec.js",
   "tests/e2e/learning-loop.spec.js",
   "tests/e2e/pages-smoke.spec.js",
@@ -159,6 +160,7 @@ const practiceCss = read("static/practice.css");
 const dataText = read("static/atlas/content-data.json");
 const auditText = read("research/repository-audit.json");
 const interactionMetadataText = read("static/atlas/interaction-metadata.json");
+const reportAuditSource = read("scripts/report-repository-audit.js");
 const practiceDataText = read("static/practice/problem-data.json");
 const viewerSource = read("static/atlas/viewer.js");
 const atlasMainSource = read("static/atlas/main.js");
@@ -272,7 +274,7 @@ const requiredFields = [
   "interactionType",
   "discoveryPoints",
   "related",
-  "source"
+  "rendering"
 ];
 const allowedInteractionTypes = new Set(["slider", "drag", "geometry", "select", "cards", "data", "simulation", "build"]);
 const engineSources = { functionGraph: `${functionGraphSource}\n${functionScenesSource}`, rangeGraph: rangeGraphSource, geometryBoard: `${geometrySource}\n${geometryScenesSource}`, regionSelector: regionSource, combinatoricsViewer: combinatoricsViewerSource, dataLab: dataLabSource, simulationLab: simulationLabSource, algebraLab: algebraLabSource, numberLineLab: numberLineLabSource, algorithmLab: algorithmLabSource, sequenceLab: sequenceLabSource };
@@ -294,8 +296,8 @@ if (Array.isArray(contents)) {
     });
     requireCondition(Array.isArray(content.discoveryPoints) && content.discoveryPoints.length > 0, `content[${index}] needs discoveryPoints`);
     requireCondition(Array.isArray(content.related), `content[${index}] related must be an array`);
-    requireCondition(content.source && typeof content.source === "object", `content[${index}] source must exist`);
-    requireCondition(content.source?.usage !== "original" && content.source?.license !== "Original implementation", `${content.id} must not use original provenance`);
+    requireCondition(content.rendering && typeof content.rendering === "object" && typeof content.rendering.library === "string" && content.rendering.library.trim() !== "", `content[${index}] rendering metadata must exist`);
+    requireCondition(!("source" in content), `${content.id} must not duplicate repository provenance in content data`);
     requireCondition(Boolean(engineSources[content.interaction?.engine]), `${content.id} uses an unknown engine`);
     if (engineSources[content.interaction?.engine]) requireCondition(engineSources[content.interaction.engine].includes(content.interaction.mode), `${content.id} mode is not supported by ${content.interaction.engine}`);
   });
@@ -519,7 +521,8 @@ requireCondition(catalogSource.includes("unvisited") && catalogSource.includes("
 requireCondition(catalogSource.includes("availableUnits") && catalogSource.includes("subjectSelect"), "atlas dependent unit filter is missing");
 requireCondition(viewerSource.includes("neighborsForContent") && viewerSource.includes("atlas-learning-navigation"), "viewer previous/next navigation is missing");
 requireCondition(atlasMainSource.includes("repository-audit.json") && atlasMainSource.includes("loadRepositoryAudit"), "atlas repository audit loading is incomplete");
-requireCondition(catalogSource.includes("Pending Repository Audit") && catalogSource.includes("repositoryAudits") && catalogSource.includes("atlas-audit-status"), "atlas catalog audit status display is incomplete");
+requireCondition(catalogSource.includes("Pending Repository Audit") && catalogSource.includes("Repository Audit unavailable") && catalogSource.includes("repositoryAudits") && catalogSource.includes("repositoryAuditStatus") && catalogSource.includes("atlas-audit-status"), "atlas catalog audit status display is incomplete");
+requireCondition(viewerSource.includes("Repository Audit unavailable") && viewerSource.includes("repositoryAuditStatus"), "atlas viewer must distinguish unavailable repository audit");
 requireCondition(viewerSource.includes("aria-pressed") && viewerSource.includes("atlas-practice-links") && viewerSource.includes("linkedProblems.length") && viewerSource.includes("appendAuditStatus") && viewerSource.includes("verified") && viewerSource.includes("practice.html") && viewerSource.includes("fromProblem"), "atlas viewer learning-loop or audit status display is incomplete");
 requireCondition(storageSource.includes("math-interactive-atlas-state-v1") && storageSource.includes("LEARNING_STATE_VERSION = 2") && storageSource.includes("loadLearningState") && storageSource.includes("saveLearningState") && storageSource.includes("toggleFavorite") && storageSource.includes("recordVisit") && storageSource.includes("recordPracticeAttempt") && storageSource.includes("correctStreak") && storageSource.includes("masteredAt"), "learning state storage API is incomplete");
 requireCondition(practiceMainSource.includes("validateProblemData") && practiceMainSource.includes("recordPracticeAttempt") && practiceMainSource.includes("problem-data.json"), "Practice main flow is incomplete");
@@ -541,22 +544,28 @@ requireCondition(progressSummarySource.includes("summarizeLearning") && progress
 requireCondition(progressSource.includes("学習記録をバックアップ") && progressSource.includes("replaceLearningRecord") && progressSource.includes("progressContents") && progressSource.includes("要復習"), "Progress report flow is incomplete");
 requireCondition(progressSource.includes("progress-content-practice") && progressSource.includes("progress-content-practice-empty") && progressSource.includes("Practiceは準備中です") && progressSource.includes("図鑑を開く"), "Progress review links are incomplete");
 requireCondition(progressRecordSource.includes("math-interactive-atlas-learning-record") && progressRecordSource.includes("LEARNING_RECORD_VERSION = 2") && progressRecordSource.includes("normalizeState"), "Learning record schema is incomplete");
-requireCondition(practiceProblems.length === 0, "Phase R0 requires an empty Practice catalog");
-requireCondition(contents.length === 89, "Phase R0 must preserve exactly 89 Atlas candidates");
-requireCondition(new Set(contents.map((content) => content.interaction?.engine)).size === 11, "Phase R0 must preserve exactly 11 interaction engines");
+requireCondition(practiceProblems.length === 0, "Phase R2 requires an empty Practice catalog");
+requireCondition(contents.length === 89, "Phase R2 must preserve exactly 89 Atlas candidates");
+requireCondition(new Set(contents.map((content) => content.interaction?.engine)).size === 11, "Phase R2 must preserve exactly 11 interaction engines");
 requireCondition(Array.isArray(repositoryAudit?.contents) && repositoryAudit.contents.length === contents.length, "repository audit must have one candidate record per content");
 if (Array.isArray(repositoryAudit?.contents)) {
   const auditIds = new Set(repositoryAudit.contents.map((record) => record.contentId));
   requireCondition(auditIds.size === repositoryAudit.contents.length && contents.every((content) => auditIds.has(content.id)), "repository audit content IDs must match Atlas candidates");
+  requireCondition(repositoryAudit.version === 1, "repository audit version must be 1");
+  requireCondition(repositoryAudit.contents.every((record) => ["verified", "needs-review"].includes(record.auditStatus)), "Phase R2 repository audit must have no pending records");
+  repositoryAudit.contents.forEach((record) => {
+    if (record.auditStatus === "needs-review") requireCondition(typeof record.reviewReason === "string" && record.reviewReason.trim() !== "", `${record.contentId} needs-review requires reviewReason`);
+  });
 }
 requireCondition(interactionMetadata?.version === 1 && Array.isArray(interactionMetadata?.interactions), "interaction metadata registry is incomplete");
+requireCondition(reportAuditSource.includes("Repository Audit Summary") && reportAuditSource.includes("auditStatus") && reportAuditSource.includes("inspired-by") && reportAuditSource.includes("adapted-from"), "repository audit summary reporter is incomplete");
 requireCondition(samplingSource.includes("sampleStandardNormal") && samplingSource.includes("sampleNormal") && samplingSource.includes("sampleMeanFromNormalPopulation") && samplingSource.includes("simulateKnownSigmaConfidenceIntervals"), "Phase 8A normal sampling helpers are missing");
 requireCondition(simulationLabSource.includes("drawNormalTestChart") && simulationLabSource.includes("標準正規分布") && simulationLabSource.includes("100区間を作る"), "Phase 8A statistical simulation UI is incomplete");
 requireCondition(geometryScenesSource.includes("判定する点P") && geometryScenesSource.includes("円周上の点P") && geometryScenesSource.includes("aria-pressed"), "Phase 8A geometry direct manipulation is incomplete");
 requireCondition(algebraLabSource.includes("formatBinomial") && algebraLabSource.includes("role: \"img\"") && algebraLabSource.includes("aria-label"), "Phase 8A algebra accessibility helpers are missing");
 requireCondition(routerSource.includes('subject: params.get("subject") || null'), "catalog route must show all subjects when subject is omitted");
 requireCondition(workflowSource.includes("node-version: 22"), "GitHub Actions must use Node.js 22");
-requireCondition(workflowSource.includes("node scripts/check-atlas-contract.js") && workflowSource.includes("node scripts/check-repository-audit.js") && workflowSource.includes("node scripts/check-interaction-metadata.js") && workflowSource.includes("node scripts/check-set-regions.js") && workflowSource.includes("node scripts/check-set-relations.js") && workflowSource.includes("node scripts/check-event-regions.js") && workflowSource.includes("node scripts/check-conditional-probability.js") && workflowSource.includes("node scripts/check-combinatorics.js") && workflowSource.includes("node scripts/check-statistics.js") && workflowSource.includes("node scripts/check-probability.js") && workflowSource.includes("node scripts/check-hypothesis-test.js") && workflowSource.includes("node scripts/check-geometry.js") && workflowSource.includes("node scripts/check-algebra.js") && workflowSource.includes("node scripts/check-number-line.js") && workflowSource.includes("node scripts/check-sample-space.js") && workflowSource.includes("node scripts/check-number-theory.js") && workflowSource.includes("node scripts/check-quadratic.js") && workflowSource.includes("node scripts/check-trigonometry.js") && workflowSource.includes("node scripts/check-curriculum.js") && workflowSource.includes("node scripts/check-related-content.js") && workflowSource.includes("node scripts/check-practice-data.js") && workflowSource.includes("node scripts/check-practice-answer.js") && workflowSource.includes("node scripts/check-practice-links.js") && workflowSource.includes("node scripts/check-practice-coverage.js") && workflowSource.includes("node scripts/check-practice-quality.js") && workflowSource.includes("node scripts/check-practice-session.js") && workflowSource.includes("node scripts/check-learning-state.js") && workflowSource.includes("node scripts/check-problem-set.js") && workflowSource.includes("node scripts/check-set-storage.js") && workflowSource.includes("node scripts/check-worksheet.js") && workflowSource.includes("node scripts/check-progress-summary.js") && workflowSource.includes("node scripts/check-learning-record.js") && workflowSource.includes("node scripts/check-asset-version.js"), "GitHub Actions check scripts are incomplete");
+requireCondition(workflowSource.includes("node scripts/check-atlas-contract.js") && workflowSource.includes("node scripts/check-repository-audit.js") && workflowSource.includes("node scripts/check-interaction-metadata.js") && workflowSource.includes("node scripts/report-repository-audit.js") && workflowSource.includes("node scripts/check-set-regions.js") && workflowSource.includes("node scripts/check-set-relations.js") && workflowSource.includes("node scripts/check-event-regions.js") && workflowSource.includes("node scripts/check-conditional-probability.js") && workflowSource.includes("node scripts/check-combinatorics.js") && workflowSource.includes("node scripts/check-statistics.js") && workflowSource.includes("node scripts/check-probability.js") && workflowSource.includes("node scripts/check-hypothesis-test.js") && workflowSource.includes("node scripts/check-geometry.js") && workflowSource.includes("node scripts/check-algebra.js") && workflowSource.includes("node scripts/check-number-line.js") && workflowSource.includes("node scripts/check-sample-space.js") && workflowSource.includes("node scripts/check-number-theory.js") && workflowSource.includes("node scripts/check-quadratic.js") && workflowSource.includes("node scripts/check-trigonometry.js") && workflowSource.includes("node scripts/check-curriculum.js") && workflowSource.includes("node scripts/check-related-content.js") && workflowSource.includes("node scripts/check-practice-data.js") && workflowSource.includes("node scripts/check-practice-answer.js") && workflowSource.includes("node scripts/check-practice-links.js") && workflowSource.includes("node scripts/check-practice-coverage.js") && workflowSource.includes("node scripts/check-practice-quality.js") && workflowSource.includes("node scripts/check-practice-session.js") && workflowSource.includes("node scripts/check-learning-state.js") && workflowSource.includes("node scripts/check-problem-set.js") && workflowSource.includes("node scripts/check-set-storage.js") && workflowSource.includes("node scripts/check-worksheet.js") && workflowSource.includes("node scripts/check-progress-summary.js") && workflowSource.includes("node scripts/check-learning-record.js") && workflowSource.includes("node scripts/check-asset-version.js"), "GitHub Actions check scripts are incomplete");
 requireCondition(workflowSource.includes("node scripts/check-js-syntax.js"), "GitHub Actions syntax checks are incomplete");
 requireCondition(workflowSource.includes("node scripts/check-exponential-logarithm.js") && workflowSource.includes("node scripts/check-calculus.js") && workflowSource.includes("node scripts/check-sequences.js") && workflowSource.includes("node scripts/check-algebra2.js") && workflowSource.includes("node scripts/check-coordinate-geometry.js") && workflowSource.includes("node scripts/check-statistical-inference.js") && workflowSource.includes("node scripts/check-modeling.js"), "Phase 7B math checks are missing from GitHub Actions");
 requireCondition(workflowSource.includes("node scripts/check-js-syntax.js"), "Phase 7B syntax checks are missing from GitHub Actions");
@@ -568,9 +577,9 @@ requireCondition(pagesWorkflowSource.includes("Smoke test deployed Pages") && pa
 requireCondition(pagesWorkflowSource.includes("test -f research/repository-audit.json") && pagesWorkflowSource.includes("cp -R research _site/research"), "Pages repository audit asset is missing");
 requireCondition(pagesWorkflowSource.includes("PLAYWRIGHT_BASE_URL") && pagesWorkflowSource.includes("tests/e2e/pages-smoke.spec.js") && pagesWorkflowSource.includes("npx playwright install --with-deps chromium"), "Pages browser smoke check is missing");
 requireCondition(e2eHelperSource.includes("function appPath") && e2eHelperSource.includes('replace(/^\\/+/, "")'), "E2E base-path helper is missing");
-requireCondition(allAtlasE2eSource.includes("readFileSync") && allAtlasE2eSource.includes("for (const content of contents)") && allAtlasE2eSource.includes("test(`${content.id}"), "Atlas regression must create independent data-driven tests");
+requireCondition(allAtlasE2eSource.includes("readFileSync") && allAtlasE2eSource.includes("repository-audit.json") && allAtlasE2eSource.includes("auditLabel") && allAtlasE2eSource.includes("for (const content of contents)") && allAtlasE2eSource.includes("test(`${content.id}"), "Atlas regression must create independent data-driven tests");
 requireCondition(learningLoopE2eSource.includes("practice-empty-state") && learningLoopE2eSource.includes("atlas-practice-links") && learningLoopE2eSource.includes("worksheet-empty-state") && learningLoopE2eSource.includes("問題 0問"), "Empty Practice state coverage is incomplete");
-requireCondition(pagesSmokeE2eSource.includes("EXPECTED_ASSET_VERSION") && pagesSmokeE2eSource.includes("toBe(expectedAssetVersion)"), "Pages smoke must verify the exact asset version");
+requireCondition(pagesSmokeE2eSource.includes("EXPECTED_ASSET_VERSION") && pagesSmokeE2eSource.includes("repository-audit.json") && pagesSmokeE2eSource.includes("toHaveLength(89)") && pagesSmokeE2eSource.includes("Repository Audit unavailable") && pagesSmokeE2eSource.includes("toBe(expectedAssetVersion)"), "Pages smoke must verify the exact asset version and repository audit availability");
 requireCondition(pagesWorkflowSource.includes("EXPECTED_ASSET_VERSION") && pagesWorkflowSource.includes("tests/e2e/all-atlas-content.spec.js") && pagesWorkflowSource.includes("tests/e2e/learning-loop.spec.js") && pagesWorkflowSource.includes("tests/e2e/responsive.spec.js"), "Pages workflow must run the full public browser gate");
 requireCondition(!viewerSource.includes("function-graph.js") && !viewerSource.includes("range-graph.js") && !viewerSource.includes("geometry-board.js") && !viewerSource.includes("region-selector.js") && !viewerSource.includes("combinatorics-viewer.js") && !viewerSource.includes("data-lab.js") && !viewerSource.includes("simulation-lab.js"), "viewer imports a concrete interaction engine");
 requireCondition(!/currentExamKey|app\.progress|answerDrafts|examFlow|MINI_EXAMS/.test(atlasSource), "atlas source references existing practice or exam state");

@@ -1,5 +1,5 @@
-import { SUBJECT_ORDER, SUBJECT_UNIT_ORDER, orderedContentIds } from "../atlas/curriculum.js?v=20260913-r1";
-import { practiceStatus } from "../atlas/storage.js?v=20260913-r1";
+import { SUBJECT_ORDER, SUBJECT_UNIT_ORDER, orderedContentIds } from "../atlas/curriculum.js?v=20260913-r2";
+import { practiceStatus } from "../atlas/storage.js?v=20260913-r2";
 
 export const STATUS_OPTIONS = Object.freeze([
   ["all", "すべて"],

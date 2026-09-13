@@ -57,9 +57,9 @@ Interaction Metadata: static/atlas/interaction-metadata.json
 ## Practice
 
 - [`practice.html`](./practice.html): 現在0問のPractice一覧。空状態を表示し、監査後の問題再整備に備える
-- [`practice.html?problem=quad-discriminant-01`](./practice.html?problem=quad-discriminant-01): 問題を開く
+- Practice問題は現在0問のため、個別問題への直リンクはありません
 - [`practice.html?status=review`](./practice.html?status=review): 要復習の問題だけを表示する。旧 `mode=mistakes` も互換対応する
-- [`practice.html?content=quadratic-discriminant`](./practice.html?content=quadratic-discriminant): 1教材の基礎→標準→発展セッション
+- AtlasからPracticeへ戻る導線は、対応する問題が登録された教材だけに表示します
 - `practice.html?unit=quadratic`、`?unit=quadratic&difficulty=1`、`?q=判別式`、`?status=mastered` で単元・難易度・検索語・習得状態を指定できる
 - 正解判定後は自動で次へ進まず、次の問題ボタンを明示的に押す。誤答時は該当する図鑑教材へ戻れる
 - 問題セットは [`sets.html`](./sets.html) で作成・保存・複製・JSON入出力できる。保存JSONにはタイトル、説明、問題IDだけを含め、教師指定の順番をPracticeへ引き継ぐ
@@ -71,7 +71,8 @@ Interaction Metadata: static/atlas/interaction-metadata.json
 
 ```text
 node scripts/check-atlas-contract.js
-node scripts/check-repository-audit.js
+node scripts/check-repository-audit.js --require-complete
+node scripts/report-repository-audit.js
 node scripts/check-interaction-metadata.js
 node scripts/check-set-regions.js
 node scripts/check-set-relations.js
@@ -116,11 +117,13 @@ GitHub Actionsでも、同じ契約・数学ロジック検査と対象JavaScrip
 
 このリポジトリの中心ゴールは、外部の公開Repositoryに存在するInteractive Featureを調査・選定・監査し、Atlasへ追跡可能な形で収録することです。正式採用に使えるrelationは `inspired-by` と `adapted-from` だけで、`original` は使用しません。監査記録は [`research/repository-audit.json`](./research/repository-audit.json) に保存し、未確認の候補へ参照元を後付けしません。
 
-### Phase R1: Repository-derived Interaction Foundation
+### Phase R2: Repository audit completion and provenance hardening
 
-次は89候補教材をInteraction単位で1件ずつ確認し、Repository URL、Interactive Feature、relation、License、aspect、evidenceを記録します。候補IDと監査RegistryのID集合は完全一致させます。R1完了までは候補数を正式採用数とみなしません。詳細なゴールと受入条件は [`docs/PROJECT_GOAL.md`](./docs/PROJECT_GOAL.md)、UI契約は [`docs/atlas/DESIGN.md`](./docs/atlas/DESIGN.md)、R0チェック項目は [`docs/RELEASE_CHECKLIST.md`](./docs/RELEASE_CHECKLIST.md) を参照してください。
+R2では89候補について、Git履歴・既存ドキュメント・過去のSource記録を先に確認しました。候補固有の外部Repository由来を裏付ける履歴は確認できなかったため、現在の監査結果は `Atlas候補 89 / verified 0 / needs-review 89 / pending 0` です。根拠のない参照元や新たに見つけたRepositoryの遡及的な帰属は登録していません。
 
-新しいInteractionは、`Repository Search → Feature確認 → License確認 → inspired-by / adapted-from判定 → Atlas登録` の順でのみ追加します。未確認のInteraction、架空のRepository URL、後付けの出典、`original` relationは許可しません。将来は `Learning Requirements → Interaction検索 → Example再利用 → 不足Data生成 → Validator → Lesson構成` をAIで実行できる状態へ進めます。
+`research/repository-audit.json` は候補の監査作業キューであり、Interactionの正規ID Registryではありません。Contentの描画ライブラリは `static/atlas/content-data.json` の `rendering.library` に置き、Repository、relation、License、evidenceは監査Registryだけを正本とします。詳細なゴールと受入条件は [`docs/PROJECT_GOAL.md`](./docs/PROJECT_GOAL.md)、UI契約は [`docs/atlas/DESIGN.md`](./docs/atlas/DESIGN.md)、R2チェック項目は [`docs/RELEASE_CHECKLIST.md`](./docs/RELEASE_CHECKLIST.md) を参照してください。
+
+新しいInteractionは、`Repository Search → Feature確認 → License確認 → inspired-by / adapted-from判定 → Atlas登録` の順でのみ追加します。未確認のInteraction、架空のRepository URL、後付けの出典、`original` relationは許可しません。`needs-review` は根拠不足を隠さず示す状態であり、`verified` と同じ意味ではありません。将来は `Learning Requirements → Interaction検索 → Example再利用 → 不足Data生成 → Validator → Lesson構成` をAIで実行できる状態へ進めます。
 
 ローカル検証は `npm run check`、`npm test`、`git diff --check` で実行します。GitHub ActionsのAtlas checksはpush / pull requestで実行します。GitHub PagesはRepository設定またはGitHubプランの制約により利用できない場合があるため、公開検証はローカル検証と分けて扱います。
 
@@ -175,4 +178,4 @@ GitHub Actionsでも、同じ契約・数学ロジック検査と対象JavaScrip
 py -m http.server 8000
 ```
 
-ブラウザで `http://localhost:8000/atlas.html` を開きます。KaTeXとJSXGraphは固定バージョンのCDNを使用します。
+ブラウザで `http://localhost:8000/atlas.html` を開きます。KaTeXとJSXGraphは固定バージョンのCDNを使用します。監査JSONを読み込めない場合、画面には `Repository Audit unavailable` を表示します。

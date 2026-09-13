@@ -18,13 +18,20 @@ function requireCondition(condition, message) {
   if (!condition) errors.push(message);
 }
 
-function isGitHubRepositoryUrl(value) {
+function repositoryFromGitHubUrl(value) {
   try {
     const url = new URL(value);
-    return url.protocol === "https:" && url.hostname === "github.com" && url.pathname.split("/").filter(Boolean).length >= 2;
+    const parts = url.pathname.split("/").filter(Boolean);
+    if (url.protocol !== "https:" || url.hostname !== "github.com" || parts.length !== 2) return null;
+    return `${parts[0]}/${parts[1].replace(/\.git$/, "")}`;
   } catch {
-    return false;
+    return null;
   }
+}
+
+function isCommitSha(value) { return typeof value === "string" && /^[0-9a-f]{40}$/i.test(value); }
+function isGitHubLicenseUrl(value, ref) {
+  return typeof value === "string" && value.startsWith("https://github.com/") && value.includes(`/blob/${ref}/`);
 }
 
 const contents = readJson("static/atlas/content-data.json");
@@ -34,6 +41,7 @@ const contentIdSet = new Set(contentIds);
 const records = Array.isArray(audit?.contents) ? audit.contents : [];
 const allowedStatuses = new Set(["pending", "verified", "needs-review"]);
 const allowedRelations = new Set(["inspired-by", "adapted-from"]);
+const requireComplete = process.argv.includes("--require-complete");
 
 requireCondition(Array.isArray(contents), "content data must be an array");
 requireCondition(audit && audit.version === 1, "repository audit version must be 1");
@@ -49,10 +57,12 @@ records.forEach((record, index) => {
   recordIds.add(record.contentId);
   requireCondition(contentIdSet.has(record.contentId), `audit contentId does not exist: ${record.contentId}`);
   requireCondition(allowedStatuses.has(record.auditStatus), `${record.contentId} has invalid auditStatus: ${record.auditStatus}`);
+  if (requireComplete) requireCondition(record.auditStatus !== "pending", `${record.contentId} must not remain pending in complete audit mode`);
   requireCondition(Array.isArray(record.references), `${record.contentId} references must be an array`);
   if (!Array.isArray(record.references)) return;
   if (record.auditStatus === "pending") requireCondition(record.references.length === 0, `${record.contentId} pending records must not have references`);
   if (record.auditStatus === "verified") requireCondition(record.references.length >= 1, `${record.contentId} verified records need at least one reference`);
+  if (record.auditStatus === "needs-review") requireCondition(typeof record.reviewReason === "string" && record.reviewReason.trim() !== "", `${record.contentId} needs-review records require reviewReason`);
 
   const repositories = new Set();
   record.references.forEach((reference, referenceIndex) => {
@@ -61,14 +71,23 @@ records.forEach((record, index) => {
     if (!reference || typeof reference !== "object" || Array.isArray(reference)) return;
     requireCondition(allowedRelations.has(reference.relation), `${label} has an invalid relation`);
     requireCondition(typeof reference.repository === "string" && /^[^/\s]+\/[^/\s]+$/.test(reference.repository), `${label} repository must use owner/repository format`);
-    requireCondition(typeof reference.url === "string" && isGitHubRepositoryUrl(reference.url), `${label} URL must be a GitHub repository URL`);
+    const repositoryFromUrl = repositoryFromGitHubUrl(reference.url);
+    requireCondition(Boolean(repositoryFromUrl), `${label} URL must be an exact GitHub repository URL`);
+    requireCondition(repositoryFromUrl === reference.repository, `${label} repository must match the URL owner/repository`);
     requireCondition(typeof reference.aspect === "string" && reference.aspect.trim() !== "", `${label} aspect is required`);
     requireCondition(typeof reference.evidence === "string" && reference.evidence.trim() !== "", `${label} evidence is required`);
     requireCondition(typeof reference.license === "string" && reference.license.trim() !== "", `${label} license is required`);
     requireCondition(typeof reference.licenseReviewed === "boolean", `${label} licenseReviewed must be boolean`);
+    requireCondition(typeof reference.attributionRequired === "boolean", `${label} attributionRequired must be boolean`);
     requireCondition(!repositories.has(reference.repository), `${record.contentId} repeats repository ${reference.repository}`);
     repositories.add(reference.repository);
     requireCondition(reference.relation !== "original", `${label} cannot use original relation`);
+    if (record.auditStatus === "verified") {
+      requireCondition(isCommitSha(reference.ref), `${label} verified references require a 40-character commit SHA ref`);
+      requireCondition(typeof reference.licenseUrl === "string" && isGitHubLicenseUrl(reference.licenseUrl, reference.ref), `${label} verified references require a licenseUrl tied to ref`);
+      requireCondition(typeof reference.reviewedAt === "string" && reference.reviewedAt.trim() !== "", `${label} verified references require reviewedAt`);
+      requireCondition(!["unknown", "unverified"].includes(String(reference.license).trim().toLowerCase()), `${label} verified references cannot use UNKNOWN or UNVERIFIED license`);
+    }
     if (reference.relation === "adapted-from") {
       requireCondition(reference.licenseReviewed === true, `${label} adapted-from requires licenseReviewed=true`);
       requireCondition(typeof reference.ref === "string" && reference.ref.trim() !== "", `${label} adapted-from requires ref`);
@@ -84,5 +103,5 @@ if (errors.length) {
   console.error(errors.join("\n"));
   process.exitCode = 1;
 } else {
-  console.log(`Repository audit: PASS (${records.length} candidate records; ${records.filter((record) => record.auditStatus === "pending").length} pending)`);
+  console.log(`Repository audit: PASS (${records.length} candidate records; ${records.filter((record) => record.auditStatus === "verified").length} verified, ${records.filter((record) => record.auditStatus === "needs-review").length} needs-review, ${records.filter((record) => record.auditStatus === "pending").length} pending${requireComplete ? "; complete mode" : ""})`);
 }

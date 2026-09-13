@@ -213,6 +213,7 @@ h3 { font-size: 1.25rem; line-height: 1.45; }
 .atlas-audit-status.is-verified { border-color: #9ab6a6; color: #2f6148; }
 .atlas-audit-status.is-needs-review { border-color: #d2ae73; color: #8a5a17; }
 .atlas-audit-status.is-pending { border-color: var(--atlas-border); color: var(--atlas-muted); }
+.atlas-audit-status.is-unavailable { border-color: var(--atlas-error); color: var(--atlas-error); }
 .atlas-catalog-filters { display:grid; grid-template-columns:minmax(200px,2fr) repeat(4,minmax(110px,1fr)) auto; gap:10px; align-items:center; margin:20px 0 12px; }
 .atlas-catalog-filters input, .atlas-catalog-filters select { width:100%; min-height:44px; padding:8px 10px; border:1px solid var(--atlas-border-strong); border-radius:8px; background:var(--atlas-canvas); color:var(--atlas-text); }
 .atlas-catalog-filters button { min-height:44px; padding:8px 12px; }

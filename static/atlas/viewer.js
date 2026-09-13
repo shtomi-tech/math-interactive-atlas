@@ -1,6 +1,6 @@
-import { mountInteraction } from "./interactions/index.js?v=20260913-r1";
-import { neighborsForContent, subjectLabel, unitLabel } from "./curriculum.js?v=20260913-r1";
-import { practiceStatus } from "./storage.js?v=20260913-r1";
+import { mountInteraction } from "./interactions/index.js?v=20260913-r2";
+import { neighborsForContent, subjectLabel, unitLabel } from "./curriculum.js?v=20260913-r2";
+import { practiceStatus } from "./storage.js?v=20260913-r2";
 
 const STATUS_LABELS = { unattempted: "未挑戦", practicing: "練習中", review: "要復習", mastered: "習得" };
 
@@ -51,25 +51,25 @@ function createControl(name, definition, initial, onInput) {
   return { label, input, output };
 }
 
-function appendSource(section, source) {
+function appendRenderingInfo(section, rendering) {
   const heading = document.createElement("h2");
-  heading.textContent = "Source";
-  const implementation = document.createElement("p");
-  implementation.textContent = `Interaction implementation: ${source.usage === "candidate" ? "Candidate; provenance pending" : source.usage}`;
+  heading.textContent = "Rendering";
   const library = document.createElement("p");
-  library.textContent = `Rendering library: ${source.library || "none"}`;
-  section.append(heading, implementation, library);
-
-  if (source.license && source.license !== "UNVERIFIED") {
-    const license = document.createElement("p");
-    license.textContent = `License: ${source.license}`;
-    section.append(license);
-  }
+  library.textContent = `Rendering library: ${rendering?.library || "none"}`;
+  section.append(heading, library);
 }
 
 function auditFor(repositoryAudits, contentId) { return repositoryAudits instanceof Map ? repositoryAudits.get(contentId) : repositoryAudits?.find?.((record) => record.contentId === contentId); }
-function auditLabel(status) { return status === "verified" ? "Verified" : status === "needs-review" ? "Needs Review" : "Pending Repository Audit"; }
-function appendAuditStatus(section, audit) {
+function auditLabel(status, available = true) { return !available ? "Repository Audit unavailable" : status === "verified" ? "Verified" : status === "needs-review" ? "Needs Review" : "Pending Repository Audit"; }
+function appendAuditStatus(section, audit, repositoryAuditStatus = "loaded") {
+  if (repositoryAuditStatus === "unavailable") {
+    const status = document.createElement("p");
+    status.className = "atlas-audit-status is-unavailable";
+    status.textContent = auditLabel(null, false);
+    status.title = "外部Repository監査を読み込めません";
+    section.append(status);
+    return;
+  }
   const record = audit || { auditStatus: "pending", references: [] };
   const status = document.createElement("p");
   status.className = `atlas-audit-status is-${record.auditStatus || "pending"}`;
@@ -111,7 +111,7 @@ export function createViewer(root, { onBack, onRelated, onNavigate = onRelated, 
     root.replaceChildren();
   }
 
-  function render(content, contents, { fromProblem = null, fromCatalog = null, practiceProblems = [], repositoryAudits = new Map(), learningState = {}, isFavorite = false } = {}) {
+  function render(content, contents, { fromProblem = null, fromCatalog = null, practiceProblems = [], repositoryAudits = new Map(), repositoryAuditStatus = "loaded", learningState = {}, isFavorite = false } = {}) {
     destroy();
 
     const viewer = document.createElement("article");
@@ -131,7 +131,7 @@ export function createViewer(root, { onBack, onRelated, onNavigate = onRelated, 
     description.className = "atlas-viewer-description";
     description.textContent = content.shortDescription;
     heading.append(breadcrumb, title, description);
-    appendAuditStatus(heading, auditFor(repositoryAudits, content.id));
+    appendAuditStatus(heading, auditFor(repositoryAudits, content.id), repositoryAuditStatus);
     const actions = document.createElement("div");
     actions.className = "atlas-viewer-actions";
     if (fromProblem) {
@@ -279,7 +279,7 @@ export function createViewer(root, { onBack, onRelated, onNavigate = onRelated, 
 
     const source = document.createElement("footer");
     source.className = "atlas-source";
-    appendSource(source, content.source);
+    appendRenderingInfo(source, content.rendering);
 
     viewer.append(header, formula, interactive, discovery, related);
     if (practiceSection) viewer.append(practiceSection);

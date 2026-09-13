@@ -3,448 +3,537 @@
   "contents": [
     {
       "contentId": "set-regions",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "necessary-sufficient",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "event-regions",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "conditional-probability",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "counting-tree",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "permutations-all",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "combinations-order",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "mean-median-outlier",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "variance-distance",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "boxplot-drag",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "correlation-builder",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "hypothesis-test-coin",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "quadratic-basic",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "quadratic-vertex",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "quadratic-discriminant",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "quadratic-range",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "unit-circle",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "triangle-area-sine",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "independent-trials",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "sine-law-circumcircle",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "cosine-law",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "triangle-centers",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "angle-bisector-ratio",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "inscribed-angle",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "power-of-point",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "expansion-area",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "factorization-reverse",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "perfect-square-build",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "sqrt-numberline",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "absolute-distance",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "inequality-numberline",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "circular-permutations",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "sample-space-grid",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "euclidean-algorithm",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "completing-square",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "three-point-parabola",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "quadratic-inequality",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "parameter-intersections",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "right-triangle-trig",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "trig-relations",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "exponent-extension",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "exponential-base",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "log-inverse",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "logarithm-base",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "exponential-equation",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "radian-measure",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "trig-function-graphs",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "trig-transform",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "trig-addition-formula",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "double-angle",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "secant-to-tangent",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "derivative-at-point",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "function-and-derivative",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "cubic-extrema",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "indefinite-integral",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "definite-integral-signed-area",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "arithmetic-sequence",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "geometric-sequence",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "sequence-partial-sum",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "recurrence-iteration",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "cubic-expansion",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "polynomial-division",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "rational-expression-domain",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "complex-arithmetic",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "roots-coefficients",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "factor-theorem",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "identity-coefficients",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "section-formula",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "line-equation",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "line-relations",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "circle-equation",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "circle-line-intersections",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "locus-distance-ratio",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "inequality-region-2d",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "sigma-notation",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "difference-sequence",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "mathematical-induction",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "population-sample",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "random-variable-distribution",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "distribution-mean-variance",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "binomial-distribution-b",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "normal-distribution",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "standard-normalization",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "sampling-distribution-mean",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "confidence-interval",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "normal-hypothesis-test",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "modeling-cycle",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "model-comparison",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     },
     {
       "contentId": "decision-sensitivity",
-      "auditStatus": "pending",
-      "references": []
+      "auditStatus": "needs-review",
+      "references": [],
+      "reviewReason": "Historical provenance for this candidate could not be established in Git history or project documentation. Any historical JSXGraph entry described rendering support, not candidate-specific Interaction provenance; per R2 policy, a Repository found now cannot be registered as retrospective inspired-by."
     }
   ]
 }

@@ -11,7 +11,7 @@ test("empty Practice state is explicit and does not offer a broken runner", asyn
   await expectNoBrowserErrors(errors);
 });
 
-test("Atlas hides Practice links while the external repository audit is pending", async ({ page }) => {
+test("Atlas hides Practice links while the external repository audit is unresolved", async ({ page }) => {
   const errors = collectBrowserErrors(page);
   await page.goto(appPath("atlas.html?content=quadratic-basic"));
   await expect(page.locator("#viewerTitle")).toBeVisible();

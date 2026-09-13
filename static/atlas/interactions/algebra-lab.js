@@ -1,5 +1,5 @@
-import { completeSquare, expandMonicProduct, factorPairExpansion, perfectSquareCoefficients } from "../math/algebra.js?v=20260913-r1";
-import { complexMultiply, expandCubic, factorTheoremFacts, polynomialDivide, quadraticRootRelations, rationalCancellationFacts } from "../math/algebra2.js?v=20260913-r1";
+import { completeSquare, expandMonicProduct, factorPairExpansion, perfectSquareCoefficients } from "../math/algebra.js?v=20260913-r2";
+import { complexMultiply, expandCubic, factorTheoremFacts, polynomialDivide, quadraticRootRelations, rationalCancellationFacts } from "../math/algebra2.js?v=20260913-r2";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 const svgElement = (name, attrs = {}) => { const node = document.createElementNS(SVG_NS, name); Object.entries(attrs).forEach(([key, value]) => node.setAttribute(key, String(value))); return node; };
