@@ -120,7 +120,7 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Read expected asset version
         id: asset-version
-        run: echo "value=$(tr -d '\\r\\n' < static/asset-version.txt)" >> "$GITHUB_OUTPUT"
+        run: echo "value=$(tr -d '\r\n' < static/asset-version.txt)" >> "$GITHUB_OUTPUT"
       - name: Browser regression deployed Pages
         env:
           PLAYWRIGHT_BASE_URL: ${{ steps.deployment.outputs.page_url }}

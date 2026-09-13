@@ -9,7 +9,9 @@ async function openInteraction(page, id) {
 test("canonical library renders all mapped statuses and evidence", async ({ page }) => {
   const errors = collectBrowserErrors(page);
   await page.goto(appPath("interactions.html"));
-  const canonicalCount = await page.locator(".library-card").count();
+  const cards = page.locator(".library-card");
+  await expect(cards.first()).toBeVisible();
+  const canonicalCount = await cards.count();
   expect(canonicalCount).toBeGreaterThanOrEqual(8);
   await expect(page.locator(".library-runtime-status.is-implemented")).toHaveCount(4);
   await expect(page.locator(".library-runtime-status.is-planned")).toHaveCount(canonicalCount - 4);
