@@ -1,0 +1,283 @@
+{
+  "version": 1,
+  "repositories": [
+    {
+      "id": "REPO-001",
+      "repository": "phetsims/graphing-quadratics",
+      "url": "https://github.com/phetsims/graphing-quadratics",
+      "ref": "709b383759e887b6e2edb040bfbb987dc3632e05",
+      "license": {
+        "expression": "MIT",
+        "url": "https://github.com/phetsims/graphing-quadratics/blob/709b383759e887b6e2edb040bfbb987dc3632e05/LICENSE",
+        "reviewed": true,
+        "reviewedAt": "2026-09-13"
+      },
+      "features": [
+        {
+          "id": "REPO-001-F001",
+          "title": "Vertex manipulator for a quadratic graph",
+          "paths": [
+            "js/vertexform/view/VertexFormGraphNode.ts",
+            "js/common/view/VertexDragListener.ts",
+            "js/common/model/Quadratic.ts"
+          ],
+          "evidenceUrls": [
+            "https://github.com/phetsims/graphing-quadratics/blob/709b383759e887b6e2edb040bfbb987dc3632e05/js/vertexform/view/VertexFormGraphNode.ts",
+            "https://github.com/phetsims/graphing-quadratics/blob/709b383759e887b6e2edb040bfbb987dc3632e05/js/common/view/VertexDragListener.ts",
+            "https://github.com/phetsims/graphing-quadratics/blob/709b383759e887b6e2edb040bfbb987dc3632e05/js/common/model/Quadratic.ts"
+          ],
+          "demoUrl": "https://phet.colorado.edu/sims/html/graphing-quadratics/latest/graphing-quadratics_en.html",
+          "behaviorSummary": "The vertex-form graph view creates a vertex manipulator tied to h and k. Its drag listener constrains the pointer to the graph, rounds the coordinates to the allowed grid, and writes the two model properties; the quadratic model exposes the vertex form.",
+          "learnerActions": [
+            "Drag the vertex on the coordinate graph",
+            "Observe the vertex coordinates and graph shape"
+          ],
+          "changes": [
+            "The horizontal and vertical vertex coordinates change",
+            "The displayed quadratic changes with the vertex"
+          ],
+          "feedback": [
+            "The graph and equation provide immediate visual feedback",
+            "The moved vertex is described after the drag"
+          ],
+          "reviewedAt": "2026-09-13"
+        },
+        {
+          "id": "REPO-001-F002",
+          "title": "Snapping coefficient slider",
+          "paths": [
+            "js/common/view/GQSlider.ts",
+            "js/common/model/Quadratic.ts"
+          ],
+          "evidenceUrls": [
+            "https://github.com/phetsims/graphing-quadratics/blob/709b383759e887b6e2edb040bfbb987dc3632e05/js/common/view/GQSlider.ts",
+            "https://github.com/phetsims/graphing-quadratics/blob/709b383759e887b6e2edb040bfbb987dc3632e05/js/common/model/Quadratic.ts"
+          ],
+          "demoUrl": "https://phet.colorado.edu/sims/html/graphing-quadratics/latest/graphing-quadratics_en.html",
+          "behaviorSummary": "GQSlider maps between a coefficient property and its view value, constrains values to an interval, can skip zero, and can snap near-zero values back to zero. It also exposes tick labels and an accessible value text for the slider.",
+          "learnerActions": [
+            "Move a coefficient slider",
+            "Compare the coefficient value with the graph response"
+          ],
+          "changes": [
+            "The selected coefficient changes in discrete intervals",
+            "The resulting quadratic model changes"
+          ],
+          "feedback": [
+            "Tick labels and the value label show the current setting",
+            "The graph and equation respond to the coefficient"
+          ],
+          "reviewedAt": "2026-09-13"
+        },
+        {
+          "id": "REPO-001-F003",
+          "title": "Curve-snapping coordinate probe",
+          "paths": [
+            "js/common/view/PointToolDragListener.ts",
+            "js/common/view/PointToolNode.ts",
+            "js/common/model/PointTool.ts"
+          ],
+          "evidenceUrls": [
+            "https://github.com/phetsims/graphing-quadratics/blob/709b383759e887b6e2edb040bfbb987dc3632e05/js/common/view/PointToolDragListener.ts",
+            "https://github.com/phetsims/graphing-quadratics/blob/709b383759e887b6e2edb040bfbb987dc3632e05/js/common/view/PointToolNode.ts",
+            "https://github.com/phetsims/graphing-quadratics/blob/709b383759e887b6e2edb040bfbb987dc3632e05/js/common/model/PointTool.ts"
+          ],
+          "demoUrl": "https://phet.colorado.edu/sims/html/graphing-quadratics/latest/graphing-quadratics_en.html",
+          "behaviorSummary": "The point tool drag listener constrains a probe to the graph bounds, snaps it to a nearby quadratic curve, rounds the displayed x coordinate, and updates the tool position. The point tool node presents the coordinates and also installs keyboard drag support.",
+          "learnerActions": [
+            "Drag a coordinate probe across the graph",
+            "Move the probe with keyboard input"
+          ],
+          "changes": [
+            "The probe position changes along the selected curve",
+            "The displayed coordinate pair changes"
+          ],
+          "feedback": [
+            "The coordinate readout identifies the current point",
+            "Snapping to a curve is signaled by the tool state"
+          ],
+          "reviewedAt": "2026-09-13"
+        }
+      ]
+    },
+    {
+      "id": "REPO-002",
+      "repository": "phetsims/function-builder",
+      "url": "https://github.com/phetsims/function-builder",
+      "ref": "6c3c834fb7808c19c37e59f17f66a3967bab5303",
+      "license": {
+        "expression": "GPL-3.0",
+        "url": "https://github.com/phetsims/function-builder/blob/6c3c834fb7808c19c37e59f17f66a3967bab5303/LICENSE",
+        "reviewed": true,
+        "reviewedAt": "2026-09-13"
+      },
+      "features": [
+        {
+          "id": "REPO-002-F001",
+          "title": "Function pipeline slots",
+          "paths": [
+            "js/common/model/builder/Builder.js",
+            "js/common/model/builder/FunctionSlot.js"
+          ],
+          "evidenceUrls": [
+            "https://github.com/phetsims/function-builder/blob/6c3c834fb7808c19c37e59f17f66a3967bab5303/js/common/model/builder/Builder.js",
+            "https://github.com/phetsims/function-builder/blob/6c3c834fb7808c19c37e59f17f66a3967bab5303/js/common/model/builder/FunctionSlot.js"
+          ],
+          "demoUrl": "https://phet.colorado.edu/sims/html/function-builder/latest/function-builder_en.html",
+          "behaviorSummary": "Builder creates an ordered collection of function slots. Each slot contains zero or one function instance, empty slots act as identity functions, and applying the builder runs occupied slots in order while emitting a change event when instances are added or removed.",
+          "learnerActions": [
+            "Place a function into an ordered slot",
+            "Apply the pipeline to an input"
+          ],
+          "changes": [
+            "The sequence of active functions changes",
+            "The pipeline output changes when a slot is added or cleared"
+          ],
+          "feedback": [
+            "The slot state shows whether a function is present",
+            "The output reflects the ordered composition"
+          ],
+          "reviewedAt": "2026-09-13"
+        },
+        {
+          "id": "REPO-002-F002",
+          "title": "Draggable function pieces",
+          "paths": [
+            "js/common/view/FBMovableNode.ts",
+            "js/common/model/FBMovable.ts"
+          ],
+          "evidenceUrls": [
+            "https://github.com/phetsims/function-builder/blob/6c3c834fb7808c19c37e59f17f66a3967bab5303/js/common/view/FBMovableNode.ts",
+            "https://github.com/phetsims/function-builder/blob/6c3c834fb7808c19c37e59f17f66a3967bab5303/js/common/model/FBMovable.ts"
+          ],
+          "demoUrl": "https://phet.colorado.edu/sims/html/function-builder/latest/function-builder_en.html",
+          "behaviorSummary": "FBMovableNode connects pointer dragging to the FBMovable model, tracks drag start and end callbacks, and updates the model position during the drag. FBMovable keeps both the current position and a destination for immediate moves or animation.",
+          "learnerActions": [
+            "Drag a function piece on the workspace",
+            "Release the piece at a new destination"
+          ],
+          "changes": [
+            "The model position follows the pointer",
+            "The piece can transition between immediate and animated movement"
+          ],
+          "feedback": [
+            "The piece visibly follows the drag",
+            "Start and end callbacks can update the surrounding builder state"
+          ],
+          "reviewedAt": "2026-09-13"
+        },
+        {
+          "id": "REPO-002-F003",
+          "title": "Function piece insertion and slot relocation",
+          "paths": [
+            "js/common/view/functions/FunctionNode.js",
+            "js/common/view/builder/FunctionSlotNode.ts"
+          ],
+          "evidenceUrls": [
+            "https://github.com/phetsims/function-builder/blob/6c3c834fb7808c19c37e59f17f66a3967bab5303/js/common/view/functions/FunctionNode.js",
+            "https://github.com/phetsims/function-builder/blob/6c3c834fb7808c19c37e59f17f66a3967bab5303/js/common/view/builder/FunctionSlotNode.ts"
+          ],
+          "demoUrl": "https://phet.colorado.edu/sims/html/function-builder/latest/function-builder_en.html",
+          "behaviorSummary": "FunctionNode handles the drag cycle for a function instance: it removes the piece from its current container, finds the closest builder slot on release, and animates it into that slot or back to the carousel. FunctionSlotNode provides the dashed empty-slot visual.",
+          "learnerActions": [
+            "Drag a function piece toward an empty slot",
+            "Move a piece from one slot to another"
+          ],
+          "changes": [
+            "A function instance is inserted into or removed from a slot",
+            "Adjacent slot occupants can be relocated when a slot is reused"
+          ],
+          "feedback": [
+            "The dashed slot indicates a drop target",
+            "Animation shows whether the piece entered the builder or returned"
+          ],
+          "reviewedAt": "2026-09-13"
+        }
+      ]
+    },
+    {
+      "id": "REPO-003",
+      "repository": "phetsims/area-model-algebra",
+      "url": "https://github.com/phetsims/area-model-algebra",
+      "ref": "8d5250d30bf1ad952b21ee48a9f1b52749044a0b",
+      "license": {
+        "expression": "GPL-3.0",
+        "url": "https://github.com/phetsims/area-model-algebra/blob/8d5250d30bf1ad952b21ee48a9f1b52749044a0b/LICENSE",
+        "reviewed": true,
+        "reviewedAt": "2026-09-13"
+      },
+      "features": [
+        {
+          "id": "REPO-003-F001",
+          "title": "Levelled area-model game screen",
+          "paths": [
+            "js/game/GameScreen.js",
+            "js/AreaModelAlgebraQueryParameters.ts",
+            "js/AreaModelAlgebraImages.ts"
+          ],
+          "evidenceUrls": [
+            "https://github.com/phetsims/area-model-algebra/blob/8d5250d30bf1ad952b21ee48a9f1b52749044a0b/js/game/GameScreen.js",
+            "https://github.com/phetsims/area-model-algebra/blob/8d5250d30bf1ad952b21ee48a9f1b52749044a0b/js/AreaModelAlgebraQueryParameters.ts",
+            "https://github.com/phetsims/area-model-algebra/blob/8d5250d30bf1ad952b21ee48a9f1b52749044a0b/js/AreaModelAlgebraImages.ts"
+          ],
+          "demoUrl": "https://phet.colorado.edu/sims/html/area-model-algebra/latest/area-model-algebra_en.html",
+          "behaviorSummary": "The public simulation wires a VariablesGameScreen with six level image properties, and its query-parameter schema controls which of the six game levels are shown. The image registry supplies the visual level assets used by the game screen.",
+          "learnerActions": [
+            "Select a level in the area-model game",
+            "Work through the visual level sequence"
+          ],
+          "changes": [
+            "The selected challenge level changes",
+            "The level-specific visual prompt changes"
+          ],
+          "feedback": [
+            "The level screen presents a different visual challenge",
+            "The game structure separates level progression from screen setup"
+          ],
+          "reviewedAt": "2026-09-13"
+        }
+      ]
+    },
+    {
+      "id": "REPO-004",
+      "repository": "phetsims/fractions-intro",
+      "url": "https://github.com/phetsims/fractions-intro",
+      "ref": "2885a338d6f76d86d53544e80b1386925a0adfaa",
+      "license": {
+        "expression": "MIT",
+        "url": "https://github.com/phetsims/fractions-intro/blob/2885a338d6f76d86d53544e80b1386925a0adfaa/LICENSE",
+        "reviewed": true,
+        "reviewedAt": "2026-09-13"
+      },
+      "features": [
+        {
+          "id": "REPO-004-F001",
+          "title": "Fraction construction lab entry",
+          "paths": [
+            "js/view/LabScreen.js",
+            "js/view/IntroScreen.js"
+          ],
+          "evidenceUrls": [
+            "https://github.com/phetsims/fractions-intro/blob/2885a338d6f76d86d53544e80b1386925a0adfaa/js/view/LabScreen.js",
+            "https://github.com/phetsims/fractions-intro/blob/2885a338d6f76d86d53544e80b1386925a0adfaa/js/view/IntroScreen.js"
+          ],
+          "demoUrl": "https://phet.colorado.edu/sims/html/fractions-intro/latest/fractions-intro_en.html",
+          "behaviorSummary": "The Lab screen mounts a BuildingLabModel with a BuildingLabScreenView, while the Intro screen mounts an IntroModel with an IntroScreenView. The repository therefore exposes a dedicated construction-lab screen alongside an introductory visual screen.",
+          "learnerActions": [
+            "Open the fraction construction lab",
+            "Switch between the introduction and lab screens"
+          ],
+          "changes": [
+            "The active screen changes from introduction to construction workspace",
+            "The lab model becomes the state behind the construction view"
+          ],
+          "feedback": [
+            "The screen navigation identifies the current learning context",
+            "The construction view provides the active workspace"
+          ],
+          "reviewedAt": "2026-09-13"
+        }
+      ]
+    }
+  ]
+}

@@ -1,6 +1,6 @@
-# Math Interactive Atlas R2 Checklist
+# Math Interactive Atlas R3 Checklist
 
-Phase R2では、89候補の外部Repository監査を完了し、由来の正本・失敗時表示・Checker・集計・E2Eを確認する。根拠がない候補は `needs-review` として残し、`verified` と偽装しない。
+Phase R3では、R2の89候補監査を維持したまま、固定SHAで確認した外部Featureから研究専用のCanonical Interaction Libraryを構築する。根拠がない候補は `needs-review` として残し、`verified` と偽装しない。
 
 ## Current scope
 
@@ -11,6 +11,9 @@ Phase R2では、89候補の外部Repository監査を完了し、由来の正本
 - [ ] `research/repository-audit.json` は89候補を保持し、`verified 0 / needs-review 89 / pending 0` である
 - [ ] 監査Registryは候補監査キューであり、Interaction metadataの正規ID Registryとは分離されている
 - [ ] Contentの描画情報は `rendering.library`、Repository由来情報は監査Registryだけにある
+- [ ] Canonical Interaction 8件以上、外部Repository 3件以上、Category 4種以上
+- [ ] R3の正本は `data/interactions.json` と `research/external-repositories.json`で、`dist/ai/interactions.json`は生成物である
+- [ ] Canonical Interactionは `contentId` に依存せず、すべて `implementationStatus: research-only` である
 
 ## Data and static gates
 
@@ -27,6 +30,12 @@ Phase R2では、89候補の外部Repository監査を完了し、由来の正本
 - [ ] Worksheet modelが空データで安全に動作する
 - [ ] Progress summaryが古いPractice履歴を除外し、Atlas閲覧を維持する
 - [ ] `node scripts/check-asset-version.js`
+- [ ] `node scripts/check-r3-scope.js`
+- [ ] `node scripts/check-external-repositories.js`
+- [ ] `node scripts/check-interaction-library.js`
+- [ ] `node scripts/build-interaction-index.js --check`
+- [ ] `node scripts/check-interaction-index.js`
+- [ ] `node scripts/report-interaction-library.js`
 - [ ] `git diff --check`
 
 ## Browser gates
@@ -49,12 +58,15 @@ Phase R2では、89候補の外部Repository監査を完了し、由来の正本
 - [ ] `verified` は正確なGitHub URL、owner/repository一致、40文字SHA、Path、aspect、evidence、License、License URL、License確認日を記録する
 - [ ] `adapted-from` はLicense、`ref`、`paths`、Attribution要件を記録する
 - [ ] `needs-review` は理由を記録する
+- [ ] 外部Repositoryは公開GitHubの正確なURL、固定40文字SHA、SHAに結びついたLicense URL、Feature Path、Behavior Summaryを持つ
+- [ ] R3の証拠URLに `main` / `master` を使わない
+- [ ] R3のRelationは `inspired-by` のみで、コードのコピー・移植・`adapted-from`を行わない
 
 ## Public Pages note
 
 Pagesの公開検証はローカル検証とは別に扱う。Repositoryの公開設定またはGitHubプランでPagesを有効化できない場合は、公開ゲートを未確認として記録し、成功とは宣言しない。
 
-## Forbidden in R2
+## Forbidden in R3
 
 - 新規Practice問題、Atlas教材、Interaction Engine
 - 削除したPractice問題の別JSON・legacy・disabled保存
@@ -64,7 +76,10 @@ Pagesの公開検証はローカル検証とは別に扱う。Repositoryの公�
 - 新規発見Repositoryを過去実装の由来として遡及帰属すること
 - 数学C、数学III、Classroom Assignment
 - 既存Progress保存形式や安定IDを破壊する変更
+- R3での新規Atlas教材、Interaction Engine、Mode、Practice問題
+- `research/external-repositories.json`のFeatureを既存89候補の過去の由来として登録すること
+- `data/interactions.json`への`contentId`追加、可変Branch URL、外部証拠のないInteraction追加
 
-## Next gate: post-R2 review
+## Next gate: post-R3 review
 
-Web ChatGPTによるR2レビュー後、指摘された次の実装指示だけを対象に進める。現行受入条件は、Practice 0問、Interaction Engine 11種、既存89教材の実装維持、監査 `pending 0`、`npm run check`、全テスト、GitHub Actionsのchecks/browser-smoke成功である。
+Web ChatGPTによるR3レビュー後、指摘された次の実装指示だけを対象に進める。現行受入条件は、Canonical Interaction 8件以上、外部Repository 3件以上、Category 4種以上、Practice 0問、Interaction Engine 11種、既存89教材の実装維持、監査 `pending 0`、`npm run check`、全テスト、GitHub Actionsのchecks/browser-smoke成功である。

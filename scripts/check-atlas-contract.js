@@ -65,6 +65,8 @@ const requiredFiles = [
   "static/atlas/math/modeling.js",
   "static/atlas/storage.js",
   "static/atlas/interaction-metadata.json",
+  "data/interactions.json",
+  "research/external-repositories.json",
   "static/practice.css",
   "static/practice/main.js",
   "static/practice/router.js",
@@ -122,6 +124,12 @@ const requiredFiles = [
   "scripts/check-repository-audit.js",
   "scripts/check-interaction-metadata.js",
   "scripts/report-repository-audit.js",
+  "scripts/check-r3-scope.js",
+  "scripts/check-external-repositories.js",
+  "scripts/check-interaction-library.js",
+  "scripts/build-interaction-index.js",
+  "scripts/check-interaction-index.js",
+  "scripts/report-interaction-library.js",
   "tests/e2e/all-atlas-content.spec.js",
   "tests/e2e/learning-loop.spec.js",
   "tests/e2e/pages-smoke.spec.js",
@@ -132,6 +140,7 @@ const requiredFiles = [
   "docs/RELEASE_CHECKLIST.md",
   "research/README.md",
   "research/repository-audit.json",
+  "dist/ai/interactions.json",
   ".github/workflows/atlas-checks.yml",
   ".github/workflows/pages.yml"
 ];
@@ -160,6 +169,8 @@ const practiceCss = read("static/practice.css");
 const dataText = read("static/atlas/content-data.json");
 const auditText = read("research/repository-audit.json");
 const interactionMetadataText = read("static/atlas/interaction-metadata.json");
+const canonicalInteractionText = read("data/interactions.json");
+const externalRepositoryText = read("research/external-repositories.json");
 const reportAuditSource = read("scripts/report-repository-audit.js");
 const practiceDataText = read("static/practice/problem-data.json");
 const viewerSource = read("static/atlas/viewer.js");
@@ -256,6 +267,20 @@ try {
   interactionMetadata = JSON.parse(interactionMetadataText);
 } catch (error) {
   errors.push(`interaction metadata is not valid JSON: ${error.message}`);
+}
+
+let canonicalInteractions = null;
+try {
+  canonicalInteractions = JSON.parse(canonicalInteractionText);
+} catch (error) {
+  errors.push(`canonical interaction library is not valid JSON: ${error.message}`);
+}
+
+let externalRepositories = null;
+try {
+  externalRepositories = JSON.parse(externalRepositoryText);
+} catch (error) {
+  errors.push(`external repository registry is not valid JSON: ${error.message}`);
 }
 
 requireCondition(Array.isArray(contents), "content data must be an array");
@@ -558,6 +583,23 @@ if (Array.isArray(repositoryAudit?.contents)) {
   });
 }
 requireCondition(interactionMetadata?.version === 1 && Array.isArray(interactionMetadata?.interactions), "interaction metadata registry is incomplete");
+const canonicalInteractionRecords = Array.isArray(canonicalInteractions?.interactions) ? canonicalInteractions.interactions : [];
+const externalRepositoryRecords = Array.isArray(externalRepositories?.repositories) ? externalRepositories.repositories : [];
+const externalFeatureIds = new Set(externalRepositoryRecords.flatMap((repository) => (repository.features || []).map((feature) => feature.id)));
+requireCondition(canonicalInteractions?.version === 1 && Array.isArray(canonicalInteractions?.interactions), "canonical interaction library is incomplete");
+requireCondition(canonicalInteractionRecords.length >= 8, "canonical interaction library must contain at least 8 research interactions");
+requireCondition(externalRepositories?.version === 1 && Array.isArray(externalRepositories?.repositories), "external repository registry is incomplete");
+requireCondition(externalRepositoryRecords.length >= 3, "external repository registry must contain at least 3 repositories");
+canonicalInteractionRecords.forEach((interaction) => {
+  requireCondition(/^MATH-INT-\d{3}$/.test(interaction.id), `${interaction.id} must use the canonical MATH-INT-### format`);
+  requireCondition(!("contentId" in interaction), `${interaction.id} must not depend on contentId`);
+  requireCondition(interaction.implementationStatus === "research-only", `${interaction.id} must remain research-only`);
+  requireCondition(Array.isArray(interaction.sources) && interaction.sources.length >= 1, `${interaction.id} needs source evidence`);
+  (interaction.sources || []).forEach((source, index) => {
+    requireCondition(externalFeatureIds.has(source.featureId), `${interaction.id} source ${index} points to an unknown external feature`);
+    requireCondition(source.relation === "inspired-by", `${interaction.id} source ${index} must use inspired-by in R3`);
+  });
+});
 requireCondition(reportAuditSource.includes("Repository Audit Summary") && reportAuditSource.includes("auditStatus") && reportAuditSource.includes("inspired-by") && reportAuditSource.includes("adapted-from"), "repository audit summary reporter is incomplete");
 requireCondition(samplingSource.includes("sampleStandardNormal") && samplingSource.includes("sampleNormal") && samplingSource.includes("sampleMeanFromNormalPopulation") && samplingSource.includes("simulateKnownSigmaConfidenceIntervals"), "Phase 8A normal sampling helpers are missing");
 requireCondition(simulationLabSource.includes("drawNormalTestChart") && simulationLabSource.includes("標準正規分布") && simulationLabSource.includes("100区間を作る"), "Phase 8A statistical simulation UI is incomplete");
@@ -567,6 +609,7 @@ requireCondition(routerSource.includes('subject: params.get("subject") || null')
 requireCondition(workflowSource.includes("node-version: 22"), "GitHub Actions must use Node.js 22");
 requireCondition(workflowSource.includes("node scripts/check-atlas-contract.js") && workflowSource.includes("node scripts/check-repository-audit.js") && workflowSource.includes("node scripts/check-interaction-metadata.js") && workflowSource.includes("node scripts/report-repository-audit.js") && workflowSource.includes("node scripts/check-set-regions.js") && workflowSource.includes("node scripts/check-set-relations.js") && workflowSource.includes("node scripts/check-event-regions.js") && workflowSource.includes("node scripts/check-conditional-probability.js") && workflowSource.includes("node scripts/check-combinatorics.js") && workflowSource.includes("node scripts/check-statistics.js") && workflowSource.includes("node scripts/check-probability.js") && workflowSource.includes("node scripts/check-hypothesis-test.js") && workflowSource.includes("node scripts/check-geometry.js") && workflowSource.includes("node scripts/check-algebra.js") && workflowSource.includes("node scripts/check-number-line.js") && workflowSource.includes("node scripts/check-sample-space.js") && workflowSource.includes("node scripts/check-number-theory.js") && workflowSource.includes("node scripts/check-quadratic.js") && workflowSource.includes("node scripts/check-trigonometry.js") && workflowSource.includes("node scripts/check-curriculum.js") && workflowSource.includes("node scripts/check-related-content.js") && workflowSource.includes("node scripts/check-practice-data.js") && workflowSource.includes("node scripts/check-practice-answer.js") && workflowSource.includes("node scripts/check-practice-links.js") && workflowSource.includes("node scripts/check-practice-coverage.js") && workflowSource.includes("node scripts/check-practice-quality.js") && workflowSource.includes("node scripts/check-practice-session.js") && workflowSource.includes("node scripts/check-learning-state.js") && workflowSource.includes("node scripts/check-problem-set.js") && workflowSource.includes("node scripts/check-set-storage.js") && workflowSource.includes("node scripts/check-worksheet.js") && workflowSource.includes("node scripts/check-progress-summary.js") && workflowSource.includes("node scripts/check-learning-record.js") && workflowSource.includes("node scripts/check-asset-version.js"), "GitHub Actions check scripts are incomplete");
 requireCondition(workflowSource.includes("node scripts/check-js-syntax.js"), "GitHub Actions syntax checks are incomplete");
+requireCondition(workflowSource.includes("node scripts/check-r3-scope.js") && workflowSource.includes("node scripts/check-external-repositories.js") && workflowSource.includes("node scripts/check-interaction-library.js") && workflowSource.includes("node scripts/build-interaction-index.js --check") && workflowSource.includes("node scripts/check-interaction-index.js") && workflowSource.includes("node scripts/report-interaction-library.js"), "Phase R3 research checks are missing from GitHub Actions");
 requireCondition(workflowSource.includes("node scripts/check-exponential-logarithm.js") && workflowSource.includes("node scripts/check-calculus.js") && workflowSource.includes("node scripts/check-sequences.js") && workflowSource.includes("node scripts/check-algebra2.js") && workflowSource.includes("node scripts/check-coordinate-geometry.js") && workflowSource.includes("node scripts/check-statistical-inference.js") && workflowSource.includes("node scripts/check-modeling.js"), "Phase 7B math checks are missing from GitHub Actions");
 requireCondition(workflowSource.includes("node scripts/check-js-syntax.js"), "Phase 7B syntax checks are missing from GitHub Actions");
 requireCondition(workflowSource.includes("browser-smoke:") && workflowSource.includes("npx playwright install --with-deps chromium") && workflowSource.includes("npm test"), "Browser smoke checks are missing from GitHub Actions");

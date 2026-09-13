@@ -194,6 +194,14 @@ R0の品質ゲートは、再帰的JavaScript構文検査、静的契約検査�
 
 R2では89候補教材をInteraction単位の監査作業キューとして管理し、schema・relation・License条件をCheckerで固定する。候補固有の歴史的な外部Repository由来は確認できなかったため、全件を `needs-review` とし、参照元を捏造しない。`auditStatus = verified` かつ有効なReferenceを持つものだけを正式な外部由来教材として扱う。監査RegistryのIDはInteraction metadataの正規IDとは別管理とする。
 
+### Phase R3: Research-only Interaction Library
+
+`Legacy Candidate`、`Canonical Interaction`、`Runtime Engine`は別の概念として扱う。既存89候補の監査キューは `research/repository-audit.json`、R3で新たに確認した公開RepositoryとFeatureは `research/external-repositories.json`、Interactionの正規metadataは `data/interactions.json`を正本とする。`static/atlas/interaction-metadata.json`は旧互換領域であり、Canonical Interactionの手入力Registryにはしない。
+
+R3のInteractionは `MATH-INT-###` ID、`inspired-by` のFeature証拠、固定commit SHA、License確認、学習者の操作・変化・フィードバック・再利用条件を持つ。すべて `implementationStatus: research-only` とし、`contentId`を持たせない。AI向けの `dist/ai/interactions.json` は `data/interactions.json` と `research/external-repositories.json`から生成し、手で編集しない。
+
+R3ではRuntimeを凍結する。既存89教材、11 Engine、Practice 0問、数学I・A・II・Bの範囲を維持し、新しい教材、Engine、Mode、Practice、数学C・数学III、Classroom機能は追加しない。外部Repositoryのコードをコピー・移植せず、次のRuntime実装候補はR3レビュー後に別Phaseで選定する。
+
 ### AI Retrieval Foundation
 
 将来的な教材生成は `Math Reference → Learning Requirements → Interaction検索 → Example再利用 → 不足Data生成 → Validator → Lesson構成` の順で行う。Atlasは数学知識そのものを置き換えず、「どう学ばせるか」を検索可能なInteraction Libraryとして提供する。

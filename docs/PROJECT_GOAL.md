@@ -728,6 +728,32 @@ Interactive Math Material
 
 という仕組みを成立させる。
 
+## Phase R3: Canonical Repository-derived Interaction Library
+
+R3では、既存の89教材を新しい出典へ遡及帰属させず、実在する公開GitHub Repositoryの実装を固定SHAで確認して、研究用の正規Interaction Libraryを別に作る。
+
+正本は次の役割に分ける。
+
+```text
+research/repository-audit.json
+    ↓ 既存89候補の歴史的な監査キュー
+
+research/external-repositories.json
+    ↓ R3で新たに確認したRepository・Feature・License・証拠
+
+data/interactions.json
+    ↓ MATH-INT-###形式の正規Interaction metadata
+
+dist/ai/interactions.json
+    ↓ 上記2つから生成するAI検索用Index
+```
+
+R3の最低条件は、8件以上のCanonical Interaction、3つ以上の外部Repository、4つ以上のInteraction Categoryである。各Interactionは `contentId` に依存せず、`inspired-by` のFeature証拠と、学習者の操作・変化・フィードバック・再利用条件を持つ。R3ではすべて `implementationStatus: research-only` とし、実行時の教材・Engine・Practiceへ追加しない。
+
+外部Repositoryの正当性は、公開GitHubの正確なowner/repository URL、40文字の固定commit SHA、SHAに結びついたLicense URL、確認日、実際のFeature PathとBehavior Summaryで検証する。`main` / `master` の可変URL、架空の証拠、コードのコピー・移植・`adapted-from` はCanonical Libraryへ登録しない。
+
+R3完了時も、Atlas 89教材、Practice 0問、Interaction Engine 11種、数学I・A・II・Bという実行時スコープは維持する。Runtime Demoの選定と実装は、R3のレビュー後に別のPhaseで行う。
+
 ## 最重要ルール
 
 > **外部公開Repositoryで確認できないInteractionを、独自に作成してAtlasへ追加してはいけない。**

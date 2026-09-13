@@ -19,6 +19,7 @@
 - Interaction Engine: `static/atlas/interactions/index.js` のRegistry経由で11エンジンを切り替える。連続量はFunctionGraph / GeometryBoard / RangeGraph、離散量はSequenceLabで表示する
 - 監査Registry: [`research/repository-audit.json`](./research/repository-audit.json) に外部Repositoryとの関係を記録する。許可するrelationは `inspired-by` / `adapted-from` のみ
 - AI向けMetadata: [`static/atlas/interaction-metadata.json`](./static/atlas/interaction-metadata.json) は学習者の認知活動からInteractionを検索するための拡張領域として管理する
+- Canonical Interaction Library: [`data/interactions.json`](./data/interactions.json) にR3研究用Interactionを8件、[`research/external-repositories.json`](./research/external-repositories.json) に外部Repository 4件・Feature 8件を保存する。実行時には追加せず、[`dist/ai/interactions.json`](./dist/ai/interactions.json)は生成物として管理する
 - 設計書: [`docs/atlas/DESIGN.md`](./docs/atlas/DESIGN.md)
 - プロジェクトゴール: [`docs/PROJECT_GOAL.md`](./docs/PROJECT_GOAL.md)
 
@@ -52,6 +53,9 @@ Shared: static/atlas/curriculum.js / static/atlas/storage.js / static/tokens.css
 Classroom Pack: static/sets/ / static/worksheet/ / static/progress/
 Repository Audit: research/repository-audit.json
 Interaction Metadata: static/atlas/interaction-metadata.json
+Canonical Interactions: data/interactions.json
+External Repositories: research/external-repositories.json
+Generated AI Index: dist/ai/interactions.json
 ```
 
 ## Practice
@@ -107,6 +111,12 @@ node scripts/check-worksheet.js
 node scripts/check-progress-summary.js
 node scripts/check-learning-record.js
 node scripts/check-asset-version.js
+node scripts/check-r3-scope.js
+node scripts/check-external-repositories.js
+node scripts/check-interaction-library.js
+node scripts/build-interaction-index.js --check
+node scripts/check-interaction-index.js
+node scripts/report-interaction-library.js
 ```
 
 GitHub Actionsでも、同じ契約・数学ロジック検査と対象JavaScriptの構文検査を実行します。
@@ -128,6 +138,10 @@ R2では89候補について、Git履歴・既存ドキュメント・過去のS
 ローカル検証は `npm run check`、`npm test`、`git diff --check` で実行します。GitHub ActionsのAtlas checksはpush / pull requestで実行します。GitHub PagesはRepository設定またはGitHubプランの制約により利用できない場合があるため、公開検証はローカル検証と分けて扱います。
 
 `zukan.html` / `static/zukan/` は旧プロトタイプです。新規実装の正本は `atlas.html` / `static/atlas/` です。Legacy prototype. Do not add new features here.
+
+### Phase R3: Canonical Interaction Library
+
+R3の到達点は `Canonical Interaction 8 / External Repository 4 / Feature 8 / Category 5 / Runtime implemented 0` です。既存の `Atlas 89 / Practice 0 / Interaction Engine 11 / audit needs-review 89` は変更しません。`data/interactions.json`がCanonicalの正本で、外部証拠は固定SHAを使い、`dist/ai/interactions.json`はスクリプトから生成します。R3では新しいAtlas教材・Engine・Practiceを追加せず、Runtime候補の選定は次のレビュー後に行います。
 
 ## URLパラメータ
 
