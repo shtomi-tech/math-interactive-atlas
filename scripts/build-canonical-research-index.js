@@ -6,11 +6,21 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const outputPath = path.join(root, "dist/ai/canonical-research-priorities.json");
 const readJson = (relativePath) => JSON.parse(fs.readFileSync(path.join(root, relativePath), "utf8"));
 const contents = readJson("static/atlas/content-data.json");
-const coverage = readJson("data/candidate-canonical-map.json");
+const currentCoverage = readJson("data/candidate-canonical-map.json");
 const analysis = readJson("research/gap-behavior-analysis.json");
 const candidateRegistry = readJson("research/canonical-interaction-candidates.json");
 const leadRegistry = readJson("research/canonical-candidate-repository-leads.json");
 const contentById = new Map(contents.map((content) => [content.id, content]));
+// This index is the immutable R6 research snapshot. R7 may add active matches
+// to the current map, so remove only those post-R6 canonical links while
+// rebuilding the historical research view.
+const coverage = {
+  ...currentCoverage,
+  candidates: currentCoverage.candidates.map((record) => {
+    const hasR7Match = (record.matches || []).some((match) => Number(match.interactionId?.replace("MATH-INT-", "")) >= 9);
+    return hasR7Match ? { ...record, coverageStatus: "gap", matches: [], recommendedAction: "research-new-interaction" } : record;
+  })
+};
 const gaps = coverage.candidates.filter((candidate) => candidate.coverageStatus === "gap");
 const partials = coverage.candidates.filter((candidate) => candidate.coverageStatus === "partial");
 const gapSet = new Set(gaps.map((candidate) => candidate.candidateId));

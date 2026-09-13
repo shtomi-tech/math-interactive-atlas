@@ -1,0 +1,40 @@
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const readJson = (relativePath) => JSON.parse(fs.readFileSync(path.join(root, relativePath), "utf8"));
+const plan = readJson("research/canonical-promotion-plan.json");
+const evidence = readJson("research/canonical-promotion-evidence.json");
+const delta = readJson("research/r7-coverage-delta.json");
+const library = readJson("data/interactions.json");
+const runtime = readJson("data/interaction-runtime-map.json");
+const evidenceByProposal = new Map((evidence.promotions || []).map((promotion) => [promotion.proposalId, promotion]));
+const runtimeById = new Map((runtime.mappings || []).map((mapping) => [mapping.interactionId, mapping]));
+const promotions = plan.decisions.filter((decision) => decision.decision === "promote");
+const holds = plan.decisions.filter((decision) => decision.decision === "hold");
+
+console.log("Phase R7 Canonical Promotion Report");
+console.log(`Baseline Canonical: 8`);
+console.log(`Active Canonical: ${library.interactions.length}`);
+console.log(`Promotion count: ${promotions.length}`);
+console.log("\nPromotions:");
+promotions.forEach((decision) => {
+  const promotion = evidenceByProposal.get(decision.proposalId);
+  console.log(`${decision.proposalId} → ${decision.promotedInteractionId}`);
+  (promotion?.sources || []).forEach((source) => console.log(`  evidence: ${source.repository} @ ${source.ref}; ${source.license.expression}; source count ${source.sourcePaths.length}`));
+  console.log(`  runtime: ${runtimeById.get(decision.promotedInteractionId)?.status || "unknown"}`);
+});
+console.log("\nHeld:");
+holds.forEach((decision) => console.log(`${decision.proposalId}\n  reason: ${decision.holdRationale}`));
+console.log("\nRuntime:");
+const counts = runtime.mappings.reduce((result, mapping) => { result[mapping.status] = (result[mapping.status] || 0) + 1; return result; }, {});
+console.log(`implemented ${counts.implemented || 0}`);
+console.log(`planned ${counts.planned || 0}`);
+console.log(`blocked ${counts["blocked-evidence"] || 0}`);
+console.log("\nCoverage:");
+console.log(`before ${delta.baseline.covered} / ${delta.baseline.partial} / ${delta.baseline.gap}`);
+console.log(`after  ${delta.current.covered} / ${delta.current.partial} / ${delta.current.gap}`);
+console.log("\nTransitions:");
+const transitionCounts = delta.transitions.reduce((result, transition) => { const key = `${transition.from} → ${transition.to}`; result[key] = (result[key] || 0) + 1; return result; }, {});
+for (const key of ["gap → covered", "gap → partial", "partial → covered"]) console.log(`${key} ${transitionCounts[key] || 0}`);

@@ -1,0 +1,88 @@
+{
+  "version": 1,
+  "baselineCommit": "e3f20563c9ff7d5251337659ec37ea8d2d76bfc9",
+  "decisions": [
+    {
+      "proposalId": "CAN-CAND-001",
+      "decision": "promote",
+      "promotedInteractionId": "MATH-INT-009",
+      "rankSnapshot": {
+        "primaryGapImpact": 16,
+        "affectedSubjectCount": 3,
+        "affectedUnitCount": 4,
+        "engineFit": "high"
+      },
+      "gates": {
+        "shortlisted": true,
+        "behaviorCoherent": true,
+        "splitRiskResolved": true,
+        "qualifiedRepositoryCount": 2,
+        "licenseReviewed": true,
+        "fixedShaVerified": true
+      },
+      "selectionRationale": "最大の16件のgapに対し、点の制約付き操作と測定値の同期という一意の最小Behaviorを定義でき、GeometryBoardへの適合度がhighである。既存leadに加えて独立したalgeobraの直接的な点操作・制約Evidenceを確認できたため、009へ昇格する。",
+      "overrideRationale": null
+    },
+    {
+      "proposalId": "CAN-CAND-002",
+      "decision": "promote",
+      "promotedInteractionId": "MATH-INT-010",
+      "rankSnapshot": {
+        "primaryGapImpact": 10,
+        "affectedSubjectCount": 3,
+        "affectedUnitCount": 3,
+        "engineFit": "high"
+      },
+      "gates": {
+        "shortlisted": true,
+        "behaviorCoherent": true,
+        "splitRiskResolved": true,
+        "qualifiedRepositoryCount": 2,
+        "licenseReviewed": true,
+        "fixedShaVerified": true
+      },
+      "selectionRationale": "10件の確率・統計gapに対し、反復試行・理論分布・統計量の比較という共通Behaviorを最小契約として定義でき、SimulationLabとDataLabへの適合度がhighである。Plinkoの反復試行Evidenceと、独立したstat-distributions-jsのパラメータ変更・再描画Evidenceを確認できたため、010へ昇格する。",
+      "overrideRationale": null
+    },
+    {
+      "proposalId": "CAN-CAND-003",
+      "decision": "hold",
+      "rankSnapshot": {
+        "primaryGapImpact": 8,
+        "affectedSubjectCount": 3,
+        "affectedUnitCount": 3,
+        "engineFit": "high"
+      },
+      "gates": {
+        "shortlisted": true,
+        "behaviorCoherent": false,
+        "splitRiskResolved": false,
+        "qualifiedRepositoryCount": 1,
+        "licenseReviewed": true,
+        "fixedShaVerified": true
+      },
+      "holdRationale": "Area-modelのEvidenceは有効だが、記号変形と逐次アルゴリズムを同じCanonicalへまとめるsplit riskが未解消で、独立Repository Evidenceも1件に留まる。Behavior境界と直接source pathを追加確認するまでHoldとする。",
+      "overrideRationale": null
+    },
+    {
+      "proposalId": "CAN-CAND-004",
+      "decision": "hold",
+      "rankSnapshot": {
+        "primaryGapImpact": 7,
+        "affectedSubjectCount": 1,
+        "affectedUnitCount": 1,
+        "engineFit": "high"
+      },
+      "gates": {
+        "shortlisted": true,
+        "behaviorCoherent": false,
+        "splitRiskResolved": false,
+        "qualifiedRepositoryCount": 1,
+        "licenseReviewed": true,
+        "fixedShaVerified": true
+      },
+      "holdRationale": "漸化式の項生成Evidenceは有効だが、数列生成と数学的帰納法の証明段階を一つのBehaviorへまとめるsplit riskが未解消で、独立Repository Evidenceも1件に留まる。挙動を分割してから再評価する。",
+      "overrideRationale": null
+    }
+  ]
+}

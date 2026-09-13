@@ -28,13 +28,14 @@ requireCondition(Array.isArray(contents) && contents.length === 89, "R5 scope re
 requireCondition(Array.isArray(practice) && practice.length === 0, "R5 scope requires Practice 0");
 requireCondition(audit?.version === 1 && audit?.contents?.length === 89, "R5 scope requires 89 audit records");
 requireCondition((auditCounts.verified || 0) === 0 && auditCounts["needs-review"] === 89 && (auditCounts.pending || 0) === 0, "R5 scope requires audit 0 / 89 / 0");
-requireCondition(Array.isArray(library?.interactions) && library.interactions.length === 8, "R5 scope requires 8 canonical interactions");
-requireCondition(Array.isArray(external?.repositories) && external.repositories.length === 6, "R5 scope requires 6 external repositories");
-requireCondition(features.length === 10, "R5 scope requires 10 external features");
-requireCondition(runtime?.version === 1 && mappings.length === 8, "R5 scope requires 8 runtime mappings");
-requireCondition(count("implemented") === 3 && count("planned") === 5 && count("blocked-evidence") === 0, "R5 scope requires runtime 3 implemented / 5 planned / 0 blocked-evidence");
+const retainedRepositoryIds = ["REPO-001", "REPO-002", "REPO-003", "REPO-004", "REPO-005", "REPO-006"];
+requireCondition(Array.isArray(library?.interactions) && library.interactions.length >= 8, "R5 scope requires the eight retained canonical interactions");
+requireCondition(Array.isArray(external?.repositories) && external.repositories.length >= 6, "R5 scope requires the six retained external repositories");
+requireCondition(features.length >= 10, "R5 scope requires the ten retained external features");
+requireCondition(runtime?.version === 1 && mappings.length === library?.interactions?.length, "R5 scope requires one runtime mapping per canonical interaction");
+requireCondition(count("implemented") === 3 && count("planned") === mappings.length - 3 && count("blocked-evidence") === 0, "R5 scope requires runtime 3 implemented / remaining planned / 0 blocked-evidence");
 requireCondition(Array.isArray(coverage?.candidates) && coverage.candidates.length === 89, "R5 scope requires 89 candidate-canonical records");
-requireCondition(repositoryIds.join(",") === "REPO-001,REPO-002,REPO-003,REPO-004,REPO-005,REPO-006", "R5 repositories must be the fixed six-repository set");
+requireCondition(retainedRepositoryIds.every((id) => repositoryIds.includes(id)), "R5 repositories must retain the fixed six-repository set");
 requireCondition(!JSON.stringify({ library, external, coverage }).includes("adapted-from"), "R5 metadata must not use adapted-from");
 requireCondition(registry.includes("functionGraph") && ["rangeGraph", "geometryBoard", "regionSelector", "combinatoricsViewer", "dataLab", "simulationLab", "algebraLab", "numberLineLab", "algorithmLab", "sequenceLab"].every((engine) => registry.includes(engine)), "R5 scope requires the existing 11-engine registry");
 
@@ -43,5 +44,5 @@ if (errors.length) {
   errors.forEach((error) => console.error(`- ${error}`));
   process.exitCode = 1;
 } else {
-  console.log("R5 scope: PASS (89 Legacy Candidates; audit 0 / 89 / 0; 8 Canonical; 6 repositories; 10 features; Practice 0; Engines 11; runtime 3 / 5 / 0; coverage 89)");
+  console.log(`R5 scope: PASS (89 Legacy Candidates; audit 0 / 89 / 0; ${library.interactions.length} Canonical; ${external.repositories.length} repositories; ${features.length} features; Practice 0; Engines 11; runtime 3 / ${mappings.length - 3} / 0; coverage 89)`);
 }

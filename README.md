@@ -18,7 +18,7 @@
 - 学習レポート: 教材の閲覧数、問題の習熟状態、単元ごとの状況、最近の学習を表示し、学習記録をJSONでバックアップ・置換復元する
 - Interaction Engine: `static/atlas/interactions/index.js` のRegistry経由で11エンジンを切り替える。連続量はFunctionGraph / GeometryBoard / RangeGraph、離散量はSequenceLabで表示する
 - 監査Registry: [`research/repository-audit.json`](./research/repository-audit.json) に外部Repositoryとの関係を記録する。許可するrelationは `inspired-by` / `adapted-from` のみ
-- Canonical Interaction Library: [`data/interactions.json`](./data/interactions.json) にCanonical Interaction 8件、[`research/external-repositories.json`](./research/external-repositories.json) に外部Repository 6件・Feature 10件を保存する。実行時の状態は [`data/interaction-runtime-map.json`](./data/interaction-runtime-map.json) で分離し、[`dist/ai/interactions.json`](./dist/ai/interactions.json) は3つの正本から生成する。89候補とのCoverageは [`data/candidate-canonical-map.json`](./data/candidate-canonical-map.json) から [`dist/ai/candidate-canonical-coverage.json`](./dist/ai/candidate-canonical-coverage.json) へ別生成する
+- Canonical Interaction Library: [`data/interactions.json`](./data/interactions.json) にCanonical Interaction 10件（R7で009/010を昇格）、[`research/external-repositories.json`](./research/external-repositories.json) に外部Repository 9件・Feature 13件を保存する。実行時の状態は [`data/interaction-runtime-map.json`](./data/interaction-runtime-map.json) で分離し、[`dist/ai/interactions.json`](./dist/ai/interactions.json) は3つの正本から生成する。89候補とのCoverageは [`data/candidate-canonical-map.json`](./data/candidate-canonical-map.json) から [`dist/ai/candidate-canonical-coverage.json`](./dist/ai/candidate-canonical-coverage.json) へ別生成し、R7の昇格判断は [`dist/ai/canonical-promotion-decisions.json`](./dist/ai/canonical-promotion-decisions.json) へ生成する
 - 設計書: [`docs/atlas/DESIGN.md`](./docs/atlas/DESIGN.md)
 - プロジェクトゴール: [`docs/PROJECT_GOAL.md`](./docs/PROJECT_GOAL.md)
 
@@ -129,6 +129,12 @@ node scripts/check-canonical-candidate-repository-leads.js
 node scripts/report-r6-research-priorities.js
 node scripts/build-canonical-research-index.js --check
 node scripts/check-r6-scope.js
+node scripts/check-canonical-promotion-plan.js
+node scripts/check-canonical-promotion-evidence.js
+node scripts/check-r7-coverage-delta.js
+node scripts/report-r7-promotion.js
+node scripts/build-canonical-promotion-index.js --check
+node scripts/check-r7-scope.js
 ```
 
 GitHub Actionsでも、同じ契約・数学ロジック検査と対象JavaScriptの構文検査を実行します。
@@ -162,6 +168,12 @@ R5では `MATH-INT-001〜003`のRuntimeを変更せず、007/008のEvidenceを�
 ### Phase R6: Gap Behavior Research and Candidate Priorities
 
 R6では、Coverage gap 56件をBehavior Signatureと8つの研究Clusterへ整理し、8件の `CAN-CAND-###` 候補と4件のShortlistを作成します。外部Repositoryは既存の稼働Registryへ追加せず、固定SHA付きResearch Leadとしてだけ記録します。生成されたResearch Indexはgap-onlyのSubject / Unit集計、候補のPrimary Gap影響、Partial二次機会、Engine適合、Evidence、Priorityを示します。稼働中のCanonical 8件、Runtime、Engine、Practice、89教材は変更しません。
+
+### Phase R7: Canonical Promotion and Evidence Formalization
+
+R7では、R6のShortlist 4件を全件昇格させず、独立した公開GitHub Repositoryを2件以上、各固定SHA・License・source path・観察挙動まで確認できた候補だけを昇格する。今回は `CAN-CAND-001 → MATH-INT-009` と `CAN-CAND-002 → MATH-INT-010` を正式化し、`CAN-CAND-003` / `004` はHoldとする。新CanonicalはすべてRuntime `planned` であり、既存3件のRuntime、11 Engine、Practice 0問、Legacy 89件は変更しない。
+
+R7の正本は [`research/canonical-promotion-plan.json`](./research/canonical-promotion-plan.json)、[`research/canonical-promotion-evidence.json`](./research/canonical-promotion-evidence.json)、[`research/r7-coverage-delta.json`](./research/r7-coverage-delta.json) である。R6のResearch snapshotは書き換えず、Active Registryと生成Indexだけを昇格結果に合わせる。外部コードはコピー・移植せず、Evidenceは `behavioral-reference-only` として扱う。現在のCoverageは `covered 18 / partial 24 / gap 47` で、9件の個別遷移を記録している。
 
 ## URLパラメータ
 

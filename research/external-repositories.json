@@ -372,6 +372,122 @@
           "reviewedAt": "2026-09-13"
         }
       ]
+    },
+    {
+      "id": "REPO-007",
+      "repository": "sibaku/algeobra",
+      "url": "https://github.com/sibaku/algeobra",
+      "ref": "5263d7ba7fd1384c82cb58f97e832471e51124f4",
+      "license": {
+        "expression": "MIT",
+        "url": "https://github.com/sibaku/algeobra/blob/5263d7ba7fd1384c82cb58f97e832471e51124f4/LICENSE",
+        "reviewed": true,
+        "reviewedAt": "2026-09-13"
+      },
+      "features": [
+        {
+          "id": "REPO-007-F001",
+          "title": "Dynamic geometry points and constrained handles",
+          "paths": ["README.md", "algeobraCanvas.js"],
+          "evidenceUrls": [
+            "https://github.com/sibaku/algeobra/blob/5263d7ba7fd1384c82cb58f97e832471e51124f4/README.md",
+            "https://github.com/sibaku/algeobra/blob/5263d7ba7fd1384c82cb58f97e832471e51124f4/algeobraCanvas.js"
+          ],
+          "demoUrl": "https://sibaku.github.io/algeobra_showcase",
+          "behaviorSummary": "The library describes dynamic geometric dependencies and its canvas layer provides draggable point manipulators, including handles that keep a point constrained to a geometric object.",
+          "learnerActions": [
+            "Drag a point in an interactive geometry diagram",
+            "Move a constrained handle and observe dependent geometry"
+          ],
+          "changes": [
+            "The manipulated point position changes",
+            "Dependent geometric objects are recomputed"
+          ],
+          "feedback": [
+            "The diagram redraws after a point update",
+            "A constrained handle keeps the controlled point on its object"
+          ],
+          "reviewedAt": "2026-09-13"
+        }
+      ]
+    },
+    {
+      "id": "REPO-008",
+      "repository": "phetsims/plinko-probability",
+      "url": "https://github.com/phetsims/plinko-probability",
+      "ref": "cd0d20a973262507b6106d42077006d964f50d90",
+      "license": {
+        "expression": "GPL-3.0",
+        "url": "https://github.com/phetsims/plinko-probability/blob/cd0d20a973262507b6106d42077006d964f50d90/LICENSE",
+        "reviewed": true,
+        "reviewedAt": "2026-09-13"
+      },
+      "features": [
+        {
+          "id": "REPO-008-F001",
+          "title": "Repeated probability trials and distribution statistics",
+          "paths": ["js/lab/model/LabModel.js", "js/lab/view/LabScreenView.js", "js/lab/view/StatisticsAccordionBox.js"],
+          "evidenceUrls": [
+            "https://github.com/phetsims/plinko-probability/blob/cd0d20a973262507b6106d42077006d964f50d90/js/lab/model/LabModel.js",
+            "https://github.com/phetsims/plinko-probability/blob/cd0d20a973262507b6106d42077006d964f50d90/js/lab/view/LabScreenView.js",
+            "https://github.com/phetsims/plinko-probability/blob/cd0d20a973262507b6106d42077006d964f50d90/js/lab/view/StatisticsAccordionBox.js"
+          ],
+          "demoUrl": null,
+          "behaviorSummary": "The lab accumulates repeated ball trials, renders bin frequencies, and presents theoretical distribution values with mean and standard deviation in the statistics view.",
+          "learnerActions": [
+            "Run repeated probability trials",
+            "Compare observed bins with theoretical values"
+          ],
+          "changes": [
+            "Trial counts and bin frequencies accumulate",
+            "Summary statistics update with the results"
+          ],
+          "feedback": [
+            "The lab displays the current distribution",
+            "The statistics view exposes theory and observed summaries"
+          ],
+          "reviewedAt": "2026-09-13"
+        }
+      ]
+    },
+    {
+      "id": "REPO-009",
+      "repository": "richarddmorey/stat-distributions-js",
+      "url": "https://github.com/richarddmorey/stat-distributions-js",
+      "ref": "189d2f40142ec6d0760f27f7fc6313482915ae0f",
+      "license": {
+        "expression": "MIT",
+        "url": "https://github.com/richarddmorey/stat-distributions-js/blob/189d2f40142ec6d0760f27f7fc6313482915ae0f/LICENSE",
+        "reviewed": true,
+        "reviewedAt": "2026-09-13"
+      },
+      "features": [
+        {
+          "id": "REPO-009-F001",
+          "title": "Interactive distribution parameters and plots",
+          "paths": ["README.md", "distributionDisplay.html", "js/distributionObjects.js"],
+          "evidenceUrls": [
+            "https://github.com/richarddmorey/stat-distributions-js/blob/189d2f40142ec6d0760f27f7fc6313482915ae0f/README.md",
+            "https://github.com/richarddmorey/stat-distributions-js/blob/189d2f40142ec6d0760f27f7fc6313482915ae0f/distributionDisplay.html",
+            "https://github.com/richarddmorey/stat-distributions-js/blob/189d2f40142ec6d0760f27f7fc6313482915ae0f/js/distributionObjects.js"
+          ],
+          "demoUrl": "https://richarddmorey.github.io/stat-distributions-js/distributionDisplay.html",
+          "behaviorSummary": "The display exposes distribution parameters through sliders and redraws probability plots when a parameter changes, allowing an interactive comparison of distribution shapes.",
+          "learnerActions": [
+            "Move a distribution parameter slider",
+            "Compare the resulting probability plot"
+          ],
+          "changes": [
+            "The selected parameter value changes",
+            "The displayed distribution curve or mass changes"
+          ],
+          "feedback": [
+            "Parameter controls show the current value",
+            "The plot redraws to show the distribution response"
+          ],
+          "reviewedAt": "2026-09-13"
+        }
+      ]
     }
   ]
 }

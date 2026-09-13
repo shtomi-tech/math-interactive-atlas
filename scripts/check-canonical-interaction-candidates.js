@@ -15,7 +15,7 @@ const registry = readJson("research/canonical-interaction-candidates.json");
 const leads = readJson("research/canonical-candidate-repository-leads.json");
 const records = Array.isArray(map?.candidates) ? map.candidates : [];
 const proposals = Array.isArray(registry?.candidates) ? registry.candidates : [];
-const gapIds = new Set(records.filter((record) => record.coverageStatus === "gap").map((record) => record.candidateId));
+const gapIds = new Set((readJson("research/gap-behavior-analysis.json")?.gaps || []).map((gap) => gap.candidateId));
 const partialIds = new Set(records.filter((record) => record.coverageStatus === "partial").map((record) => record.candidateId));
 const coveredIds = new Set(records.filter((record) => record.coverageStatus === "covered").map((record) => record.candidateId));
 const validCategories = new Set(["Move", "Build", "Compare", "Simulate", "Transform", "Select", "Measure", "Animate"]);

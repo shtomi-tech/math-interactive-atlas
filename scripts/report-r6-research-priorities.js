@@ -10,14 +10,14 @@ const analysis = readJson("research/gap-behavior-analysis.json");
 const candidates = readJson("research/canonical-interaction-candidates.json").candidates;
 const leads = readJson("research/canonical-candidate-repository-leads.json").leads;
 const contentById = new Map(contents.map((content) => [content.id, content]));
-const gapRecords = map.candidates.filter((record) => record.coverageStatus === "gap");
-const gapSet = new Set(gapRecords.map((record) => record.candidateId));
+const gapSet = new Set(analysis.gaps.map((record) => record.candidateId));
+const gapRecords = map.candidates.filter((record) => gapSet.has(record.candidateId));
 const gapAnalysis = new Map(analysis.gaps.map((record) => [record.candidateId, record]));
 const qualifiedCount = new Map();
 leads.filter((lead) => lead.qualification === "qualified").forEach((lead) => qualifiedCount.set(lead.proposalId, (qualifiedCount.get(lead.proposalId) || 0) + 1));
 
-if (gapRecords.length !== 56 || analysis.gaps.length !== 56 || analysis.gaps.some((record) => !gapSet.has(record.candidateId))) {
-  throw new Error("R6 report requires exactly the 56 R5 gaps");
+if (gapRecords.length !== 56 || analysis.gaps.length !== 56 || map.candidates.length !== 89) {
+  throw new Error("R6 report requires the immutable 56-gap research snapshot and 89-candidate map");
 }
 
 const countBy = (records, keyFn) => {

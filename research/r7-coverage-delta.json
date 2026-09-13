@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "baseline": {
+    "covered": 9,
+    "partial": 24,
+    "gap": 56
+  },
+  "current": {
+    "covered": 18,
+    "partial": 24,
+    "gap": 47
+  },
+  "transitions": [
+    {
+      "candidateId": "unit-circle",
+      "from": "gap",
+      "to": "covered",
+      "interactionId": "MATH-INT-009",
+      "rationale": "円周上の点または角を動かし、座標とsin・cosを測定する教材の中心Behaviorが、制約付き点移動と派生値表示に直接一致する。"
+    },
+    {
+      "candidateId": "triangle-area-sine",
+      "from": "gap",
+      "to": "covered",
+      "interactionId": "MATH-INT-009",
+      "rationale": "頂点や角を動かし、高さ・sin・面積を同期して測定するため、図形状態と派生測定値の直接操作契約に一致する。"
+    },
+    {
+      "candidateId": "cosine-law",
+      "from": "gap",
+      "to": "covered",
+      "interactionId": "MATH-INT-009",
+      "rationale": "三角形の角または頂点を動かし、辺長と関係式を比較する教材であり、制約付き測定と関係式表示を直接利用できる。"
+    },
+    {
+      "candidateId": "line-relations",
+      "from": "gap",
+      "to": "covered",
+      "interactionId": "MATH-INT-009",
+      "rationale": "点や直線の状態を動かして傾き・距離・角度の関係を観察するため、複数測定値の同期というBehaviorに直接一致する。"
+    },
+    {
+      "candidateId": "circle-line-intersections",
+      "from": "gap",
+      "to": "covered",
+      "interactionId": "MATH-INT-009",
+      "rationale": "円と直線の交点を制約付きで更新し、交点や成立条件を表示する教材であり、制約保持と導出状態の更新を直接利用できる。"
+    },
+    {
+      "candidateId": "hypothesis-test-coin",
+      "from": "gap",
+      "to": "covered",
+      "interactionId": "MATH-INT-010",
+      "rationale": "コイン試行を反復し、観測値以上の理論確率と実験結果を比較するため、試行蓄積・理論値・判定の同期に直接一致する。"
+    },
+    {
+      "candidateId": "independent-trials",
+      "from": "gap",
+      "to": "covered",
+      "interactionId": "MATH-INT-010",
+      "rationale": "n・p・kを変えた反復実験と二項分布の理論値を重ねる教材であり、パラメータ変更と分布比較を直接利用できる。"
+    },
+    {
+      "candidateId": "population-sample",
+      "from": "gap",
+      "to": "covered",
+      "interactionId": "MATH-INT-010",
+      "rationale": "母集団から標本を繰り返し抽出し、標本平均を比較するため、標本蓄積と統計量の比較というBehaviorに直接一致する。"
+    },
+    {
+      "candidateId": "sampling-distribution-mean",
+      "from": "gap",
+      "to": "covered",
+      "interactionId": "MATH-INT-010",
+      "rationale": "標本平均を何度も生成し、試行回数や標本サイズと分布の変化を比べるため、反復生成と理論値の比較を直接利用できる。"
+    }
+  ]
+}

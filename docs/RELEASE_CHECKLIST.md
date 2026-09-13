@@ -94,6 +94,18 @@ Pagesの公開検証はローカル検証とは別に扱う。Repositoryの公�
 - [ ] R6候補を `data/interactions.json`、Runtime map、`dist/ai/interactions.json`、教材、Practiceへ追加しない
 - [ ] R6の6チェッカー、既存検査、`npm test`、GitHub Actions checks / browser-smokeが成功する
 
+## R7 gates
+
+- [ ] R6 baseline commit `e3f20563c9ff7d5251337659ec37ea8d2d76bfc9` とR6 Research snapshotを保持する
+- [ ] Shortlist 4件をPromotion PlanでExactly Once decision化し、promoteは最大3件、hold理由を記録する
+- [ ] Promoteごとに独立した公開Repository 2件以上、固定SHA、LICENSE、source path、観察挙動をLive確認する
+- [ ] Evidenceのrelationは `inspired-by`、implementation boundaryは `behavioral-reference-only`、`adapted-from` は0件である
+- [ ] 今回のPromotionは `CAN-CAND-001 → MATH-INT-009`、`CAN-CAND-002 → MATH-INT-010`、新Runtimeはplannedである
+- [ ] Coverage DeltaがCandidate単位で遷移を記録し、total 89、既存covered regression 0、gap reductionを満たす
+- [ ] `dist/ai/canonical-promotion-decisions.json`、Active Interaction Index、Coverage IndexをBuild Scriptから生成する
+- [ ] R7 ScopeでCanonical 10 / Repository 9 / Feature 13 / Runtime `3 implemented / 7 planned / 0 blocked` / Coverage `18 / 24 / 47` を確認する
+- [ ] R4/R5/R6 checker、既存数学検査、`npm run check`、`npm test`、GitHub Actions checks / browser-smokeが成功する
+
 ## Forbidden in R4
 
 - 新規Practice問題、Atlas教材、Interaction Engine

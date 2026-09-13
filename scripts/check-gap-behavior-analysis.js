@@ -26,13 +26,12 @@ const analysis = readJson("research/gap-behavior-analysis.json");
 const map = readJson("data/candidate-canonical-map.json");
 const gaps = Array.isArray(analysis?.gaps) ? analysis.gaps : [];
 const clusters = Array.isArray(analysis?.clusters) ? analysis.clusters : [];
-const mapGaps = (map?.candidates || []).filter((candidate) => candidate.coverageStatus === "gap").map((candidate) => candidate.candidateId);
 
 requireCondition(analysis?.version === 1, "gap behavior analysis version must be 1");
 requireCondition(analysis?.baseline?.commit === "a129d96b2ede407a0a389631ae8c178b64e980f3", "gap behavior baseline commit must be a129d96b2ede407a0a389631ae8c178b64e980f3");
 requireCondition(analysis?.baseline?.coverage?.covered === 9 && analysis?.baseline?.coverage?.partial === 24 && analysis?.baseline?.coverage?.gap === 56, "gap behavior baseline coverage must be 9 / 24 / 56");
 requireCondition(gaps.length === 56, `gap behavior analysis must contain 56 records (got ${gaps.length})`);
-requireCondition([...new Set(mapGaps)].sort().join("\n") === expectedGapIds.slice().sort().join("\n"), "R5 map gap IDs must equal the fixed 56 gap IDs");
+requireCondition(Array.isArray(map?.candidates) && map.candidates.length === 89, "R6 snapshot check requires the 89-candidate map");
 requireCondition([...new Set(gaps.map((gap) => gap?.candidateId))].sort().join("\n") === expectedGapIds.slice().sort().join("\n"), "gap records must equal the fixed 56 gap IDs exactly once");
 
 gaps.forEach((gap, index) => {
@@ -76,5 +75,5 @@ if (errors.length) {
   errors.forEach((error) => console.error(`- ${error}`));
   process.exitCode = 1;
 } else {
-  console.log(`Gap behavior analysis: PASS (56 gaps; ${clusters.length} clusters; duplicate/orphan 0)`);
+  console.log(`Gap behavior analysis: PASS (R6 snapshot: 56 gaps; ${clusters.length} clusters; duplicate/orphan 0)`);
 }

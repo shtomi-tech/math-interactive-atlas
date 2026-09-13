@@ -24,28 +24,26 @@ const leads = readJson("research/canonical-candidate-repository-leads.json");
 const auditCounts = (audit?.contents || []).reduce((counts, record) => { counts[record.auditStatus] = (counts[record.auditStatus] || 0) + 1; return counts; }, {});
 const mappings = Array.isArray(runtime?.mappings) ? runtime.mappings : [];
 const features = external?.repositories?.flatMap((repository) => repository.features || []) || [];
-const activeIds = ["MATH-INT-001", "MATH-INT-002", "MATH-INT-003", "MATH-INT-004", "MATH-INT-005", "MATH-INT-006", "MATH-INT-007", "MATH-INT-008"];
+const retainedActiveIds = ["MATH-INT-001", "MATH-INT-002", "MATH-INT-003", "MATH-INT-004", "MATH-INT-005", "MATH-INT-006", "MATH-INT-007", "MATH-INT-008"];
 const fixedRepositories = ["REPO-001", "REPO-002", "REPO-003", "REPO-004", "REPO-005", "REPO-006"];
 const fixedFeatures = ["REPO-001-F001", "REPO-001-F002", "REPO-001-F003", "REPO-002-F001", "REPO-002-F002", "REPO-002-F003", "REPO-003-F001", "REPO-004-F001", "REPO-005-F001", "REPO-006-F001"];
 const countStatus = (status) => mappings.filter((mapping) => mapping.status === status).length;
-const gapIds = new Set((coverage?.candidates || []).filter((candidate) => candidate.coverageStatus === "gap").map((candidate) => candidate.candidateId));
 const analyzedGapIds = new Set((gapAnalysis?.gaps || []).map((gap) => gap.candidateId));
 
 requireCondition(Array.isArray(contents) && contents.length === 89, "R6 scope requires exactly 89 Legacy Candidates");
 requireCondition(Array.isArray(practice) && practice.length === 0, "R6 scope requires Practice 0");
 requireCondition(audit?.version === 1 && audit?.contents?.length === 89, "R6 scope requires 89 audit records");
 requireCondition((auditCounts.verified || 0) === 0 && auditCounts["needs-review"] === 89 && (auditCounts.pending || 0) === 0, "R6 scope requires audit 0 / 89 / 0");
-requireCondition(Array.isArray(library?.interactions) && library.interactions.length === 8, "R6 scope requires 8 active canonical interactions");
-requireCondition(Array.isArray(activeIndex?.interactions) && activeIndex.interactions.length === 8, "R6 scope requires 8 active generated interactions");
-requireCondition(library?.interactions?.map((interaction) => interaction.id).sort().join(",") === activeIds.join(","), "active canonical IDs must remain MATH-INT-001..008");
-requireCondition(activeIndex?.interactions?.map((interaction) => interaction.id).sort().join(",") === activeIds.join(","), "active generated IDs must remain MATH-INT-001..008");
-requireCondition(Array.isArray(external?.repositories) && external.repositories.length === 6, "R6 scope requires 6 active external repositories");
-requireCondition(external.repositories.map((repository) => repository.id).join(",") === fixedRepositories.join(","), "active repository IDs must remain the fixed six-repository set");
-requireCondition(features.length === 10 && features.map((feature) => feature.id).join(",") === fixedFeatures.join(","), "active repository features must remain the fixed ten-feature set");
-requireCondition(runtime?.version === 1 && mappings.length === 8, "R6 scope requires 8 runtime mappings");
-requireCondition(countStatus("implemented") === 3 && countStatus("planned") === 5 && countStatus("blocked-evidence") === 0, "R6 scope requires runtime 3 implemented / 5 planned / 0 blocked-evidence");
+requireCondition(Array.isArray(library?.interactions) && library.interactions.length >= 8, "R6 scope requires the eight retained canonical interactions");
+requireCondition(retainedActiveIds.every((id) => library.interactions.some((interaction) => interaction.id === id)), "R6 scope requires MATH-INT-001..008 to be retained");
+requireCondition(Array.isArray(activeIndex?.interactions) && activeIndex.interactions.length === library?.interactions?.length, "R6 scope requires a generated record for each active canonical");
+requireCondition(Array.isArray(external?.repositories) && external.repositories.length >= 6, "R6 scope requires the six retained external repositories");
+requireCondition(fixedRepositories.every((id) => external.repositories.some((repository) => repository.id === id)), "R6 scope requires the fixed six repositories to be retained");
+requireCondition(features.length >= 10 && fixedFeatures.every((id) => features.some((feature) => feature.id === id)), "R6 scope requires the fixed ten features to be retained");
+requireCondition(runtime?.version === 1 && mappings.length === library?.interactions?.length, "R6 scope requires one runtime mapping per active canonical");
+requireCondition(countStatus("implemented") === 3 && countStatus("planned") === mappings.length - 3 && countStatus("blocked-evidence") === 0, "R6 scope requires the three retained pilots and planned remainder");
 requireCondition(Array.isArray(coverage?.candidates) && coverage.candidates.length === 89, "R6 scope requires 89 candidate-canonical records");
-requireCondition(gapIds.size === 56 && analyzedGapIds.size === 56 && [...gapIds].every((id) => analyzedGapIds.has(id)), "R6 scope requires exact analysis of the 56 R5 gaps");
+requireCondition(gapAnalysis?.baseline?.coverage?.covered === 9 && gapAnalysis?.baseline?.coverage?.partial === 24 && gapAnalysis?.baseline?.coverage?.gap === 56 && analyzedGapIds.size === 56, "R6 scope requires exact analysis of the 56 R5 gaps");
 requireCondition(Array.isArray(candidateRegistry?.candidates) && candidateRegistry.candidates.filter((candidate) => candidate.shortlisted).length >= 3 && candidateRegistry.candidates.filter((candidate) => candidate.shortlisted).length <= 5, "R6 scope requires a 3 to 5 proposal shortlist");
 requireCondition(!JSON.stringify({ library, activeIndex, external, runtime, coverage, candidateRegistry, leads }).includes("adapted-from"), "R6 metadata must not use adapted-from");
 requireCondition(!JSON.stringify(candidateRegistry).match(/MATH-INT-\d{3}/), "R6 candidates must not add active MATH-INT IDs");
@@ -57,5 +55,5 @@ if (errors.length) {
   errors.forEach((error) => console.error(`- ${error}`));
   process.exitCode = 1;
 } else {
-  console.log("R6 scope: PASS (89 Legacy Candidates; audit 0 / 89 / 0; 8 Canonical; 6 repositories; 10 features; Practice 0; Engines 11; runtime 3 / 5 / 0; gaps 56; shortlist 4)");
+  console.log(`R6 scope: PASS (R6 snapshot retained; 89 Legacy Candidates; audit 0 / 89 / 0; ${library.interactions.length} active Canonical; ${external.repositories.length} repositories; ${features.length} features; Engines 11; R6 gaps 56; shortlist 4)`);
 }

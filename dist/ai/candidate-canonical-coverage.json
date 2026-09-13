@@ -129,9 +129,17 @@
       "subject": "math1",
       "unit": "statistics",
       "title": "仮説検定をシミュレーション",
-      "coverageStatus": "gap",
-      "matches": [],
-      "recommendedAction": "research-new-interaction"
+      "coverageStatus": "covered",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-010",
+          "interactionTitle": "試行と理論分布を重ねて比べる",
+          "relation": "direct",
+          "confidence": "high",
+          "rationale": "反復試行、理論確率、観測値による判定を同じ状態から比較することが教材の主役であり、試行・理論分布・統計量の同期契約に直接一致する。"
+        }
+      ],
+      "recommendedAction": "canonicalize-later"
     },
     {
       "candidateId": "quadratic-basic",
@@ -206,27 +214,51 @@
       "subject": "math1",
       "unit": "trigonometry",
       "title": "単位円でsin・cosを見る",
-      "coverageStatus": "gap",
-      "matches": [],
-      "recommendedAction": "research-new-interaction"
+      "coverageStatus": "covered",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-009",
+          "interactionTitle": "制約を保った図形を動かして測る",
+          "relation": "direct",
+          "confidence": "high",
+          "rationale": "円周上の点や角を動かし、座標とsin・cosを測定するため、制約付き点移動と派生値表示に直接一致する。"
+        }
+      ],
+      "recommendedAction": "canonicalize-later"
     },
     {
       "candidateId": "triangle-area-sine",
       "subject": "math1",
       "unit": "trigonometry",
       "title": "三角形の面積とsin",
-      "coverageStatus": "gap",
-      "matches": [],
-      "recommendedAction": "research-new-interaction"
+      "coverageStatus": "covered",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-009",
+          "interactionTitle": "制約を保った図形を動かして測る",
+          "relation": "direct",
+          "confidence": "high",
+          "rationale": "頂点や角を動かして高さ・sin・面積を同期表示するため、図形状態と派生測定値の直接操作契約に一致する。"
+        }
+      ],
+      "recommendedAction": "canonicalize-later"
     },
     {
       "candidateId": "independent-trials",
       "subject": "mathA",
       "unit": "probability",
       "title": "独立試行を大量実験する",
-      "coverageStatus": "gap",
-      "matches": [],
-      "recommendedAction": "research-new-interaction"
+      "coverageStatus": "covered",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-010",
+          "interactionTitle": "試行と理論分布を重ねて比べる",
+          "relation": "direct",
+          "confidence": "high",
+          "rationale": "n・p・kを変えた反復実験と二項分布の理論値を重ねて比べるため、パラメータ変更と分布比較を直接利用できる。"
+        }
+      ],
+      "recommendedAction": "canonicalize-later"
     },
     {
       "candidateId": "sine-law-circumcircle",
@@ -242,9 +274,17 @@
       "subject": "math1",
       "unit": "trigonometry",
       "title": "余弦定理を変形で見る",
-      "coverageStatus": "gap",
-      "matches": [],
-      "recommendedAction": "research-new-interaction"
+      "coverageStatus": "covered",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-009",
+          "interactionTitle": "制約を保った図形を動かして測る",
+          "relation": "direct",
+          "confidence": "medium",
+          "rationale": "三角形の角や頂点を動かし、辺長と関係式を比較する教材であり、制約付き測定と関係式表示を直接利用できる。"
+        }
+      ],
+      "recommendedAction": "canonicalize-later"
     },
     {
       "candidateId": "triangle-centers",
@@ -851,9 +891,17 @@
       "subject": "math2",
       "unit": "geometry-equations",
       "title": "平行・垂直と点から直線までの距離",
-      "coverageStatus": "gap",
-      "matches": [],
-      "recommendedAction": "research-new-interaction"
+      "coverageStatus": "covered",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-009",
+          "interactionTitle": "制約を保った図形を動かして測る",
+          "relation": "direct",
+          "confidence": "medium",
+          "rationale": "点や直線を動かして傾き・距離・角度の関係を観察するため、複数測定値の同期というBehaviorに直接一致する。"
+        }
+      ],
+      "recommendedAction": "canonicalize-later"
     },
     {
       "candidateId": "circle-equation",
@@ -877,9 +925,17 @@
       "subject": "math2",
       "unit": "geometry-equations",
       "title": "円と直線の共有点",
-      "coverageStatus": "gap",
-      "matches": [],
-      "recommendedAction": "research-new-interaction"
+      "coverageStatus": "covered",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-009",
+          "interactionTitle": "制約を保った図形を動かして測る",
+          "relation": "direct",
+          "confidence": "medium",
+          "rationale": "円と直線の交点を制約付きで更新し、交点と成立条件を表示するため、制約保持と導出状態の更新を直接利用できる。"
+        }
+      ],
+      "recommendedAction": "canonicalize-later"
     },
     {
       "candidateId": "locus-distance-ratio",
@@ -939,9 +995,17 @@
       "subject": "mathB",
       "unit": "statistical-inference",
       "title": "母集団と標本",
-      "coverageStatus": "gap",
-      "matches": [],
-      "recommendedAction": "research-new-interaction"
+      "coverageStatus": "covered",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-010",
+          "interactionTitle": "試行と理論分布を重ねて比べる",
+          "relation": "direct",
+          "confidence": "high",
+          "rationale": "母集団から標本を繰り返し抽出し、標本平均を比較するため、標本蓄積と統計量比較のBehaviorに直接一致する。"
+        }
+      ],
+      "recommendedAction": "canonicalize-later"
     },
     {
       "candidateId": "random-variable-distribution",
@@ -1001,9 +1065,17 @@
       "subject": "mathB",
       "unit": "statistical-inference",
       "title": "標本平均の分布",
-      "coverageStatus": "gap",
-      "matches": [],
-      "recommendedAction": "research-new-interaction"
+      "coverageStatus": "covered",
+      "matches": [
+        {
+          "interactionId": "MATH-INT-010",
+          "interactionTitle": "試行と理論分布を重ねて比べる",
+          "relation": "direct",
+          "confidence": "high",
+          "rationale": "標本平均を何度も生成し、試行回数や標本サイズによる分布の変化を比べるため、反復生成と理論値比較を直接利用できる。"
+        }
+      ],
+      "recommendedAction": "canonicalize-later"
     },
     {
       "candidateId": "confidence-interval",

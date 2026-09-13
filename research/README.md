@@ -37,3 +37,9 @@ R6では、R5のCoverage `gap 56` だけを調査対象にします。 [`gap-beh
 [`canonical-interaction-candidates.json`](./canonical-interaction-candidates.json) は `CAN-CAND-###` 形式の研究候補です。Shortlistは3〜5件に制限し、候補は `research-only` のまま、`MATH-INT-###`、Runtime、教材、Practiceへ自動昇格させません。Priorityの根拠、Primary Gap、Secondary Partial、Engine適合、Evidence状態を候補ごとに記録します。
 
 [`canonical-candidate-repository-leads.json`](./canonical-candidate-repository-leads.json) は候補の挙動を考えるためのResearch Leadです。Qualified leadは公開Repository、固定40文字SHA、SHA付きsource path、LICENSE、License確認日、観察した挙動を持ちます。GPL / AGPLを含む場合も `behavioral-reference-only` に限定し、コードのコピー・移植や `adapted-from` は行いません。R6の生成Indexは [`../dist/ai/canonical-research-priorities.json`](../dist/ai/canonical-research-priorities.json) です。
+
+## Phase R7: Canonical promotion
+
+R7では、R6のShortlistを `research/canonical-promotion-plan.json` で全件Decision化し、昇格したCandidateの追加Evidenceだけを `research/canonical-promotion-evidence.json` に記録します。昇格には独立した公開GitHub Repository 2件以上、固定40文字SHA、SHA上のLICENSEとsource path、観察挙動、`inspired-by`、`behavioral-reference-only`、clean-room境界が必要です。Evidence URLは `/blob/<sha>/` に固定し、外部コードはコピー・移植しません。
+
+R7で正式化したRepositoryとFeatureは [`external-repositories.json`](./external-repositories.json) へ既存schemaで追加し、Canonicalは `data/interactions.json`、Runtime状態は `data/interaction-runtime-map.json` へ分離します。新Canonicalは `planned` のままで、R7ではRuntime実装を行いません。`r7-coverage-delta.json` はCandidate単位の遷移を記録し、Cluster全体の自動mappingを禁止します。R6生成IndexはR6 snapshotとして保持し、R7昇格Indexは [`../dist/ai/canonical-promotion-decisions.json`](../dist/ai/canonical-promotion-decisions.json) に分離します。

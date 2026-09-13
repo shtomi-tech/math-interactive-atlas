@@ -42,6 +42,12 @@ jobs:
           node scripts/report-r6-research-priorities.js
           node scripts/build-canonical-research-index.js --check
           node scripts/check-r6-scope.js
+          node scripts/check-canonical-promotion-plan.js
+          node scripts/check-canonical-promotion-evidence.js
+          node scripts/check-r7-coverage-delta.js
+          node scripts/report-r7-promotion.js
+          node scripts/build-canonical-promotion-index.js --check
+          node scripts/check-r7-scope.js
           node scripts/check-set-regions.js
           node scripts/check-set-relations.js
           node scripts/check-event-regions.js

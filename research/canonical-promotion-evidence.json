@@ -1,0 +1,119 @@
+{
+  "version": 1,
+  "promotions": [
+    {
+      "proposalId": "CAN-CAND-001",
+      "interactionId": "MATH-INT-009",
+      "sources": [
+        {
+          "repository": "phetsims/graphing-quadratics",
+          "visibility": "public",
+          "ref": "709b383759e887b6e2edb040bfbb987dc3632e05",
+          "license": {
+            "expression": "MIT",
+            "reviewed": true
+          },
+          "sourcePaths": [
+            "js/common/view/PointToolDragListener.ts",
+            "js/common/view/PointToolNode.ts"
+          ],
+          "evidenceUrls": [
+            "https://github.com/phetsims/graphing-quadratics/blob/709b383759e887b6e2edb040bfbb987dc3632e05/js/common/view/PointToolDragListener.ts",
+            "https://github.com/phetsims/graphing-quadratics/blob/709b383759e887b6e2edb040bfbb987dc3632e05/js/common/view/PointToolNode.ts"
+          ],
+          "observedBehavior": [
+            "A graph vertex is manipulated on a constrained quadratic model.",
+            "The vertex coordinates and derived graph representation stay synchronized."
+          ],
+          "relation": "inspired-by",
+          "implementationBoundary": "behavioral-reference-only",
+          "verifiedAt": "2026-09-13"
+        },
+        {
+          "repository": "sibaku/algeobra",
+          "visibility": "public",
+          "ref": "5263d7ba7fd1384c82cb58f97e832471e51124f4",
+          "license": {
+            "expression": "MIT",
+            "reviewed": true
+          },
+          "sourcePaths": [
+            "README.md",
+            "algeobraCanvas.js"
+          ],
+          "evidenceUrls": [
+            "https://github.com/sibaku/algeobra/blob/5263d7ba7fd1384c82cb58f97e832471e51124f4/README.md",
+            "https://github.com/sibaku/algeobra/blob/5263d7ba7fd1384c82cb58f97e832471e51124f4/algeobraCanvas.js"
+          ],
+          "observedBehavior": [
+            "Dynamic geometry dependencies recompute when a defining value changes.",
+            "Point manipulators update points through mouse events, while handle mappings keep controlled points constrained to geometric objects."
+          ],
+          "relation": "inspired-by",
+          "implementationBoundary": "behavioral-reference-only",
+          "verifiedAt": "2026-09-13"
+        }
+      ],
+      "cleanRoomRequired": true
+    },
+    {
+      "proposalId": "CAN-CAND-002",
+      "interactionId": "MATH-INT-010",
+      "sources": [
+        {
+          "repository": "phetsims/plinko-probability",
+          "visibility": "public",
+          "ref": "cd0d20a973262507b6106d42077006d964f50d90",
+          "license": {
+            "expression": "GPL-3.0",
+            "reviewed": true
+          },
+          "sourcePaths": [
+            "js/lab/model/LabModel.js",
+            "js/lab/view/LabScreenView.js",
+            "js/lab/view/StatisticsAccordionBox.js"
+          ],
+          "evidenceUrls": [
+            "https://github.com/phetsims/plinko-probability/blob/cd0d20a973262507b6106d42077006d964f50d90/js/lab/model/LabModel.js",
+            "https://github.com/phetsims/plinko-probability/blob/cd0d20a973262507b6106d42077006d964f50d90/js/lab/view/LabScreenView.js",
+            "https://github.com/phetsims/plinko-probability/blob/cd0d20a973262507b6106d42077006d964f50d90/js/lab/view/StatisticsAccordionBox.js"
+          ],
+          "observedBehavior": [
+            "Repeated trials accumulate into bins in the laboratory model.",
+            "The lab and statistics view compare observed frequencies with theoretical distribution values and summary statistics."
+          ],
+          "relation": "inspired-by",
+          "implementationBoundary": "behavioral-reference-only",
+          "verifiedAt": "2026-09-13"
+        },
+        {
+          "repository": "richarddmorey/stat-distributions-js",
+          "visibility": "public",
+          "ref": "189d2f40142ec6d0760f27f7fc6313482915ae0f",
+          "license": {
+            "expression": "MIT",
+            "reviewed": true
+          },
+          "sourcePaths": [
+            "README.md",
+            "distributionDisplay.html",
+            "js/distributionObjects.js"
+          ],
+          "evidenceUrls": [
+            "https://github.com/richarddmorey/stat-distributions-js/blob/189d2f40142ec6d0760f27f7fc6313482915ae0f/README.md",
+            "https://github.com/richarddmorey/stat-distributions-js/blob/189d2f40142ec6d0760f27f7fc6313482915ae0f/distributionDisplay.html",
+            "https://github.com/richarddmorey/stat-distributions-js/blob/189d2f40142ec6d0760f27f7fc6313482915ae0f/js/distributionObjects.js"
+          ],
+          "observedBehavior": [
+            "Distribution parameters are exposed through interactive slider controls.",
+            "Changing a parameter updates the displayed probability plot and its current value."
+          ],
+          "relation": "inspired-by",
+          "implementationBoundary": "behavioral-reference-only",
+          "verifiedAt": "2026-09-13"
+        }
+      ],
+      "cleanRoomRequired": true
+    }
+  ]
+}

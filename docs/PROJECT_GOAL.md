@@ -776,6 +776,18 @@ R6の生成物 [`dist/ai/canonical-research-priorities.json`](../dist/ai/canonic
 
 R6完了時も、Atlas 89教材、Practice 0問、Canonical 8件、External Repository 6件 / Feature 10件、Runtime `implemented 3 / planned 5 / blocked-evidence 0`、Coverage `covered 9 / partial 24 / gap 56`、Interaction Engine 11種を固定する。次のR7では、R6の候補・証拠・優先度をレビューし、必要な候補だけを `MATH-INT-009` 以降へ昇格する。
 
+## Phase R7: Canonical Promotion and Evidence Formalization
+
+R7では、R6 Research Candidateを無条件にActive Canonicalへ移さず、Evidence FormalizationとPromotion Gateを通過した少数だけを昇格する。R6のResearch snapshot（候補、Lead、Research Index）は過去時点の判断材料として保持し、R7で追加したEvidenceは別Registryへ記録する。
+
+R7開始baselineはR6 commit `e3f20563c9ff7d5251337659ec37ea8d2d76bfc9`、Legacy 89、監査 `0 / 89 / 0`、Canonical 8、External Repository 6 / Feature 10、Practice 0、Engine 11、Runtime `implemented 3 / planned 5 / blocked-evidence 0`、Coverage `covered 9 / partial 24 / gap 56` である。Shortlistは `CAN-CAND-001`〜`004` の4件で、Behavior coherence、split risk、Engine fit、独立した公開Repository 2件以上、固定SHA・LICENSE・source path・観察挙動を各Candidateの昇格条件とする。
+
+今回の昇格結果は `CAN-CAND-001 → MATH-INT-009`、`CAN-CAND-002 → MATH-INT-010` の2件である。`CAN-CAND-003` と `CAN-CAND-004` はEvidence不足と分割リスクのためHoldとする。新CanonicalはRuntime `planned` とし、Runtime実装・新Engine・新Scene・新教材・Practice変更はR7では行わない。新IDは選抜順に009から連番発行し、Hold CandidateのIDは予約しない。
+
+R7の正本は `research/canonical-promotion-plan.json`、`research/canonical-promotion-evidence.json`、`research/r7-coverage-delta.json` で、生成物は `dist/ai/canonical-promotion-decisions.json`、`dist/ai/interactions.json`、`dist/ai/candidate-canonical-coverage.json` である。Coverageは候補ごとに再評価し、今回は `covered 18 / partial 24 / gap 47`、9件の個別遷移を記録する。`covered` の回帰、Evidenceの捏造、外部コードのコピー・移植、`adapted-from`、Runtimeへの早期昇格を禁止する。
+
+R7完了後に `promotionCount >= 1`、全Evidence Gate、Canonical・Runtime map・Coverageの整合、既存回帰、GitHub Actionsのchecks / browser-smokeがそろえば、次のR8で昇格済みCanonicalから1件だけRuntime Pilot対象を選ぶ。R7でPromotion Gateを満たせない場合は `promotionCount = 0` とし、R8へ進まずResearchを継続する。
+
 ## 最重要ルール
 
 > **外部公開Repositoryで確認できないInteractionを、独自に作成してAtlasへ追加してはいけない。**

@@ -216,6 +216,8 @@ R5では `data/interaction-runtime-map.json` の001〜003の実装を変更せ�
 
 R6の研究データはRuntimeの正本と分離する。`research/gap-behavior-analysis.json` はR5の56 gapをExactly OnceでBehavior SignatureとClusterへ整理し、`research/canonical-interaction-candidates.json` は昇格前の研究候補、`research/canonical-candidate-repository-leads.json` は固定SHAで確認した挙動参照先を保持する。これらは `MATH-INT-###`、`content-data.json`、Runtime map、外部Repositoryの稼働Registryへ追加しない。
 
+R7では、Research Candidate、Active Canonical、Runtime Implementedを別状態として保持する。`research/canonical-promotion-plan.json` はShortlist全件のpromote / hold判断、`research/canonical-promotion-evidence.json` は昇格対象の独立Repository Evidence、`research/r7-coverage-delta.json` はCandidate単位のCoverage遷移を正本とする。昇格Canonicalは `data/interactions.json` と `data/interaction-runtime-map.json` に追加するが、Runtime状態は必ず `planned` とし、実装専用metadataを持たせない。Evidenceは固定SHA・License・source path・観察挙動を備え、外部コードは `behavioral-reference-only` のclean-room境界で参照する。R6のResearch Indexは過去時点のsnapshotとして保持し、R7判断の生成Indexは `dist/ai/canonical-promotion-decisions.json` へ分離する。
+
 候補のPriorityはPrimary Gap影響、対象Subject / Unit数、既存Engine適合、Evidenceの順で比較する。Shortlistは3〜5件、Primary Gapはgapだけ、Secondary Opportunityはpartialだけとし、同じPrimary Gapを複数Shortlistへ割り当てない。R6では操作状態の設計と証拠の不足を明示し、教材の見た目やコードの移植を先行させない。
 
 ### AI Retrieval Foundation

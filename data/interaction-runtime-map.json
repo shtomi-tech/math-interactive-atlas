@@ -49,6 +49,16 @@
       "interactionId": "MATH-INT-008",
       "status": "planned",
       "sourceFeatureIds": ["REPO-004-F001", "REPO-006-F001"]
+    },
+    {
+      "interactionId": "MATH-INT-009",
+      "status": "planned",
+      "sourceFeatureIds": ["REPO-001-F003", "REPO-007-F001"]
+    },
+    {
+      "interactionId": "MATH-INT-010",
+      "status": "planned",
+      "sourceFeatureIds": ["REPO-008-F001", "REPO-009-F001"]
     }
   ]
 }

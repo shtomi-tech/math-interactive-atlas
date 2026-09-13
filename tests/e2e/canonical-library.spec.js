@@ -9,9 +9,10 @@ async function openInteraction(page, id) {
 test("canonical library renders all mapped statuses and evidence", async ({ page }) => {
   const errors = collectBrowserErrors(page);
   await page.goto(appPath("interactions.html"));
-  await expect(page.locator(".library-card")).toHaveCount(8);
+  const canonicalCount = await page.locator(".library-card").count();
+  expect(canonicalCount).toBeGreaterThanOrEqual(8);
   await expect(page.locator(".library-runtime-status.is-implemented")).toHaveCount(3);
-  await expect(page.locator(".library-runtime-status.is-planned")).toHaveCount(5);
+  await expect(page.locator(".library-runtime-status.is-planned")).toHaveCount(canonicalCount - 3);
   await expect(page.locator(".library-runtime-status.is-blocked-evidence")).toHaveCount(0);
   await expect(page.locator(".library-card").nth(0)).toContainText("phetsims/graphing-quadratics");
   await expect(page.locator(".library-card").nth(0)).toContainText("MIT");
@@ -91,12 +92,12 @@ test("MATH-INT-003 keeps the curve probe on the function and supports keyboard i
   await expectNoBrowserErrors(errors);
 });
 
-test("planned and evidence-review interactions do not mount demos", async ({ page }) => {
+test("planned Canonical interactions do not mount demos", async ({ page }) => {
   const errors = collectBrowserErrors(page);
-  for (const id of ["MATH-INT-004", "MATH-INT-005", "MATH-INT-006", "MATH-INT-007", "MATH-INT-008"]) {
+  for (const id of ["MATH-INT-004", "MATH-INT-005", "MATH-INT-006", "MATH-INT-007", "MATH-INT-008", "MATH-INT-009", "MATH-INT-010"]) {
     await openInteraction(page, id);
     await expect(page.locator(".library-demo")).toHaveCount(0);
-    await expect(page.locator(".library-source-item")).toHaveCount(["MATH-INT-007", "MATH-INT-008"].includes(id) ? 2 : 1);
+    await expect(page.locator(".library-source-item")).toHaveCount(["MATH-INT-007", "MATH-INT-008", "MATH-INT-009", "MATH-INT-010"].includes(id) ? 2 : 1);
     await expect(page.locator(".library-unavailable")).toHaveText("Runtime implementation is not yet available.");
   }
   await expectNoBrowserErrors(errors);

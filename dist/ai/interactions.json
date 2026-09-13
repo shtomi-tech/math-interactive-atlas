@@ -535,6 +535,158 @@
           "license": "MIT"
         }
       ]
+    },
+    {
+      "id": "MATH-INT-009",
+      "title": "制約を保った図形を動かして測る",
+      "category": "Measure",
+      "description": "点や線を制約の上で動かし、図形の状態と長さ・角度・比・式の変化を同時に観察するInteraction。",
+      "learningGoal": "図形を動かしても保たれる関係と、動きに応じて変化する測定値を対応づける。",
+      "learnerActions": [
+        "点や頂点をドラッグする",
+        "測定対象を切り替える",
+        "補助線と関係式を表示する"
+      ],
+      "changes": [
+        "制約を保った図形の状態",
+        "長さ・角度・比の測定値",
+        "補助線・交点・ラベル"
+      ],
+      "feedbackCapabilities": [
+        "図形の即時再描画",
+        "数値と式の同期表示",
+        "成立している関係の説明"
+      ],
+      "capabilities": [
+        "constraint-preserving-drag",
+        "geometry-measurement",
+        "derived-value-feedback"
+      ],
+      "learningPatterns": [
+        "direct-manipulation",
+        "observe-invariant",
+        "compare-measurements"
+      ],
+      "bestFor": [
+        "三角比と図形",
+        "円と直線の関係",
+        "座標・長さ・角度の対応"
+      ],
+      "notBestFor": [
+        "長い証明の記述",
+        "大量データの統計処理",
+        "数式変形の自動実行"
+      ],
+      "supports": [
+        "pointer",
+        "keyboard-follow-up",
+        "measurement-feedback",
+        "constraint-visualization"
+      ],
+      "implementationDifficulty": "high",
+      "reusability": "high",
+      "reusePolicy": "reimplement",
+      "runtime": {
+        "status": "planned"
+      },
+      "sources": [
+        {
+          "repository": "phetsims/graphing-quadratics",
+          "ref": "709b383759e887b6e2edb040bfbb987dc3632e05",
+          "featureId": "REPO-001-F003",
+          "featurePath": "js/common/view/PointToolDragListener.ts",
+          "relation": "inspired-by",
+          "aspect": "curve-constrained coordinate probe",
+          "evidence": "The existing fixed-source feature evidence describes a draggable probe constrained to a quadratic curve with coordinate readout and keyboard support.",
+          "license": "MIT"
+        },
+        {
+          "repository": "sibaku/algeobra",
+          "ref": "5263d7ba7fd1384c82cb58f97e832471e51124f4",
+          "featureId": "REPO-007-F001",
+          "featurePath": "README.md",
+          "relation": "inspired-by",
+          "aspect": "dynamic geometry points and constrained handles",
+          "evidence": "The fixed-source algeobra README and canvas interaction path describe dynamic geometry dependencies, draggable points, and handles that keep a point constrained to a geometric object.",
+          "license": "MIT"
+        }
+      ]
+    },
+    {
+      "id": "MATH-INT-010",
+      "title": "試行と理論分布を重ねて比べる",
+      "category": "Simulate",
+      "description": "確率分布や標本抽出を繰り返し、実験結果・理論値・統計量を同じ画面で比較するInteraction。",
+      "learningGoal": "試行回数や分布パラメータが、実験結果の分布と理論値の近づき方に与える影響を捉える。",
+      "learnerActions": [
+        "試行・標本抽出を実行する",
+        "分布パラメータを変える",
+        "実験値と理論値を比較する"
+      ],
+      "changes": [
+        "試行結果と標本",
+        "度数・分布・統計量",
+        "不確かさと判定"
+      ],
+      "feedbackCapabilities": [
+        "結果の蓄積表示",
+        "理論分布との重ね合わせ",
+        "統計量と推測結果の同期"
+      ],
+      "capabilities": [
+        "seeded-repeated-trials",
+        "distribution-overlay",
+        "sample-statistic-feedback"
+      ],
+      "learningPatterns": [
+        "simulate-and-compare",
+        "vary-parameters",
+        "observe-convergence"
+      ],
+      "bestFor": [
+        "独立試行と二項分布",
+        "標本分布",
+        "仮説検定の直感"
+      ],
+      "notBestFor": [
+        "証明の文章構成",
+        "図形の制約付き作図",
+        "式の長い変形"
+      ],
+      "supports": [
+        "parameter-controls",
+        "repeatable-simulation",
+        "theory-vs-experiment",
+        "accessible-results"
+      ],
+      "implementationDifficulty": "high",
+      "reusability": "high",
+      "reusePolicy": "reimplement",
+      "runtime": {
+        "status": "planned"
+      },
+      "sources": [
+        {
+          "repository": "phetsims/plinko-probability",
+          "ref": "cd0d20a973262507b6106d42077006d964f50d90",
+          "featureId": "REPO-008-F001",
+          "featurePath": "js/lab/model/LabModel.js",
+          "relation": "inspired-by",
+          "aspect": "repeated trial bins and statistics",
+          "evidence": "The fixed-source Plinko Probability lab model and view accumulate repeated trials, show bin frequencies, and expose theoretical distribution and summary statistics.",
+          "license": "GPL-3.0"
+        },
+        {
+          "repository": "richarddmorey/stat-distributions-js",
+          "ref": "189d2f40142ec6d0760f27f7fc6313482915ae0f",
+          "featureId": "REPO-009-F001",
+          "featurePath": "README.md",
+          "relation": "inspired-by",
+          "aspect": "interactive distribution parameters and plots",
+          "evidence": "The fixed-source statistical-distributions-js display and parameter objects create sliders, update distribution parameters, and redraw probability plots when values change.",
+          "license": "MIT"
+        }
+      ]
     }
   ]
 }
