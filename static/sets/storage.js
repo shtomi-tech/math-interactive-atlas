@@ -1,4 +1,4 @@
-import { createProblemSet, normalizeProblemSet } from "./model.js?v=20260913-r2";
+import { createProblemSet, normalizeProblemSet } from "./model.js?v=20260913-r4";
 
 export const PROBLEM_SETS_KEY = "math-interactive-atlas-problem-sets-v1";
 export const MAX_SAVED_SETS = 50;

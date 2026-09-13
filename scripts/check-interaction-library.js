@@ -6,7 +6,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const errors = [];
 const categories = new Set(["Build", "Move", "Select", "Transform", "Visualize", "Compare", "Simulate", "Generate", "Measure", "Construct"]);
 const arrayFields = ["learnerActions", "changes", "feedbackCapabilities", "capabilities", "learningPatterns", "bestFor", "notBestFor", "supports"];
-const scalarFields = ["id", "title", "category", "description", "learningGoal", "implementationDifficulty", "reusability", "reusePolicy", "implementationStatus"];
+const scalarFields = ["id", "title", "category", "description", "learningGoal", "implementationDifficulty", "reusability", "reusePolicy"];
 
 function readJson(relativePath) {
   try {
@@ -46,7 +46,7 @@ interactions.forEach((interaction, index) => {
   requireCondition(categories.has(interaction.category), `${interaction.id} has unsupported category: ${interaction.category}`);
   interactionCategories.add(interaction.category);
   arrayFields.forEach((field) => requireCondition(Array.isArray(interaction[field]) && interaction[field].length >= 1 && interaction[field].every((value) => typeof value === "string" && value.trim() !== ""), `${interaction.id} ${field} must contain non-empty strings`));
-  requireCondition(interaction.implementationStatus === "research-only", `${interaction.id} must remain research-only in R3`);
+  requireCondition(!Object.prototype.hasOwnProperty.call(interaction, "implementationStatus"), `${interaction.id} must keep runtime status in the separate R4 mapping`);
   requireCondition(!Object.prototype.hasOwnProperty.call(interaction, "contentId"), `${interaction.id} must not depend on contentId`);
   requireCondition(Array.isArray(interaction.sources) && interaction.sources.length >= 1, `${interaction.id} needs at least one source`);
   const sourceFeatures = new Set();
@@ -72,5 +72,5 @@ if (errors.length > 0) {
   errors.forEach((error) => console.error(`- ${error}`));
   process.exitCode = 1;
 } else {
-  console.log(`Interaction library: PASS (${interactions.length} canonical interactions; ${interactionRepositories.size} repositories; ${interactionCategories.size} categories; research-only)`);
+  console.log(`Interaction library: PASS (${interactions.length} canonical interactions; ${interactionRepositories.size} repositories; ${interactionCategories.size} categories; runtime status is mapped separately)`);
 }

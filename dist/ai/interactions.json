@@ -47,17 +47,17 @@
       "implementationDifficulty": "medium",
       "reusability": "high",
       "reusePolicy": "reimplement",
-      "implementationStatus": "research-only",
+      "runtime": {
+        "status": "implemented",
+        "engine": "functionGraph",
+        "mode": "canonical-vertex-drag"
+      },
       "sources": [
         {
           "repository": "phetsims/graphing-quadratics",
           "ref": "709b383759e887b6e2edb040bfbb987dc3632e05",
           "featureId": "REPO-001-F001",
-          "featurePaths": [
-            "js/vertexform/view/VertexFormGraphNode.ts",
-            "js/common/view/VertexDragListener.ts",
-            "js/common/model/Quadratic.ts"
-          ],
+          "featurePath": "js/vertexform/view/VertexFormGraphNode.ts",
           "relation": "inspired-by",
           "aspect": "vertex drag constrained to a graph model",
           "evidence": "VertexFormGraphNode connects a vertex manipulator to h and k properties, and VertexDragListener constrains and rounds the dragged model point.",
@@ -111,16 +111,17 @@
       "implementationDifficulty": "low",
       "reusability": "high",
       "reusePolicy": "reimplement",
-      "implementationStatus": "research-only",
+      "runtime": {
+        "status": "implemented",
+        "engine": "functionGraph",
+        "mode": "canonical-coefficient-slider"
+      },
       "sources": [
         {
           "repository": "phetsims/graphing-quadratics",
           "ref": "709b383759e887b6e2edb040bfbb987dc3632e05",
           "featureId": "REPO-001-F002",
-          "featurePaths": [
-            "js/common/view/GQSlider.ts",
-            "js/common/model/Quadratic.ts"
-          ],
+          "featurePath": "js/common/view/GQSlider.ts",
           "relation": "inspired-by",
           "aspect": "coefficient slider with interval and zero constraints",
           "evidence": "GQSlider maps a coefficient property to a view slider, rounds to an interval, and supports skip-zero and snap-to-zero behavior.",
@@ -174,17 +175,17 @@
       "implementationDifficulty": "medium",
       "reusability": "high",
       "reusePolicy": "reimplement",
-      "implementationStatus": "research-only",
+      "runtime": {
+        "status": "implemented",
+        "engine": "functionGraph",
+        "mode": "canonical-curve-probe"
+      },
       "sources": [
         {
           "repository": "phetsims/graphing-quadratics",
           "ref": "709b383759e887b6e2edb040bfbb987dc3632e05",
           "featureId": "REPO-001-F003",
-          "featurePaths": [
-            "js/common/view/PointToolDragListener.ts",
-            "js/common/view/PointToolNode.ts",
-            "js/common/model/PointTool.ts"
-          ],
+          "featurePath": "js/common/view/PointToolDragListener.ts",
           "relation": "inspired-by",
           "aspect": "draggable point tool that snaps to a nearby curve",
           "evidence": "PointToolDragListener constrains the probe, finds a nearby quadratic, snaps to its closest point, and updates the point position; PointToolNode also installs keyboard dragging.",
@@ -238,16 +239,15 @@
       "implementationDifficulty": "medium",
       "reusability": "high",
       "reusePolicy": "reimplement",
-      "implementationStatus": "research-only",
+      "runtime": {
+        "status": "planned"
+      },
       "sources": [
         {
           "repository": "phetsims/function-builder",
           "ref": "6c3c834fb7808c19c37e59f17f66a3967bab5303",
           "featureId": "REPO-002-F001",
-          "featurePaths": [
-            "js/common/model/builder/Builder.js",
-            "js/common/model/builder/FunctionSlot.js"
-          ],
+          "featurePath": "js/common/model/builder/Builder.js",
           "relation": "inspired-by",
           "aspect": "ordered function slots and identity behavior",
           "evidence": "Builder creates FunctionSlot instances, applies occupied slots in order, treats empty slots as identity, and emits when a function instance changes.",
@@ -301,16 +301,15 @@
       "implementationDifficulty": "medium",
       "reusability": "high",
       "reusePolicy": "reimplement",
-      "implementationStatus": "research-only",
+      "runtime": {
+        "status": "planned"
+      },
       "sources": [
         {
           "repository": "phetsims/function-builder",
           "ref": "6c3c834fb7808c19c37e59f17f66a3967bab5303",
           "featureId": "REPO-002-F002",
-          "featurePaths": [
-            "js/common/view/FBMovableNode.ts",
-            "js/common/model/FBMovable.ts"
-          ],
+          "featurePath": "js/common/view/FBMovableNode.ts",
           "relation": "inspired-by",
           "aspect": "model-view synchronization during dragging",
           "evidence": "FBMovableNode installs a drag listener that moves FBMovable, while FBMovable stores current and destination positions for immediate or animated movement.",
@@ -364,16 +363,15 @@
       "implementationDifficulty": "medium",
       "reusability": "high",
       "reusePolicy": "reimplement",
-      "implementationStatus": "research-only",
+      "runtime": {
+        "status": "planned"
+      },
       "sources": [
         {
           "repository": "phetsims/function-builder",
           "ref": "6c3c834fb7808c19c37e59f17f66a3967bab5303",
           "featureId": "REPO-002-F003",
-          "featurePaths": [
-            "js/common/view/functions/FunctionNode.js",
-            "js/common/view/builder/FunctionSlotNode.ts"
-          ],
+          "featurePath": "js/common/view/functions/FunctionNode.js",
           "relation": "inspired-by",
           "aspect": "drop-to-closest-slot and relocation behavior",
           "evidence": "FunctionNode finds the closest slot on release, animates a piece into the builder or back to the carousel, and can relocate an adjacent occupant; FunctionSlotNode renders an empty dashed target.",
@@ -427,17 +425,15 @@
       "implementationDifficulty": "medium",
       "reusability": "medium",
       "reusePolicy": "reimplement",
-      "implementationStatus": "research-only",
+      "runtime": {
+        "status": "blocked-evidence"
+      },
       "sources": [
         {
           "repository": "phetsims/area-model-algebra",
           "ref": "8d5250d30bf1ad952b21ee48a9f1b52749044a0b",
           "featureId": "REPO-003-F001",
-          "featurePaths": [
-            "js/game/GameScreen.js",
-            "js/AreaModelAlgebraQueryParameters.ts",
-            "js/AreaModelAlgebraImages.ts"
-          ],
+          "featurePath": "js/game/GameScreen.js",
           "relation": "inspired-by",
           "aspect": "six-level visual game-screen configuration",
           "evidence": "GameScreen passes six level image properties to VariablesGameScreen, and AreaModelAlgebraQueryParameters defines the six game levels shown by the screen.",
@@ -491,16 +487,15 @@
       "implementationDifficulty": "low",
       "reusability": "medium",
       "reusePolicy": "reimplement",
-      "implementationStatus": "research-only",
+      "runtime": {
+        "status": "blocked-evidence"
+      },
       "sources": [
         {
           "repository": "phetsims/fractions-intro",
           "ref": "2885a338d6f76d86d53544e80b1386925a0adfaa",
           "featureId": "REPO-004-F001",
-          "featurePaths": [
-            "js/view/LabScreen.js",
-            "js/view/IntroScreen.js"
-          ],
+          "featurePath": "js/view/LabScreen.js",
           "relation": "inspired-by",
           "aspect": "separate introduction and construction-lab screens",
           "evidence": "LabScreen mounts BuildingLabModel with BuildingLabScreenView, while IntroScreen mounts IntroModel with IntroScreenView.",

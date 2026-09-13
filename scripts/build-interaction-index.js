@@ -9,13 +9,14 @@ function readJson(relativePath) {
   return JSON.parse(fs.readFileSync(path.join(root, relativePath), "utf8"));
 }
 
-export function buildIndex(library, external) {
+export function buildIndex(library, external, runtimeMap = { mappings: [] }) {
   const featureMap = new Map((external.repositories || []).flatMap((repository) => (repository.features || []).map((feature) => [feature.id, {
     repository: repository.repository,
     ref: repository.ref,
     license: repository.license.expression,
     paths: feature.paths
   }])));
+  const runtimeById = new Map((runtimeMap.mappings || []).map((mapping) => [mapping.interactionId, mapping]));
 
   return {
     version: 1,
@@ -36,7 +37,15 @@ export function buildIndex(library, external) {
       implementationDifficulty: interaction.implementationDifficulty,
       reusability: interaction.reusability,
       reusePolicy: interaction.reusePolicy,
-      implementationStatus: interaction.implementationStatus,
+      runtime: (() => {
+        const mapping = runtimeById.get(interaction.id);
+        if (!mapping) throw new Error(`missing runtime mapping: ${interaction.id}`);
+        return {
+          status: mapping.status,
+          ...(mapping.engine ? { engine: mapping.engine } : {}),
+          ...(mapping.mode ? { mode: mapping.mode } : {})
+        };
+      })(),
       sources: (interaction.sources || []).map((source) => {
         const feature = featureMap.get(source.featureId);
         if (!feature) throw new Error(`unknown featureId: ${source.featureId}`);
@@ -44,7 +53,7 @@ export function buildIndex(library, external) {
           repository: feature.repository,
           ref: feature.ref,
           featureId: source.featureId,
-          featurePaths: feature.paths,
+          featurePath: feature.paths[0],
           relation: source.relation,
           aspect: source.aspect,
           evidence: source.evidence,
@@ -56,7 +65,7 @@ export function buildIndex(library, external) {
 }
 
 function serializedIndex() {
-  return `${JSON.stringify(buildIndex(readJson("data/interactions.json"), readJson("research/external-repositories.json")), null, 2)}\n`;
+  return `${JSON.stringify(buildIndex(readJson("data/interactions.json"), readJson("research/external-repositories.json"), readJson("data/interaction-runtime-map.json")), null, 2)}\n`;
 }
 
 function main() {

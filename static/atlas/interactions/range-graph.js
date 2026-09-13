@@ -1,4 +1,4 @@
-import { definiteIntegral, signedAreaParts } from "../math/calculus.js?v=20260913-r2";
+import { definiteIntegral, signedAreaParts } from "../math/calculus.js?v=20260913-r4";
 
 const COLORS = {
   primary: "#2563eb",

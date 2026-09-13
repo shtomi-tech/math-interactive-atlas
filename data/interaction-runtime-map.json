@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "mappings": [
+    {
+      "interactionId": "MATH-INT-001",
+      "status": "implemented",
+      "engine": "functionGraph",
+      "mode": "canonical-vertex-drag",
+      "implementationStyle": "clean-room-reimplementation",
+      "sourceFeatureIds": ["REPO-001-F001"]
+    },
+    {
+      "interactionId": "MATH-INT-002",
+      "status": "implemented",
+      "engine": "functionGraph",
+      "mode": "canonical-coefficient-slider",
+      "implementationStyle": "clean-room-reimplementation",
+      "sourceFeatureIds": ["REPO-001-F002"]
+    },
+    {
+      "interactionId": "MATH-INT-003",
+      "status": "implemented",
+      "engine": "functionGraph",
+      "mode": "canonical-curve-probe",
+      "implementationStyle": "clean-room-reimplementation",
+      "sourceFeatureIds": ["REPO-001-F003"]
+    },
+    {
+      "interactionId": "MATH-INT-004",
+      "status": "planned",
+      "sourceFeatureIds": ["REPO-002-F001"]
+    },
+    {
+      "interactionId": "MATH-INT-005",
+      "status": "planned",
+      "sourceFeatureIds": ["REPO-002-F002"]
+    },
+    {
+      "interactionId": "MATH-INT-006",
+      "status": "planned",
+      "sourceFeatureIds": ["REPO-002-F003"]
+    },
+    {
+      "interactionId": "MATH-INT-007",
+      "status": "blocked-evidence",
+      "sourceFeatureIds": ["REPO-003-F001"]
+    },
+    {
+      "interactionId": "MATH-INT-008",
+      "status": "blocked-evidence",
+      "sourceFeatureIds": ["REPO-004-F001"]
+    }
+  ]
+}

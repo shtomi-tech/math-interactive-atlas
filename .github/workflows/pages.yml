@@ -35,7 +35,14 @@ jobs:
           test -f static/atlas.css
           test -f static/atlas/main.js
           test -f static/atlas/content-data.json
-          test -f static/atlas/interaction-metadata.json
+          test -f interactions.html
+          test -f data/interactions.json
+          test -f data/interaction-runtime-map.json
+          test -f research/external-repositories.json
+          test -f static/library.css
+          test -f static/library/main.js
+          test -f static/library/catalog.js
+          test -f static/library/viewer.js
           test -f static/atlas/interactions/sequence-lab.js
           test -f static/atlas/math/exponential-logarithm.js
           test -f static/atlas/math/calculus.js
@@ -69,12 +76,16 @@ jobs:
       - name: Prepare static files
         run: |
           mkdir -p _site/static
-          cp atlas.html index.html practice.html sets.html worksheet.html progress.html _site/
+          cp atlas.html interactions.html index.html practice.html sets.html worksheet.html progress.html _site/
           cp static/tokens.css static/atlas.css static/practice.css _site/static/
           cp static/sets.css static/worksheet.css static/progress.css _site/static/
+          cp static/library.css _site/static/
           cp static/asset-version.txt _site/static/
           cp -R research _site/research
+          cp -R data _site/data
+          cp -R dist _site/dist
           cp -R static/atlas _site/static/atlas
+          cp -R static/library _site/static/library
           cp -R static/practice _site/static/practice
           cp -R static/sets _site/static/sets
           cp -R static/worksheet _site/static/worksheet
@@ -113,6 +124,7 @@ jobs:
           EXPECTED_ASSET_VERSION: ${{ steps.asset-version.outputs.value }}
         run: >-
           npx playwright test
+          tests/e2e/canonical-library.spec.js
           tests/e2e/pages-smoke.spec.js
           tests/e2e/all-atlas-content.spec.js
           tests/e2e/learning-loop.spec.js

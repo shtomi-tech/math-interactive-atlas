@@ -4,6 +4,7 @@ import { appPath, collectBrowserErrors, expectNoBrowserErrors } from "./helpers.
 test("interactive controls have accessible names", async ({ page }) => {
   const errors = collectBrowserErrors(page);
   for (const url of [
+    appPath("interactions.html"),
     appPath("atlas.html?content=confidence-interval"),
     appPath("atlas.html?content=inequality-region-2d"),
     appPath("practice.html"),

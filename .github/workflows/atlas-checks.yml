@@ -22,13 +22,15 @@ jobs:
           node scripts/check-atlas-contract.js
           node scripts/check-repository-audit.js --require-complete
           node scripts/report-repository-audit.js
-          node scripts/check-interaction-metadata.js
           node scripts/check-r3-scope.js
           node scripts/check-external-repositories.js
           node scripts/check-interaction-library.js
           node scripts/build-interaction-index.js --check
           node scripts/check-interaction-index.js
           node scripts/report-interaction-library.js
+          node scripts/check-r4-scope.js
+          node scripts/check-interaction-runtime-map.js
+          node scripts/check-canonical-runtime-math.js
           node scripts/check-set-regions.js
           node scripts/check-set-relations.js
           node scripts/check-event-regions.js

@@ -56,7 +56,7 @@ Atlasの基本単位はRepositoryや数学単元ではなくInteractionとする
 
 ### Interaction Metadata
 
-AIが数学単元名だけでなく、学習者に行わせたい認知活動から検索できるよう、`static/atlas/interaction-metadata.json` に次の拡張フィールドを持たせる。R2ではRegistryとValidatorを用意し、Interaction metadataのIDはContent IDから独立させる。将来の正規IDは `MATH-INT-*` 形式を使える。
+AIが数学単元名だけでなく、学習者に行わせたい認知活動から検索できるよう、Canonical metadataは `data/interactions.json` に保持する。Runtime実装状態は `data/interaction-runtime-map.json` に分離し、Interaction定義とEngine実装の責務を混ぜない。
 
 ```text
 capabilities / learningPatterns / learnerActions / changes
@@ -196,11 +196,15 @@ R2では89候補教材をInteraction単位の監査作業キューとして管�
 
 ### Phase R3: Research-only Interaction Library
 
-`Legacy Candidate`、`Canonical Interaction`、`Runtime Engine`は別の概念として扱う。既存89候補の監査キューは `research/repository-audit.json`、R3で新たに確認した公開RepositoryとFeatureは `research/external-repositories.json`、Interactionの正規metadataは `data/interactions.json`を正本とする。`static/atlas/interaction-metadata.json`は旧互換領域であり、Canonical Interactionの手入力Registryにはしない。
+`Legacy Candidate`、`Canonical Interaction`、`Runtime Engine`は別の概念として扱う。既存89候補の監査キューは `research/repository-audit.json`、R3で新たに確認した公開RepositoryとFeatureは `research/external-repositories.json`、Interactionの正規metadataは `data/interactions.json`を正本とする。旧 `static/atlas/interaction-metadata.json` はR4で廃止し、Canonical Interactionの手入力Registryを二重に持たない。
 
-R3のInteractionは `MATH-INT-###` ID、`inspired-by` のFeature証拠、固定commit SHA、License確認、学習者の操作・変化・フィードバック・再利用条件を持つ。すべて `implementationStatus: research-only` とし、`contentId`を持たせない。AI向けの `dist/ai/interactions.json` は `data/interactions.json` と `research/external-repositories.json`から生成し、手で編集しない。
+R3のInteractionは `MATH-INT-###` ID、`inspired-by` のFeature証拠、固定commit SHA、License確認、学習者の操作・変化・フィードバック・再利用条件を持つ。`contentId`を持たせない。R4以降のRuntime状態は `data/interaction-runtime-map.json` で管理し、AI向けの `dist/ai/interactions.json` は3つの正本から生成し、手で編集しない。
 
 R3ではRuntimeを凍結する。既存89教材、11 Engine、Practice 0問、数学I・A・II・Bの範囲を維持し、新しい教材、Engine、Mode、Practice、数学C・数学III、Classroom機能は追加しない。外部Repositoryのコードをコピー・移植せず、次のRuntime実装候補はR3レビュー後に別Phaseで選定する。
+
+### Phase R4: Canonical Runtime Pilot
+
+R4ではCanonical InteractionとRuntime実装状態を分離し、`MATH-INT-001〜003`だけを既存の `functionGraph` Engine上へclean-roomで再実装する。`MATH-INT-004〜006`は `planned`、`MATH-INT-007〜008`は `blocked-evidence` とし、8件すべてを `data/interaction-runtime-map.json` に一度ずつ登録する。新規Engine、Practice、Canonical Interaction、Legacy Candidateとのmappingは追加しない。
 
 ### AI Retrieval Foundation
 

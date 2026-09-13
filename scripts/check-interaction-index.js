@@ -17,9 +17,10 @@ function readJson(relativePath) {
 
 const library = readJson("data/interactions.json");
 const external = readJson("research/external-repositories.json");
+const runtime = readJson("data/interaction-runtime-map.json");
 const actual = readJson("dist/ai/interactions.json");
-if (library && external && actual) {
-  const expected = buildIndex(library, external);
+if (library && external && runtime && actual) {
+  const expected = buildIndex(library, external, runtime);
   if (JSON.stringify(actual) !== JSON.stringify(expected)) errors.push("dist/ai/interactions.json does not match the generated index");
 }
 

@@ -18,7 +18,6 @@
       "implementationDifficulty": "medium",
       "reusability": "high",
       "reusePolicy": "reimplement",
-      "implementationStatus": "research-only",
       "sources": [{"featureId": "REPO-001-F001", "relation": "inspired-by", "aspect": "vertex drag constrained to a graph model", "evidence": "VertexFormGraphNode connects a vertex manipulator to h and k properties, and VertexDragListener constrains and rounds the dragged model point."}]
     },
     {
@@ -38,7 +37,6 @@
       "implementationDifficulty": "low",
       "reusability": "high",
       "reusePolicy": "reimplement",
-      "implementationStatus": "research-only",
       "sources": [{"featureId": "REPO-001-F002", "relation": "inspired-by", "aspect": "coefficient slider with interval and zero constraints", "evidence": "GQSlider maps a coefficient property to a view slider, rounds to an interval, and supports skip-zero and snap-to-zero behavior."}]
     },
     {
@@ -58,7 +56,6 @@
       "implementationDifficulty": "medium",
       "reusability": "high",
       "reusePolicy": "reimplement",
-      "implementationStatus": "research-only",
       "sources": [{"featureId": "REPO-001-F003", "relation": "inspired-by", "aspect": "draggable point tool that snaps to a nearby curve", "evidence": "PointToolDragListener constrains the probe, finds a nearby quadratic, snaps to its closest point, and updates the point position; PointToolNode also installs keyboard dragging."}]
     },
     {
@@ -78,7 +75,6 @@
       "implementationDifficulty": "medium",
       "reusability": "high",
       "reusePolicy": "reimplement",
-      "implementationStatus": "research-only",
       "sources": [{"featureId": "REPO-002-F001", "relation": "inspired-by", "aspect": "ordered function slots and identity behavior", "evidence": "Builder creates FunctionSlot instances, applies occupied slots in order, treats empty slots as identity, and emits when a function instance changes."}]
     },
     {
@@ -98,7 +94,6 @@
       "implementationDifficulty": "medium",
       "reusability": "high",
       "reusePolicy": "reimplement",
-      "implementationStatus": "research-only",
       "sources": [{"featureId": "REPO-002-F002", "relation": "inspired-by", "aspect": "model-view synchronization during dragging", "evidence": "FBMovableNode installs a drag listener that moves FBMovable, while FBMovable stores current and destination positions for immediate or animated movement."}]
     },
     {
@@ -118,7 +113,6 @@
       "implementationDifficulty": "medium",
       "reusability": "high",
       "reusePolicy": "reimplement",
-      "implementationStatus": "research-only",
       "sources": [{"featureId": "REPO-002-F003", "relation": "inspired-by", "aspect": "drop-to-closest-slot and relocation behavior", "evidence": "FunctionNode finds the closest slot on release, animates a piece into the builder or back to the carousel, and can relocate an adjacent occupant; FunctionSlotNode renders an empty dashed target."}]
     },
     {
@@ -138,7 +132,6 @@
       "implementationDifficulty": "medium",
       "reusability": "medium",
       "reusePolicy": "reimplement",
-      "implementationStatus": "research-only",
       "sources": [{"featureId": "REPO-003-F001", "relation": "inspired-by", "aspect": "six-level visual game-screen configuration", "evidence": "GameScreen passes six level image properties to VariablesGameScreen, and AreaModelAlgebraQueryParameters defines the six game levels shown by the screen."}]
     },
     {
@@ -158,7 +151,6 @@
       "implementationDifficulty": "low",
       "reusability": "medium",
       "reusePolicy": "reimplement",
-      "implementationStatus": "research-only",
       "sources": [{"featureId": "REPO-004-F001", "relation": "inspired-by", "aspect": "separate introduction and construction-lab screens", "evidence": "LabScreen mounts BuildingLabModel with BuildingLabScreenView, while IntroScreen mounts IntroModel with IntroScreenView."}]
     }
   ]

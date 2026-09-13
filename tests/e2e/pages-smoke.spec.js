@@ -10,6 +10,7 @@ test("deployed learning surfaces initialize and load their versioned assets", as
   const routes = [
     [appPath(), "#atlasCatalogView"],
     [appPath("atlas.html"), "#atlasCatalogView"],
+    [appPath("interactions.html"), "#libraryCatalogView"],
     [appPath("practice.html"), "#practiceCatalogView"],
     [appPath("sets.html"), "#setsMain"],
     [appPath("worksheet.html"), ".worksheet-page"],

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="公開Repositoryの証拠から構成した、再利用可能な数学Interaction Library。">
+  <title>Canonical Interaction Library | 数学インタラクティブ図鑑</title>
+  <link rel="stylesheet" href="./static/tokens.css?v=20260913-r4">
+  <link rel="stylesheet" href="./static/atlas.css?v=20260913-r4">
+  <link rel="stylesheet" href="./static/library.css?v=20260913-r4">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsxgraph@1.8.0/distrib/jsxgraph.css">
+  <script src="https://cdn.jsdelivr.net/npm/jsxgraph@1.8.0/distrib/jsxgraphcore.js"></script>
+  <script type="module" src="./static/library/main.js?v=20260913-r4"></script>
+</head>
+<body>
+  <a class="atlas-skip-link" href="#libraryMain">本文へ移動</a>
+  <header class="atlas-header">
+    <div class="atlas-header-inner">
+      <a class="atlas-brand" href="./atlas.html" aria-label="数学インタラクティブ図鑑へ戻る">
+        <span class="atlas-brand-mark" aria-hidden="true">∑</span>
+        <span><span class="atlas-eyebrow">INTERACTION RESEARCH LIBRARY</span><strong>数学インタラクティブ図鑑</strong></span>
+      </a>
+      <nav class="atlas-primary-nav" aria-label="主要メニュー">
+        <a href="./atlas.html">図鑑</a>
+        <a aria-current="page" href="./interactions.html">Interaction Library</a>
+        <a href="./practice.html">問題演習</a>
+        <a href="./progress.html">学習レポート</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="libraryMain" class="atlas-shell library-shell">
+    <p id="libraryStatus" class="atlas-status" role="status" aria-live="polite"></p>
+    <section id="libraryCatalogView" aria-labelledby="libraryTitle">
+      <div class="library-heading">
+        <p class="atlas-eyebrow">CANONICAL / RESEARCH-TO-RUNTIME</p>
+        <h1 id="libraryTitle">Canonical Interaction Library</h1>
+        <p>公開Repositoryで確認した操作・変化・フィードバックを、Atlasで再利用するための正本です。ここにあるRuntime状態は、教材一覧とは別に管理しています。</p>
+      </div>
+      <div id="librarySummary" class="library-summary" aria-label="Libraryの集計"></div>
+      <div id="libraryCatalog" class="library-grid" aria-label="Canonical Interaction一覧"></div>
+    </section>
+    <section id="libraryViewerView" hidden aria-labelledby="libraryViewerTitle" tabindex="-1">
+      <div id="libraryViewer"></div>
+    </section>
+  </main>
+</body>
+</html>

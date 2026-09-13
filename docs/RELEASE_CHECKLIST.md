@@ -1,6 +1,6 @@
-# Math Interactive Atlas R3 Checklist
+# Math Interactive Atlas R4 Checklist
 
-Phase R3では、R2の89候補監査を維持したまま、固定SHAで確認した外部Featureから研究専用のCanonical Interaction Libraryを構築する。根拠がない候補は `needs-review` として残し、`verified` と偽装しない。
+Phase R4では、R3の89候補監査とCanonical Interaction Libraryを維持したまま、001〜003を既存 `functionGraph` Engineへclean-roomでRuntime化する。根拠がない候補は `needs-review` として残し、`verified` と偽装しない。
 
 ## Current scope
 
@@ -13,7 +13,7 @@ Phase R3では、R2の89候補監査を維持したまま、固定SHAで確認�
 - [ ] Contentの描画情報は `rendering.library`、Repository由来情報は監査Registryだけにある
 - [ ] Canonical Interaction 8件以上、外部Repository 3件以上、Category 4種以上
 - [ ] R3の正本は `data/interactions.json` と `research/external-repositories.json`で、`dist/ai/interactions.json`は生成物である
-- [ ] Canonical Interactionは `contentId` に依存せず、すべて `implementationStatus: research-only` である
+- [ ] Canonical Interactionは `contentId` に依存せず、Runtime状態を別のmappingで管理する
 
 ## Data and static gates
 
@@ -66,7 +66,14 @@ Phase R3では、R2の89候補監査を維持したまま、固定SHAで確認�
 
 Pagesの公開検証はローカル検証とは別に扱う。Repositoryの公開設定またはGitHubプランでPagesを有効化できない場合は、公開ゲートを未確認として記録し、成功とは宣言しない。
 
-## Forbidden in R3
+## R4 gates
+
+- [ ] Runtime mapping 8件、implemented 3件、planned 3件、blocked-evidence 2件
+- [ ] `interactions.html` が8件を表示し、001〜003だけDemoをmountする
+- [ ] `data/interactions.json`にRuntime状態を重複保持しない
+- [ ] 旧 `static/atlas/interaction-metadata.json`をCanonical Sourceとして参照しない
+
+## Forbidden in R4
 
 - 新規Practice問題、Atlas教材、Interaction Engine
 - 削除したPractice問題の別JSON・legacy・disabled保存
@@ -82,4 +89,4 @@ Pagesの公開検証はローカル検証とは別に扱う。Repositoryの公�
 
 ## Next gate: post-R3 review
 
-Web ChatGPTによるR3レビュー後、指摘された次の実装指示だけを対象に進める。現行受入条件は、Canonical Interaction 8件以上、外部Repository 3件以上、Category 4種以上、Practice 0問、Interaction Engine 11種、既存89教材の実装維持、監査 `pending 0`、`npm run check`、全テスト、GitHub Actionsのchecks/browser-smoke成功である。
+Web ChatGPTによるR3レビュー後、R4の3件Pilotだけを対象に進める。現行受入条件は、Canonical Interaction 8件、外部Repository 4件、Feature 8件、Practice 0問、Interaction Engine 11種、既存89教材の実装維持、監査 `0 / 89 / 0`、R4 Checker、全テスト、GitHub Actionsのchecks/browser-smoke成功である。

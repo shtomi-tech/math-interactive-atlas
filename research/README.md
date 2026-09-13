@@ -16,6 +16,10 @@ Phase R2では、89候補教材を1件ずつ確認しました。Git履歴、REA
 
 R3の新規調査は、既存89候補の監査とは分離します。新たに確認した公開GitHub Repository、固定commit SHA、License、Feature Path、実際のBehavior Summaryは [`external-repositories.json`](./external-repositories.json) に保存し、既存候補の監査キューである [`repository-audit.json`](./repository-audit.json)へ遡及登録しません。
 
-Interactionの正本は [`../data/interactions.json`](../data/interactions.json) です。各IDは `MATH-INT-###`、各Sourceは外部Featureを参照する `inspired-by` とし、R3ではすべて `implementationStatus: research-only` にします。`contentId`への依存、`main` / `master`の可変証拠URL、コードのコピー・移植・`adapted-from`、外部証拠のない独自Interactionは登録しません。
+Interactionの正本は [`../data/interactions.json`](../data/interactions.json) です。各IDは `MATH-INT-###`、各Sourceは外部Featureを参照する `inspired-by` とします。Runtime状態は [`../data/interaction-runtime-map.json`](../data/interaction-runtime-map.json) に分離します。`contentId`への依存、`main` / `master`の可変証拠URL、コードのコピー・移植・`adapted-from`、外部証拠のない独自Interactionは登録しません。
 
 最低条件はCanonical Interaction 8件以上、外部Repository 3件以上、Category 4種以上です。`dist/ai/interactions.json` は `node scripts/build-interaction-index.js` で生成し、正本へ手入力しません。`check-external-repositories.js`、`check-interaction-library.js`、`check-interaction-index.js`、`report-interaction-library.js`で、出典・schema・生成結果・実数を検査します。
+
+## Phase R4: Canonical Runtime Pilot
+
+`data/interaction-runtime-map.json` は8件のCanonical InteractionをExactly Onceで記録します。001〜003は既存 `functionGraph` のclean-room Runtime、004〜006は `planned`、007〜008は `blocked-evidence` です。R4では新しいInteraction、Repository、Feature、Practice、Engineを追加しません。

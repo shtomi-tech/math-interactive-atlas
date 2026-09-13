@@ -34,6 +34,7 @@ const requiredFiles = [
   "static/atlas/interactions/function-scenes/common.js",
   "static/atlas/interactions/function-scenes/index.js",
   "static/atlas/interactions/function-scenes/quadratic.js",
+  "static/atlas/interactions/function-scenes/canonical.js",
   "static/atlas/interactions/function-scenes/exponential.js",
   "static/atlas/interactions/function-scenes/trigonometric.js",
   "static/atlas/interactions/function-scenes/calculus.js",
@@ -54,6 +55,7 @@ const requiredFiles = [
   "static/atlas/math/sample-space.js",
   "static/atlas/math/number-theory.js",
   "static/atlas/math/quadratic.js",
+  "static/atlas/math/canonical-quadratic.js",
   "static/atlas/math/trigonometry.js",
   "static/atlas/math/exponential-logarithm.js",
   "static/atlas/math/calculus.js",
@@ -64,9 +66,14 @@ const requiredFiles = [
   "static/atlas/math/sampling.js",
   "static/atlas/math/modeling.js",
   "static/atlas/storage.js",
-  "static/atlas/interaction-metadata.json",
   "data/interactions.json",
+  "data/interaction-runtime-map.json",
   "research/external-repositories.json",
+  "interactions.html",
+  "static/library.css",
+  "static/library/main.js",
+  "static/library/catalog.js",
+  "static/library/viewer.js",
   "static/practice.css",
   "static/practice/main.js",
   "static/practice/router.js",
@@ -122,7 +129,6 @@ const requiredFiles = [
   "scripts/check-practice-session.js",
   "scripts/check-learning-state.js",
   "scripts/check-repository-audit.js",
-  "scripts/check-interaction-metadata.js",
   "scripts/report-repository-audit.js",
   "scripts/check-r3-scope.js",
   "scripts/check-external-repositories.js",
@@ -130,6 +136,9 @@ const requiredFiles = [
   "scripts/build-interaction-index.js",
   "scripts/check-interaction-index.js",
   "scripts/report-interaction-library.js",
+  "scripts/check-r4-scope.js",
+  "scripts/check-interaction-runtime-map.js",
+  "scripts/check-canonical-runtime-math.js",
   "tests/e2e/all-atlas-content.spec.js",
   "tests/e2e/learning-loop.spec.js",
   "tests/e2e/pages-smoke.spec.js",
@@ -168,7 +177,6 @@ const css = read("static/atlas.css");
 const practiceCss = read("static/practice.css");
 const dataText = read("static/atlas/content-data.json");
 const auditText = read("research/repository-audit.json");
-const interactionMetadataText = read("static/atlas/interaction-metadata.json");
 const canonicalInteractionText = read("data/interactions.json");
 const externalRepositoryText = read("research/external-repositories.json");
 const reportAuditSource = read("scripts/report-repository-audit.js");
@@ -187,7 +195,7 @@ const algebraLabSource = read("static/atlas/interactions/algebra-lab.js");
 const numberLineLabSource = read("static/atlas/interactions/number-line-lab.js");
 const algorithmLabSource = read("static/atlas/interactions/algorithm-lab.js");
 const functionGraphSource = read("static/atlas/interactions/function-graph.js");
-const functionScenesSource = ["common.js", "index.js", "quadratic.js", "exponential.js", "trigonometric.js", "calculus.js", "social-models.js"].map((file) => read(`static/atlas/interactions/function-scenes/${file}`)).join("\n");
+const functionScenesSource = ["common.js", "index.js", "quadratic.js", "canonical.js", "exponential.js", "trigonometric.js", "calculus.js", "social-models.js"].map((file) => read(`static/atlas/interactions/function-scenes/${file}`)).join("\n");
 const sequenceLabSource = read("static/atlas/interactions/sequence-lab.js");
 const rangeGraphSource = read("static/atlas/interactions/range-graph.js");
 const curriculumSource = read("static/atlas/curriculum.js");
@@ -260,13 +268,6 @@ try {
   repositoryAudit = JSON.parse(auditText);
 } catch (error) {
   errors.push(`repository audit is not valid JSON: ${error.message}`);
-}
-
-let interactionMetadata = null;
-try {
-  interactionMetadata = JSON.parse(interactionMetadataText);
-} catch (error) {
-  errors.push(`interaction metadata is not valid JSON: ${error.message}`);
 }
 
 let canonicalInteractions = null;
@@ -582,7 +583,6 @@ if (Array.isArray(repositoryAudit?.contents)) {
     if (record.auditStatus === "needs-review") requireCondition(typeof record.reviewReason === "string" && record.reviewReason.trim() !== "", `${record.contentId} needs-review requires reviewReason`);
   });
 }
-requireCondition(interactionMetadata?.version === 1 && Array.isArray(interactionMetadata?.interactions), "interaction metadata registry is incomplete");
 const canonicalInteractionRecords = Array.isArray(canonicalInteractions?.interactions) ? canonicalInteractions.interactions : [];
 const externalRepositoryRecords = Array.isArray(externalRepositories?.repositories) ? externalRepositories.repositories : [];
 const externalFeatureIds = new Set(externalRepositoryRecords.flatMap((repository) => (repository.features || []).map((feature) => feature.id)));
@@ -593,7 +593,7 @@ requireCondition(externalRepositoryRecords.length >= 3, "external repository reg
 canonicalInteractionRecords.forEach((interaction) => {
   requireCondition(/^MATH-INT-\d{3}$/.test(interaction.id), `${interaction.id} must use the canonical MATH-INT-### format`);
   requireCondition(!("contentId" in interaction), `${interaction.id} must not depend on contentId`);
-  requireCondition(interaction.implementationStatus === "research-only", `${interaction.id} must remain research-only`);
+  requireCondition(!Object.prototype.hasOwnProperty.call(interaction, "implementationStatus"), `${interaction.id} must keep runtime status in the R4 mapping`);
   requireCondition(Array.isArray(interaction.sources) && interaction.sources.length >= 1, `${interaction.id} needs source evidence`);
   (interaction.sources || []).forEach((source, index) => {
     requireCondition(externalFeatureIds.has(source.featureId), `${interaction.id} source ${index} points to an unknown external feature`);
@@ -607,18 +607,18 @@ requireCondition(geometryScenesSource.includes("判定する点P") && geometrySc
 requireCondition(algebraLabSource.includes("formatBinomial") && algebraLabSource.includes("role: \"img\"") && algebraLabSource.includes("aria-label"), "Phase 8A algebra accessibility helpers are missing");
 requireCondition(routerSource.includes('subject: params.get("subject") || null'), "catalog route must show all subjects when subject is omitted");
 requireCondition(workflowSource.includes("node-version: 22"), "GitHub Actions must use Node.js 22");
-requireCondition(workflowSource.includes("node scripts/check-atlas-contract.js") && workflowSource.includes("node scripts/check-repository-audit.js") && workflowSource.includes("node scripts/check-interaction-metadata.js") && workflowSource.includes("node scripts/report-repository-audit.js") && workflowSource.includes("node scripts/check-set-regions.js") && workflowSource.includes("node scripts/check-set-relations.js") && workflowSource.includes("node scripts/check-event-regions.js") && workflowSource.includes("node scripts/check-conditional-probability.js") && workflowSource.includes("node scripts/check-combinatorics.js") && workflowSource.includes("node scripts/check-statistics.js") && workflowSource.includes("node scripts/check-probability.js") && workflowSource.includes("node scripts/check-hypothesis-test.js") && workflowSource.includes("node scripts/check-geometry.js") && workflowSource.includes("node scripts/check-algebra.js") && workflowSource.includes("node scripts/check-number-line.js") && workflowSource.includes("node scripts/check-sample-space.js") && workflowSource.includes("node scripts/check-number-theory.js") && workflowSource.includes("node scripts/check-quadratic.js") && workflowSource.includes("node scripts/check-trigonometry.js") && workflowSource.includes("node scripts/check-curriculum.js") && workflowSource.includes("node scripts/check-related-content.js") && workflowSource.includes("node scripts/check-practice-data.js") && workflowSource.includes("node scripts/check-practice-answer.js") && workflowSource.includes("node scripts/check-practice-links.js") && workflowSource.includes("node scripts/check-practice-coverage.js") && workflowSource.includes("node scripts/check-practice-quality.js") && workflowSource.includes("node scripts/check-practice-session.js") && workflowSource.includes("node scripts/check-learning-state.js") && workflowSource.includes("node scripts/check-problem-set.js") && workflowSource.includes("node scripts/check-set-storage.js") && workflowSource.includes("node scripts/check-worksheet.js") && workflowSource.includes("node scripts/check-progress-summary.js") && workflowSource.includes("node scripts/check-learning-record.js") && workflowSource.includes("node scripts/check-asset-version.js"), "GitHub Actions check scripts are incomplete");
+requireCondition(workflowSource.includes("node scripts/check-atlas-contract.js") && workflowSource.includes("node scripts/check-repository-audit.js") && workflowSource.includes("node scripts/report-repository-audit.js") && workflowSource.includes("node scripts/check-set-regions.js") && workflowSource.includes("node scripts/check-set-relations.js") && workflowSource.includes("node scripts/check-event-regions.js") && workflowSource.includes("node scripts/check-conditional-probability.js") && workflowSource.includes("node scripts/check-combinatorics.js") && workflowSource.includes("node scripts/check-statistics.js") && workflowSource.includes("node scripts/check-probability.js") && workflowSource.includes("node scripts/check-hypothesis-test.js") && workflowSource.includes("node scripts/check-geometry.js") && workflowSource.includes("node scripts/check-algebra.js") && workflowSource.includes("node scripts/check-number-line.js") && workflowSource.includes("node scripts/check-sample-space.js") && workflowSource.includes("node scripts/check-number-theory.js") && workflowSource.includes("node scripts/check-quadratic.js") && workflowSource.includes("node scripts/check-trigonometry.js") && workflowSource.includes("node scripts/check-curriculum.js") && workflowSource.includes("node scripts/check-related-content.js") && workflowSource.includes("node scripts/check-practice-data.js") && workflowSource.includes("node scripts/check-practice-answer.js") && workflowSource.includes("node scripts/check-practice-links.js") && workflowSource.includes("node scripts/check-practice-coverage.js") && workflowSource.includes("node scripts/check-practice-quality.js") && workflowSource.includes("node scripts/check-practice-session.js") && workflowSource.includes("node scripts/check-learning-state.js") && workflowSource.includes("node scripts/check-problem-set.js") && workflowSource.includes("node scripts/check-set-storage.js") && workflowSource.includes("node scripts/check-worksheet.js") && workflowSource.includes("node scripts/check-progress-summary.js") && workflowSource.includes("node scripts/check-learning-record.js") && workflowSource.includes("node scripts/check-asset-version.js"), "GitHub Actions check scripts are incomplete");
 requireCondition(workflowSource.includes("node scripts/check-js-syntax.js"), "GitHub Actions syntax checks are incomplete");
 requireCondition(workflowSource.includes("node scripts/check-r3-scope.js") && workflowSource.includes("node scripts/check-external-repositories.js") && workflowSource.includes("node scripts/check-interaction-library.js") && workflowSource.includes("node scripts/build-interaction-index.js --check") && workflowSource.includes("node scripts/check-interaction-index.js") && workflowSource.includes("node scripts/report-interaction-library.js"), "Phase R3 research checks are missing from GitHub Actions");
+requireCondition(workflowSource.includes("node scripts/check-r4-scope.js") && workflowSource.includes("node scripts/check-interaction-runtime-map.js") && workflowSource.includes("node scripts/check-canonical-runtime-math.js"), "Phase R4 runtime checks are missing from GitHub Actions");
 requireCondition(workflowSource.includes("node scripts/check-exponential-logarithm.js") && workflowSource.includes("node scripts/check-calculus.js") && workflowSource.includes("node scripts/check-sequences.js") && workflowSource.includes("node scripts/check-algebra2.js") && workflowSource.includes("node scripts/check-coordinate-geometry.js") && workflowSource.includes("node scripts/check-statistical-inference.js") && workflowSource.includes("node scripts/check-modeling.js"), "Phase 7B math checks are missing from GitHub Actions");
 requireCondition(workflowSource.includes("node scripts/check-js-syntax.js"), "Phase 7B syntax checks are missing from GitHub Actions");
 requireCondition(workflowSource.includes("browser-smoke:") && workflowSource.includes("npx playwright install --with-deps chromium") && workflowSource.includes("npm test"), "Browser smoke checks are missing from GitHub Actions");
-requireCondition(pagesWorkflowSource.includes("workflow_dispatch:") && !pagesWorkflowSource.includes("  push:") && pagesWorkflowSource.includes("actions/configure-pages@v5") && !pagesWorkflowSource.includes("enablement:") && pagesWorkflowSource.includes("test -f atlas.html") && pagesWorkflowSource.includes("test -f index.html") && pagesWorkflowSource.includes("test -f practice.html") && pagesWorkflowSource.includes("test -f static/tokens.css") && pagesWorkflowSource.includes("test -f static/atlas.css") && pagesWorkflowSource.includes("test -f static/atlas/main.js") && pagesWorkflowSource.includes("test -f static/atlas/content-data.json") && pagesWorkflowSource.includes("test -f static/practice.css") && pagesWorkflowSource.includes("test -f static/practice/main.js") && pagesWorkflowSource.includes("test -f static/practice/problem-data.json") && pagesWorkflowSource.includes("cp static/tokens.css static/atlas.css static/practice.css _site/static/") && pagesWorkflowSource.includes("cp -R static/atlas _site/static/atlas") && pagesWorkflowSource.includes("cp -R static/practice _site/static/practice") && pagesWorkflowSource.includes("touch _site/.nojekyll") && pagesWorkflowSource.includes("actions/upload-pages-artifact@v3") && pagesWorkflowSource.includes("actions/deploy-pages@v4"), "GitHub Pages deploy workflow is incomplete");
+requireCondition(pagesWorkflowSource.includes("workflow_dispatch:") && !pagesWorkflowSource.includes("  push:") && pagesWorkflowSource.includes("actions/configure-pages@v5") && !pagesWorkflowSource.includes("enablement:") && pagesWorkflowSource.includes("test -f atlas.html") && pagesWorkflowSource.includes("test -f interactions.html") && pagesWorkflowSource.includes("test -f data/interactions.json") && pagesWorkflowSource.includes("test -f data/interaction-runtime-map.json") && pagesWorkflowSource.includes("test -f static/library/main.js") && pagesWorkflowSource.includes("test -f index.html") && pagesWorkflowSource.includes("test -f practice.html") && pagesWorkflowSource.includes("test -f static/tokens.css") && pagesWorkflowSource.includes("test -f static/atlas.css") && pagesWorkflowSource.includes("test -f static/atlas/main.js") && pagesWorkflowSource.includes("test -f static/atlas/content-data.json") && pagesWorkflowSource.includes("test -f static/practice.css") && pagesWorkflowSource.includes("test -f static/practice/main.js") && pagesWorkflowSource.includes("test -f static/practice/problem-data.json") && pagesWorkflowSource.includes("cp static/tokens.css static/atlas.css static/practice.css _site/static/") && pagesWorkflowSource.includes("cp -R static/atlas _site/static/atlas") && pagesWorkflowSource.includes("cp -R static/library _site/static/library") && pagesWorkflowSource.includes("cp -R data _site/data") && pagesWorkflowSource.includes("touch _site/.nojekyll") && pagesWorkflowSource.includes("actions/upload-pages-artifact@v3") && pagesWorkflowSource.includes("actions/deploy-pages@v4"), "GitHub Pages deploy workflow is incomplete");
 requireCondition(pagesWorkflowSource.includes("test -f static/atlas/interactions/sequence-lab.js") && pagesWorkflowSource.includes("test -f static/atlas/math/exponential-logarithm.js") && pagesWorkflowSource.includes("test -f static/atlas/math/calculus.js") && pagesWorkflowSource.includes("test -f static/atlas/math/sequences.js") && pagesWorkflowSource.includes("test -f static/atlas/math/algebra2.js") && pagesWorkflowSource.includes("test -f static/atlas/math/coordinate-geometry.js") && pagesWorkflowSource.includes("test -f static/atlas/math/statistical-inference.js") && pagesWorkflowSource.includes("test -f static/atlas/math/modeling.js") && pagesWorkflowSource.includes("test -f static/atlas/interactions/function-scenes/index.js") && pagesWorkflowSource.includes("test -f static/atlas/interactions/geometry-scenes/index.js"), "Phase 7B Pages assets are missing");
-requireCondition(pagesWorkflowSource.includes("test -f static/atlas/interaction-metadata.json"), "Pages interaction metadata asset is missing");
 requireCondition(pagesWorkflowSource.includes("Smoke test deployed Pages") && pagesWorkflowSource.includes("curl --fail"), "Pages post-deploy smoke check is missing");
 requireCondition(pagesWorkflowSource.includes("test -f research/repository-audit.json") && pagesWorkflowSource.includes("cp -R research _site/research"), "Pages repository audit asset is missing");
-requireCondition(pagesWorkflowSource.includes("PLAYWRIGHT_BASE_URL") && pagesWorkflowSource.includes("tests/e2e/pages-smoke.spec.js") && pagesWorkflowSource.includes("npx playwright install --with-deps chromium"), "Pages browser smoke check is missing");
+requireCondition(pagesWorkflowSource.includes("PLAYWRIGHT_BASE_URL") && pagesWorkflowSource.includes("tests/e2e/pages-smoke.spec.js") && pagesWorkflowSource.includes("tests/e2e/canonical-library.spec.js") && pagesWorkflowSource.includes("npx playwright install --with-deps chromium"), "Pages browser smoke check is missing");
 requireCondition(e2eHelperSource.includes("function appPath") && e2eHelperSource.includes('replace(/^\\/+/, "")'), "E2E base-path helper is missing");
 requireCondition(allAtlasE2eSource.includes("readFileSync") && allAtlasE2eSource.includes("repository-audit.json") && allAtlasE2eSource.includes("auditLabel") && allAtlasE2eSource.includes("for (const content of contents)") && allAtlasE2eSource.includes("test(`${content.id}"), "Atlas regression must create independent data-driven tests");
 requireCondition(learningLoopE2eSource.includes("practice-empty-state") && learningLoopE2eSource.includes("atlas-practice-links") && learningLoopE2eSource.includes("worksheet-empty-state") && learningLoopE2eSource.includes("問題 0問"), "Empty Practice state coverage is incomplete");

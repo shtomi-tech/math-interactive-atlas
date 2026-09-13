@@ -1,0 +1,69 @@
+.library-shell { max-width: 1180px; }
+.library-heading, .library-viewer, .library-card { background: var(--atlas-canvas); border: 1px solid var(--atlas-border); border-radius: 16px; box-shadow: 0 1px 3px rgba(15, 23, 42, .06); }
+.library-heading { padding: 32px; }
+.library-heading h1 { margin-top: 8px; }
+.library-heading p:last-child { max-width: 780px; margin-top: 14px; color: var(--atlas-muted); }
+.library-summary { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0; color: var(--atlas-muted); font-size: .875rem; }
+.library-summary span { padding: 6px 10px; border: 1px solid var(--atlas-border); border-radius: 999px; background: var(--atlas-canvas); }
+.library-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.library-card { display: flex; min-width: 0; flex-direction: column; padding: 22px; }
+.library-card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.library-card-id { color: var(--atlas-accent); font-family: var(--atlas-mono); font-size: .75rem; font-weight: 700; letter-spacing: .05em; }
+.library-card h2 { margin-top: 6px; font-size: 1.2rem; }
+.library-card-category { flex: 0 0 auto; padding: 4px 8px; border: 1px solid var(--atlas-border-strong); border-radius: 999px; color: var(--atlas-muted); font-size: .75rem; }
+.library-card-description { margin-top: 12px; color: var(--atlas-muted); font-size: .9375rem; }
+.library-card-goal { margin-top: 14px; padding: 12px; border-left: 3px solid var(--atlas-math-highlight); background: #fffbeb; }
+.library-card-goal strong { display: block; font-size: .75rem; color: #92400e; }
+.library-card-goal span { display: block; margin-top: 3px; }
+.library-card-meta { display: grid; gap: 6px; margin: 16px 0; color: var(--atlas-muted); font-size: .8125rem; }
+.library-card-meta strong { color: var(--atlas-text); font-weight: 650; }
+.library-runtime-status { display: inline-flex; align-items: center; min-height: 28px; width: fit-content; padding: 3px 9px; border: 1px solid var(--atlas-border-strong); border-radius: 999px; font-size: .75rem; font-weight: 700; }
+.library-runtime-status.is-implemented { border-color: #9ab6a6; color: #2f6148; }
+.library-runtime-status.is-planned { border-color: #d2ae73; color: #8a5a17; }
+.library-runtime-status.is-blocked-evidence { border-color: var(--atlas-error); color: var(--atlas-error); }
+.library-card-open { width: 100%; margin-top: auto; padding: 9px 12px; }
+.library-card-open[disabled] { cursor: not-allowed; opacity: .72; }
+.library-viewer { padding: 32px; }
+.library-viewer-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+.library-viewer-header h1 { margin-top: 8px; }
+.library-viewer-description { max-width: 760px; margin-top: 12px; color: var(--atlas-muted); }
+.library-viewer-actions { display: flex; flex-wrap: wrap; gap: 8px; flex: 0 0 auto; }
+.library-back { color: var(--atlas-accent); }
+.library-detail-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 24px; }
+.library-detail-panel { min-width: 0; padding: 18px; border: 1px solid var(--atlas-border); border-radius: 12px; background: var(--atlas-subtle); }
+.library-detail-panel h2 { font-size: 1rem; }
+.library-detail-panel p { margin-top: 8px; color: var(--atlas-muted); font-size: .875rem; }
+.library-detail-panel ul { margin: 10px 0 0; padding-left: 1.3rem; color: var(--atlas-muted); font-size: .875rem; }
+.library-demo { grid-column: 1 / -1; margin-top: 24px; padding: 20px; border: 1px solid var(--atlas-border); border-radius: 12px; }
+.library-demo h2 { font-size: 1.1rem; }
+.library-demo-instructions { margin-top: 8px; color: var(--atlas-muted); }
+.library-demo-canvas { min-height: 0; margin-top: 14px; }
+.library-demo-state { margin-top: 12px; padding: 10px 12px; border-left: 3px solid var(--atlas-math-primary); background: var(--atlas-formula-bg); font-family: var(--atlas-mono); }
+.library-demo-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-top: 12px; }
+.library-source-list { display: grid; gap: 8px; margin-top: 10px; }
+.library-source-item { padding: 10px 12px; border: 1px solid var(--atlas-border); border-radius: 8px; background: var(--atlas-canvas); font-size: .8125rem; overflow-wrap: anywhere; }
+.library-source-item p + p { margin-top: 4px; }
+.library-source-item a { overflow-wrap: anywhere; }
+.library-unavailable { margin-top: 18px; padding: 16px; border: 1px solid #d2ae73; border-radius: 10px; background: #fffbeb; color: #7c4a03; }
+.atlas-canonical-keyboard-target { min-height: 44px; }
+.atlas-canonical-handle-layer { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+.atlas-canonical-drag-handle { position: absolute; width: 44px; min-height: 44px; padding: 0; transform: translate(-50%, -50%); pointer-events: auto; border: 2px solid var(--atlas-text); border-radius: 50%; background: var(--atlas-math-highlight); color: var(--atlas-text); font-weight: 800; }
+.atlas-canonical-drag-handle:hover { background: #fbbf24; }
+.atlas-canonical-slider-control { display: grid; grid-template-columns: auto minmax(140px, 1fr) auto; align-items: center; gap: 10px; min-height: 44px; margin-top: 10px; }
+.atlas-canonical-slider-control input { min-width: 0; }
+.atlas-canonical-slider-control output { min-width: 3em; font-family: var(--atlas-mono); text-align: right; }
+@media (max-width: 720px) {
+  .library-grid, .library-detail-grid { grid-template-columns: 1fr; }
+  .library-viewer-header { flex-direction: column; }
+  .library-demo { grid-column: auto; }
+}
+@media (max-width: 420px) {
+  .library-heading, .library-viewer, .library-card { padding: 18px; border-radius: 12px; }
+  .library-card-header { flex-direction: column; }
+  .library-card-category { align-self: flex-start; }
+  .atlas-canonical-slider-control { grid-template-columns: 1fr auto; }
+  .atlas-canonical-slider-control input { grid-column: 1 / -1; grid-row: 2; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}

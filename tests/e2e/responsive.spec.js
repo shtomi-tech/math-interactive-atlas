@@ -13,6 +13,7 @@ for (const viewport of [
     const errors = collectBrowserErrors(page);
     for (const url of [
       appPath("atlas.html"),
+      appPath("interactions.html"),
       appPath("atlas.html?content=confidence-interval"),
       appPath("atlas.html?content=inequality-region-2d"),
       appPath("atlas.html?content=function-and-derivative"),

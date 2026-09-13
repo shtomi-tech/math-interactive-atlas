@@ -748,11 +748,15 @@ dist/ai/interactions.json
     ↓ 上記2つから生成するAI検索用Index
 ```
 
-R3の最低条件は、8件以上のCanonical Interaction、3つ以上の外部Repository、4つ以上のInteraction Categoryである。各Interactionは `contentId` に依存せず、`inspired-by` のFeature証拠と、学習者の操作・変化・フィードバック・再利用条件を持つ。R3ではすべて `implementationStatus: research-only` とし、実行時の教材・Engine・Practiceへ追加しない。
+R3の最低条件は、8件以上のCanonical Interaction、3つ以上の外部Repository、4つ以上のInteraction Categoryである。各Interactionは `contentId` に依存せず、`inspired-by` のFeature証拠と、学習者の操作・変化・フィードバック・再利用条件を持つ。R3では実行時の教材・Engine・Practiceへ追加しない。Runtime状態はR4で `data/interaction-runtime-map.json` に分離する。
 
 外部Repositoryの正当性は、公開GitHubの正確なowner/repository URL、40文字の固定commit SHA、SHAに結びついたLicense URL、確認日、実際のFeature PathとBehavior Summaryで検証する。`main` / `master` の可変URL、架空の証拠、コードのコピー・移植・`adapted-from` はCanonical Libraryへ登録しない。
 
 R3完了時も、Atlas 89教材、Practice 0問、Interaction Engine 11種、数学I・A・II・Bという実行時スコープは維持する。Runtime Demoの選定と実装は、R3のレビュー後に別のPhaseで行う。
+
+## Phase R4: Canonical Interaction Runtime Pilot
+
+R4ではCanonical Interactionを既存Engineへ接続する最小Pilotを実施する。`MATH-INT-001〜003`だけを `functionGraph` 上へclean-roomで再実装し、`MATH-INT-004〜006`は `planned`、`MATH-INT-007〜008`は `blocked-evidence` として、8件すべてを `data/interaction-runtime-map.json` にExactly Onceで記録する。Canonical定義は `data/interactions.json`、実装状態はRuntime map、AI検索用出力は3つの正本から生成する。新規Canonical Interaction、Practice、Engine、Legacy Candidateとの自動mappingはR4では追加しない。
 
 ## 最重要ルール
 
